@@ -1,0 +1,62 @@
+.navbarMain {
+    display: flex;
+    width: 100%;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    background-color: #24004fa9;
+    z-index: 99;
+    max-width: 1728px;
+}
+
+.brand {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-left: -20px;
+}
+
+.nav-left {
+    width: 50%;
+}
+
+.nav-right {
+    width: 50%;
+    display: flex;
+    gap: 2rem;
+    font-weight: bold;
+    justify-content: flex-end;
+}
+
+.nav-right span {
+    cursor: pointer;
+}
+
+@media (max-width : 768px) {
+    .nav-right span {
+        display: none;
+    }
+
+    .tabMenu {
+        display: flex !important;
+        width: 100%;
+        height: calc(100% - 6rem);
+        position: fixed;
+        bottom: 0;
+        z-index: 9999;
+        background-color: #23004F;
+        left: 0;
+        transition-duration: 600ms !important;
+        transition-delay: 0s !important;
+        flex-direction: column;
+    }
+
+    .tabMenu a {
+        height: 15%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

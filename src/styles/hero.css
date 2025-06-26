@@ -1,0 +1,46 @@
+.hero {
+    display: flex;
+    align-items: center;
+    min-height: 70vh;
+    justify-content: space-between;
+}
+
+.btnContactMe{
+    padding: 10px 3rem;
+    border-radius: 90px;
+    outline: none;
+    border: none;
+    background-color: #00D1FF;
+    color: #23004F;
+}
+
+.btnContactMe:hover{
+    box-shadow: 2px 2px 2px white;
+    transition: 300ms !important;
+    transition-delay: 0s !important;
+}
+
+
+@media (max-width : 768px){
+    .hero{
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+    .hero-left{
+        width: 100%;
+        margin-top: 50px;
+    }
+    .hero-right{
+        width: 100%;
+    }
+    .btnContactMe{
+        width: 100%;
+    }
+
+    .hero-left h3{
+        font-size: 2rem;
+    }
+    .hero-left h4{
+        font-size: 1.8rem;
+    }
+}
