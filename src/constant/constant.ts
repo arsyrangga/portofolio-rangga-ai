@@ -1,3 +1,5 @@
+import { Github, Linkedin } from "lucide-react";
+
 export const imageList = [
   {
     url: `/assets/images/nodejs.png`,
@@ -116,4 +118,9 @@ export const projectData = [
     title: `Indobara Smart Services`,
     content: `Indobara Smart Services(iServe) is a website for PT Borneo Indo Bara (BIB), part of Sinar Mas Mining Group. Primarily this website is for Serving Fuel Assets, Visit Management, GA Reporting, Asset Inspection and Observation, and others. Only BIB and contractors can use Indobara Smart Services, I worked on this project in the assets management section`,
   },
+];
+
+export const medsos = [
+  { icon: Github, label: "GitHub", url : "https://github.com/arsyrangga" },
+  { icon: Linkedin, label: "LinkedIn", url : "https://www.linkedin.com/in/ranggarsy" },
 ];

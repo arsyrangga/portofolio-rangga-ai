@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // File: pages/index.js
 "use client";
 import React, { useState, useEffect } from "react";
@@ -9,52 +8,63 @@ import {
   MapPin,
   Github,
   Linkedin,
-  Twitter,
   ExternalLink,
   Menu,
   X,
   Award,
-  Calendar,
   Users,
 } from "lucide-react";
-import { projects } from '@/data/projects';
-import { skills } from '@/data/skills';
-import { certificates } from '@/data/certificates';
-import { gradientColors } from '@/data/gradientColors';
+import { projects } from "@/data/projects";
+import { skills } from "@/data/skills";
+import { certificates } from "@/data/certificates";
+import { gradientColors } from "@/constant/gradientColors";
+import { medsos } from "@/constant/constant";
 
 const Portfolio = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [expandedIndex, setExpandedIndex] = useState<null | number>(null);useEffect(() => {
-  const handleScroll = () => {
-    setIsScrolled(window.scrollY > 50);
+  const [expandedIndex, setExpandedIndex] = useState<null | number>(null);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+   const [message, setMessage] = useState("");
+
+  const sendToWhatsApp = () => {
+    const phoneNumber = "6289673494895"; 
+    const text = encodeURIComponent(message);
+    const url = `https://wa.me/${phoneNumber}?text=Nama: ${name} \n Email: ${email} \n Pesan: ${text}`;
+    window.open(url, "_blank");
   };
 
-  const observerOptions = {
-    threshold: 0.01,
-    rootMargin: "50px 0px 50px 0px", // mobile friendly
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      console.log("OBSERVE:", entry.target.id, entry.isIntersecting);
-      if (entry.isIntersecting) {
-        setVisibleSections((prev) => new Set([...prev, entry.target.id]));
-      }
-    });
-  }, observerOptions);
+    const observerOptions = {
+      threshold: 0.01,
+      rootMargin: "50px 0px 50px 0px", // mobile friendly
+    };
 
-  const sections = document.querySelectorAll("section[id]");
-  sections.forEach((section) => observer.observe(section));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        console.log("OBSERVE:", entry.target.id, entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setVisibleSections((prev) => new Set([...prev, entry.target.id]));
+        }
+      });
+    }, observerOptions);
 
-  window.addEventListener("scroll", handleScroll);
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-    observer.disconnect();
-  };
-}, []);
+    const sections = document.querySelectorAll("section[id]");
+    sections.forEach((section) => observer.observe(section));
 
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -67,7 +77,6 @@ const Portfolio = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
 
   return (
     <div className="bg-slate-900 text-white overflow-x-hidden">
@@ -158,14 +167,10 @@ const Portfolio = () => {
           {/* Mobile Social Links */}
           <div className="border-t border-slate-800/50 px-4 py-3">
             <div className="flex space-x-4 justify-center">
-              {[
-                { icon: Github, label: "GitHub" },
-                { icon: Linkedin, label: "LinkedIn" },
-                { icon: Twitter, label: "Twitter" },
-              ].map((social) => (
+              {medsos.map((social) => (
                 <a
                   key={social.label}
-                  href="#"
+                  href={social.url}
                   className="text-slate-400 hover:text-blue-400 transition-colors duration-300 p-2 rounded-full hover:bg-slate-800"
                 >
                   <social.icon className="w-5 h-5" />
@@ -192,7 +197,7 @@ const Portfolio = () => {
         </div>
 
         <div className="text-center z-10 max-w-4xl mx-auto px-4">
-                <div
+          <div
             className={`transition-all duration-1000 ${
               visibleSections.has("home")
                 ? "opacity-100 translate-y-0"
@@ -215,7 +220,9 @@ const Portfolio = () => {
                 Rangga Arsy Prawira
               </span>
               <br />
-              <span className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl">Full Stack Developer</span>
+              <span className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl">
+                Full Stack Developer
+              </span>
             </h1>
           </div>
           <div
@@ -238,12 +245,9 @@ const Portfolio = () => {
           >
             <button
               onClick={() => scrollToSection("projects")}
-              className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+              className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25" style={{cursor : "pointer"}}
             >
               Lihat Portfolio
-            </button>
-            <button className="border-2 border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
-              Download CV
             </button>
           </div>
         </div>
@@ -702,6 +706,7 @@ const Portfolio = () => {
                       type="text"
                       placeholder="Nama Anda"
                       className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300"
+                      onInput={(e)=> setName(e.currentTarget.value)}
                     />
                   </div>
                   <div>
@@ -709,6 +714,7 @@ const Portfolio = () => {
                       type="email"
                       placeholder="Email Anda"
                       className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300"
+                      onInput={(e)=> setEmail(e.currentTarget.value)}
                     />
                   </div>
                   <div>
@@ -716,12 +722,13 @@ const Portfolio = () => {
                       placeholder="Pesan Anda"
                       rows={5}
                       className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300 resize-none"
+                      onInput={(e)=> setMessage(e.currentTarget.value)}
                     />
                   </div>
                   <button
                     type="button"
-                    onClick={() => alert("Pesan berhasil dikirim!")}
-                    className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+                    onClick={sendToWhatsApp}
+                    className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
                   >
                     Kirim Pesan
                   </button>
@@ -740,14 +747,10 @@ const Portfolio = () => {
               ©Copyright Rangga Arsy Prawira @2025 || All Right Reserved
             </p>
             <div className="flex justify-center space-x-6 mt-4">
-              {[
-                { icon: Github, label: "GitHub" },
-                { icon: Linkedin, label: "LinkedIn" },
-                { icon: Twitter, label: "Twitter" },
-              ].map((social) => (
+              {medsos.map((social) => (
                 <a
                   key={social.label}
-                  href="#"
+                  href={social.url}
                   className="text-slate-400 hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
                 >
                   <social.icon className="w-5 h-5" />
@@ -763,82 +766,3 @@ const Portfolio = () => {
 };
 
 export default Portfolio;
-=======
-"use client";
-
-import Hero from "@/components/hero/Hero";
-import Navbar from "@/components/navbar/Navbar";
-import AOS from "aos";
-import { Suspense, useEffect } from "react";
-import "aos/dist/aos.css";
-import FlareCursor from "@/components/flareCursor/flareComponent";
-import Skills from "@/components/skills/Skills";
-import Portfolio from "@/components/portfolio/Portfolio";
-import Contact from "@/components/contact/Contact";
-import Footer from "@/components/footer/Footer";
-import Script from "next/script";
-
-
-export default function Home() {
-  useEffect(() => {
-    AOS.init();
-    window.scroll({ top: 0 });
-  }, []);
-  return (
-    <div className="flex w-100 flex-col justify-center items-center" id="my-background">
-      <FlareCursor />
-      <Suspense
-        fallback={
-          <div
-            style={{
-              background: "red",
-              width: "100vw",
-              height: "100vh",
-              position: "fixed",
-              top: 0,
-              zIndex: "9999",
-            }}
-          ></div>
-        }
-      >
-        <main>
-          <Navbar />
-          <Hero />
-          <Skills />
-          <Portfolio />
-          <Contact />
-        </main>
-      </Suspense>
-      <Footer />
-
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-        strategy="afterInteractive"
-        onLoad={() => console.log("Three.js loaded")}
-      />
-
-      {/* Load Vanta.js */}
-      <Script
-        src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          // @ts-ignore
-          window?.VANTA.NET({
-            el: "#my-background",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            // color: 0x00FFE1,
-            color: 0xFF0285,
-            backgroundColor: 0x23004F
-          })
-        }}
-      />
-    </div>
-  );
-}
->>>>>>> 836eea28404329b0bc8df15f93801556f13a2229
