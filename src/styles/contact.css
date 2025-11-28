@@ -1,0 +1,78 @@
+.contact {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.contact-left {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.contact-right {
+    width: 34%;
+}
+
+.inputContact {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-left: 4px solid #00D1FF;
+    border-bottom: 4px solid #00D1FF;
+    margin-bottom: 3rem;
+    height: 40px;
+    padding: 0 10px;
+    color: white;
+}
+
+.areaContact {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-left: 4px solid #00D1FF;
+    border-bottom: 4px solid #00D1FF;
+    margin-bottom: 3rem;
+    height: 100px;
+    padding: 0 10px;
+    color: white;
+}
+
+.buttonContact {
+    padding: 10px 30px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    border-left: 3px solid #00D1FF;
+    border-right: 3px solid #00D1FF;
+}
+
+.grouper-contact {
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+@media(max-width : 768px) {
+
+    .contact {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .contact-left {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .contact-right {
+        width: 100%;
+        margin-top: 3rem;
+        flex-direction: column;
+        display: flex;
+    }
+}

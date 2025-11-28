@@ -1,0 +1,20 @@
+.imageContainer{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 6rem;
+}
+
+.imageWrap {
+    width: 30%;
+    height: 225px;
+    position: relative;
+}
+
+@media(max-width : 768px){
+    .imageWrap{
+        width: 45%;
+        height: 150px;
+    }
+}

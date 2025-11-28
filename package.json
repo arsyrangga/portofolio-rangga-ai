@@ -1,15 +1,24 @@
 {
+<<<<<<< HEAD
   "name": "portofolio-rangga-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "normal" : "next dev",
+=======
+  "name": "new-portofolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+>>>>>>> 836eea28404329b0bc8df15f93801556f13a2229
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "framer-motion": "^12.19.1",
     "lucide-react": "^0.523.0",
     "next": "15.3.4",
@@ -27,6 +36,26 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.10",
+=======
+    "aos": "^2.3.4",
+    "next": "14.1.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-simple-image-viewer": "^1.2.2",
+    "typewriter-effect": "^2.21.0",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "@types/aos": "^3.0.7",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+>>>>>>> 836eea28404329b0bc8df15f93801556f13a2229
     "typescript": "^5"
   }
 }
