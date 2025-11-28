@@ -657,7 +657,7 @@ const Portfolio = () => {
                       {
                         icon: Mail,
                         label: "Email",
-                        value: "arsyrangga@example.com",
+                        value: "arsyrangga@gmail.com",
                         color: "blue",
                       },
                       {
