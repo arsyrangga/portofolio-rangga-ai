@@ -247,7 +247,7 @@ const Portfolio = () => {
               onClick={() => scrollToSection("projects")}
               className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25" style={{cursor : "pointer"}}
             >
-              Lihat Portfolio
+              See Portfolio
             </button>
           </div>
         </div>
@@ -596,22 +596,22 @@ const Portfolio = () => {
             <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8 max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-4">
                 <Award className="w-8 h-8 text-blue-400 mr-3" />
-                <h3 className="text-2xl font-bold text-blue-400">Pencapaian</h3>
+                <h3 className="text-2xl font-bold text-blue-400">Achievement</h3>
               </div>
               <div className="grid grid-cols-3 gap-6 text-center">
                 <div>
                   <div className="text-3xl font-bold text-white mb-2">
                     {certificates.length}
                   </div>
-                  <div className="text-slate-300 text-sm">Sertifikat</div>
+                  <div className="text-slate-300 text-sm">Certificate</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-white mb-2">500+</div>
-                  <div className="text-slate-300 text-sm">Jam Belajar</div>
+                  <div className="text-slate-300 text-sm">Study Hours</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-white mb-2">15+</div>
-                  <div className="text-slate-300 text-sm">Teknologi</div>
+                  <div className="text-slate-300 text-sm">Tech</div>
                 </div>
               </div>
             </div>
@@ -635,7 +635,7 @@ const Portfolio = () => {
               </span>
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto text-lg">
-              Mari berkolaborasi untuk menciptakan sesuatu yang luar biasa
+              Let's Connect and Collaborate to Build Amazing Things Together.
             </p>
           </div>
 
@@ -650,7 +650,7 @@ const Portfolio = () => {
               >
                 <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8">
                   <h3 className="text-2xl font-bold mb-6 text-blue-400">
-                    Mari Berkolaborasi
+                    Let's Collaborate
                   </h3>
                   <div className="space-y-4">
                     {[
@@ -730,7 +730,7 @@ const Portfolio = () => {
                     onClick={sendToWhatsApp}
                     className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
                   >
-                    Kirim Pesan
+                    Send Message
                   </button>
                 </div>
               </div>
