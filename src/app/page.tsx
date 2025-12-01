@@ -270,7 +270,7 @@ const Portfolio = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                Tentang Saya
+                About Me
               </span>
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto text-lg">
