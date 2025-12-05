@@ -28,10 +28,10 @@ const Portfolio = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-   const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const sendToWhatsApp = () => {
-    const phoneNumber = "6289673494895"; 
+    const phoneNumber = "6289673494895";
     const text = encodeURIComponent(message);
     const url = `https://wa.me/${phoneNumber}?text=Nama: ${name} \n Email: ${email} \n Pesan: ${text}`;
     window.open(url, "_blank");
@@ -211,8 +211,9 @@ const Portfolio = () => {
                 width="350"
                 height="350"
                 decoding="async"
-                src="https://rangga.tech/assets/images/rangga_arsy_prawira.png"
+                src="/assets/images/rangga.jpg"
                 className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover"
+                style={{border : "5px solid #155dfc", boxShadow: "0 0 20px rgba(21, 93, 252, 0.5)"}}
               />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 px-4">
@@ -245,10 +246,18 @@ const Portfolio = () => {
           >
             <button
               onClick={() => scrollToSection("projects")}
-              className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25" style={{cursor : "pointer"}}
+              className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+              style={{ cursor: "pointer" }}
             >
               See Portfolio
             </button>
+            <a
+              href="/assets/pdf/cv.pdf"
+              className="border-2 border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              download={true}
+            >
+              Download CV
+            </a>
           </div>
         </div>
 
@@ -274,9 +283,13 @@ const Portfolio = () => {
               </span>
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto text-lg">
-              Organized and dependable candidate successful at managing multiple
-              priorities with a positive attitude. Willingness to take on added
-              responsibilities to meet team goals.
+              I am a Full-Stack Developer with over 4 years of experience,
+              skilled in both frontend and backend development. I build
+              responsive, SEO-friendly interfaces and write clean, maintainable
+              code. I’m an organized and reliable professional, capable of
+              managing multiple priorities with a positive attitude, and always
+              willing to take on additional responsibilities to help the team
+              achieve its goals
             </p>
           </div>
 
@@ -313,7 +326,7 @@ const Portfolio = () => {
                             : "bg-yellow-600/20 text-yellow-400"
                         }`}
                       >
-                        {tech}a
+                        {tech}
                       </span>
                     )
                   )}
@@ -455,11 +468,16 @@ const Portfolio = () => {
                       </span>
                     ))}
                   </div>
-                  <button
-                    className={`text-${project.color}-400 hover:text-${project.color}-300 font-semibold transition-colors duration-300 flex items-center gap-2`}
-                  >
-                    View Project <ExternalLink className="w-4 h-4" />
-                  </button>
+                  {project.link !== "#" && project.link && (
+                    <button
+                      className={`text-${project.color}-400 hover:text-${project.color}-300 font-semibold transition-colors duration-300 flex items-center gap-2 cursor-pointer`}
+                      onClick={() => {
+                        window.open(project.link, "_blank");
+                      }}
+                    >
+                      View Project <ExternalLink className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -596,7 +614,9 @@ const Portfolio = () => {
             <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8 max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-4">
                 <Award className="w-8 h-8 text-blue-400 mr-3" />
-                <h3 className="text-2xl font-bold text-blue-400">Achievement</h3>
+                <h3 className="text-2xl font-bold text-blue-400">
+                  Achievement
+                </h3>
               </div>
               <div className="grid grid-cols-3 gap-6 text-center">
                 <div>
@@ -706,7 +726,7 @@ const Portfolio = () => {
                       type="text"
                       placeholder="Nama Anda"
                       className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300"
-                      onInput={(e)=> setName(e.currentTarget.value)}
+                      onInput={(e) => setName(e.currentTarget.value)}
                     />
                   </div>
                   <div>
@@ -714,7 +734,7 @@ const Portfolio = () => {
                       type="email"
                       placeholder="Email Anda"
                       className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300"
-                      onInput={(e)=> setEmail(e.currentTarget.value)}
+                      onInput={(e) => setEmail(e.currentTarget.value)}
                     />
                   </div>
                   <div>
@@ -722,7 +742,7 @@ const Portfolio = () => {
                       placeholder="Pesan Anda"
                       rows={5}
                       className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300 resize-none"
-                      onInput={(e)=> setMessage(e.currentTarget.value)}
+                      onInput={(e) => setMessage(e.currentTarget.value)}
                     />
                   </div>
                   <button

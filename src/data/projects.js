@@ -57,7 +57,7 @@
       gradient: "from-purple-600 to-cyan-600",
       color: "purple",
       tech: ["Next.js", "JavaScript", "Ant UI"],
-      link: "https://rindangparicb.vercel.app",
+      link: "#",
       image: "https://rangga.tech/assets/images/rindang.jpg",
     },
     {
@@ -67,7 +67,7 @@
       gradient: "from-purple-600 to-pink-600",
       color: "blue",
       tech: ["React Native", "Expo", "JavaScript"],
-      link: "https://play.google.com/store/apps/details?id=com.gardamedis.gardamedismobileapp",
+      link: "#",
       image: "https://rangga.tech/assets/images/garda.jpg",
     },
 
@@ -97,7 +97,7 @@
       gradient: "from-purple-600 to-pink-600",
       color: "blue",
       tech: ["React Native", "Expo", "JavaScript"],
-      link: "https://play.google.com/store/apps/details?id=com.gardamedis.gardamedismobileapp",
+      link: "https://idn.media",
       image: "https://rangga.tech/assets/images/idn.jpg",
     },
 
