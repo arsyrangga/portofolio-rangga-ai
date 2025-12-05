@@ -213,7 +213,10 @@ const Portfolio = () => {
                 decoding="async"
                 src="/assets/images/rangga.jpg"
                 className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover"
-                style={{border : "5px solid #155dfc", boxShadow: "0 0 20px rgba(21, 93, 252, 0.5)"}}
+                style={{
+                  border: "5px solid #155dfc",
+                  boxShadow: "0 0 20px rgba(21, 93, 252, 0.5)",
+                }}
               />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 px-4">
@@ -238,22 +241,24 @@ const Portfolio = () => {
             </p>
           </div>
           <div
-            className={`transition-all duration-1000 delay-500 space-x-4 ${
-              visibleSections.has("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
+            className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-1000 delay-500 
+    space-y-3 sm:space-y-0 sm:space-x-4 
+    ${
+      visibleSections.has("home")
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-10"
+    }`}
           >
             <button
               onClick={() => scrollToSection("projects")}
-              className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
-              style={{ cursor: "pointer" }}
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
             >
               See Portfolio
             </button>
+
             <a
               href="/assets/pdf/cv.pdf"
-              className="border-2 border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="w-full sm:w-auto border-2 border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
               download={true}
             >
               Download CV
