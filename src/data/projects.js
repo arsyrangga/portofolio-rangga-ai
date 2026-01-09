@@ -7,7 +7,7 @@
       color: "blue",
       tech: ["Next.js", "Material UI"],
       link: "https://qlola.bri.co.id",
-      image: "https://rangga.tech/assets/images/bri.png",
+      image: "https://rangga.click/assets/images/bri.png",
     },
     {
       title: "Instructor Cimb Program by Hacktive8",
@@ -17,7 +17,7 @@
       color: "green",
       tech: ["HTML", "JavaScript", "React"],
       link: "#",
-      image: "https://rangga.tech/assets/images/cimb.jpg",
+      image: "https://rangga.click/assets/images/cimb.jpg",
     },
     {
       title: "Mtoyota Mobile Apps",
@@ -27,7 +27,7 @@
       color: "purple",
       tech: ["Angular.js", "Ionic"],
       link: "https://play.google.com/store/apps/details?id=com.toyota.m&hl=id",
-      image: "https://rangga.tech/assets/images/toyota.jpg",
+      image: "https://rangga.click/assets/images/toyota.jpg",
     },
 
     {
@@ -38,7 +38,7 @@
       color: "blue",
       tech: ["CodeIgniter", "PHP", "Bootstrap"],
       link: "#",
-      image: "https://rangga.tech/assets/images/apjii.jpg",
+      image: "https://rangga.click/assets/images/apjii.jpg",
     },
     {
       title: "Concordia Carwash",
@@ -48,7 +48,7 @@
       color: "green",
       tech: ["CodeIgniter", "PHP", "Bootstrap"],
       link: "#",
-      image: "https://rangga.tech/assets/images/concordia.jpg",
+      image: "https://rangga.click/assets/images/concordia.jpg",
     },
     {
       title: "Rindang Pari Cahya Buana",
@@ -58,7 +58,7 @@
       color: "purple",
       tech: ["Next.js", "JavaScript", "Ant UI"],
       link: "#",
-      image: "https://rangga.tech/assets/images/rindang.jpg",
+      image: "https://rangga.click/assets/images/rindang.jpg",
     },
     {
       title: "Garda Medis Mobile Apps",
@@ -68,7 +68,7 @@
       color: "blue",
       tech: ["React Native", "Expo", "JavaScript"],
       link: "#",
-      image: "https://rangga.tech/assets/images/garda.jpg",
+      image: "https://rangga.click/assets/images/garda.jpg",
     },
 
     {
@@ -79,7 +79,7 @@
       color: "green",
       tech: ["NextJS", "NodeJS"],
       link: "https://online.pasarmusibaru.co.id",
-      image: "https://rangga.tech/assets/images/musi.jpg",
+      image: "https://rangga.click/assets/images/musi.jpg",
     },
     {
       title: "Pasar Musi Baru Official",
@@ -89,7 +89,7 @@
       color: "purple",
       tech: ["Next.js", "JavaScript", "ANT UI"],
       link: "https://pasarmusibaru.co.id",
-      image: "https://rangga.tech/assets/images/musi-web.jpg",
+      image: "https://rangga.click/assets/images/musi-web.jpg",
     },
     {
       title: "IDN Media",
@@ -98,7 +98,7 @@
       color: "blue",
       tech: ["React Native", "Expo", "JavaScript"],
       link: "https://idn.media",
-      image: "https://rangga.tech/assets/images/idn.jpg",
+      image: "https://rangga.click/assets/images/idn.jpg",
     },
 
     {
@@ -109,7 +109,7 @@
       color: "green",
       tech: ["NextJS"],
       link: "https://bjs.vercel.app",
-      image: "https://rangga.tech/assets/images/bjs.jpg",
+      image: "https://rangga.click/assets/images/bjs.jpg",
     },
 
     {
@@ -120,7 +120,7 @@
       color: "purple",
       tech: ["Next.js", "NodeJS", "ANT UI"],
       link: "https://dutadropship.vercel.app",
-      image: "https://rangga.tech/assets/images/duta.jpg",
+      image: "https://rangga.click/assets/images/duta.jpg",
     },
     {
       title: "Movementcare",
@@ -130,7 +130,7 @@
       color: "blue",
       tech: ["NextJS", "NodeJS", "Xendit Payment Gateway"],
       link: "#",
-      image: "https://rangga.tech/assets/images/movementcare.jpg",
+      image: "https://rangga.click/assets/images/movementcare.jpg",
     },
     {
       title: "Jejak Fun",
@@ -140,7 +140,7 @@
       color: "green",
       tech: ["NextJS", "NodeJS", "Google OAuth"],
       link: "#",
-      image: "https://rangga.tech/assets/images/jejak.jpg",
+      image: "https://rangga.click/assets/images/jejak.jpg",
     },
     {
       title: "Kandara Video Call",
@@ -150,7 +150,7 @@
       color: "purple",
       tech: ["Next.js", "NodeJS", "Custom CSS"],
       link: "http://kandara-vidcall.vercel.app",
-      image: "https://rangga.tech/assets/images/vc.jpg",
+      image: "https://rangga.click/assets/images/vc.jpg",
     },
 
     {
@@ -161,7 +161,7 @@
       color: "blue",
       tech: ["NextJS", "Python", "KokoroTTS"],
       link: "https://deepchan.tech",
-      image: "https://rangga.tech/assets/images/deepchan.png",
+      image: "https://rangga.click/assets/images/deepchan.png",
     },
     {
       title: "Ekawira Sanjaya",
@@ -171,7 +171,7 @@
       color: "green",
       tech: ["NextJS", "NodeJS", "Google OAuth"],
       link: "https://pancaekawirasanjaya.com",
-      image: "https://rangga.tech/assets/images/ekawira.jpg",
+      image: "https://rangga.click/assets/images/ekawira.jpg",
     },
     {
       title: "Indobara Smart Services",
@@ -181,7 +181,7 @@
       color: "purple",
       tech: ["Nodejs", "ExpressJS", "Custom CSS"],
       link: "https://iserve.borneo-indobara.com",
-      image: "https://rangga.tech/assets/images/sinarmas_assets.png",
+      image: "https://rangga.click/assets/images/sinarmas_assets.png",
     },
   ];
 
