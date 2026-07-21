@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>RFID Reader</title>
+
+<style>
+body{
+    font-family:Arial;
+    margin:40px;
+    background:#f5f5f5;
+}
+
+button{
+    padding:15px 30px;
+    font-size:18px;
+}
+
+#log{
+    margin-top:20px;
+    padding:15px;
+    background:white;
+    border-radius:10px;
+    white-space:pre-wrap;
+}
+</style>
+
+</head>
+<body>
+
+<h2>RFID / NFC Reader</h2>
+
+<button id="scan">Scan NFC</button>
+
+<div id="log">
+Belum ada data.
+</div>
+
+<script>
+
+const log = document.getElementById("log");
+
+document.getElementById("scan").onclick = async ()=>{
+
+    if(!("NDEFReader" in window)){
+        alert("Browser tidak mendukung Web NFC");
+        return;
+    }
+
+    try{
+
+        const ndef = new NDEFReader();
+
+        await ndef.scan();
+
+        log.textContent="Tempelkan kartu...";
+
+        ndef.onreading = event=>{
+
+            log.textContent="Tag berhasil dibaca\n\n";
+
+            log.textContent +=
+                "Serial Number : "
+                + event.serialNumber
+                + "\n\n";
+
+            for(const record of event.message.records){
+
+                log.textContent +=
+                    "Record Type : "
+                    + record.recordType
+                    + "\n";
+
+                if(record.recordType==="text"){
+
+                    const decoder = new TextDecoder();
+
+                    log.textContent +=
+                        "Isi : "
+                        + decoder.decode(record.data)
+                        + "\n";
+                }
+
+            }
+
+        };
+
+        ndef.onreadingerror = ()=>{
+
+            log.textContent="Gagal membaca tag.";
+
+        };
+
+    }catch(err){
+
+        alert(err);
+
+    }
+
+};
+
+</script>
+
+</body>
+</html>
