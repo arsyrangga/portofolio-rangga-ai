@@ -18,6 +18,7 @@ import {
   ExternalLink,
   Mail,
 } from "lucide-react";
+import Character3DViewer from "./components/Character3DViewer";
 import "./siti-chan.css";
 
 /* ═══════════════════════════════════════════
@@ -302,117 +303,131 @@ export default function SitiChanLandingPage() {
         <Floating3DElements />
 
         {/* Content */}
-        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          {/* App icon */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5, rotateY: -30 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="mb-8 inline-block"
-          >
-            <div className="relative">
-              <div className="absolute inset-0 rounded-3xl blur-2xl opacity-40"
-                style={{ background: "var(--sc-gradient-accent)" }}
-              />
-              <Image
-                src="/assets/siti-chan/icon.png"
-                alt="Siti-Chan App Icon"
-                width={120}
-                height={120}
-                className="relative rounded-3xl shadow-2xl"
-                priority
-              />
-            </div>
-          </motion.div>
-
-          {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-5xl sm:text-7xl md:text-8xl font-extrabold mb-4 tracking-tight"
-          >
-            <span className="sc-gradient-text">Siti-Chan</span>
-          </motion.h1>
-
-          {/* Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="text-lg sm:text-xl md:text-2xl font-light mb-3 max-w-2xl mx-auto"
-            style={{ color: "var(--sc-text-muted)" }}
-          >
-            Teman Bicara Virtual 3D — Interaktif, Ekspresif, & Cerdas
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="text-sm md:text-base mb-10 max-w-xl mx-auto"
-            style={{ color: "var(--sc-text-muted)", opacity: 0.7 }}
-          >
-            AI companion dengan avatar 3D VRM, voice chat, AR mode, dan dukungan 31 bahasa.
-            Gratis di Google Play!
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <a
-              href={PLAY_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sc-glow-btn inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-semibold text-base transition-all"
-              style={{
-                background: "var(--sc-gradient-accent)",
-                color: "#050816",
-              }}
-              id="hero-download-btn"
+        <div className="relative z-10 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column: Copywriting & CTAs */}
+          <div className="lg:col-span-7 text-center lg:text-left">
+            {/* App icon */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5, rotateY: -30 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="mb-6 inline-block"
             >
-              <Download className="w-5 h-5" />
-              Download di Google Play
-              <ExternalLink className="w-4 h-4 opacity-60" />
-            </a>
-
-            <a
-              href="#features"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base sc-glass-sm hover:bg-white/5 transition-all"
-              style={{ color: "var(--sc-accent)" }}
-              id="hero-learn-more-btn"
-            >
-              <Sparkles className="w-5 h-5" />
-              Pelajari Fitur
-            </a>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.8 }}
-            className="mt-16 flex flex-wrap justify-center gap-8 md:gap-16"
-          >
-            {[
-              { value: "5", label: "Karakter", icon: "✨" },
-              { value: "31", label: "Bahasa", icon: "🌐" },
-              { value: "3D", label: "Avatar VRM", icon: "🎭" },
-              { value: "AR", label: "Mode", icon: "📱" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold sc-gradient-text sc-stat-number">
-                  {stat.icon} {stat.value}
-                </div>
-                <div className="text-xs mt-1" style={{ color: "var(--sc-text-muted)" }}>
-                  {stat.label}
-                </div>
+              <div className="relative">
+                <div
+                  className="absolute inset-0 rounded-3xl blur-2xl opacity-40"
+                  style={{ background: "var(--sc-gradient-accent)" }}
+                />
+                <Image
+                  src="/assets/siti-chan/icon.png"
+                  alt="Siti-Chan App Icon"
+                  width={100}
+                  height={100}
+                  className="relative rounded-3xl shadow-2xl"
+                  priority
+                />
               </div>
-            ))}
+            </motion.div>
+
+            {/* Title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-5xl sm:text-6xl md:text-7xl font-extrabold mb-4 tracking-tight"
+            >
+              <span className="sc-gradient-text">Siti-Chan</span>
+            </motion.h1>
+
+            {/* Tagline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-lg sm:text-xl font-light mb-3 max-w-xl mx-auto lg:mx-0"
+              style={{ color: "var(--sc-text-muted)" }}
+            >
+              Teman Bicara Virtual 3D — Interaktif, Ekspresif, & Cerdas
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="text-sm md:text-base mb-8 max-w-lg mx-auto lg:mx-0"
+              style={{ color: "var(--sc-text-muted)", opacity: 0.7 }}
+            >
+              AI companion dengan avatar 3D VRM, voice chat, AR mode, dan dukungan 31 bahasa.
+              Gratis di Google Play!
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"
+            >
+              <a
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sc-glow-btn inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-semibold text-base transition-all"
+                style={{
+                  background: "var(--sc-gradient-accent)",
+                  color: "#050816",
+                }}
+                id="hero-download-btn"
+              >
+                <Download className="w-5 h-5" />
+                Download di Google Play
+                <ExternalLink className="w-4 h-4 opacity-60" />
+              </a>
+
+              <a
+                href="#features"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base sc-glass-sm hover:bg-white/5 transition-all"
+                style={{ color: "var(--sc-accent)" }}
+                id="hero-learn-more-btn"
+              >
+                <Sparkles className="w-5 h-5" />
+                Pelajari Fitur
+              </a>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
+              className="mt-12 flex flex-wrap justify-center lg:justify-start gap-8 md:gap-12"
+            >
+              {[
+                { value: "5", label: "Karakter", icon: "✨" },
+                { value: "31", label: "Bahasa", icon: "🌐" },
+                { value: "3D", label: "Avatar VRM", icon: "🎭" },
+                { value: "AR", label: "Mode", icon: "📱" },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center lg:text-left">
+                  <div className="text-2xl md:text-3xl font-bold sc-gradient-text sc-stat-number">
+                    {stat.icon} {stat.value}
+                  </div>
+                  <div className="text-xs mt-1" style={{ color: "var(--sc-text-muted)" }}>
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right Column: Interactive 3D Model Viewer */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="lg:col-span-5 w-full"
+          >
+            <Character3DViewer />
           </motion.div>
         </div>
 
