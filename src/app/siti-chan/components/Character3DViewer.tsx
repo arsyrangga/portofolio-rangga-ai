@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, RefreshCw, RotateCcw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
 interface CharacterOption {
   id: string;
@@ -88,14 +88,17 @@ export default function Character3DViewer() {
         if (!isMounted || !container) return;
 
         const width = container.clientWidth || 400;
-        const height = container.clientHeight || 450;
+        const height = container.clientHeight || 550;
+        const isMobile = width < 640;
 
         // 1. Scene
         const scene = new THREE.Scene();
 
-        // 2. Camera
-        const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 20.0);
-        camera.position.set(0.0, 1.25, 2.2);
+        // 2. Camera: Position closer & higher so the 3D model appears large and clear
+        const fov = isMobile ? 32 : 28;
+        const camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 20.0);
+        const camZ = isMobile ? 2.1 : 1.85;
+        camera.position.set(0.0, 1.15, camZ);
 
         // 3. Renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -119,7 +122,7 @@ export default function Character3DViewer() {
 
         // 5. Controls
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.target.set(0.0, 1.0, 0.0);
+        controls.target.set(0.0, 1.05, 0.0);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.minDistance = 1.0;
@@ -242,12 +245,14 @@ export default function Character3DViewer() {
         // Load Initial Model
         loadModel(selectedChar.vrmUrl);
 
-        // Resize handler
+        // Responsive Resize Handler
         const handleResize = () => {
           if (!container || !camera || !renderer) return;
           const newWidth = container.clientWidth;
           const newHeight = container.clientHeight;
 
+          const isMob = newWidth < 640;
+          camera.fov = isMob ? 32 : 28;
           camera.aspect = newWidth / newHeight;
           camera.updateProjectionMatrix();
           renderer.setSize(newWidth, newHeight);
@@ -340,8 +345,9 @@ export default function Character3DViewer() {
           applyNaturalPosture(vrm);
 
           if (controls && camera) {
-            controls.target.set(0.0, 1.1, 0.0);
-            camera.position.set(0.0, 1.25, 2.2);
+            controls.target.set(0.0, 1.05, 0.0);
+            const isMob = (containerRef.current?.clientWidth || 400) < 640;
+            camera.position.set(0.0, 1.15, isMob ? 2.1 : 1.85);
             controls.update();
           }
         }
@@ -360,55 +366,28 @@ export default function Character3DViewer() {
     loadModel(char.vrmUrl);
   };
 
-  const handleResetCamera = () => {
-    if (threeRef.current) {
-      const { controls, camera } = threeRef.current;
-      if (controls && camera) {
-        controls.target.set(0.0, 1.1, 0.0);
-        camera.position.set(0.0, 1.25, 2.2);
-        controls.update();
-      }
-    }
-  };
-
   return (
-    <div className="relative w-full h-[420px] md:h-[500px] rounded-3xl overflow-hidden sc-glass-card p-2 border border-white/10 shadow-2xl flex flex-col">
-      {/* Top Header Bar */}
-      <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full sc-glass-sm pointer-events-auto">
-          <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span className="text-xs font-semibold text-white/90">3D Interactive Avatar</span>
-        </div>
-
-        <button
-          onClick={handleResetCamera}
-          className="p-2 rounded-full sc-glass-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors pointer-events-auto"
-          title="Reset Camera"
-        >
-          <RotateCcw className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* 3D Canvas Container */}
+    <div className="relative w-full h-[460px] sm:h-[540px] md:h-[620px] lg:h-[680px] flex flex-col items-center justify-center">
+      {/* 3D Canvas Container - Clean, borderless, seamless */}
       <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
-      {/* Loading Overlay */}
+      {/* Loading Indicator Overlay */}
       {loading && (
-        <div className="absolute inset-0 z-30 bg-slate-950/80 backdrop-blur-md flex flex-col items-center justify-center gap-3">
+        <div className="absolute inset-0 z-30 bg-slate-950/40 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center gap-3">
           <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
-          <p className="text-sm font-medium text-white/80">Memuat Model 3D {selectedChar.name}...</p>
+          <p className="text-sm font-medium text-white/90">Memuat Model 3D {selectedChar.name}...</p>
         </div>
       )}
 
       {/* Bottom Character Selector */}
-      <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-center gap-2 pointer-events-auto">
+      <div className="absolute bottom-2 z-20 flex items-center justify-center gap-2 pointer-events-auto">
         {CHARACTERS.map((char) => {
           const isSelected = selectedChar.id === char.id;
           return (
             <button
               key={char.id}
               onClick={() => handleSelectCharacter(char)}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 flex items-center gap-2 ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 flex items-center gap-2 ${
                 isSelected
                   ? `bg-gradient-to-r ${char.color} text-white shadow-lg scale-105 border border-white/30`
                   : "sc-glass-sm text-white/70 hover:text-white hover:bg-white/10"
