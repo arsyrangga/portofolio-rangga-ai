@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, Variants } from "framer-motion";
 import Image from "next/image";
 import {
   MessageSquare,
@@ -159,26 +159,26 @@ const LANGUAGES_SAMPLE = [
    ANIMATION VARIANTS
    ═══════════════════════════════════════════ */
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }),
 };
 
-const fadeIn = {
+const fadeIn: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.8 } },
 };
 
-const scaleUp = {
+const scaleUp: Variants = {
   hidden: { opacity: 0, scale: 0.85 },
   visible: (i: number = 0) => ({
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.5, delay: i * 0.12, ease: "easeOut" },
+    transition: { duration: 0.5, delay: i * 0.12, ease: "easeOut" as const },
   }),
 };
 
