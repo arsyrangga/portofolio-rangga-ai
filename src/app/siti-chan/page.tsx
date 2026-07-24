@@ -27,8 +27,7 @@ import "./siti-chan.css";
    DATA
    ═══════════════════════════════════════════ */
 
-const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.sitichan.app";
+const PLAY_STORE_URL = "/siti-store";
 
 const YOUTUBE_URL =
   "https://youtu.be/K2C8uF7_xhI?si=z33yliYbt7M_rwNm";
