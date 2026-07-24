@@ -94,11 +94,11 @@ export default function Character3DViewer() {
         // 1. Scene
         const scene = new THREE.Scene();
 
-        // 2. Camera: Position closer & higher so the 3D model appears large and clear
+        // 2. Camera: Positioned higher & zoomed out slightly for balanced full-body framing
         const fov = isMobile ? 32 : 28;
         const camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 20.0);
-        const camZ = isMobile ? 2.1 : 1.85;
-        camera.position.set(0.0, 1.15, camZ);
+        const camZ = isMobile ? 2.8 : 2.5;
+        camera.position.set(0.0, 1.28, camZ);
 
         // 3. Renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -122,7 +122,7 @@ export default function Character3DViewer() {
 
         // 5. Controls
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.target.set(0.0, 1.05, 0.0);
+        controls.target.set(0.0, 1.10, 0.0);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.minDistance = 1.0;
@@ -345,9 +345,9 @@ export default function Character3DViewer() {
           applyNaturalPosture(vrm);
 
           if (controls && camera) {
-            controls.target.set(0.0, 1.05, 0.0);
+            controls.target.set(0.0, 1.0, 0.0);
             const isMob = (containerRef.current?.clientWidth || 400) < 640;
-            camera.position.set(0.0, 1.15, isMob ? 2.1 : 1.85);
+            camera.position.set(0.0, 1.00, isMob ? 2.6 : 2.3);
             controls.update();
           }
         }

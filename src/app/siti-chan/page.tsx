@@ -17,6 +17,8 @@ import {
   Download,
   ExternalLink,
   Mail,
+  Youtube,
+  Play,
 } from "lucide-react";
 import Character3DViewer from "./components/Character3DViewer";
 import "./siti-chan.css";
@@ -27,6 +29,9 @@ import "./siti-chan.css";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.sitichan.app";
+
+const YOUTUBE_URL =
+  "https://youtu.be/K2C8uF7_xhI?si=z33yliYbt7M_rwNm";
 
 const FEATURES = [
   {
@@ -271,6 +276,64 @@ function Floating3DElements() {
 }
 
 /* ═══════════════════════════════════════════
+   DEMO VIDEO SECTION
+   ═══════════════════════════════════════════ */
+
+function VideoShowcaseSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section className="relative py-20 px-6" id="video-demo">
+      <div className="max-w-4xl mx-auto text-center" ref={ref}>
+        <SectionTitle
+          badge="Demo Video"
+          title="Tonton Siti-Chan Aksi Nyata"
+          subtitle="Lihat bagaimana Siti-Chan merespons percakapan suara dan tampilan 3D secara langsung."
+        />
+
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={scaleUp}
+          className="relative rounded-3xl overflow-hidden sc-glass-card p-3 sm:p-4 border border-white/10 shadow-2xl"
+        >
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-950 shadow-inner">
+            <iframe
+              src="https://www.youtube.com/embed/K2C8uF7_xhI?rel=0"
+              title="Siti-Chan App Demo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-full border-0"
+            />
+          </div>
+
+          <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
+            <div className="flex items-center gap-2 text-left">
+              <Youtube className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-medium text-white/90">
+                Siti-Chan Official App Preview & Demo
+              </span>
+            </div>
+
+            <a
+              href={YOUTUBE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white border border-red-500/30 transition-all group"
+            >
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>Buka di YouTube</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-70 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════
    PAGE COMPONENT
    ═══════════════════════════════════════════ */
 
@@ -366,7 +429,7 @@ export default function SitiChanLandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"
+              className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start items-center"
             >
               <a
                 href={PLAY_STORE_URL}
@@ -385,8 +448,20 @@ export default function SitiChanLandingPage() {
               </a>
 
               <a
+                href={YOUTUBE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-6 py-4 rounded-2xl font-semibold text-base sc-glass-sm hover:bg-red-500/10 hover:border-red-500/30 text-white transition-all border border-white/10 group"
+                id="hero-youtube-btn"
+              >
+                <Youtube className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
+                <span>Tonton Demo</span>
+                <ExternalLink className="w-4 h-4 opacity-60" />
+              </a>
+
+              <a
                 href="#features"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base sc-glass-sm hover:bg-white/5 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-semibold text-base sc-glass-sm hover:bg-white/5 transition-all"
                 style={{ color: "var(--sc-accent)" }}
                 id="hero-learn-more-btn"
               >
@@ -468,6 +543,11 @@ export default function SitiChanLandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════
+          DEMO VIDEO SECTION
+         ═══════════════════════════════════ */}
+      <VideoShowcaseSection />
 
       {/* ═══════════════════════════════════
           CHARACTERS SECTION
