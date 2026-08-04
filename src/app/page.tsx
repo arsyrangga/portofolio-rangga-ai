@@ -16,6 +16,7 @@ import {
   BookOpen,
   Eye,
   ArrowUpRight,
+  ZoomIn,
 } from "lucide-react";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
@@ -44,6 +45,31 @@ const Portfolio = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoadingArticles, setIsLoadingArticles] = useState(true);
   const [articlesError, setArticlesError] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string;
+    title: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+
+    if (selectedImage) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedImage]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -410,16 +436,31 @@ const Portfolio = () => {
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Image Section */}
-                <div className="h-44 bg-muted relative border-b border-border overflow-hidden">
+                <div
+                  className="h-44 bg-muted relative border-b border-border overflow-hidden group cursor-pointer"
+                  onClick={() =>
+                    setSelectedImage({
+                      src:
+                        project.image ||
+                        `https://picsum.photos/400/200?random=${index}`,
+                      title: project.title,
+                    })
+                  }
+                >
                   <img
                     src={
                       project.image ||
                       `https://picsum.photos/400/200?random=${index}`
                     }
                     alt={project.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     style={{ objectPosition: "0% 5%" }}
                   />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="bg-background/90 text-foreground p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xs border border-border">
+                      <ZoomIn className="w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Content Section */}
@@ -857,6 +898,39 @@ const Portfolio = () => {
           </div>
         </div>
       </footer>
+
+      {/* Image Preview Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative max-w-4xl w-full bg-card border border-border shadow-2xl rounded-2xl overflow-hidden text-card-foreground p-3 sm:p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-border mb-4">
+              <h3 className="text-base font-semibold text-foreground tracking-tight">
+                {selectedImage.title}
+              </h3>
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="relative flex items-center justify-center bg-muted/40 rounded-xl overflow-hidden max-h-[75vh]">
+              <img
+                src={selectedImage.src}
+                alt={selectedImage.title}
+                className="max-h-[75vh] w-auto max-w-full object-contain rounded-lg shadow-xs"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

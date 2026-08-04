@@ -46,7 +46,7 @@ export const projects = [
       "Siti Chan Mobile, an AI-powered virtual assistant application that enables users to interact with an intelligent avatar through conversations. Focused on building a responsive and intuitive mobile experience by integrating AI chat, text-to-speech capabilities, and a user-friendly interface, while optimizing performance and ensuring smooth interactions across Android devices.",
     gradient: "from-purple-600 to-pink-600",
     color: "blue",
-    tech: ["Kotlin", "Onnyx Runtime", "PiperTTS"],
+    tech: ["Kotlin", "PiperTTS", "Nodejs"],
     link: "https://deepchan.tech",
     image: "https://portofolio.rangga.click/assets/images/sitichan.png",
   },
