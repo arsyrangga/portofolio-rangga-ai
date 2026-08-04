@@ -80,7 +80,7 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="bg-slate-900 text-white overflow-x-hidden">
+    <div className="bg-background text-foreground overflow-x-hidden min-h-screen transition-colors duration-300">
       {/* Overlay untuk mobile menu */}
       {isMobileMenuOpen && (
         <div
@@ -187,7 +187,7 @@ const Portfolio = () => {
       {/* Hero Section */}
       <section
         id="home"
-        className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden pt-16"
+        className="min-h-screen bg-background dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center relative overflow-hidden pt-16"
       >
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -215,7 +215,7 @@ const Portfolio = () => {
                 height="350"
                 decoding="async"
                 src="/assets/images/rangga.jpg"
-                className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover"
+                className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover shadow-lg"
                 style={{
                   border: "5px solid #155dfc",
                   boxShadow: "0 0 20px rgba(21, 93, 252, 0.5)",
@@ -223,11 +223,11 @@ const Portfolio = () => {
               />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 px-4">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 Rangga Arsy Prawira
               </span>
               <br />
-              <span className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl">
+              <span className="text-foreground text-2xl sm:text-3xl md:text-5xl lg:text-6xl">
                 Full Stack Developer
               </span>
             </h1>
@@ -239,7 +239,7 @@ const Portfolio = () => {
                 : "opacity-0 translate-y-10"
             }`}
           >
-            <p className="text-xl md:text-2xl text-slate-300 mb-8 leading-relaxed">
+            <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
               Creating amazing digital experiences with modern technology.
             </p>
           </div>
@@ -254,14 +254,14 @@ const Portfolio = () => {
           >
             <button
               onClick={() => scrollToSection("projects")}
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
             >
               See Portfolio
             </button>
 
             <a
               href="/assets/pdf/cv.pdf"
-              className="w-full sm:w-auto border-2 border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="w-full sm:w-auto border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
               download={true}
             >
               Download CV
@@ -271,12 +271,12 @@ const Portfolio = () => {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-6 h-6 text-blue-400" />
+          <ChevronDown className="w-6 h-6 text-blue-500" />
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-slate-800/50">
+      <section id="about" className="py-20 bg-muted/40 border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-1000 ${
@@ -286,11 +286,11 @@ const Portfolio = () => {
             }`}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 About Me
               </span>
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-lg">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               I am a Full-Stack Developer with over 4 years of experience,
               skilled in both frontend and backend development. I build
               responsive, SEO-friendly interfaces and write clean, maintainable
@@ -309,11 +309,11 @@ const Portfolio = () => {
                   : "opacity-0 -translate-x-10"
               }`}
             >
-              <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8 transform hover:scale-105 transition-all duration-300">
-                <h3 className="text-2xl font-bold mb-4 text-blue-400">
+              <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8 transform hover:scale-105 transition-all duration-300">
+                <h3 className="text-2xl font-bold mb-4 text-blue-500">
                   Background
                 </h3>
-                <p className="text-slate-300 leading-relaxed mb-6">
+                <p className="text-muted-foreground leading-relaxed mb-6">
                   I am a Full Stack Developer with a passion for creating
                   innovative digital solutions. With more than 3 years of
                   experience in web development, I have worked with various
@@ -324,14 +324,14 @@ const Portfolio = () => {
                     (tech, index) => (
                       <span
                         key={tech}
-                        className={`px-3 py-1 rounded-full text-sm ${
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
                           index === 0
-                            ? "bg-blue-600/20 text-blue-400"
+                            ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
                             : index === 1
-                            ? "bg-green-600/20 text-green-400"
+                            ? "bg-green-500/10 text-green-600 dark:text-green-400"
                             : index === 2
-                            ? "bg-purple-600/20 text-purple-400"
-                            : "bg-yellow-600/20 text-yellow-400"
+                            ? "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
                         }`}
                       >
                         {tech}
@@ -353,7 +353,7 @@ const Portfolio = () => {
                 {skills.map((skill, index) => (
                   <div
                     key={index}
-                    className={`bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-xl p-6 transform hover:translate-x-2 transition-all duration-300`}
+                    className={`bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-xl p-6 transform hover:translate-x-2 transition-all duration-300`}
                   >
                     <div className="flex items-center mb-3">
                       <div
@@ -362,9 +362,9 @@ const Portfolio = () => {
                           backgroundColor: skill.color,
                         }}
                       ></div>
-                      <h4 className="text-xl font-semibold">{skill.name}</h4>
+                      <h4 className="text-xl font-semibold text-foreground">{skill.name}</h4>
                     </div>
-                    <p className="text-slate-300">{skill.desc}</p>
+                    <p className="text-muted-foreground">{skill.desc}</p>
                   </div>
                 ))}
               </div>
@@ -374,7 +374,7 @@ const Portfolio = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 bg-slate-900">
+      <section id="projects" className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-1000 ${
@@ -384,11 +384,11 @@ const Portfolio = () => {
             }`}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 Projects
               </span>
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-lg">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Throughout my career, I’ve had the opportunity to collaborate on a
               diverse range of projects—each one presenting unique challenges,
               creative solutions, and valuable lessons.
@@ -399,7 +399,7 @@ const Portfolio = () => {
             {projects.map((project, index) => (
               <div
                 key={project.title}
-                className={`bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-500 group ${
+                className={`bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-500 group ${
                   visibleSections.has("projects")
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-10"
@@ -407,7 +407,7 @@ const Portfolio = () => {
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 {/* Image Section */}
-                <div className="h-48 bg-slate-800 relative overflow-hidden">
+                <div className="h-48 bg-muted relative overflow-hidden">
                   <img
                     src={
                       project.image ||
@@ -418,7 +418,7 @@ const Portfolio = () => {
                     style={{ objectPosition: "0% 5%" }}
                   />
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
                   {/* Gradient overlay untuk blend dengan theme */}
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-20 group-hover:opacity-10 transition-opacity duration-300`}
@@ -429,7 +429,7 @@ const Portfolio = () => {
                       className={`w-8 h-8 bg-${project.color}-500/20 backdrop-blur-sm rounded-full flex items-center justify-center animate-pulse`}
                     >
                       <div
-                        className={`w-3 h-3 bg-${project.color}-400 rounded-full`}
+                        className={`w-3 h-3 bg-${project.color}-500 rounded-full`}
                       ></div>
                     </div>
                   </div>
@@ -438,18 +438,18 @@ const Portfolio = () => {
                 {/* Content Section */}
                 <div className="p-6">
                   <h3
-                    className={`text-xl font-bold mb-2 text-${project.color}-400`}
+                    className="text-xl font-bold mb-2 text-foreground"
                   >
                     {project.title}
                   </h3>
-                  <p className="text-slate-300 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {expandedIndex === index ||
                     project.description.length <= 150
                       ? project.description
                       : `${project.description.slice(0, 150)}...`}
                     {project.description.length > 150 && (
                       <button
-                        className={`text-${project.color}-400 hover:underline ml-1`}
+                        className="text-blue-500 hover:underline ml-1 cursor-pointer font-medium"
                         onClick={() =>
                           setExpandedIndex(
                             expandedIndex === index ? null : index
@@ -464,12 +464,12 @@ const Portfolio = () => {
                     {project.tech.map((tech, techIndex) => (
                       <span
                         key={tech}
-                        className={`px-2 py-1 rounded text-xs ${
+                        className={`px-2 py-1 rounded text-xs font-medium ${
                           techIndex === 0
-                            ? "bg-blue-600/20 text-blue-400"
+                            ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
                             : techIndex === 1
-                            ? "bg-green-600/20 text-green-400"
-                            : "bg-purple-600/20 text-purple-400"
+                            ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                            : "bg-purple-500/10 text-purple-600 dark:text-purple-400"
                         }`}
                       >
                         {tech}
@@ -478,7 +478,7 @@ const Portfolio = () => {
                   </div>
                   {project.link !== "#" && project.link && (
                     <button
-                      className={`text-${project.color}-400 hover:text-${project.color}-300 font-semibold transition-colors duration-300 flex items-center gap-2 cursor-pointer`}
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-500 font-semibold transition-colors duration-300 flex items-center gap-2 cursor-pointer"
                       onClick={() => {
                         window.open(project.link, "_blank");
                       }}
@@ -494,7 +494,7 @@ const Portfolio = () => {
       </section>
 
       {/* Certificates Section */}
-      <section id="certificates" className="py-20 bg-slate-800/50">
+      <section id="certificates" className="py-20 bg-muted/40 border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-1000 ${
@@ -504,11 +504,11 @@ const Portfolio = () => {
             }`}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 Licenses & Certificates
               </span>
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-lg">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Certifications and achievements in technology development
             </p>
           </div>
@@ -517,7 +517,7 @@ const Portfolio = () => {
             {certificates.map((cert, index) => (
               <div
                 key={cert.title}
-                className={`bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-6 transform hover:scale-105 transition-all duration-500 group relative overflow-hidden ${
+                className={`bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-6 transform hover:scale-105 transition-all duration-500 group relative overflow-hidden ${
                   visibleSections.has("certificates")
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-10"
@@ -527,7 +527,7 @@ const Portfolio = () => {
                 {/* Certificate Badge */}
                 <div className="flex items-start justify-between mb-4">
                   <div
-                    className={`w-16 h-16 bg-gradient-to-br  ${
+                    className={`w-16 h-16 bg-gradient-to-br ${
                       gradientColors[cert.color as keyof typeof gradientColors]
                         .from
                     } ${
@@ -538,7 +538,7 @@ const Portfolio = () => {
                     <Award className="w-8 h-8 text-white" />
                   </div>
                   <div
-                    className={`px-3 py-1 bg-${cert.color}-600/20 text-${cert.color}-400 rounded-full text-sm font-medium`}
+                    className="px-3 py-1 bg-muted text-foreground rounded-full text-sm font-medium border border-border"
                   >
                     {cert.date}
                   </div>
@@ -547,15 +547,15 @@ const Portfolio = () => {
                 {/* Certificate Content */}
                 <div className="mb-4">
                   <h3
-                    className={`text-xl font-bold mb-2 text-${cert.color}-400 group-hover:text-${cert.color}-300 transition-colors duration-300`}
+                    className="text-xl font-bold mb-2 text-foreground group-hover:text-blue-500 transition-colors duration-300"
                   >
                     {cert.title}
                   </h3>
-                  <div className="flex items-center text-slate-300 mb-3">
-                    <Users className="w-4 h-4 mr-2" />
+                  <div className="flex items-center text-muted-foreground mb-3">
+                    <Users className="w-4 h-4 mr-2 text-blue-500" />
                     <span className="text-sm font-medium">{cert.issuer}</span>
                   </div>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                     {cert.description}
                   </p>
                 </div>
@@ -565,14 +565,14 @@ const Portfolio = () => {
                   {cert.skills.map((skill, skillIndex) => (
                     <span
                       key={skill}
-                      className={`px-2 py-1 rounded text-xs ${
+                      className={`px-2 py-1 rounded text-xs font-medium ${
                         skillIndex % 4 === 0
-                          ? "bg-blue-600/20 text-blue-400"
+                          ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
                           : skillIndex % 4 === 1
-                          ? "bg-green-600/20 text-green-400"
+                          ? "bg-green-500/10 text-green-600 dark:text-green-400"
                           : skillIndex % 4 === 2
-                          ? "bg-purple-600/20 text-purple-400"
-                          : "bg-orange-600/20 text-orange-400"
+                          ? "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                          : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
                       }`}
                     >
                       {skill}
@@ -581,18 +581,18 @@ const Portfolio = () => {
                 </div>
 
                 {/* Credential ID */}
-                <div className="border-t border-slate-700/50 pt-4">
+                <div className="border-t border-border pt-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-slate-400 mb-1">
+                      <p className="text-xs text-muted-foreground mb-1">
                         Credential ID
                       </p>
-                      <p className="text-sm font-mono text-slate-300">
+                      <p className="text-sm font-mono text-foreground">
                         {cert.credentialId}
                       </p>
                     </div>
                     <button
-                      className={`text-${cert.color}-400 hover:text-${cert.color}-300 transition-colors duration-300`}
+                      className="text-blue-500 hover:text-blue-600 transition-colors duration-300"
                     >
                       <ExternalLink
                         style={{ cursor: "pointer" }}
@@ -605,7 +605,7 @@ const Portfolio = () => {
 
                 {/* Hover Effect Overlay */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br from-${cert.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl`}
+                  className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
                 ></div>
               </div>
             ))}
@@ -619,27 +619,27 @@ const Portfolio = () => {
                 : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8 max-w-2xl mx-auto">
+            <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8 max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-4">
-                <Award className="w-8 h-8 text-blue-400 mr-3" />
-                <h3 className="text-2xl font-bold text-blue-400">
+                <Award className="w-8 h-8 text-blue-500 mr-3" />
+                <h3 className="text-2xl font-bold text-blue-500">
                   Achievement
                 </h3>
               </div>
               <div className="grid grid-cols-3 gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-white mb-2">
+                  <div className="text-3xl font-bold text-foreground mb-2">
                     {certificates.length}
                   </div>
-                  <div className="text-slate-300 text-sm">Certificate</div>
+                  <div className="text-muted-foreground text-sm">Certificate</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-white mb-2">500+</div>
-                  <div className="text-slate-300 text-sm">Study Hours</div>
+                  <div className="text-3xl font-bold text-foreground mb-2">500+</div>
+                  <div className="text-muted-foreground text-sm">Study Hours</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-white mb-2">15+</div>
-                  <div className="text-slate-300 text-sm">Tech</div>
+                  <div className="text-3xl font-bold text-foreground mb-2">15+</div>
+                  <div className="text-muted-foreground text-sm">Tech</div>
                 </div>
               </div>
             </div>
@@ -648,7 +648,7 @@ const Portfolio = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-slate-800/50">
+      <section id="contact" className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-1000 ${
@@ -658,11 +658,11 @@ const Portfolio = () => {
             }`}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 Get In Touch
               </span>
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-lg">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Let's Connect and Collaborate to Build Amazing Things Together.
             </p>
           </div>
@@ -676,8 +676,8 @@ const Portfolio = () => {
                     : "opacity-0 -translate-x-10"
                 }`}
               >
-                <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8">
-                  <h3 className="text-2xl font-bold mb-6 text-blue-400">
+                <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8">
+                  <h3 className="text-2xl font-bold mb-6 text-blue-500">
                     Let's Collaborate
                   </h3>
                   <div className="space-y-4">
@@ -703,15 +703,15 @@ const Portfolio = () => {
                     ].map((contact) => (
                       <div key={contact.label} className="flex items-center">
                         <div
-                          className={`w-12 h-12 bg-${contact.color}-600/20 rounded-full flex items-center justify-center mr-4`}
+                          className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mr-4"
                         >
                           <contact.icon
-                            className={`w-6 h-6 text-${contact.color}-400`}
+                            className="w-6 h-6 text-blue-500"
                           />
                         </div>
                         <div>
-                          <p className="text-slate-300">{contact.label}</p>
-                          <p className="text-white font-semibold">
+                          <p className="text-muted-foreground">{contact.label}</p>
+                          <p className="text-foreground font-semibold">
                             {contact.value}
                           </p>
                         </div>
@@ -728,12 +728,12 @@ const Portfolio = () => {
                     : "opacity-0 translate-x-10"
                 }`}
               >
-                <div className="bg-slate-900/80 backdrop-blur-xl border border-blue-500/10 rounded-2xl p-8 space-y-6">
+                <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8 space-y-6">
                   <div>
                     <input
                       type="text"
                       placeholder="Nama Anda"
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300"
+                      className="w-full px-4 py-3 bg-background border border-input text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-300 placeholder:text-muted-foreground"
                       onInput={(e) => setName(e.currentTarget.value)}
                     />
                   </div>
@@ -741,7 +741,7 @@ const Portfolio = () => {
                     <input
                       type="email"
                       placeholder="Email Anda"
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300"
+                      className="w-full px-4 py-3 bg-background border border-input text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-300 placeholder:text-muted-foreground"
                       onInput={(e) => setEmail(e.currentTarget.value)}
                     />
                   </div>
@@ -749,14 +749,14 @@ const Portfolio = () => {
                     <textarea
                       placeholder="Pesan Anda"
                       rows={5}
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:border-blue-400 focus:outline-none transition-colors duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-background border border-input text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-300 resize-none placeholder:text-muted-foreground"
                       onInput={(e) => setMessage(e.currentTarget.value)}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={sendToWhatsApp}
-                    className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
                   >
                     Send Message
                   </button>
@@ -768,10 +768,10 @@ const Portfolio = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 py-8 border-t border-slate-800">
+      <footer className="bg-card text-card-foreground py-8 border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-slate-400">
+            <p className="text-muted-foreground">
               ©Copyright Rangga Arsy Prawira @2025 || All Right Reserved
             </p>
             <div className="flex justify-center space-x-6 mt-4">
@@ -779,7 +779,7 @@ const Portfolio = () => {
                 <a
                   key={social.label}
                   href={social.url}
-                  className="text-slate-400 hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
+                  className="text-muted-foreground hover:text-blue-500 transition-colors duration-300 flex items-center gap-2 font-medium"
                 >
                   <social.icon className="w-5 h-5" />
                   {social.label}
