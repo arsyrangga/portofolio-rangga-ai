@@ -983,18 +983,25 @@ const Portfolio = () => {
             </p>
 
             {/* Image Box with Scroll / Touch Pan Support */}
-            <div className="relative flex-1 overflow-auto rounded-xl bg-muted/40 border border-border p-2 min-h-[300px] flex items-center justify-center select-none">
+            <div className="relative flex-1 overflow-auto rounded-xl bg-muted/40 border border-border p-4 min-h-[300px] select-none">
               <div
-                className="transition-all duration-200 flex items-center justify-center min-w-full"
+                className="transition-all duration-200 flex items-center justify-center m-auto"
                 style={{
                   width: zoomLevel === 1 ? "100%" : `${zoomLevel * 100}%`,
+                  minWidth: zoomLevel === 1 ? "100%" : `${zoomLevel * 100}%`,
+                  minHeight: zoomLevel === 1 ? "auto" : `${zoomLevel * 100}%`,
                 }}
               >
                 <img
                   src={selectedImage.src}
                   alt={selectedImage.title}
                   onClick={handleToggleZoom}
-                  className={`w-full max-h-[75vh] object-contain rounded-lg shadow-xs transition-all duration-200 ${
+                  style={{
+                    maxHeight: zoomLevel === 1 ? "70vh" : "none",
+                    maxWidth: zoomLevel === 1 ? "100%" : "none",
+                    width: zoomLevel === 1 ? "auto" : "100%",
+                  }}
+                  className={`rounded-lg shadow-xs transition-all duration-200 ${
                     zoomLevel > 1 ? "cursor-zoom-out" : "cursor-zoom-in"
                   }`}
                 />
