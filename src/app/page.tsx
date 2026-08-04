@@ -19,6 +19,7 @@ import { skills } from "@/data/skills";
 import { certificates } from "@/data/certificates";
 import { gradientColors } from "@/constant/gradientColors";
 import { medsos } from "@/constant/constant";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Portfolio = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -91,41 +92,43 @@ const Portfolio = () => {
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-slate-900/90 backdrop-blur-xl border-b border-slate-800/50"
+            ? "bg-background/80 backdrop-blur-xl border-b border-border text-foreground shadow-sm"
             : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 Rangga Portfolio
               </span>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:block">
+            <div className="hidden md:flex items-center space-x-6">
               <div className="ml-10 flex items-baseline space-x-8">
                 {["home", "about", "projects", "certificates", "contact"].map(
                   (section) => (
                     <button
                       key={section}
                       onClick={() => scrollToSection(section)}
-                      className="hover:text-blue-400 transition-colors duration-300 relative group capitalize"
+                      className="hover:text-blue-500 transition-colors duration-300 relative group capitalize text-foreground/80 hover:text-foreground font-medium"
                     >
                       {section === "certificates" ? "Sertifikat" : section}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
                     </button>
                   )
                 )}
               </div>
+              <ThemeToggle />
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            {/* Mobile Menu Button & Toggle */}
+            <div className="md:hidden flex items-center space-x-2">
+              <ThemeToggle />
               <button
                 onClick={toggleMobileMenu}
-                className="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-300"
+                className="inline-flex items-center justify-center p-2 rounded-md text-foreground/70 hover:text-foreground hover:bg-muted transition-all duration-300"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -143,7 +146,7 @@ const Portfolio = () => {
             isMobileMenuOpen
               ? "max-h-80 opacity-100 visible"
               : "max-h-0 opacity-0 invisible"
-          } overflow-hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/50`}
+          } overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {["home", "about", "projects", "certificates", "contact"].map(
@@ -151,7 +154,7 @@ const Portfolio = () => {
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-all duration-300 capitalize transform ${
+                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted transition-all duration-300 capitalize transform ${
                     isMobileMenuOpen
                       ? "translate-x-0 opacity-100"
                       : "-translate-x-4 opacity-0"
@@ -165,13 +168,13 @@ const Portfolio = () => {
           </div>
 
           {/* Mobile Social Links */}
-          <div className="border-t border-slate-800/50 px-4 py-3">
+          <div className="border-t border-border px-4 py-3">
             <div className="flex space-x-4 justify-center">
               {medsos.map((social) => (
                 <a
                   key={social.label}
                   href={social.url}
-                  className="text-slate-400 hover:text-blue-400 transition-colors duration-300 p-2 rounded-full hover:bg-slate-800"
+                  className="text-foreground/70 hover:text-blue-500 transition-colors duration-300 p-2 rounded-full hover:bg-muted"
                 >
                   <social.icon className="w-5 h-5" />
                 </a>
