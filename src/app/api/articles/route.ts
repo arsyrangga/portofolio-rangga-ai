@@ -21,6 +21,12 @@ export async function GET() {
     }
 
     const data = await res.json();
+    if (Array.isArray(data)) {
+      data.sort(
+        (a: { date?: string }, b: { date?: string }) =>
+          new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+      );
+    }
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

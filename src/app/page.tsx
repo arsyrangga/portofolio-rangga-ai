@@ -63,7 +63,11 @@ const Portfolio = () => {
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         if (Array.isArray(data)) {
-          setArticles(data.slice(0, 6));
+          const sorted = [...data].sort(
+            (a, b) =>
+              new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+          );
+          setArticles(sorted.slice(0, 6));
         }
       } catch (err) {
         console.error("Error fetching articles:", err);
