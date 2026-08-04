@@ -13,6 +13,9 @@ import {
   X,
   Award,
   Users,
+  BookOpen,
+  Eye,
+  ArrowUpRight,
 } from "lucide-react";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
@@ -21,11 +24,26 @@ import { gradientColors } from "@/constant/gradientColors";
 import { medsos } from "@/constant/constant";
 import { ThemeToggle } from "@/components/theme-toggle";
 
+interface Article {
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  date: string;
+  thumbnail: string;
+  tags: string[];
+  views: number;
+}
+
 const Portfolio = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<null | number>(null);
+
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoadingArticles, setIsLoadingArticles] = useState(true);
+  const [articlesError, setArticlesError] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,6 +55,25 @@ const Portfolio = () => {
     const url = `https://wa.me/${phoneNumber}?text=Nama: ${name} \n Email: ${email} \n Pesan: ${text}`;
     window.open(url, "_blank");
   };
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const res = await fetch("/api/articles");
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setArticles(data.slice(0, 6));
+        }
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+        setArticlesError(true);
+      } finally {
+        setIsLoadingArticles(false);
+      }
+    };
+    fetchArticles();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,14 +144,18 @@ const Portfolio = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
               <div className="ml-10 flex items-baseline space-x-6">
-                {["home", "about", "projects", "certificates", "contact"].map(
+                {["home", "about", "projects", "certificates", "articles", "contact"].map(
                   (section) => (
                     <button
                       key={section}
                       onClick={() => scrollToSection(section)}
                       className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative group capitalize font-medium text-sm cursor-pointer"
                     >
-                      {section === "certificates" ? "Sertifikat" : section}
+                      {section === "certificates"
+                        ? "Sertifikat"
+                        : section === "articles"
+                        ? "Artikel"
+                        : section}
                       <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground transition-all duration-200 group-hover:w-full"></span>
                     </button>
                   )
@@ -149,14 +190,18 @@ const Portfolio = () => {
           } overflow-hidden bg-background border-b border-border`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {["home", "about", "projects", "certificates", "contact"].map(
+            {["home", "about", "projects", "certificates", "articles", "contact"].map(
               (section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
                   className="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 capitalize cursor-pointer"
                 >
-                  {section === "certificates" ? "Sertifikat" : section}
+                  {section === "certificates"
+                    ? "Sertifikat"
+                    : section === "articles"
+                    ? "Artikel"
+                    : section}
                 </button>
               )
             )}
@@ -540,6 +585,140 @@ const Portfolio = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Articles Section */}
+      <section id="articles" className="py-20 bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            className={`text-center mb-16 transition-all duration-700 ${
+              visibleSections.has("articles")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-6"
+            }`}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+              Latest Articles
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-base">
+              Articles, technical insights, and digital tutorials published on Blogyra.
+            </p>
+          </div>
+
+          {isLoadingArticles ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="bg-card border border-border shadow-xs rounded-xl p-5 animate-pulse space-y-4"
+                >
+                  <div className="h-40 bg-muted rounded-lg w-full"></div>
+                  <div className="h-4 bg-muted rounded w-1/3"></div>
+                  <div className="h-5 bg-muted rounded w-3/4"></div>
+                  <div className="h-3 bg-muted rounded w-full"></div>
+                </div>
+              ))}
+            </div>
+          ) : articlesError || articles.length === 0 ? (
+            <div className="bg-card border border-border shadow-xs rounded-xl p-8 text-center max-w-md mx-auto">
+              <BookOpen className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
+              <p className="text-sm font-medium text-foreground mb-1">
+                Unable to load articles
+              </p>
+              <p className="text-xs text-muted-foreground mb-4">
+                Visit Blogyra directly to read our latest publications.
+              </p>
+              <a
+                href="https://blogyra.site"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
+              >
+                Visit Blogyra <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {articles.map((article, index) => (
+                <div
+                  key={article.slug || index}
+                  className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all flex flex-col justify-between ${
+                    visibleSections.has("articles")
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-6"
+                  }`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div>
+                    {/* Thumbnail */}
+                    <div className="h-44 bg-muted relative border-b border-border overflow-hidden">
+                      <img
+                        src={
+                          article.thumbnail.startsWith("http")
+                            ? article.thumbnail
+                            : `https://blogyra.site${article.thumbnail}`
+                        }
+                        alt={article.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src =
+                            "https://blogyra.site/icon/icon.png";
+                        }}
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className="px-2.5 py-0.5 bg-background/90 text-foreground text-xs font-medium rounded-full border border-border shadow-xs">
+                          {article.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-5">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+                        <span>{article.date}</span>
+                        <span className="flex items-center gap-1">
+                          <Eye className="w-3.5 h-3.5" />
+                          {article.views || 0}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-semibold tracking-tight text-foreground mb-2 line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3 mb-4">
+                        {article.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-5 pt-0 mt-auto">
+                    <a
+                      href={`https://blogyra.site/blog/${article.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:opacity-80 transition-opacity"
+                    >
+                      Read Article <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Footer CTA */}
+          {!articlesError && articles.length > 0 && (
+            <div className="mt-12 text-center">
+              <a
+                href="https://blogyra.site"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground hover:opacity-90 rounded-lg text-sm font-medium transition-all shadow-xs"
+              >
+                View All Articles on Blogyra <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          )}
         </div>
       </section>
 
