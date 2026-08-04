@@ -17,6 +17,8 @@ import {
   Eye,
   ArrowUpRight,
   ZoomIn,
+  ZoomOut,
+  RotateCcw,
 } from "lucide-react";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
@@ -50,6 +52,24 @@ const Portfolio = () => {
     src: string;
     title: string;
   } | null>(null);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
+
+  const handleOpenImage = (src: string, title: string) => {
+    setSelectedImage({ src, title });
+    setZoomLevel(1);
+  };
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.75, 2.5));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.75, 1));
+  };
+
+  const handleToggleZoom = () => {
+    setZoomLevel((prev) => (prev === 1 ? 2 : 1));
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -439,12 +459,11 @@ const Portfolio = () => {
                 <div
                   className="h-44 bg-muted relative border-b border-border overflow-hidden group cursor-pointer"
                   onClick={() =>
-                    setSelectedImage({
-                      src:
-                        project.image ||
+                    handleOpenImage(
+                      project.image ||
                         `https://picsum.photos/400/200?random=${index}`,
-                      title: project.title,
-                    })
+                      project.title
+                    )
                   }
                 >
                   <img
@@ -902,31 +921,84 @@ const Portfolio = () => {
       {/* Image Preview Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-xs animate-in fade-in duration-200"
           onClick={() => setSelectedImage(null)}
         >
           <div
-            className="relative max-w-4xl w-full bg-card border border-border shadow-2xl rounded-2xl overflow-hidden text-card-foreground p-3 sm:p-5"
+            className="relative max-w-5xl w-full bg-card border border-border shadow-2xl rounded-2xl overflow-hidden text-card-foreground p-3 sm:p-5 max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-border mb-4">
-              <h3 className="text-base font-semibold text-foreground tracking-tight">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-border mb-2 flex-shrink-0 gap-2">
+              <h3 className="text-sm sm:text-base font-semibold text-foreground tracking-tight truncate max-w-[45%]">
                 {selectedImage.title}
               </h3>
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
+
+              {/* Controls */}
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
+                <div className="flex items-center bg-muted border border-border rounded-lg p-0.5">
+                  <button
+                    onClick={handleZoomOut}
+                    disabled={zoomLevel <= 1}
+                    className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-background disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer"
+                    title="Zoom Out (-)"
+                  >
+                    <ZoomOut className="w-4 h-4" />
+                  </button>
+                  <span className="text-xs font-mono px-2 text-foreground font-medium min-w-[42px] text-center">
+                    {Math.round(zoomLevel * 100)}%
+                  </span>
+                  <button
+                    onClick={handleZoomIn}
+                    disabled={zoomLevel >= 2.5}
+                    className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-background disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer"
+                    title="Zoom In (+)"
+                  >
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
+                  {zoomLevel > 1 && (
+                    <button
+                      onClick={() => setZoomLevel(1)}
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-background transition-all cursor-pointer border-l border-border ml-0.5"
+                      title="Reset Zoom"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer ml-1"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-            <div className="relative flex items-center justify-center bg-muted/40 rounded-xl overflow-hidden max-h-[75vh]">
-              <img
-                src={selectedImage.src}
-                alt={selectedImage.title}
-                className="max-h-[75vh] w-auto max-w-full object-contain rounded-lg shadow-xs"
-              />
+
+            {/* Mobile Touch Hint */}
+            <p className="text-[11px] text-muted-foreground text-center mb-2 flex-shrink-0 sm:hidden">
+              Ketuk gambar atau gunakan tombol + / - untuk perbesar • Geser untuk pan
+            </p>
+
+            {/* Image Box with Scroll / Touch Pan Support */}
+            <div className="relative flex-1 overflow-auto rounded-xl bg-muted/40 border border-border p-2 min-h-[300px] flex items-center justify-center select-none">
+              <div
+                className="transition-all duration-200 flex items-center justify-center min-w-full"
+                style={{
+                  width: zoomLevel === 1 ? "100%" : `${zoomLevel * 100}%`,
+                }}
+              >
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.title}
+                  onClick={handleToggleZoom}
+                  className={`w-full max-h-[75vh] object-contain rounded-lg shadow-xs transition-all duration-200 ${
+                    zoomLevel > 1 ? "cursor-zoom-out" : "cursor-zoom-in"
+                  }`}
+                />
+              </div>
             </div>
           </div>
         </div>
