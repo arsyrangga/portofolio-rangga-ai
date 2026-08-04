@@ -72,24 +72,24 @@
     },
 
     {
-      title: "Pasar Musi Baru",
+      title: "Qita By BRI",
       description:
-        "Pasar Musi is an online shopping website, products come from Pasar Musi Baru in the Depok area.",
+        "Worked as a Frontend Developer on the Qita by BRI project for 2 months, focusing on the development of the SBN (Government Securities) and SIGNAL (National Digital Vehicle Tax Service) features. Responsible for building responsive user interfaces, integrating REST APIs with the backend, implementing frontend business logic, debugging and resolving issues, and collaborating closely with backend developers, QA engineers, and UI/UX designers to ensure high-quality, reliable, and user-friendly application features.",
       gradient: "from-blue-600 to-purple-600",
       color: "green",
-      tech: ["NextJS", "NodeJS"],
-      link: "https://online.pasarmusibaru.co.id",
-      image: "https://rangga.click/assets/images/blogyra.png",
+      tech: ["SWIFT", "SWIFTUI", "XCODE"],
+      link: "https://play.google.com/store/apps/details?id=id.co.bri.brimons&hl=id",
+      image: "https://portofolio.rangga.click/assets/images/qita.jpg",
     },
     {
       title: "Blogyra",
       description:
-        "Sistem pembuatan artikel blog SEO otomatis yang memanfaatkan arsitektur modern gabungan Next.js 15 App Router di sisi Frontend dan Rust (Axum) di sisi Backend yang terintegrasi dengan DeepSeek AI API.",
+        "An automated SEO blog article generation system that leverages a modern architecture combining Next.js 15 App Router on the front end and Rust (Axum) on the back end, integrated with the DeepSeek AI API.",
       gradient: "from-purple-600 to-cyan-600",
       color: "purple",
       tech: ["Next.js", "Axum", "Rust"],
       link: "https://blogyra.site",
-      image: "https://rangga.click/assets/images/blogyra.jpg",
+      image: "https://portofolio.rangga.click/assets/images/blogyra.png",
     },
     {
       title: "IDN Media",
