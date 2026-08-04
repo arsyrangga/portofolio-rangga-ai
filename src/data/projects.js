@@ -79,17 +79,17 @@
       color: "green",
       tech: ["NextJS", "NodeJS"],
       link: "https://online.pasarmusibaru.co.id",
-      image: "https://rangga.click/assets/images/musi.jpg",
+      image: "https://rangga.click/assets/images/blogyra.png",
     },
     {
-      title: "Pasar Musi Baru Official",
+      title: "Blogyra",
       description:
-        "Pasar Musi Baru is the official website of Pasar Musi Baru in the Depok area",
+        "Sistem pembuatan artikel blog SEO otomatis yang memanfaatkan arsitektur modern gabungan Next.js 15 App Router di sisi Frontend dan Rust (Axum) di sisi Backend yang terintegrasi dengan DeepSeek AI API.",
       gradient: "from-purple-600 to-cyan-600",
       color: "purple",
-      tech: ["Next.js", "JavaScript", "ANT UI"],
-      link: "https://pasarmusibaru.co.id",
-      image: "https://rangga.click/assets/images/musi-web.jpg",
+      tech: ["Next.js", "Axum", "Rust"],
+      link: "https://blogyra.site",
+      image: "https://rangga.click/assets/images/blogyra.jpg",
     },
     {
       title: "IDN Media",
