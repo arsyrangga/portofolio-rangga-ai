@@ -80,42 +80,42 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="bg-background text-foreground overflow-x-hidden min-h-screen transition-colors duration-200 font-sans">
+    <div className="bg-background text-foreground overflow-x-hidden min-h-screen transition-colors duration-300">
       {/* Overlay untuk mobile menu */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-200 ${
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-background/95 border-b border-border text-foreground shadow-xs"
+            ? "bg-background/80 backdrop-blur-xl border-b border-border text-foreground shadow-sm"
             : "bg-transparent"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <span className="text-xl font-bold tracking-tight text-foreground">
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                 Rangga Portfolio
               </span>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-              <div className="ml-10 flex items-baseline space-x-6">
+              <div className="ml-10 flex items-baseline space-x-8">
                 {["home", "about", "projects", "certificates", "contact"].map(
                   (section) => (
                     <button
                       key={section}
                       onClick={() => scrollToSection(section)}
-                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative group capitalize font-medium text-sm cursor-pointer"
+                      className="hover:text-blue-500 transition-colors duration-300 relative group capitalize text-foreground/80 hover:text-foreground font-medium"
                     >
                       {section === "certificates" ? "Sertifikat" : section}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground transition-all duration-200 group-hover:w-full"></span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
                     </button>
                   )
                 )}
@@ -128,12 +128,12 @@ const Portfolio = () => {
               <ThemeToggle />
               <button
                 onClick={toggleMobileMenu}
-                className="inline-flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 cursor-pointer"
+                className="inline-flex items-center justify-center p-2 rounded-md text-foreground/70 hover:text-foreground hover:bg-muted transition-all duration-300"
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-5 w-5" />
+                  <X className="h-6 w-6" />
                 ) : (
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-6 w-6" />
                 )}
               </button>
             </div>
@@ -142,19 +142,24 @@ const Portfolio = () => {
 
         {/* Mobile Navigation Menu */}
         <div
-          className={`md:hidden transition-all duration-200 ease-in-out ${
+          className={`md:hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen
               ? "max-h-80 opacity-100 visible"
               : "max-h-0 opacity-0 invisible"
-          } overflow-hidden bg-background border-b border-border`}
+          } overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {["home", "about", "projects", "certificates", "contact"].map(
-              (section) => (
+              (section, index) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 capitalize cursor-pointer"
+                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted transition-all duration-300 capitalize transform ${
+                    isMobileMenuOpen
+                      ? "translate-x-0 opacity-100"
+                      : "-translate-x-4 opacity-0"
+                  }`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
                 >
                   {section === "certificates" ? "Sertifikat" : section}
                 </button>
@@ -169,9 +174,9 @@ const Portfolio = () => {
                 <a
                   key={social.label}
                   href={social.url}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 p-2 rounded-lg hover:bg-muted"
+                  className="text-foreground/70 hover:text-blue-500 transition-colors duration-300 p-2 rounded-full hover:bg-muted"
                 >
-                  <social.icon className="w-4 h-4" />
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
@@ -182,14 +187,24 @@ const Portfolio = () => {
       {/* Hero Section */}
       <section
         id="home"
-        className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden pt-16"
+        className="min-h-screen bg-background dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center relative overflow-hidden pt-16"
       >
-        <div className="text-center z-10 max-w-4xl mx-auto px-4 py-12">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-purple-500/10 rounded-full animate-bounce"></div>
           <div
-            className={`transition-all duration-700 ${
+            className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-cyan-500/10 rounded-full animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+        </div>
+
+        <div className="text-center z-10 max-w-4xl mx-auto px-4">
+          <div
+            className={`transition-all duration-1000 ${
               visibleSections.has("home")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
             <div className="flex justify-center mb-6">
@@ -200,45 +215,53 @@ const Portfolio = () => {
                 height="350"
                 decoding="async"
                 src="/assets/images/rangga.jpg"
-                className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full object-cover border-2 border-border shadow-xs"
+                className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover shadow-lg"
+                style={{
+                  border: "5px solid #155dfc",
+                  boxShadow: "0 0 20px rgba(21, 93, 252, 0.5)",
+                }}
               />
             </div>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 px-4 text-foreground">
-              Rangga Arsy Prawira
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 px-4">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                Rangga Arsy Prawira
+              </span>
               <br />
-              <span className="text-muted-foreground text-xl sm:text-3xl md:text-4xl font-normal block mt-2">
+              <span className="text-foreground text-2xl sm:text-3xl md:text-5xl lg:text-6xl">
                 Full Stack Developer
               </span>
             </h1>
           </div>
           <div
-            className={`transition-all duration-700 delay-150 ${
+            className={`transition-all duration-1000 delay-300 ${
               visibleSections.has("home")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
-              Creating high-performance digital products and elegant web applications with modern web standards.
+            <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
+              Creating amazing digital experiences with modern technology.
             </p>
           </div>
           <div
-            className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-700 delay-300 space-y-3 sm:space-y-0 sm:space-x-4 ${
-              visibleSections.has("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
+            className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-1000 delay-500 
+    space-y-3 sm:space-y-0 sm:space-x-4 
+    ${
+      visibleSections.has("home")
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-10"
+    }`}
           >
             <button
               onClick={() => scrollToSection("projects")}
-              className="w-full sm:w-auto bg-primary text-primary-foreground hover:opacity-90 px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs cursor-pointer"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
             >
               See Portfolio
             </button>
 
             <a
               href="/assets/pdf/cv.pdf"
-              className="w-full sm:w-auto border border-border bg-background text-foreground hover:bg-muted px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs"
+              className="w-full sm:w-auto border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
               download={true}
             >
               Download CV
@@ -247,82 +270,101 @@ const Portfolio = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 opacity-60">
-          <ChevronDown className="w-5 h-5 text-muted-foreground animate-bounce" />
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <ChevronDown className="w-6 h-6 text-blue-500" />
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-muted/30 border-y border-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="about" className="py-20 bg-muted/40 border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
+            className={`text-center mb-16 transition-all duration-1000 ${
               visibleSections.has("about")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
-              About Me
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                About Me
+              </span>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               I am a Full-Stack Developer with over 4 years of experience,
-              skilled in building responsive, SEO-friendly interfaces and writing clean, maintainable code.
+              skilled in both frontend and backend development. I build
+              responsive, SEO-friendly interfaces and write clean, maintainable
+              code. I’m an organized and reliable professional, capable of
+              managing multiple priorities with a positive attitude, and always
+              willing to take on additional responsibilities to help the team
+              achieve its goals
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 items-start">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             <div
-              className={`transition-all duration-700 delay-150 ${
+              className={`transition-all duration-1000 delay-200 ${
                 visibleSections.has("about")
                   ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-6"
+                  : "opacity-0 -translate-x-10"
               }`}
             >
-              <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6">
-                <h3 className="text-xl font-semibold tracking-tight text-foreground mb-3">
+              <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8 transform hover:scale-105 transition-all duration-300">
+                <h3 className="text-2xl font-bold mb-4 text-blue-500">
                   Background
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                <p className="text-muted-foreground leading-relaxed mb-6">
                   I am a Full Stack Developer with a passion for creating
                   innovative digital solutions. With more than 3 years of
                   experience in web development, I have worked with various
-                  modern technologies to deliver production-ready software.
+                  modern technologies.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {["React", "Node.js", "Next.js", "JavaScript"].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-0.5 rounded-md text-xs font-medium bg-secondary text-secondary-foreground border border-border"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  {["React", "Node.js", "Next.js", "JavaScript"].map(
+                    (tech, index) => (
+                      <span
+                        key={tech}
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          index === 0
+                            ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                            : index === 1
+                            ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                            : index === 2
+                            ? "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        }`}
+                      >
+                        {tech}
+                      </span>
+                    )
+                  )}
                 </div>
               </div>
             </div>
 
             <div
-              className={`transition-all duration-700 delay-300 ${
+              className={`transition-all duration-1000 delay-400 ${
                 visibleSections.has("about")
                   ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-6"
+                  : "opacity-0 translate-x-10"
               }`}
             >
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {skills.map((skill, index) => (
                   <div
                     key={index}
-                    className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all"
+                    className={`bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-xl p-6 transform hover:translate-x-2 transition-all duration-300`}
                   >
-                    <div className="flex items-center mb-2">
+                    <div className="flex items-center mb-3">
                       <div
-                        className="w-2.5 h-2.5 rounded-full mr-3"
-                        style={{ backgroundColor: skill.color }}
+                        className={`w-3 h-3 rounded-full mr-3`}
+                        style={{
+                          backgroundColor: skill.color,
+                        }}
                       ></div>
-                      <h4 className="text-base font-semibold text-foreground">{skill.name}</h4>
+                      <h4 className="text-xl font-semibold text-foreground">{skill.name}</h4>
                     </div>
-                    <p className="text-muted-foreground text-xs leading-relaxed">{skill.desc}</p>
+                    <p className="text-muted-foreground">{skill.desc}</p>
                   </div>
                 ))}
               </div>
@@ -333,74 +375,102 @@ const Portfolio = () => {
 
       {/* Projects Section */}
       <section id="projects" className="py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
+            className={`text-center mb-16 transition-all duration-1000 ${
               visibleSections.has("projects")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
-              Projects
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                Projects
+              </span>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-base">
-              A collection of digital products, applications, and web services I've engineered.
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Throughout my career, I’ve had the opportunity to collaborate on a
+              diverse range of projects—each one presenting unique challenges,
+              creative solutions, and valuable lessons.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <div
                 key={project.title}
-                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all ${
+                className={`bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-500 group ${
                   visibleSections.has("projects")
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
+                    : "opacity-0 translate-y-10"
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${index * 200}ms` }}
               >
                 {/* Image Section */}
-                <div className="h-44 bg-muted relative border-b border-border overflow-hidden">
+                <div className="h-48 bg-muted relative overflow-hidden">
                   <img
                     src={
                       project.image ||
                       `https://picsum.photos/400/200?random=${index}`
                     }
                     alt={project.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     style={{ objectPosition: "0% 5%" }}
                   />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
+                  {/* Gradient overlay untuk blend dengan theme */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-20 group-hover:opacity-10 transition-opacity duration-300`}
+                  ></div>
+                  {/* Icon atau badge di corner */}
+                  <div className="absolute top-4 right-4">
+                    <div
+                      className={`w-8 h-8 bg-${project.color}-500/20 backdrop-blur-sm rounded-full flex items-center justify-center animate-pulse`}
+                    >
+                      <div
+                        className={`w-3 h-3 bg-${project.color}-500 rounded-full`}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="p-5">
-                  <h3 className="text-lg font-semibold tracking-tight text-foreground mb-2">
+                <div className="p-6">
+                  <h3
+                    className="text-xl font-bold mb-2 text-foreground"
+                  >
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground text-xs leading-relaxed mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {expandedIndex === index ||
-                    project.description.length <= 130
+                    project.description.length <= 150
                       ? project.description
-                      : `${project.description.slice(0, 130)}...`}
-                    {project.description.length > 130 && (
+                      : `${project.description.slice(0, 150)}...`}
+                    {project.description.length > 150 && (
                       <button
-                        className="text-foreground hover:underline ml-1 font-medium cursor-pointer"
+                        className="text-blue-500 hover:underline ml-1 cursor-pointer font-medium"
                         onClick={() =>
                           setExpandedIndex(
                             expandedIndex === index ? null : index
                           )
                         }
                       >
-                        {expandedIndex === index ? "Less" : "More"}
+                        {expandedIndex === index ? "See Less" : "See More"}
                       </button>
                     )}
                   </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {project.tech.map((tech) => (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tech.map((tech, techIndex) => (
                       <span
                         key={tech}
-                        className="px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground border border-border"
+                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          techIndex === 0
+                            ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                            : techIndex === 1
+                            ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                            : "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                        }`}
                       >
                         {tech}
                       </span>
@@ -408,12 +478,12 @@ const Portfolio = () => {
                   </div>
                   {project.link !== "#" && project.link && (
                     <button
-                      className="text-xs font-semibold text-foreground hover:opacity-80 transition-opacity flex items-center gap-1.5 cursor-pointer"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-500 font-semibold transition-colors duration-300 flex items-center gap-2 cursor-pointer"
                       onClick={() => {
                         window.open(project.link, "_blank");
                       }}
                     >
-                      View Project <ExternalLink className="w-3.5 h-3.5" />
+                      View Project <ExternalLink className="w-4 h-4" />
                     </button>
                   )}
                 </div>
@@ -424,118 +494,152 @@ const Portfolio = () => {
       </section>
 
       {/* Certificates Section */}
-      <section id="certificates" className="py-20 bg-muted/30 border-y border-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="certificates" className="py-20 bg-muted/40 border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
+            className={`text-center mb-16 transition-all duration-1000 ${
               visibleSections.has("certificates")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
-              Licenses & Certificates
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                Licenses & Certificates
+              </span>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-base">
-              Verified certifications and industry credentials
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Certifications and achievements in technology development
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {certificates.map((cert, index) => (
               <div
                 key={cert.title}
-                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all ${
+                className={`bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-6 transform hover:scale-105 transition-all duration-500 group relative overflow-hidden ${
                   visibleSections.has("certificates")
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
+                    : "opacity-0 translate-y-10"
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${index * 150}ms` }}
               >
+                {/* Certificate Badge */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="p-2.5 rounded-lg bg-muted border border-border">
-                    <Award className="w-5 h-5 text-foreground" />
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-br ${
+                      gradientColors[cert.color as keyof typeof gradientColors]
+                        .from
+                    } ${
+                      gradientColors[cert.color as keyof typeof gradientColors]
+                        .to
+                    } rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg`}
+                  >
+                    <Award className="w-8 h-8 text-white" />
                   </div>
-                  <span className="px-2.5 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium border border-border">
+                  <div
+                    className="px-3 py-1 bg-muted text-foreground rounded-full text-sm font-medium border border-border"
+                  >
                     {cert.date}
-                  </span>
+                  </div>
                 </div>
 
+                {/* Certificate Content */}
                 <div className="mb-4">
-                  <h3 className="text-base font-semibold tracking-tight text-foreground mb-1">
+                  <h3
+                    className="text-xl font-bold mb-2 text-foreground group-hover:text-blue-500 transition-colors duration-300"
+                  >
                     {cert.title}
                   </h3>
-                  <div className="flex items-center text-muted-foreground text-xs mb-2">
-                    <Users className="w-3.5 h-3.5 mr-1.5" />
-                    <span>{cert.issuer}</span>
+                  <div className="flex items-center text-muted-foreground mb-3">
+                    <Users className="w-4 h-4 mr-2 text-blue-500" />
+                    <span className="text-sm font-medium">{cert.issuer}</span>
                   </div>
-                  <p className="text-muted-foreground text-xs leading-relaxed mb-3">
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                     {cert.description}
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {cert.skills.map((skill) => (
+                {/* Skills Tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {cert.skills.map((skill, skillIndex) => (
                     <span
                       key={skill}
-                      className="px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground border border-border"
+                      className={`px-2 py-1 rounded text-xs font-medium ${
+                        skillIndex % 4 === 0
+                          ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                          : skillIndex % 4 === 1
+                          ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                          : skillIndex % 4 === 2
+                          ? "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                          : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      }`}
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
 
-                <div className="border-t border-border pt-3">
+                {/* Credential ID */}
+                <div className="border-t border-border pt-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                      <p className="text-xs text-muted-foreground mb-1">
                         Credential ID
                       </p>
-                      <p className="text-xs font-mono text-foreground font-medium">
+                      <p className="text-sm font-mono text-foreground">
                         {cert.credentialId}
                       </p>
                     </div>
                     <button
-                      className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                      onClick={() => window.open(cert.link)}
+                      className="text-blue-500 hover:text-blue-600 transition-colors duration-300"
                     >
-                      <ExternalLink className="w-4 h-4 cursor-pointer" />
+                      <ExternalLink
+                        style={{ cursor: "pointer" }}
+                        onClick={() => window.open(cert.link)}
+                        className="w-4 h-4"
+                      />
                     </button>
                   </div>
                 </div>
+
+                {/* Hover Effect Overlay */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+                ></div>
               </div>
             ))}
           </div>
 
           {/* Certificate Summary */}
           <div
-            className={`mt-12 text-center transition-all duration-700 delay-300 ${
+            className={`mt-16 text-center transition-all duration-1000 delay-600 ${
               visibleSections.has("certificates")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 max-w-xl mx-auto">
+            <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8 max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-4">
-                <Award className="w-5 h-5 text-foreground mr-2" />
-                <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                  Achievements Summary
+                <Award className="w-8 h-8 text-blue-500 mr-3" />
+                <h3 className="text-2xl font-bold text-blue-500">
+                  Achievement
                 </h3>
               </div>
-              <div className="grid grid-cols-3 gap-4 text-center divide-x divide-border">
+              <div className="grid grid-cols-3 gap-6 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-foreground">
+                  <div className="text-3xl font-bold text-foreground mb-2">
                     {certificates.length}
                   </div>
-                  <div className="text-muted-foreground text-xs mt-1">Certificates</div>
+                  <div className="text-muted-foreground text-sm">Certificate</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-foreground">500+</div>
-                  <div className="text-muted-foreground text-xs mt-1">Hours</div>
+                  <div className="text-3xl font-bold text-foreground mb-2">500+</div>
+                  <div className="text-muted-foreground text-sm">Study Hours</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-foreground">15+</div>
-                  <div className="text-muted-foreground text-xs mt-1">Technologies</div>
+                  <div className="text-3xl font-bold text-foreground mb-2">15+</div>
+                  <div className="text-muted-foreground text-sm">Tech</div>
                 </div>
               </div>
             </div>
@@ -545,34 +649,36 @@ const Portfolio = () => {
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
+            className={`text-center mb-16 transition-all duration-1000 ${
               visibleSections.has("contact")
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
-              Get In Touch
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                Get In Touch
+              </span>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-base">
-              Let's connect and collaborate on your next project.
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Let's Connect and Collaborate to Build Amazing Things Together.
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12">
               <div
-                className={`transition-all duration-700 delay-150 ${
+                className={`transition-all duration-1000 delay-200 ${
                   visibleSections.has("contact")
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-6"
+                    : "opacity-0 -translate-x-10"
                 }`}
               >
-                <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-5">
-                  <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                    Contact Details
+                <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8">
+                  <h3 className="text-2xl font-bold mb-6 text-blue-500">
+                    Let's Collaborate
                   </h3>
                   <div className="space-y-4">
                     {[
@@ -580,25 +686,32 @@ const Portfolio = () => {
                         icon: Mail,
                         label: "Email",
                         value: "arsyrangga@gmail.com",
+                        color: "blue",
                       },
                       {
                         icon: Phone,
                         label: "Phone",
                         value: "+6289673494895",
+                        color: "green",
                       },
                       {
                         icon: MapPin,
                         label: "Location",
                         value: "Jakarta, Indonesia",
+                        color: "purple",
                       },
                     ].map((contact) => (
                       <div key={contact.label} className="flex items-center">
-                        <div className="p-2.5 rounded-lg bg-muted border border-border mr-3.5">
-                          <contact.icon className="w-4 h-4 text-foreground" />
+                        <div
+                          className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mr-4"
+                        >
+                          <contact.icon
+                            className="w-6 h-6 text-blue-500"
+                          />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">{contact.label}</p>
-                          <p className="text-sm font-medium text-foreground">
+                          <p className="text-muted-foreground">{contact.label}</p>
+                          <p className="text-foreground font-semibold">
                             {contact.value}
                           </p>
                         </div>
@@ -609,18 +722,18 @@ const Portfolio = () => {
               </div>
 
               <div
-                className={`transition-all duration-700 delay-300 ${
+                className={`transition-all duration-1000 delay-400 ${
                   visibleSections.has("contact")
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 translate-x-6"
+                    : "opacity-0 translate-x-10"
                 }`}
               >
-                <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
+                <div className="bg-card text-card-foreground backdrop-blur-xl border border-border shadow-sm rounded-2xl p-8 space-y-6">
                   <div>
                     <input
                       type="text"
                       placeholder="Nama Anda"
-                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground transition-colors"
+                      className="w-full px-4 py-3 bg-background border border-input text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-300 placeholder:text-muted-foreground"
                       onInput={(e) => setName(e.currentTarget.value)}
                     />
                   </div>
@@ -628,22 +741,22 @@ const Portfolio = () => {
                     <input
                       type="email"
                       placeholder="Email Anda"
-                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground transition-colors"
+                      className="w-full px-4 py-3 bg-background border border-input text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-300 placeholder:text-muted-foreground"
                       onInput={(e) => setEmail(e.currentTarget.value)}
                     />
                   </div>
                   <div>
                     <textarea
                       placeholder="Pesan Anda"
-                      rows={4}
-                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground transition-colors resize-none"
+                      rows={5}
+                      className="w-full px-4 py-3 bg-background border border-input text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-300 resize-none placeholder:text-muted-foreground"
                       onInput={(e) => setMessage(e.currentTarget.value)}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={sendToWhatsApp}
-                    className="w-full bg-primary text-primary-foreground hover:opacity-90 py-2.5 rounded-lg font-medium text-sm shadow-xs transition-all cursor-pointer"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 cursor-pointer"
                   >
                     Send Message
                   </button>
@@ -655,18 +768,20 @@ const Portfolio = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-background py-8 border-t border-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2025 Rangga Arsy Prawira. All rights reserved.</p>
-            <div className="flex space-x-6">
+      <footer className="bg-card text-card-foreground py-8 border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-muted-foreground">
+              ©Copyright Rangga Arsy Prawira @2025 || All Right Reserved
+            </p>
+            <div className="flex justify-center space-x-6 mt-4">
               {medsos.map((social) => (
                 <a
                   key={social.label}
                   href={social.url}
-                  className="hover:text-foreground transition-colors flex items-center gap-1.5 font-medium"
+                  className="text-muted-foreground hover:text-blue-500 transition-colors duration-300 flex items-center gap-2 font-medium"
                 >
-                  <social.icon className="w-3.5 h-3.5" />
+                  <social.icon className="w-5 h-5" />
                   {social.label}
                 </a>
               ))}
