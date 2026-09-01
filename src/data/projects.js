@@ -153,14 +153,14 @@ export const projects = [
     image: "https://rangga.click/assets/images/jejak.jpg",
   },
   {
-    title: "Kandara Video Call",
+    title: "AInterview - AI Interview Platform",
     description:
-      "Kandara Video Call is a website similar to Google Meet and Zoom where you can also sharescreen",
+      "AInterview is an AI-powered interview platform designed to speed up the initial screening process for job candidates, using Supertonic 3 and 3D avatar technology, fully integrated with Artificial Intelligence.",
     gradient: "from-purple-600 to-cyan-600",
     color: "purple",
-    tech: ["Next.js", "NodeJS", "Custom CSS"],
-    link: "http://kandara-vidcall.vercel.app",
-    image: "https://rangga.click/assets/images/vc.jpg",
+    tech: ["NextJS", "Shacdn", "NestJS", "Deepseek API", "Supertonic 3"],
+    link: "#",
+    image: "https://rangga.click/assets/images/ainterview.png",
   },
   {
     title: "Ekawira Sanjaya",
