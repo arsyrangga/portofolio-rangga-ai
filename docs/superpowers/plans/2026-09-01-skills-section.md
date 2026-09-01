@@ -180,12 +180,8 @@ export const skills = [
 ];
 ```
 
-- [ ] **Step 2: Commit data changes**
-
-```bash
-git add src/data/skills.js
-git commit -m "feat(skills): update skills dataset with 8 comprehensive categories"
-```
+- [x] **Step 1: Write updated `src/data/skills.js`**
+- [x] **Step 2: Commit data changes**
 
 ---
 
@@ -196,38 +192,12 @@ git commit -m "feat(skills): update skills dataset with 8 comprehensive categori
 
 **Interfaces:**
 - Imports: `skills` from `@/data/skills`
-- Lucide Icons: `Code2`, `Boxes`, `Smartphone`, `Server`, `Cpu`, `ShieldCheck`, `Wrench`, `Users`, `Search`, `Sparkles`, `Layers`
+- Lucide Icons: `Code2`, `Boxes`, `Smartphone`, `Server`, `Cpu`, `ShieldCheck`, `Wrench`, `Users`, `Search`, `Sparkles`, `ArrowRight`
 
-- [ ] **Step 1: Update navigation items and state**
-  - Add `searchSkill` and `selectedCategory` state in `Portfolio` component.
-  - Update nav sections array: `["home", "about", "skills", "projects", "certificates", "articles", "contact"]`.
-  - Update nav labels: `skills` -> `"Skills"`.
+- [x] **Step 1: Update navigation items and state**
+- [x] **Step 2: Refine About Section**
+- [x] **Step 3: Render Dedicated Skills Section (`#skills`)**
+- [x] **Step 4: Verify in Browser & Test Responsiveness**
+- [x] **Step 5: Run build verification**
+- [x] **Step 6: Commit changes**
 
-- [ ] **Step 2: Refine About Section**
-  - Update the right-hand column of `#about` with career highlights & quick stats (e.g. 4+ Years Experience, Full Stack & Mobile Specialist, Cloud & Security Mindset) + "Explore All Skills" action button that scrolls to `#skills`.
-
-- [ ] **Step 3: Render Dedicated Skills Section (`#skills`)**
-  - Add `<section id="skills" className="py-20 bg-background">`.
-  - Add section header with title, description, and total skill count badge.
-  - Add search bar with real-time filtering & clear button.
-  - Add category filter tabs ("All" + 8 category buttons with badges).
-  - Add responsive grid of category cards with category icon, title, description, and skill badges.
-  - Support instant search highlighting and empty state if query matches nothing.
-
-- [ ] **Step 4: Verify in Browser & Test Responsiveness**
-  - Check dark and light mode rendering.
-  - Test search functionality and category filter buttons.
-  - Test navigation bar link scrolling.
-
-- [ ] **Step 5: Run build verification**
-
-```bash
-npm run build
-```
-
-- [ ] **Step 6: Commit changes**
-
-```bash
-git add src/app/page.tsx
-git commit -m "feat(ui): add dedicated skills section with search and category filtering"
-```
