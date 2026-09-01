@@ -359,6 +359,9 @@ const Portfolio = () => {
         id="home"
         className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden pt-16"
       >
+        {/* Ambient Radiant Mesh Glow */}
+        <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[350px] bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-teal-500/10 rounded-full blur-3xl opacity-60 animate-pulse-glow" />
+
         <div className="text-center z-10 max-w-4xl mx-auto px-4 py-12">
           <div
             className={`transition-all duration-700 ${visibleSections.has("home")
@@ -366,17 +369,22 @@ const Portfolio = () => {
               : "opacity-0 translate-y-6"
               }`}
           >
+            {/* Profile Avatar with Glowing Ring */}
             <div className="flex justify-center mb-6">
-              <img
-                alt="profile_image"
-                loading="lazy"
-                width="350"
-                height="350"
-                decoding="async"
-                src="/assets/images/rangga.jpg"
-                className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full object-cover border-2 border-border shadow-xs"
-              />
+              <div className="relative group inline-block">
+                <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-teal-500/30 blur-sm group-hover:blur-md transition-all duration-500 animate-pulse-glow" />
+                <img
+                  alt="profile_image"
+                  loading="lazy"
+                  width="350"
+                  height="350"
+                  decoding="async"
+                  src="/assets/images/rangga.jpg"
+                  className="relative w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full object-cover border-2 border-border/80 shadow-md group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
+
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 px-4 text-foreground">
               Rangga Arsy Prawira
               <br />
@@ -403,14 +411,14 @@ const Portfolio = () => {
           >
             <button
               onClick={() => scrollToSection("projects")}
-              className="w-full sm:w-auto bg-primary text-primary-foreground hover:opacity-90 px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs cursor-pointer"
+              className="w-full sm:w-auto bg-primary text-primary-foreground hover:opacity-90 hover:scale-105 active:scale-95 px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs hover:shadow-md hover:shadow-primary/20 cursor-pointer"
             >
               See Portfolio
             </button>
 
             <a
               href="/assets/pdf/cv.pdf"
-              className="w-full sm:w-auto border border-border bg-background text-foreground hover:bg-muted px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs"
+              className="w-full sm:w-auto border border-border bg-background text-foreground hover:bg-muted hover:scale-105 active:scale-95 px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs hover:shadow-sm"
               download={true}
             >
               Download CV
@@ -420,7 +428,7 @@ const Portfolio = () => {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 opacity-60">
-          <ChevronDown className="w-5 h-5 text-muted-foreground animate-bounce" />
+          <ChevronDown className="w-5 h-5 text-muted-foreground animate-bounce cursor-pointer hover:scale-125 transition-transform" />
         </div>
       </section>
 
@@ -483,36 +491,51 @@ const Portfolio = () => {
                   Core Strengths & Focus
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
-                      <Code2 className="w-4 h-4 text-blue-500" />
+                      <div className="p-1 rounded-md bg-blue-500/10 group-hover:scale-110 transition-transform duration-300">
+                        <Code2 className="w-4 h-4 text-blue-500" />
+                      </div>
                       <span>Full Stack & Mobile</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       React, Next.js, Kotlin, Swift, React Native
                     </p>
                   </div>
-                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+
+                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
-                      <Server className="w-4 h-4 text-emerald-500" />
+                      <div className="p-1 rounded-md bg-emerald-500/10 group-hover:scale-110 transition-transform duration-300">
+                        <Server className="w-4 h-4 text-emerald-500" />
+                      </div>
                       <span>Cloud & Backend</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Node.js, Golang, GCP Cloud Run, SQL/NoSQL
                     </p>
                   </div>
-                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+
+                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
-                      <ShieldCheck className="w-4 h-4 text-rose-500" />
+                      <div className="p-1 rounded-md bg-rose-500/10 group-hover:scale-110 transition-transform duration-300">
+                        <ShieldCheck className="w-4 h-4 text-rose-500" />
+                      </div>
                       <span>Security & Quality</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       SonarQube, Jest, Incident Response, Risk Mgmt
                     </p>
                   </div>
-                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+
+                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
-                      <Users className="w-4 h-4 text-teal-500" />
+                      <div className="p-1 rounded-md bg-teal-500/10 group-hover:scale-110 transition-transform duration-300">
+                        <Users className="w-4 h-4 text-teal-500" />
+                      </div>
                       <span>Agile & Delivery</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -527,9 +550,9 @@ const Portfolio = () => {
                   </span>
                   <button
                     onClick={() => scrollToSection("skills")}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:text-primary transition-colors cursor-pointer group"
                   >
-                    View Full Skillset <ArrowRight className="w-3.5 h-3.5" />
+                    View Full Skillset <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
@@ -539,8 +562,12 @@ const Portfolio = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="skills" className="py-20 bg-background relative overflow-hidden">
+        {/* Subtle Background Glow */}
+        <div className="pointer-events-none absolute top-1/3 -left-20 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl animate-pulse-glow" />
+        <div className="pointer-events-none absolute bottom-1/3 -right-20 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse-glow" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Header */}
           <div
             className={`text-center mb-12 transition-all duration-700 ${visibleSections.has("skills")
@@ -548,7 +575,8 @@ const Portfolio = () => {
               : "opacity-0 translate-y-6"
               }`}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border mb-3 shadow-2xs animate-float">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>Technical Arsenal • {totalSkillsCount} Skills across 8 Domains</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -576,12 +604,12 @@ const Portfolio = () => {
                 value={searchSkill}
                 onChange={(e) => setSearchSkill(e.target.value)}
                 placeholder="Search any skill, tool, or technology (e.g. Kotlin, Golang, Jest, GCP)..."
-                className="w-full pl-10 pr-9 py-2.5 bg-card border border-input text-foreground text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground transition-all shadow-2xs"
+                className="w-full pl-10 pr-9 py-2.5 bg-card border border-input text-foreground text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground transition-all shadow-2xs hover:border-foreground/30"
               />
               {searchSkill && (
                 <button
                   onClick={() => setSearchSkill("")}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground cursor-pointer"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground hover:scale-110 transition-transform cursor-pointer"
                   title="Clear search"
                 >
                   <X className="w-4 h-4" />
@@ -593,8 +621,8 @@ const Portfolio = () => {
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setSelectedCategory("all")}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${selectedCategory === "all"
-                  ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border hover:scale-105 active:scale-95 ${selectedCategory === "all"
+                  ? "bg-primary text-primary-foreground border-primary shadow-xs"
                   : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
                   }`}
               >
@@ -604,15 +632,15 @@ const Portfolio = () => {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border flex items-center gap-1.5 ${selectedCategory === cat.id
-                    ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border flex items-center gap-1.5 hover:scale-105 active:scale-95 ${selectedCategory === cat.id
+                    ? "bg-primary text-primary-foreground border-primary shadow-xs"
                     : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
                     }`}
                 >
                   <span>{cat.name}</span>
                   <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${selectedCategory === cat.id
-                      ? "bg-primary-foreground/20 text-primary-foreground"
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full transition-colors ${selectedCategory === cat.id
+                      ? "bg-primary-foreground/20 text-primary-foreground font-semibold"
                       : "bg-background text-muted-foreground border border-border"
                       }`}
                   >
@@ -625,8 +653,8 @@ const Portfolio = () => {
 
           {/* Grid of Skill Categories */}
           {filteredCategories.length === 0 ? (
-            <div className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto">
-              <Search className="w-8 h-8 text-muted-foreground mx-auto mb-3 opacity-60" />
+            <div className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto shadow-2xs">
+              <Search className="w-8 h-8 text-muted-foreground mx-auto mb-3 opacity-60 animate-bounce" />
               <p className="text-sm font-semibold text-foreground mb-1">
                 No matching skills found
               </p>
@@ -638,7 +666,7 @@ const Portfolio = () => {
                   setSearchSkill("");
                   setSelectedCategory("all");
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:opacity-90 transition-opacity cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs"
               >
                 Reset Filter & Search
               </button>
@@ -648,26 +676,52 @@ const Portfolio = () => {
               {filteredCategories.map((category, index) => (
                 <div
                   key={category.id}
-                  className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/25 hover:shadow-xs transition-all flex flex-col justify-between group ${visibleSections.has("skills")
+                  className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden gpu-accelerated ${visibleSections.has("skills")
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
                     }`}
                   style={{ transitionDelay: `${(index % 8) * 60}ms` }}
                 >
+                  {/* Subtle Ambient Card Glow */}
+                  <div
+                    className="pointer-events-none absolute -top-12 -right-12 w-36 h-36 rounded-full opacity-0 group-hover:opacity-15 blur-2xl transition-opacity duration-500 ease-out"
+                    style={{ backgroundColor: category.color }}
+                  />
+
+                  {/* Top Accent Line */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ backgroundColor: category.color }}
+                  />
+
                   <div>
                     {/* Card Header */}
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
-                          className="p-2 rounded-lg bg-muted border border-border text-foreground group-hover:scale-105 transition-transform flex-shrink-0"
+                          className="p-2 rounded-lg bg-muted border border-border text-foreground group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 flex-shrink-0"
                         >
                           {getCategoryIcon(category.icon)}
                         </div>
-                        <h3 className="text-sm font-bold tracking-tight text-foreground truncate">
-                          {category.name}
-                        </h3>
+                        <div className="flex items-center min-w-0">
+                          <span
+                            className="relative flex h-2 w-2 mr-2 flex-shrink-0"
+                          >
+                            <span
+                              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                              style={{ backgroundColor: category.color }}
+                            />
+                            <span
+                              className="relative inline-flex rounded-full h-2 w-2"
+                              style={{ backgroundColor: category.color }}
+                            />
+                          </span>
+                          <h3 className="text-sm font-bold tracking-tight text-foreground truncate">
+                            {category.name}
+                          </h3>
+                        </div>
                       </div>
-                      <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border flex-shrink-0">
+                      <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border flex-shrink-0 group-hover:border-foreground/20 transition-colors">
                         {category.filteredItems.length}
                       </span>
                     </div>
@@ -688,9 +742,9 @@ const Portfolio = () => {
                         return (
                           <span
                             key={item}
-                            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${isMatched
-                              ? "bg-primary text-primary-foreground font-semibold ring-2 ring-primary/40 shadow-xs"
-                              : "bg-secondary text-secondary-foreground border border-border/80 hover:bg-muted hover:border-foreground/20"
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-default ${isMatched
+                              ? "bg-primary text-primary-foreground font-semibold ring-2 ring-primary/40 shadow-xs animate-pulse"
+                              : "bg-secondary text-secondary-foreground border border-border/80 hover:bg-muted hover:border-foreground/30 shadow-2xs"
                               }`}
                           >
                             {item}
@@ -727,11 +781,11 @@ const Portfolio = () => {
             {projects.map((project, index) => (
               <div
                 key={project.title}
-                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all ${visibleSections.has("projects")
+                className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl overflow-hidden hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group gpu-accelerated ${visibleSections.has("projects")
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-6"
                   }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${index * 80}ms` }}
               >
                 {/* Image Section */}
                 <div
@@ -750,59 +804,64 @@ const Portfolio = () => {
                       `https://picsum.photos/400/200?random=${index}`
                     }
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
                     style={{ objectPosition: "0% 5%" }}
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                    <div className="bg-background/90 text-foreground p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xs border border-border">
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                    <div className="bg-background/90 text-foreground p-2.5 rounded-full opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 shadow-md border border-border">
                       <ZoomIn className="w-4 h-4" />
                     </div>
                   </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="p-5">
-                  <h3 className="text-lg font-semibold tracking-tight text-foreground mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground text-xs leading-relaxed mb-4">
-                    {expandedIndex === index ||
-                      project.description.length <= 130
-                      ? project.description
-                      : `${project.description.slice(0, 130)}...`}
-                    {project.description.length > 130 && (
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold tracking-tight text-foreground mb-2 group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground text-xs leading-relaxed mb-4">
+                      {expandedIndex === index ||
+                        project.description.length <= 130
+                        ? project.description
+                        : `${project.description.slice(0, 130)}...`}
+                      {project.description.length > 130 && (
+                        <button
+                          className="text-foreground hover:underline ml-1 font-medium cursor-pointer"
+                          onClick={() =>
+                            setExpandedIndex(
+                              expandedIndex === index ? null : index
+                            )
+                          }
+                        >
+                          {expandedIndex === index ? "Less" : "More"}
+                        </button>
+                      )}
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {project.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground border border-border hover:scale-105 hover:bg-secondary hover:text-foreground transition-all duration-200"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    {project.link !== "#" && project.link && (
                       <button
-                        className="text-foreground hover:underline ml-1 font-medium cursor-pointer"
-                        onClick={() =>
-                          setExpandedIndex(
-                            expandedIndex === index ? null : index
-                          )
-                        }
+                        className="text-xs font-semibold text-foreground hover:opacity-80 transition-opacity flex items-center gap-1.5 cursor-pointer group/btn"
+                        onClick={() => {
+                          window.open(project.link, "_blank");
+                        }}
                       >
-                        {expandedIndex === index ? "Less" : "More"}
+                        View Project <ExternalLink className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                       </button>
                     )}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {project.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground border border-border"
-                      >
-                        {tech}
-                      </span>
-                    ))}
                   </div>
-                  {project.link !== "#" && project.link && (
-                    <button
-                      className="text-xs font-semibold text-foreground hover:opacity-80 transition-opacity flex items-center gap-1.5 cursor-pointer"
-                      onClick={() => {
-                        window.open(project.link, "_blank");
-                      }}
-                    >
-                      View Project <ExternalLink className="w-3.5 h-3.5" />
-                    </button>
-                  )}
                 </div>
               </div>
             ))}
@@ -831,61 +890,66 @@ const Portfolio = () => {
             {certificates.map((cert, index) => (
               <div
                 key={cert.title}
-                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all ${visibleSections.has("certificates")
+                className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group gpu-accelerated ${visibleSections.has("certificates")
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-6"
                   }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${index * 80}ms` }}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-2.5 rounded-lg bg-muted border border-border">
-                    <Award className="w-5 h-5 text-foreground" />
-                  </div>
-                  <span className="px-2.5 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium border border-border">
-                    {cert.date}
-                  </span>
-                </div>
-
-                <div className="mb-4">
-                  <h3 className="text-base font-semibold tracking-tight text-foreground mb-1">
-                    {cert.title}
-                  </h3>
-                  <div className="flex items-center text-muted-foreground text-xs mb-2">
-                    <Users className="w-3.5 h-3.5 mr-1.5" />
-                    <span>{cert.issuer}</span>
-                  </div>
-                  <p className="text-muted-foreground text-xs leading-relaxed mb-3">
-                    {cert.description}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {cert.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground border border-border"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="border-t border-border pt-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                        Credential ID
-                      </p>
-                      <p className="text-xs font-mono text-foreground font-medium">
-                        {cert.credentialId}
-                      </p>
+                <div>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="p-2.5 rounded-lg bg-muted border border-border group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                      <Award className="w-5 h-5" />
                     </div>
-                    <button
-                      className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                      onClick={() => window.open(cert.link)}
-                    >
-                      <ExternalLink className="w-4 h-4 cursor-pointer" />
-                    </button>
+                    <span className="px-2.5 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium border border-border">
+                      {cert.date}
+                    </span>
+                  </div>
+
+                  <div className="mb-4">
+                    <h3 className="text-base font-semibold tracking-tight text-foreground mb-1 group-hover:text-primary transition-colors">
+                      {cert.title}
+                    </h3>
+                    <div className="flex items-center text-muted-foreground text-xs mb-2">
+                      <Users className="w-3.5 h-3.5 mr-1.5" />
+                      <span>{cert.issuer}</span>
+                    </div>
+                    <p className="text-muted-foreground text-xs leading-relaxed mb-3">
+                      {cert.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {cert.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground border border-border hover:scale-105 hover:bg-muted transition-all duration-200"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-border pt-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                          Credential ID
+                        </p>
+                        <p className="text-xs font-mono text-foreground font-medium">
+                          {cert.credentialId}
+                        </p>
+                      </div>
+                      <button
+                        className="text-muted-foreground hover:text-foreground hover:scale-110 transition-all p-1"
+                        onClick={() => window.open(cert.link)}
+                        title="View Certificate"
+                      >
+                        <ExternalLink className="w-4 h-4 cursor-pointer" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -981,11 +1045,11 @@ const Portfolio = () => {
               {articles.map((article, index) => (
                 <div
                   key={article.slug || index}
-                  className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all flex flex-col justify-between ${visibleSections.has("articles")
+                  className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl overflow-hidden hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group gpu-accelerated ${visibleSections.has("articles")
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
                     }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  style={{ transitionDelay: `${index * 80}ms` }}
                 >
                   <div>
                     {/* Thumbnail */}
@@ -997,14 +1061,14 @@ const Portfolio = () => {
                             : `https://blogyra.site${article.thumbnail}`
                         }
                         alt={article.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
                         onError={(e) => {
                           (e.currentTarget as HTMLImageElement).src =
                             "https://blogyra.site/icon/icon.png";
                         }}
                       />
                       <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-0.5 bg-background/90 text-foreground text-xs font-medium rounded-full border border-border shadow-xs">
+                        <span className="px-2.5 py-0.5 bg-background/90 backdrop-blur-xs text-foreground text-xs font-medium rounded-full border border-border shadow-xs">
                           {article.category}
                         </span>
                       </div>
@@ -1019,7 +1083,7 @@ const Portfolio = () => {
                           {article.views || 0}
                         </span>
                       </div>
-                      <h3 className="text-base font-semibold tracking-tight text-foreground mb-2 line-clamp-2">
+                      <h3 className="text-base font-semibold tracking-tight text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                         {article.title}
                       </h3>
                       <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3 mb-4">
@@ -1033,9 +1097,9 @@ const Portfolio = () => {
                       href={`https://blogyra.site/blog/${article.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:opacity-80 transition-opacity"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition-colors group/link"
                     >
-                      Read Article <ArrowUpRight className="w-3.5 h-3.5" />
+                      Read Article <ArrowUpRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                     </a>
                   </div>
                 </div>
@@ -1133,7 +1197,7 @@ const Portfolio = () => {
                     <input
                       type="text"
                       placeholder="Nama Anda"
-                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground transition-colors"
+                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary placeholder:text-muted-foreground transition-all hover:border-foreground/30"
                       onInput={(e) => setName(e.currentTarget.value)}
                     />
                   </div>
@@ -1141,7 +1205,7 @@ const Portfolio = () => {
                     <input
                       type="email"
                       placeholder="Email Anda"
-                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground transition-colors"
+                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary placeholder:text-muted-foreground transition-all hover:border-foreground/30"
                       onInput={(e) => setEmail(e.currentTarget.value)}
                     />
                   </div>
@@ -1149,14 +1213,14 @@ const Portfolio = () => {
                     <textarea
                       placeholder="Pesan Anda"
                       rows={4}
-                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground transition-colors resize-none"
+                      className="w-full px-3.5 py-2.5 bg-background border border-input text-foreground text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary placeholder:text-muted-foreground transition-all hover:border-foreground/30 resize-none"
                       onInput={(e) => setMessage(e.currentTarget.value)}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={sendToWhatsApp}
-                    className="w-full bg-primary text-primary-foreground hover:opacity-90 py-2.5 rounded-lg font-medium text-sm shadow-xs transition-all cursor-pointer"
+                    className="w-full bg-primary text-primary-foreground hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] py-2.5 rounded-lg font-medium text-sm shadow-xs hover:shadow-md hover:shadow-primary/20 transition-all cursor-pointer"
                   >
                     Send Message
                   </button>
