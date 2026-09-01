@@ -41,6 +41,26 @@ export const projects = [
     image: "https://portofolio.rangga.click/assets/images/blogyra.png",
   },
   {
+    title: "AInterview - AI Interview Platform",
+    description:
+      "AInterview is an AI-powered interview platform designed to speed up the initial screening process for job candidates, using Supertonic 3 and 3D avatar technology, fully integrated with Artificial Intelligence.",
+    gradient: "from-purple-600 to-cyan-600",
+    color: "purple",
+    tech: ["NextJS", "Shacdn", "NestJS", "Deepseek API", "Supertonic 3"],
+    link: "#",
+    image: "https://portofolio.rangga.click/assets/images/ainterview.png",
+  },
+  {
+    title: "VNIMA - AI Visual Novel Maker Mobile",
+    description:
+      "VNIMA is an Mobile AI visual novel creation platform that enables creators to turn ideas into interactive stories with less technical effort. From character development and dialogue to story progression and visual assets.",
+    gradient: "from-purple-600 to-pink-600",
+    color: "green",
+    tech: ["Kotlin", "Rust", "Deepseek API"],
+    link: "https://play.google.com/store/apps/details?id=com.vnima.app",
+    image: "https://portofolio.rangga.click/assets/images/vnima.png",
+  },
+  {
     title: "Siti Chan Mobile",
     description:
       "Siti Chan Mobile, an AI-powered virtual assistant application that enables users to interact with an intelligent avatar through conversations. Focused on building a responsive and intuitive mobile experience by integrating AI chat, text-to-speech capabilities, and a user-friendly interface, while optimizing performance and ensuring smooth interactions across Android devices.",
@@ -79,6 +99,16 @@ export const projects = [
     tech: ["CodeIgniter", "PHP", "Bootstrap"],
     link: "#",
     image: "https://rangga.click/assets/images/apjii.jpg",
+  },
+  {
+    title: "Indobara Smart Services",
+    description:
+      "Indobara Smart Services(iServe) is a website for PT Borneo Indo Bara (BIB), part of Sinar Mas Mining Group. Primarily this website is for Serving Fuel Assets, Visit Management, GA Reporting, Asset Inspection and Observation, and others. Only BIB and contractors can use Indobara Smart Services, I worked on this project in the assets management section",
+    gradient: "from-purple-600 to-cyan-600",
+    color: "purple",
+    tech: ["Nodejs", "ExpressJS", "Custom CSS"],
+    link: "https://iserve.borneo-indobara.com",
+    image: "https://rangga.click/assets/images/sinarmas_assets.png",
   },
   {
     title: "Rindang Pari Cahya Buana",
@@ -143,26 +173,6 @@ export const projects = [
     image: "https://rangga.click/assets/images/movementcare.jpg",
   },
   {
-    title: "Jejak Fun",
-    description:
-      "Jejak.fun is a website for guessing places through Google Maps API and there are scores too, the website like geoguessr, but with a different theme",
-    gradient: "from-purple-600 to-pink-600",
-    color: "green",
-    tech: ["NextJS", "NodeJS", "Google OAuth"],
-    link: "#",
-    image: "https://rangga.click/assets/images/jejak.jpg",
-  },
-  {
-    title: "AInterview - AI Interview Platform",
-    description:
-      "AInterview is an AI-powered interview platform designed to speed up the initial screening process for job candidates, using Supertonic 3 and 3D avatar technology, fully integrated with Artificial Intelligence.",
-    gradient: "from-purple-600 to-cyan-600",
-    color: "purple",
-    tech: ["NextJS", "Shacdn", "NestJS", "Deepseek API", "Supertonic 3"],
-    link: "#",
-    image: "https://rangga.click/assets/images/ainterview.png",
-  },
-  {
     title: "Ekawira Sanjaya",
     description:
       "PT Panca Ekawira Sanjaya is a company offering distribution, construction, and application services. The company was established in Jakarta in 2018 by experienced professionals14. Their main business focuses on construction material distribution and construction services throughout Indonesia",
@@ -172,15 +182,6 @@ export const projects = [
     link: "https://pancaekawirasanjaya.com",
     image: "https://rangga.click/assets/images/ekawira.jpg",
   },
-  {
-    title: "Indobara Smart Services",
-    description:
-      "Indobara Smart Services(iServe) is a website for PT Borneo Indo Bara (BIB), part of Sinar Mas Mining Group. Primarily this website is for Serving Fuel Assets, Visit Management, GA Reporting, Asset Inspection and Observation, and others. Only BIB and contractors can use Indobara Smart Services, I worked on this project in the assets management section",
-    gradient: "from-purple-600 to-cyan-600",
-    color: "purple",
-    tech: ["Nodejs", "ExpressJS", "Custom CSS"],
-    link: "https://iserve.borneo-indobara.com",
-    image: "https://rangga.click/assets/images/sinarmas_assets.png",
-  },
+
 ];
 
