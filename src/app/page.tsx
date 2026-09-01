@@ -19,6 +19,16 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
+  Code2,
+  Boxes,
+  Smartphone,
+  Server,
+  Cpu,
+  ShieldCheck,
+  Wrench,
+  Search,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
@@ -43,6 +53,74 @@ const Portfolio = () => {
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<null | number>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchSkill, setSearchSkill] = useState<string>("");
+
+  const getCategoryIcon = (iconName: string) => {
+    switch (iconName) {
+      case "Code2":
+        return <Code2 className="w-4 h-4" />;
+      case "Boxes":
+        return <Boxes className="w-4 h-4" />;
+      case "Smartphone":
+        return <Smartphone className="w-4 h-4" />;
+      case "Server":
+        return <Server className="w-4 h-4" />;
+      case "Cpu":
+        return <Cpu className="w-4 h-4" />;
+      case "ShieldCheck":
+        return <ShieldCheck className="w-4 h-4" />;
+      case "Wrench":
+        return <Wrench className="w-4 h-4" />;
+      case "Users":
+        return <Users className="w-4 h-4" />;
+      default:
+        return <Code2 className="w-4 h-4" />;
+    }
+  };
+
+  const totalSkillsCount = skills.reduce(
+    (acc, cat) => acc + cat.items.length,
+    0
+  );
+
+  const filteredCategories = skills
+    .map((category) => {
+      if (selectedCategory !== "all" && category.id !== selectedCategory) {
+        return null;
+      }
+
+      if (searchSkill.trim()) {
+        const query = searchSkill.toLowerCase().trim();
+        const matchesCategory =
+          category.name.toLowerCase().includes(query) ||
+          category.desc.toLowerCase().includes(query);
+        const matchingItems = category.items.filter((item) =>
+          item.toLowerCase().includes(query)
+        );
+
+        if (!matchesCategory && matchingItems.length === 0) {
+          return null;
+        }
+
+        return {
+          ...category,
+          filteredItems: matchesCategory ? category.items : matchingItems,
+          isCategoryMatch: matchesCategory,
+        };
+      }
+
+      return {
+        ...category,
+        filteredItems: category.items,
+        isCategoryMatch: false,
+      };
+    })
+    .filter(Boolean) as (typeof skills[0] & {
+    filteredItems: string[];
+    isCategoryMatch: boolean;
+  })[];
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoadingArticles, setIsLoadingArticles] = useState(true);
@@ -193,18 +271,20 @@ const Portfolio = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
               <div className="ml-10 flex items-baseline space-x-6">
-                {["home", "about", "projects", "certificates", "articles", "contact"].map(
+                {["home", "about", "skills", "projects", "certificates", "articles", "contact"].map(
                   (section) => (
                     <button
                       key={section}
                       onClick={() => scrollToSection(section)}
                       className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative group capitalize font-medium text-sm cursor-pointer"
                     >
-                      {section === "certificates"
-                        ? "Sertifikat"
-                        : section === "articles"
-                          ? "Artikel"
-                          : section}
+                      {section === "skills"
+                        ? "Skills"
+                        : section === "certificates"
+                          ? "Sertifikat"
+                          : section === "articles"
+                            ? "Artikel"
+                            : section}
                       <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground transition-all duration-200 group-hover:w-full"></span>
                     </button>
                   )
@@ -238,18 +318,20 @@ const Portfolio = () => {
             } overflow-hidden bg-background border-b border-border`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {["home", "about", "projects", "certificates", "articles", "contact"].map(
+            {["home", "about", "skills", "projects", "certificates", "articles", "contact"].map(
               (section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
                   className="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 capitalize cursor-pointer"
                 >
-                  {section === "certificates"
-                    ? "Sertifikat"
-                    : section === "articles"
-                      ? "Artikel"
-                      : section}
+                  {section === "skills"
+                    ? "Skills"
+                    : section === "certificates"
+                      ? "Sertifikat"
+                      : section === "articles"
+                        ? "Artikel"
+                        : section}
                 </button>
               )
             )}
@@ -396,25 +478,232 @@ const Portfolio = () => {
                   : "opacity-0 translate-x-6"
                 }`}
             >
-              <div className="space-y-4">
-                {skills.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all"
-                  >
-                    <div className="flex items-center mb-2">
-                      <div
-                        className="w-2.5 h-2.5 rounded-full mr-3"
-                        style={{ backgroundColor: skill.color }}
-                      ></div>
-                      <h4 className="text-base font-semibold text-foreground">{skill.name}</h4>
+              <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
+                <h3 className="text-xl font-semibold tracking-tight text-foreground">
+                  Core Strengths & Focus
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+                    <div className="flex items-center gap-2 text-foreground font-medium text-sm">
+                      <Code2 className="w-4 h-4 text-blue-500" />
+                      <span>Full Stack & Mobile</span>
                     </div>
-                    <p className="text-muted-foreground text-xs leading-relaxed">{skill.desc}</p>
+                    <p className="text-xs text-muted-foreground">
+                      React, Next.js, Kotlin, Swift, React Native
+                    </p>
                   </div>
-                ))}
+                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+                    <div className="flex items-center gap-2 text-foreground font-medium text-sm">
+                      <Server className="w-4 h-4 text-emerald-500" />
+                      <span>Cloud & Backend</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Node.js, Golang, GCP Cloud Run, SQL/NoSQL
+                    </p>
+                  </div>
+                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+                    <div className="flex items-center gap-2 text-foreground font-medium text-sm">
+                      <ShieldCheck className="w-4 h-4 text-rose-500" />
+                      <span>Security & Quality</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      SonarQube, Jest, Incident Response, Risk Mgmt
+                    </p>
+                  </div>
+                  <div className="p-3.5 rounded-lg bg-muted/50 border border-border/80 space-y-1">
+                    <div className="flex items-center gap-2 text-foreground font-medium text-sm">
+                      <Users className="w-4 h-4 text-teal-500" />
+                      <span>Agile & Delivery</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Project Planning, Mentoring, Task Prioritization
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center justify-between border-t border-border">
+                  <span className="text-xs text-muted-foreground">
+                    Explore all 8 domains & {totalSkillsCount} skills
+                  </span>
+                  <button
+                    onClick={() => scrollToSection("skills")}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+                  >
+                    View Full Skillset <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className="py-20 bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div
+            className={`text-center mb-12 transition-all duration-700 ${visibleSections.has("skills")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-6"
+              }`}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <span>Technical Arsenal • {totalSkillsCount} Skills across 8 Domains</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+              Skills & Expertise
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
+              A comprehensive directory of programming languages, frameworks, cloud architecture, and engineering practices I utilize in production.
+            </p>
+          </div>
+
+          {/* Search and Category Filter Controls */}
+          <div
+            className={`mb-10 space-y-4 transition-all duration-700 delay-150 ${visibleSections.has("skills")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-6"
+              }`}
+          >
+            {/* Search Bar */}
+            <div className="max-w-md mx-auto relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
+                <Search className="w-4 h-4" />
+              </div>
+              <input
+                type="text"
+                value={searchSkill}
+                onChange={(e) => setSearchSkill(e.target.value)}
+                placeholder="Search any skill, tool, or technology (e.g. Kotlin, Golang, Jest, GCP)..."
+                className="w-full pl-10 pr-9 py-2.5 bg-card border border-input text-foreground text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground transition-all shadow-2xs"
+              />
+              {searchSkill && (
+                <button
+                  onClick={() => setSearchSkill("")}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground cursor-pointer"
+                  title="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <button
+                onClick={() => setSelectedCategory("all")}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${selectedCategory === "all"
+                    ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                    : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
+                  }`}
+              >
+                All Domains ({totalSkillsCount})
+              </button>
+              {skills.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border flex items-center gap-1.5 ${selectedCategory === cat.id
+                      ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                      : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
+                    }`}
+                >
+                  <span>{cat.name}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${selectedCategory === cat.id
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-background text-muted-foreground border border-border"
+                      }`}
+                  >
+                    {cat.items.length}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Grid of Skill Categories */}
+          {filteredCategories.length === 0 ? (
+            <div className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto">
+              <Search className="w-8 h-8 text-muted-foreground mx-auto mb-3 opacity-60" />
+              <p className="text-sm font-semibold text-foreground mb-1">
+                No matching skills found
+              </p>
+              <p className="text-xs text-muted-foreground mb-4">
+                No skill or technology matched "{searchSkill}". Try clearing your search or looking across all domains.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchSkill("");
+                  setSelectedCategory("all");
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:opacity-90 transition-opacity cursor-pointer shadow-xs"
+              >
+                Reset Filter & Search
+              </button>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {filteredCategories.map((category, index) => (
+                <div
+                  key={category.id}
+                  className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/25 hover:shadow-xs transition-all flex flex-col justify-between group ${visibleSections.has("skills")
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-6"
+                    }`}
+                  style={{ transitionDelay: `${(index % 8) * 60}ms` }}
+                >
+                  <div>
+                    {/* Card Header */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div
+                          className="p-2 rounded-lg bg-muted border border-border text-foreground group-hover:scale-105 transition-transform flex-shrink-0"
+                        >
+                          {getCategoryIcon(category.icon)}
+                        </div>
+                        <h3 className="text-sm font-bold tracking-tight text-foreground truncate">
+                          {category.name}
+                        </h3>
+                      </div>
+                      <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border flex-shrink-0">
+                        {category.filteredItems.length}
+                      </span>
+                    </div>
+
+                    {/* Short Description */}
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-4 min-h-[32px]">
+                      {category.desc}
+                    </p>
+
+                    {/* Skill Badges */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {category.filteredItems.map((item) => {
+                        const isMatched =
+                          searchSkill.trim() &&
+                          item
+                            .toLowerCase()
+                            .includes(searchSkill.toLowerCase().trim());
+                        return (
+                          <span
+                            key={item}
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${isMatched
+                                ? "bg-primary text-primary-foreground font-semibold ring-2 ring-primary/40 shadow-xs"
+                                : "bg-secondary text-secondary-foreground border border-border/80 hover:bg-muted hover:border-foreground/20"
+                              }`}
+                          >
+                            {item}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
