@@ -118,9 +118,9 @@ const Portfolio = () => {
       };
     })
     .filter(Boolean) as (typeof skills[0] & {
-    filteredItems: string[];
-    isCategoryMatch: boolean;
-  })[];
+      filteredItems: string[];
+      isCategoryMatch: boolean;
+    })[];
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoadingArticles, setIsLoadingArticles] = useState(true);
@@ -256,8 +256,8 @@ const Portfolio = () => {
       {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-200 ${isScrolled
-            ? "bg-background/95 border-b border-border text-foreground shadow-xs"
-            : "bg-transparent"
+          ? "bg-background/95 border-b border-border text-foreground shadow-xs"
+          : "bg-transparent"
           }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -313,8 +313,8 @@ const Portfolio = () => {
         {/* Mobile Navigation Menu */}
         <div
           className={`md:hidden transition-all duration-200 ease-in-out ${isMobileMenuOpen
-              ? "max-h-80 opacity-100 visible"
-              : "max-h-0 opacity-0 invisible"
+            ? "max-h-80 opacity-100 visible"
+            : "max-h-0 opacity-0 invisible"
             } overflow-hidden bg-background border-b border-border`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
@@ -362,8 +362,8 @@ const Portfolio = () => {
         <div className="text-center z-10 max-w-4xl mx-auto px-4 py-12">
           <div
             className={`transition-all duration-700 ${visibleSections.has("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <div className="flex justify-center mb-6">
@@ -387,8 +387,8 @@ const Portfolio = () => {
           </div>
           <div
             className={`transition-all duration-700 delay-150 ${visibleSections.has("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
@@ -397,8 +397,8 @@ const Portfolio = () => {
           </div>
           <div
             className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-700 delay-300 space-y-3 sm:space-y-0 sm:space-x-4 ${visibleSections.has("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <button
@@ -429,8 +429,8 @@ const Portfolio = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("about")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -445,8 +445,8 @@ const Portfolio = () => {
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div
               className={`transition-all duration-700 delay-150 ${visibleSections.has("about")
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-6"
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-6"
                 }`}
             >
               <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6">
@@ -474,8 +474,8 @@ const Portfolio = () => {
 
             <div
               className={`transition-all duration-700 delay-300 ${visibleSections.has("about")
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-6"
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-6"
                 }`}
             >
               <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
@@ -544,12 +544,11 @@ const Portfolio = () => {
           {/* Header */}
           <div
             className={`text-center mb-12 transition-all duration-700 ${visibleSections.has("skills")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>Technical Arsenal • {totalSkillsCount} Skills across 8 Domains</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -563,8 +562,8 @@ const Portfolio = () => {
           {/* Search and Category Filter Controls */}
           <div
             className={`mb-10 space-y-4 transition-all duration-700 delay-150 ${visibleSections.has("skills")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             {/* Search Bar */}
@@ -595,8 +594,8 @@ const Portfolio = () => {
               <button
                 onClick={() => setSelectedCategory("all")}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${selectedCategory === "all"
-                    ? "bg-primary text-primary-foreground border-primary shadow-2xs"
-                    : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
+                  ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                  : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
                   }`}
               >
                 All Domains ({totalSkillsCount})
@@ -606,15 +605,15 @@ const Portfolio = () => {
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border flex items-center gap-1.5 ${selectedCategory === cat.id
-                      ? "bg-primary text-primary-foreground border-primary shadow-2xs"
-                      : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
+                    ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                    : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
                     }`}
                 >
                   <span>{cat.name}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full ${selectedCategory === cat.id
-                        ? "bg-primary-foreground/20 text-primary-foreground"
-                        : "bg-background text-muted-foreground border border-border"
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-background text-muted-foreground border border-border"
                       }`}
                   >
                     {cat.items.length}
@@ -645,13 +644,13 @@ const Portfolio = () => {
               </button>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCategories.map((category, index) => (
                 <div
                   key={category.id}
                   className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/25 hover:shadow-xs transition-all flex flex-col justify-between group ${visibleSections.has("skills")
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-6"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-6"
                     }`}
                   style={{ transitionDelay: `${(index % 8) * 60}ms` }}
                 >
@@ -690,8 +689,8 @@ const Portfolio = () => {
                           <span
                             key={item}
                             className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${isMatched
-                                ? "bg-primary text-primary-foreground font-semibold ring-2 ring-primary/40 shadow-xs"
-                                : "bg-secondary text-secondary-foreground border border-border/80 hover:bg-muted hover:border-foreground/20"
+                              ? "bg-primary text-primary-foreground font-semibold ring-2 ring-primary/40 shadow-xs"
+                              : "bg-secondary text-secondary-foreground border border-border/80 hover:bg-muted hover:border-foreground/20"
                               }`}
                           >
                             {item}
@@ -712,8 +711,8 @@ const Portfolio = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("projects")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -729,8 +728,8 @@ const Portfolio = () => {
               <div
                 key={project.title}
                 className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all ${visibleSections.has("projects")
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
                   }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
@@ -816,8 +815,8 @@ const Portfolio = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("certificates")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -833,8 +832,8 @@ const Portfolio = () => {
               <div
                 key={cert.title}
                 className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all ${visibleSections.has("certificates")
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
                   }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
@@ -896,8 +895,8 @@ const Portfolio = () => {
           {/* Certificate Summary */}
           <div
             className={`mt-12 text-center transition-all duration-700 delay-300 ${visibleSections.has("certificates")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 max-w-xl mx-auto">
@@ -933,8 +932,8 @@ const Portfolio = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("articles")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -983,8 +982,8 @@ const Portfolio = () => {
                 <div
                   key={article.slug || index}
                   className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all flex flex-col justify-between ${visibleSections.has("articles")
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-6"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-6"
                     }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
@@ -1065,8 +1064,8 @@ const Portfolio = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("contact")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
               }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -1081,8 +1080,8 @@ const Portfolio = () => {
             <div className="grid md:grid-cols-2 gap-8">
               <div
                 className={`transition-all duration-700 delay-150 ${visibleSections.has("contact")
-                    ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-6"
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 -translate-x-6"
                   }`}
               >
                 <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-5">
@@ -1125,8 +1124,8 @@ const Portfolio = () => {
 
               <div
                 className={`transition-all duration-700 delay-300 ${visibleSections.has("contact")
-                    ? "opacity-100 translate-x-0"
-                    : "opacity-0 translate-x-6"
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 translate-x-6"
                   }`}
               >
                 <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
