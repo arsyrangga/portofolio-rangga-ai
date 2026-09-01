@@ -177,11 +177,10 @@ const Portfolio = () => {
       )}
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-200 ${
-          isScrolled
+        className={`fixed top-0 w-full z-50 transition-all duration-200 ${isScrolled
             ? "bg-background/95 border-b border-border text-foreground shadow-xs"
             : "bg-transparent"
-        }`}
+          }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -204,8 +203,8 @@ const Portfolio = () => {
                       {section === "certificates"
                         ? "Sertifikat"
                         : section === "articles"
-                        ? "Artikel"
-                        : section}
+                          ? "Artikel"
+                          : section}
                       <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground transition-all duration-200 group-hover:w-full"></span>
                     </button>
                   )
@@ -233,11 +232,10 @@ const Portfolio = () => {
 
         {/* Mobile Navigation Menu */}
         <div
-          className={`md:hidden transition-all duration-200 ease-in-out ${
-            isMobileMenuOpen
+          className={`md:hidden transition-all duration-200 ease-in-out ${isMobileMenuOpen
               ? "max-h-80 opacity-100 visible"
               : "max-h-0 opacity-0 invisible"
-          } overflow-hidden bg-background border-b border-border`}
+            } overflow-hidden bg-background border-b border-border`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {["home", "about", "projects", "certificates", "articles", "contact"].map(
@@ -250,8 +248,8 @@ const Portfolio = () => {
                   {section === "certificates"
                     ? "Sertifikat"
                     : section === "articles"
-                    ? "Artikel"
-                    : section}
+                      ? "Artikel"
+                      : section}
                 </button>
               )
             )}
@@ -281,11 +279,10 @@ const Portfolio = () => {
       >
         <div className="text-center z-10 max-w-4xl mx-auto px-4 py-12">
           <div
-            className={`transition-all duration-700 ${
-              visibleSections.has("home")
+            className={`transition-all duration-700 ${visibleSections.has("home")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <div className="flex justify-center mb-6">
               <img
@@ -307,22 +304,20 @@ const Portfolio = () => {
             </h1>
           </div>
           <div
-            className={`transition-all duration-700 delay-150 ${
-              visibleSections.has("home")
+            className={`transition-all duration-700 delay-150 ${visibleSections.has("home")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
               Creating high-performance digital products and elegant web applications with modern web standards.
             </p>
           </div>
           <div
-            className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-700 delay-300 space-y-3 sm:space-y-0 sm:space-x-4 ${
-              visibleSections.has("home")
+            className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-700 delay-300 space-y-3 sm:space-y-0 sm:space-x-4 ${visibleSections.has("home")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <button
               onClick={() => scrollToSection("projects")}
@@ -351,11 +346,10 @@ const Portfolio = () => {
       <section id="about" className="py-20 bg-muted/30 border-y border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
-              visibleSections.has("about")
+            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("about")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               About Me
@@ -368,11 +362,10 @@ const Portfolio = () => {
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div
-              className={`transition-all duration-700 delay-150 ${
-                visibleSections.has("about")
+              className={`transition-all duration-700 delay-150 ${visibleSections.has("about")
                   ? "opacity-100 translate-x-0"
                   : "opacity-0 -translate-x-6"
-              }`}
+                }`}
             >
               <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6">
                 <h3 className="text-xl font-semibold tracking-tight text-foreground mb-3">
@@ -398,11 +391,10 @@ const Portfolio = () => {
             </div>
 
             <div
-              className={`transition-all duration-700 delay-300 ${
-                visibleSections.has("about")
+              className={`transition-all duration-700 delay-300 ${visibleSections.has("about")
                   ? "opacity-100 translate-x-0"
                   : "opacity-0 translate-x-6"
-              }`}
+                }`}
             >
               <div className="space-y-4">
                 {skills.map((skill, index) => (
@@ -430,11 +422,10 @@ const Portfolio = () => {
       <section id="projects" className="py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
-              visibleSections.has("projects")
+            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("projects")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Projects
@@ -448,11 +439,10 @@ const Portfolio = () => {
             {projects.map((project, index) => (
               <div
                 key={project.title}
-                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all ${
-                  visibleSections.has("projects")
+                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all ${visibleSections.has("projects")
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
-                }`}
+                  }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Image Section */}
@@ -461,7 +451,7 @@ const Portfolio = () => {
                   onClick={() =>
                     handleOpenImage(
                       project.image ||
-                        `https://picsum.photos/400/200?random=${index}`,
+                      `https://picsum.photos/400/200?random=${index}`,
                       project.title
                     )
                   }
@@ -489,7 +479,7 @@ const Portfolio = () => {
                   </h3>
                   <p className="text-muted-foreground text-xs leading-relaxed mb-4">
                     {expandedIndex === index ||
-                    project.description.length <= 130
+                      project.description.length <= 130
                       ? project.description
                       : `${project.description.slice(0, 130)}...`}
                     {project.description.length > 130 && (
@@ -536,11 +526,10 @@ const Portfolio = () => {
       <section id="certificates" className="py-20 bg-muted/30 border-y border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
-              visibleSections.has("certificates")
+            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("certificates")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Licenses & Certificates
@@ -554,11 +543,10 @@ const Portfolio = () => {
             {certificates.map((cert, index) => (
               <div
                 key={cert.title}
-                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all ${
-                  visibleSections.has("certificates")
+                className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl p-5 hover:border-foreground/20 transition-all ${visibleSections.has("certificates")
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
-                }`}
+                  }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -618,11 +606,10 @@ const Portfolio = () => {
 
           {/* Certificate Summary */}
           <div
-            className={`mt-12 text-center transition-all duration-700 delay-300 ${
-              visibleSections.has("certificates")
+            className={`mt-12 text-center transition-all duration-700 delay-300 ${visibleSections.has("certificates")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 max-w-xl mx-auto">
               <div className="flex items-center justify-center mb-4">
@@ -656,11 +643,10 @@ const Portfolio = () => {
       <section id="articles" className="py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
-              visibleSections.has("articles")
+            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("articles")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Latest Articles
@@ -707,11 +693,10 @@ const Portfolio = () => {
               {articles.map((article, index) => (
                 <div
                   key={article.slug || index}
-                  className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all flex flex-col justify-between ${
-                    visibleSections.has("articles")
+                  className={`bg-card text-card-foreground border border-border shadow-xs rounded-xl overflow-hidden hover:border-foreground/20 transition-all flex flex-col justify-between ${visibleSections.has("articles")
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-6"
-                  }`}
+                    }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
                   <div>
@@ -790,11 +775,10 @@ const Portfolio = () => {
       <section id="contact" className="py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
-              visibleSections.has("contact")
+            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("contact")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
-            }`}
+              }`}
           >
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Get In Touch
@@ -807,11 +791,10 @@ const Portfolio = () => {
           <div className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
               <div
-                className={`transition-all duration-700 delay-150 ${
-                  visibleSections.has("contact")
+                className={`transition-all duration-700 delay-150 ${visibleSections.has("contact")
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 -translate-x-6"
-                }`}
+                  }`}
               >
                 <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-5">
                   <h3 className="text-lg font-semibold tracking-tight text-foreground">
@@ -852,11 +835,10 @@ const Portfolio = () => {
               </div>
 
               <div
-                className={`transition-all duration-700 delay-300 ${
-                  visibleSections.has("contact")
+                className={`transition-all duration-700 delay-300 ${visibleSections.has("contact")
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 translate-x-6"
-                }`}
+                  }`}
               >
                 <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
                   <div>
@@ -901,7 +883,7 @@ const Portfolio = () => {
       <footer className="bg-background py-8 border-t border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2025 Rangga Arsy Prawira. All rights reserved.</p>
+            <p>© 2026 Rangga Arsy Prawira. All rights reserved.</p>
             <div className="flex space-x-6">
               {medsos.map((social) => (
                 <a
@@ -1001,9 +983,8 @@ const Portfolio = () => {
                     maxWidth: zoomLevel === 1 ? "100%" : "none",
                     width: zoomLevel === 1 ? "auto" : "100%",
                   }}
-                  className={`rounded-lg shadow-xs transition-all duration-200 ${
-                    zoomLevel > 1 ? "cursor-zoom-out" : "cursor-zoom-in"
-                  }`}
+                  className={`rounded-lg shadow-xs transition-all duration-200 ${zoomLevel > 1 ? "cursor-zoom-out" : "cursor-zoom-in"
+                    }`}
                 />
               </div>
             </div>
