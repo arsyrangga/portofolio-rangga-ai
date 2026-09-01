@@ -36,6 +36,7 @@ import { certificates } from "@/data/certificates";
 import { gradientColors } from "@/constant/gradientColors";
 import { medsos } from "@/constant/constant";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence, Variants } from "framer-motion";
 
 interface Article {
   title: string;
@@ -48,10 +49,40 @@ interface Article {
   views: number;
 }
 
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+};
+
 const Portfolio = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [visibleSections, setVisibleSections] = useState(new Set());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Custom Cursor / Spotlight
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const springConfig = { damping: 25, stiffness: 200 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+
+  useEffect(() => {
+    const moveCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", moveCursor);
+    return () => window.removeEventListener("mousemove", moveCursor);
+  }, [cursorX, cursorY]);
   const [expandedIndex, setExpandedIndex] = useState<null | number>(null);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -208,27 +239,9 @@ const Portfolio = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
-    const observerOptions = {
-      threshold: 0.01,
-      rootMargin: "50px 0px 50px 0px", // mobile friendly
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        console.log("OBSERVE:", entry.target.id, entry.isIntersecting);
-        if (entry.isIntersecting) {
-          setVisibleSections((prev) => new Set([...prev, entry.target.id]));
-        }
-      });
-    }, observerOptions);
-
-    const sections = document.querySelectorAll("section[id]");
-    sections.forEach((section) => observer.observe(section));
-
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      observer.disconnect();
     };
   }, []);
 
@@ -245,7 +258,27 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="bg-background text-foreground overflow-x-hidden min-h-screen transition-colors duration-200 font-sans">
+    <div className="bg-background text-foreground overflow-x-hidden min-h-screen transition-colors duration-200 font-sans relative">
+      {/* Global Cursor Spotlight */}
+      <motion.div
+        className="pointer-events-none fixed top-0 left-0 z-[100] w-8 h-8 rounded-full bg-primary/30 blur-xl mix-blend-screen hidden md:block"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+      />
+      <motion.div
+        className="pointer-events-none fixed top-0 left-0 z-[100] w-3 h-3 rounded-full bg-primary mix-blend-screen hidden md:block"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+      />
+
       {/* Overlay untuk mobile menu */}
       {isMobileMenuOpen && (
         <div
@@ -362,25 +395,28 @@ const Portfolio = () => {
         {/* Ambient Radiant Mesh Glow */}
         <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[350px] bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-teal-500/10 rounded-full blur-3xl opacity-60 animate-pulse-glow" />
 
-        <div className="text-center z-10 max-w-4xl mx-auto px-4 py-12">
-          <div
-            className={`transition-all duration-700 ${visibleSections.has("home")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-50px" }}
+          className="text-center z-10 max-w-4xl mx-auto px-4 py-12"
+        >
+          <motion.div variants={fadeInUp}>
             {/* Profile Avatar with Glowing Ring */}
             <div className="flex justify-center mb-6">
               <div className="relative group inline-block">
                 <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-teal-500/30 blur-sm group-hover:blur-md transition-all duration-500 animate-pulse-glow" />
-                <img
+                <motion.img
                   alt="profile_image"
                   loading="lazy"
                   width="350"
                   height="350"
                   decoding="async"
                   src="/assets/images/rangga.jpg"
-                  className="relative w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full object-cover border-2 border-border/80 shadow-md group-hover:scale-105 transition-transform duration-500"
+                  className="relative w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full object-cover border-2 border-border/80 shadow-md transition-transform duration-500"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                 />
               </div>
             </div>
@@ -392,39 +428,36 @@ const Portfolio = () => {
                 Full Stack Developer
               </span>
             </h1>
-          </div>
-          <div
-            className={`transition-all duration-700 delay-150 ${visibleSections.has("home")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+          </motion.div>
+          <motion.div variants={fadeInUp}>
             <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
               Creating high-performance digital products and elegant web applications with modern web standards.
             </p>
-          </div>
-          <div
-            className={`flex flex-col sm:flex-row justify-center items-center transition-all duration-700 delay-300 space-y-3 sm:space-y-0 sm:space-x-4 ${visibleSections.has("home")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
+          </motion.div>
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4"
           >
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => scrollToSection("projects")}
-              className="w-full sm:w-auto bg-primary text-primary-foreground hover:opacity-90 hover:scale-105 active:scale-95 px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs hover:shadow-md hover:shadow-primary/20 cursor-pointer"
+              className="w-full sm:w-auto bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-medium text-sm shadow-xs hover:shadow-md hover:shadow-primary/20 cursor-pointer"
             >
               See Portfolio
-            </button>
+            </motion.button>
 
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="/assets/pdf/cv.pdf"
-              className="w-full sm:w-auto border border-border bg-background text-foreground hover:bg-muted hover:scale-105 active:scale-95 px-6 py-2.5 rounded-lg font-medium text-sm transition-all shadow-xs hover:shadow-sm"
+              className="w-full sm:w-auto border border-border bg-background text-foreground hover:bg-muted px-6 py-2.5 rounded-lg font-medium text-sm shadow-xs hover:shadow-sm"
               download={true}
             >
               Download CV
-            </a>
-          </div>
-        </div>
+            </motion.a>
+          </motion.div>
+        </motion.div>
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 opacity-60">
@@ -434,13 +467,14 @@ const Portfolio = () => {
 
       {/* About Section */}
       <section id="about" className="py-20 bg-muted/30 border-y border-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("about")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               About Me
             </h2>
@@ -448,15 +482,10 @@ const Portfolio = () => {
               I am a Full-Stack Developer with over 4 years of experience,
               skilled in building responsive, SEO-friendly interfaces and writing clean, maintainable code.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
-            <div
-              className={`transition-all duration-700 delay-150 ${visibleSections.has("about")
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-6"
-                }`}
-            >
+            <motion.div variants={fadeInUp}>
               <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6">
                 <h3 className="text-xl font-semibold tracking-tight text-foreground mb-3">
                   Background
@@ -478,20 +507,19 @@ const Portfolio = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div
-              className={`transition-all duration-700 delay-300 ${visibleSections.has("about")
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-6"
-                }`}
-            >
+            <motion.div variants={fadeInUp}>
               <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
                 <h3 className="text-xl font-semibold tracking-tight text-foreground">
                   Core Strengths & Focus
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                  <motion.div
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:shadow-sm transition-colors space-y-1 relative overflow-hidden"
+                  >
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
                       <div className="p-1 rounded-md bg-blue-500/10 group-hover:scale-110 transition-transform duration-300">
@@ -502,9 +530,13 @@ const Portfolio = () => {
                     <p className="text-xs text-muted-foreground">
                       React, Next.js, Kotlin, Swift, React Native
                     </p>
-                  </div>
+                  </motion.div>
 
-                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                  <motion.div
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:shadow-sm transition-colors space-y-1 relative overflow-hidden"
+                  >
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
                       <div className="p-1 rounded-md bg-emerald-500/10 group-hover:scale-110 transition-transform duration-300">
@@ -515,9 +547,13 @@ const Portfolio = () => {
                     <p className="text-xs text-muted-foreground">
                       Node.js, Golang, GCP Cloud Run, SQL/NoSQL
                     </p>
-                  </div>
+                  </motion.div>
 
-                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                  <motion.div
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:shadow-sm transition-colors space-y-1 relative overflow-hidden"
+                  >
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
                       <div className="p-1 rounded-md bg-rose-500/10 group-hover:scale-110 transition-transform duration-300">
@@ -528,9 +564,13 @@ const Portfolio = () => {
                     <p className="text-xs text-muted-foreground">
                       SonarQube, Jest, Incident Response, Risk Mgmt
                     </p>
-                  </div>
+                  </motion.div>
 
-                  <div className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 space-y-1 relative overflow-hidden gpu-accelerated">
+                  <motion.div
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="group p-3.5 rounded-lg bg-muted/40 border border-border/80 hover:border-foreground/30 hover:shadow-sm transition-colors space-y-1 relative overflow-hidden"
+                  >
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="flex items-center gap-2 text-foreground font-medium text-sm">
                       <div className="p-1 rounded-md bg-teal-500/10 group-hover:scale-110 transition-transform duration-300">
@@ -541,7 +581,7 @@ const Portfolio = () => {
                     <p className="text-xs text-muted-foreground">
                       Project Planning, Mentoring, Task Prioritization
                     </p>
-                  </div>
+                  </motion.div>
                 </div>
 
                 <div className="pt-2 flex items-center justify-between border-t border-border">
@@ -556,9 +596,9 @@ const Portfolio = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Skills Section */}
@@ -567,14 +607,15 @@ const Portfolio = () => {
         <div className="pointer-events-none absolute top-1/3 -left-20 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl animate-pulse-glow" />
         <div className="pointer-events-none absolute bottom-1/3 -right-20 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse-glow" />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+        >
           {/* Header */}
-          <div
-            className={`text-center mb-12 transition-all duration-700 ${visibleSections.has("skills")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+          <motion.div variants={fadeInUp} className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border mb-3 shadow-2xs animate-float">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>Technical Arsenal • {totalSkillsCount} Skills across 8 Domains</span>
@@ -585,15 +626,10 @@ const Portfolio = () => {
             <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
               A comprehensive directory of programming languages, frameworks, cloud architecture, and engineering practices I utilize in production.
             </p>
-          </div>
+          </motion.div>
 
           {/* Search and Category Filter Controls */}
-          <div
-            className={`mb-10 space-y-4 transition-all duration-700 delay-150 ${visibleSections.has("skills")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+          <motion.div variants={fadeInUp} className="mb-10 space-y-4">
             {/* Search Bar */}
             <div className="max-w-md mx-auto relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
@@ -619,20 +655,24 @@ const Portfolio = () => {
 
             {/* Category Filter Tabs */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory("all")}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border hover:scale-105 active:scale-95 ${selectedCategory === "all"
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border ${selectedCategory === "all"
                   ? "bg-primary text-primary-foreground border-primary shadow-xs"
                   : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
                   }`}
               >
                 All Domains ({totalSkillsCount})
-              </button>
+              </motion.button>
               {skills.map((cat) => (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border flex items-center gap-1.5 hover:scale-105 active:scale-95 ${selectedCategory === cat.id
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border flex items-center gap-1.5 ${selectedCategory === cat.id
                     ? "bg-primary text-primary-foreground border-primary shadow-xs"
                     : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border-border"
                     }`}
@@ -646,14 +686,14 @@ const Portfolio = () => {
                   >
                     {cat.items.length}
                   </span>
-                </button>
+                </motion.button>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Grid of Skill Categories */}
           {filteredCategories.length === 0 ? (
-            <div className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto shadow-2xs">
+            <motion.div variants={fadeInUp} className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto shadow-2xs">
               <Search className="w-8 h-8 text-muted-foreground mx-auto mb-3 opacity-60 animate-bounce" />
               <p className="text-sm font-semibold text-foreground mb-1">
                 No matching skills found
@@ -666,21 +706,26 @@ const Portfolio = () => {
                   setSearchSkill("");
                   setSelectedCategory("all");
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:opacity-90 transition-all cursor-pointer shadow-xs"
               >
                 Reset Filter & Search
               </button>
-            </div>
+            </motion.div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCategories.map((category, index) => (
-                <div
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {filteredCategories.map((category) => (
+                <motion.div
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.02, y: -6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
                   key={category.id}
-                  className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden gpu-accelerated ${visibleSections.has("skills")
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
-                    }`}
-                  style={{ transitionDelay: `${(index % 8) * 60}ms` }}
+                  className="bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg transition-colors flex flex-col justify-between group relative overflow-hidden"
                 >
                   {/* Subtle Ambient Card Glow */}
                   <div
@@ -740,52 +785,53 @@ const Portfolio = () => {
                             .toLowerCase()
                             .includes(searchSkill.toLowerCase().trim());
                         return (
-                          <span
+                          <motion.span
+                            whileHover={{ scale: 1.1, y: -2 }}
                             key={item}
-                            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-default ${isMatched
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium cursor-default ${isMatched
                               ? "bg-primary text-primary-foreground font-semibold ring-2 ring-primary/40 shadow-xs animate-pulse"
                               : "bg-secondary text-secondary-foreground border border-border/80 hover:bg-muted hover:border-foreground/30 shadow-2xs"
                               }`}
                           >
                             {item}
-                          </span>
+                          </motion.span>
                         );
                       })}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </section>
 
       {/* Projects Section */}
       <section id="projects" className="py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("projects")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Projects
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-base">
               A collection of digital products, applications, and web services I've engineered.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
-              <div
+              <motion.div
+                variants={fadeInUp}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
                 key={project.title}
-                className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl overflow-hidden hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group gpu-accelerated ${visibleSections.has("projects")
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-6"
-                  }`}
-                style={{ transitionDelay: `${index * 80}ms` }}
+                className="bg-card text-card-foreground border border-border shadow-2xs rounded-xl overflow-hidden hover:border-foreground/30 hover:shadow-lg transition-colors flex flex-col justify-between group"
               >
                 {/* Image Section */}
                 <div
@@ -863,38 +909,38 @@ const Portfolio = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Certificates Section */}
       <section id="certificates" className="py-20 bg-muted/30 border-y border-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("certificates")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Licenses & Certificates
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-base">
               Verified certifications and industry credentials
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {certificates.map((cert, index) => (
-              <div
+              <motion.div
+                variants={fadeInUp}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
                 key={cert.title}
-                className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group gpu-accelerated ${visibleSections.has("certificates")
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-6"
-                  }`}
-                style={{ transitionDelay: `${index * 80}ms` }}
+                className="bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg transition-colors flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-start justify-between mb-4">
@@ -952,17 +998,12 @@ const Portfolio = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
           {/* Certificate Summary */}
-          <div
-            className={`mt-12 text-center transition-all duration-700 delay-300 ${visibleSections.has("certificates")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+          <motion.div variants={fadeInUp} className="mt-12 text-center">
             <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 max-w-xl mx-auto">
               <div className="flex items-center justify-center mb-4">
                 <Award className="w-5 h-5 text-foreground mr-2" />
@@ -987,26 +1028,27 @@ const Portfolio = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Articles Section */}
       <section id="articles" className="py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("articles")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Latest Articles
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-base">
               Articles, technical insights, and digital tutorials published on Blogyra.
             </p>
-          </div>
+          </motion.div>
 
           {isLoadingArticles ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1043,13 +1085,12 @@ const Portfolio = () => {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((article, index) => (
-                <div
+                <motion.div
+                  variants={fadeInUp}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
                   key={article.slug || index}
-                  className={`bg-card text-card-foreground border border-border shadow-2xs rounded-xl overflow-hidden hover:border-foreground/30 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group gpu-accelerated ${visibleSections.has("articles")
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
-                    }`}
-                  style={{ transitionDelay: `${index * 80}ms` }}
+                  className="bg-card text-card-foreground border border-border shadow-2xs rounded-xl overflow-hidden hover:border-foreground/30 hover:shadow-lg transition-colors flex flex-col justify-between group"
                 >
                   <div>
                     {/* Thumbnail */}
@@ -1102,14 +1143,14 @@ const Portfolio = () => {
                       Read Article <ArrowUpRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                     </a>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}
 
           {/* Footer CTA */}
           {!articlesError && articles.length > 0 && (
-            <div className="mt-12 text-center">
+            <motion.div variants={fadeInUp} className="mt-12 text-center">
               <a
                 href="https://blogyra.site"
                 target="_blank"
@@ -1118,36 +1159,32 @@ const Portfolio = () => {
               >
                 View All Articles on Blogyra <ExternalLink className="w-4 h-4" />
               </a>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </section>
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-700 ${visibleSections.has("contact")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-              }`}
-          >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
               Get In Touch
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-base">
               Let's connect and collaborate on your next project.
             </p>
-          </div>
+          </motion.div>
 
           <div className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
-              <div
-                className={`transition-all duration-700 delay-150 ${visibleSections.has("contact")
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-6"
-                  }`}
-              >
+              <motion.div variants={fadeInUp}>
                 <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-5">
                   <h3 className="text-lg font-semibold tracking-tight text-foreground">
                     Contact Details
@@ -1184,14 +1221,9 @@ const Portfolio = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div
-                className={`transition-all duration-700 delay-300 ${visibleSections.has("contact")
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-6"
-                  }`}
-              >
+              <motion.div variants={fadeInUp}>
                 <div className="bg-card text-card-foreground border border-border shadow-xs rounded-xl p-6 space-y-4">
                   <div>
                     <input
@@ -1225,10 +1257,10 @@ const Portfolio = () => {
                     Send Message
                   </button>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer */}
