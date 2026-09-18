@@ -27,7 +27,6 @@ import {
   ShieldCheck,
   Wrench,
   Search,
-  Sparkles,
   ArrowRight,
 } from "lucide-react";
 import { projects } from "@/data/projects";
@@ -617,7 +616,6 @@ const Portfolio = () => {
           {/* Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border mb-3 shadow-2xs animate-float">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>Technical Arsenal • {totalSkillsCount} Skills across 8 Domains</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
@@ -693,7 +691,11 @@ const Portfolio = () => {
 
           {/* Grid of Skill Categories */}
           {filteredCategories.length === 0 ? (
-            <motion.div variants={fadeInUp} className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto shadow-2xs">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-card border border-border rounded-xl p-10 text-center max-w-md mx-auto shadow-2xs"
+            >
               <Search className="w-8 h-8 text-muted-foreground mx-auto mb-3 opacity-60 animate-bounce" />
               <p className="text-sm font-semibold text-foreground mb-1">
                 No matching skills found
@@ -713,20 +715,21 @@ const Portfolio = () => {
             </motion.div>
           ) : (
             <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-100px" }}
+              layout
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filteredCategories.map((category) => (
-                <motion.div
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.02, y: -6 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                  key={category.id}
-                  className="bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg transition-colors flex flex-col justify-between group relative overflow-hidden"
-                >
+              <AnimatePresence mode="popLayout">
+                {filteredCategories.map((category) => (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    whileHover={{ scale: 1.02, y: -6 }}
+                    key={category.id}
+                    className="bg-card text-card-foreground border border-border shadow-2xs rounded-xl p-5 hover:border-foreground/30 hover:shadow-lg transition-colors flex flex-col justify-between group relative overflow-hidden"
+                  >
                   {/* Subtle Ambient Card Glow */}
                   <div
                     className="pointer-events-none absolute -top-12 -right-12 w-36 h-36 rounded-full opacity-0 group-hover:opacity-15 blur-2xl transition-opacity duration-500 ease-out"
@@ -801,8 +804,9 @@ const Portfolio = () => {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
-          )}
+            </AnimatePresence>
+          </motion.div>
+        )}
         </motion.div>
       </section>
 
