@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Shift Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .hero-icon, .info-card/.info-card-header/.info-card-title,
+       .info-item(+:nth-last-child)/.info-lbl/.info-val/.info-sub, and
+       .add-emp-list/.add-emp-item(+.selected/.hover/:last-child) are all
+       promoted to layout.css (Task 10, section 7 / info-grid area /
+       GROUP 6). .hero-text and table.emp-tbl (+ its thead/th/td/tr
+       sub-rules) were deleted — .hero-text duplicated the existing
+       .hero-info exactly (markup switched to it); the table rules
+       duplicated the generic shared table/th/td selectors byte-for-byte
+       (the .emp-tbl class was dropped from the table element below,
+       which needs no class at all to pick up the shared styling). See
+       layout.css GROUP 6's batch note for details. */
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="" data-active-sub=""></aside>
+
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action gear-active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Back link -->
+    <button class="back-link" onclick="window.location.href='settings.html?section=employee-shift'">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Shift Configuration
+    </button>
+
+    <!-- Hero card -->
+    <div class="hero-card">
+      <div class="hero-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#E04A2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="9"/>
+          <path d="M11 6v5l3 3"/>
+        </svg>
+      </div>
+      <div class="hero-info">
+        <div class="hero-name" id="page-shift-name">—</div>
+        <div class="hero-sub">Shift Configuration <span style="color:#D1D5DB;margin:0 6px">·</span> <span id="page-emp-count">—</span></div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-outline" onclick="openEditShift()">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Edit
+        </button>
+        <button class="btn btn-danger-outline" onclick="openDeleteShift()">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- Info card -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="info-card-title">Shift Details</span>
+      </div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-lbl">Check-in Time</div>
+          <div class="info-val" id="sd-cin-time">—</div>
+        </div>
+        <div class="info-item">
+          <div class="info-lbl">Check-in Tolerance</div>
+          <div class="info-val" id="sd-cin-tol">—</div>
+        </div>
+        <div class="info-item">
+          <div class="info-lbl">Check-out Time</div>
+          <div class="info-val" id="sd-cout-time">—</div>
+        </div>
+        <div class="info-item">
+          <div class="info-lbl">Check-out Tolerance</div>
+          <div class="info-val" id="sd-cout-tol">—</div>
+        </div>
+        <div class="info-item">
+          <div class="info-lbl">Shift Duration</div>
+          <div class="info-val" id="sd-duration">—</div>
+        </div>
+        <div class="info-item">
+          <div class="info-lbl">Late Tolerance Count</div>
+          <div class="info-val" id="sd-late">—</div>
+          <div class="info-sub">Allowed late arrivals before deduction applies</div>
+        </div>
+        <div class="info-item" style="grid-column:1/-1;border-bottom:1px solid #F3F4F6">
+          <div class="info-lbl">Late Deduction Rate</div>
+          <div class="info-val" id="sd-late-rate">—</div>
+          <div class="info-sub">IDR per point deducted from salary</div>
+        </div>
+        <div class="info-item" style="grid-column:1/-1;border-bottom:1px solid #F3F4F6">
+          <div class="info-lbl">Late Point Tiers</div>
+          <div id="sd-tiers" style="display:flex;gap:16px;margin-top:4px;flex-wrap:wrap">
+            <span style="font-size:13px;color:#374151"><span style="color:#6B7280;font-size:12px">1–15 min</span> <strong id="sd-tier1">—</strong> pts</span>
+            <span style="font-size:13px;color:#374151"><span style="color:#6B7280;font-size:12px">16–30 min</span> <strong id="sd-tier2">—</strong> pts</span>
+            <span style="font-size:13px;color:#374151"><span style="color:#6B7280;font-size:12px">&gt;30 min</span> <strong id="sd-tier3">—</strong> pts</span>
+          </div>
+          <div class="info-sub">Points assigned by lateness duration — deduction = points × rate</div>
+        </div>
+        <div class="info-item" style="grid-column:1/-1;border-bottom:none">
+          <div class="info-lbl">Flexible Shift</div>
+          <div class="info-val" id="sd-flexible">—</div>
+          <div class="info-sub" id="sd-flexible-sub"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employee table -->
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="emp-search" type="text" placeholder="Search employee…" oninput="renderEmpTable(this.value)">
+          </div>
+          <div class="toolbar-count" id="emp-count"></div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th style="width:180px">Department</th>
+            <th style="width:200px">Position</th>
+            <th class="col-actions" style="width:72px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="emp-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- Edit Shift Modal -->
+<div class="modal-overlay" id="shift-modal" onclick="if(event.target===this)closeShiftModal()">
+  <div class="modal-box modal-wide">
+    <div class="modal-head">
+      <span class="modal-head-title">Edit Shift</span>
+      <button class="modal-close-btn" onclick="closeShiftModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- Name -->
+      <div class="form-field">
+        <label class="field-label" for="shift-name">Shift Name</label>
+        <input type="text" id="shift-name" class="text-input" placeholder="e.g. Morning Shift" maxlength="80"
+               oninput="clearShiftFieldErr('shift-name')" />
+        <span class="field-err" id="shift-name-err"></span>
+      </div>
+      <!-- Check-in row -->
+      <div class="form-row">
+        <div class="form-field">
+          <label class="field-label" for="shift-cin">Check-in Time</label>
+          <input type="time" id="shift-cin" class="text-input"
+                 oninput="clearShiftFieldErr('shift-cin');checkToleranceWarn()" />
+          <span class="field-err" id="shift-cin-err"></span>
+        </div>
+        <div class="form-field">
+          <label class="field-label" for="shift-cin-tol">Check-in Tolerance (min)</label>
+          <input type="number" id="shift-cin-tol" class="text-input" min="0" max="120" placeholder="15"
+                 oninput="clearShiftFieldErr('shift-cin-tol');checkToleranceWarn()" />
+          <span class="field-hint">Grace window for early/late check-in</span>
+          <span class="field-err"  id="shift-cin-tol-err"></span>
+          <span class="field-warn" id="shift-cin-tol-warn"></span>
+        </div>
+      </div>
+      <!-- Check-out row -->
+      <div class="form-row">
+        <div class="form-field">
+          <label class="field-label" for="shift-cout">Check-out Time</label>
+          <input type="time" id="shift-cout" class="text-input"
+                 oninput="clearShiftFieldErr('shift-cout');checkToleranceWarn()" />
+          <span class="field-err" id="shift-cout-err"></span>
+        </div>
+        <div class="form-field">
+          <label class="field-label" for="shift-cout-tol">Check-out Tolerance (min)</label>
+          <input type="number" id="shift-cout-tol" class="text-input" min="0" max="120" placeholder="15"
+                 oninput="clearShiftFieldErr('shift-cout-tol');checkToleranceWarn()" />
+          <span class="field-hint">Grace window for early/late check-out</span>
+          <span class="field-err"  id="shift-cout-tol-err"></span>
+          <span class="field-warn" id="shift-cout-tol-warn"></span>
+        </div>
+      </div>
+      <!-- Late tolerance -->
+      <div id="shift-late-group">
+        <div class="form-row">
+          <div class="form-field">
+            <label class="field-label" for="shift-late">Late Tolerance Count</label>
+            <input type="number" id="shift-late" class="text-input" min="0" max="99" placeholder="1"
+                   oninput="clearShiftFieldErr('shift-late');checkLateWarn()" />
+            <span class="field-hint">0–99 (0 = all late arrivals counted)</span>
+            <span class="field-err"  id="shift-late-err"></span>
+            <span class="field-warn" id="shift-late-warn"></span>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="shift-late-rate">Late Deduction Rate</label>
+            <div class="f-input" id="shift-late-rate-wrap">
+              <span class="input-prefix">IDR</span>
+              <input type="number" id="shift-late-rate" min="0" placeholder="5000"
+                     oninput="clearShiftFieldErr('shift-late-rate')" />
+            </div>
+            <span class="field-hint">IDR per point deducted from salary</span>
+            <span class="field-err" id="shift-late-rate-err"></span>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:8px">Late Point Tiers</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label class="field-label" for="shift-late-tier1">1–15 min</label>
+              <input type="number" id="shift-late-tier1" class="text-input" min="0" placeholder="20"
+                     oninput="clearShiftFieldErr('shift-late-tier1')" />
+              <span class="field-err" id="shift-late-tier1-err"></span>
+            </div>
+            <div class="form-field">
+              <label class="field-label" for="shift-late-tier2">16–30 min</label>
+              <input type="number" id="shift-late-tier2" class="text-input" min="0" placeholder="50"
+                     oninput="clearShiftFieldErr('shift-late-tier2')" />
+              <span class="field-err" id="shift-late-tier2-err"></span>
+            </div>
+            <div class="form-field">
+              <label class="field-label" for="shift-late-tier3">&gt;30 min</label>
+              <input type="number" id="shift-late-tier3" class="text-input" min="0" placeholder="100"
+                     oninput="clearShiftFieldErr('shift-late-tier3')" />
+              <span class="field-err" id="shift-late-tier3-err"></span>
+            </div>
+          </div>
+          <span class="field-hint">Points earned per late check-in, by minutes late. Points × Late Deduction Rate = amount deducted.</span>
+        </div>
+      </div>
+      <label class="toggle-row" for="shift-flexible">
+        <div class="toggle-wrap">
+          <input type="checkbox" id="shift-flexible" onchange="onFlexibleChange()">
+          <span class="toggle-track"></span>
+          <span class="toggle-knob"></span>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:0">Flexible Shift</div>
+          <div class="field-hint" style="margin-top:2px">Employees in this shift won't incur late deductions regardless of arrival time</div>
+        </div>
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeShiftModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveShift()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="shift-delete-modal" onclick="if(event.target===this)closeDeleteModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Shift</span>
+      <button class="modal-close-btn" onclick="closeDeleteModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-shift-nm"></span>?</div>
+        <div class="sub-desc">This shift will be permanently deleted. This action cannot be undone.</div>
+        <div id="delete-shift-emp-warn" style="display:none;margin-top:8px;font-size:13px;color:#B45309"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteShift()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal-overlay" id="add-emp-modal" onclick="if(event.target===this)closeAddModal()">
+  <div class="modal-box" style="width:480px">
+    <div class="modal-head">
+      <span class="modal-head-title" id="add-modal-title">Add Employee</span>
+      <button class="modal-close-btn" onclick="closeAddModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="field-label">Search Employee</label>
+        <div class="search-wrap" style="width:100%">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input type="text" id="add-emp-search" placeholder="Type name or employee ID…" oninput="renderAddList(this.value)">
+        </div>
+        <div style="font-size:11px;color:#9CA3AF;margin-top:4px">Only employees not yet assigned to this shift will appear</div>
+      </div>
+      <div class="add-emp-list" id="add-emp-list"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
+      <button class="btn btn-primary" id="add-emp-btn" onclick="confirmAddEmployee()" style="opacity:0.5;pointer-events:none">Add Employee</button>
+    </div>
+  </div>
+</div>
+
+<!-- Remove Employee Confirm Modal -->
+<div class="modal-overlay" id="remove-emp-modal" onclick="if(event.target===this)closeRemoveModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Remove Employee</span>
+      <button class="modal-close-btn" onclick="closeRemoveModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Remove <strong id="remove-emp-nm">this employee</strong> from <strong id="remove-shift-nm">this shift</strong>?</div>
+        <div class="modal-sub-desc">This employee will no longer be assigned to this shift. You can re-add them at any time.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRemoveModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmRemoveEmployee()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script>
+  /* ── Data helpers ── */
+  var SHIFT_KEY  = 'QUADRA_SHIFTS';
+  var SHIFT_VKEY = 'QUADRA_SHIFTS_V';
+  var SHIFT_VER  = 4;
+  var SHIFT_SEED = [
+    { id: 1, name: 'NDS',         checkIn: '09:00', checkInTol: 15, checkOut: '18:00', checkOutTol: 15, lateTolCount: 1, lateDeductionPerPoint: 5000, lateTier1Points: 20, lateTier2Points: 50, lateTier3Points: 100, isFlexible: false },
+    { id: 2, name: 'Bendi',       checkIn: '08:00', checkInTol: 10, checkOut: '17:00', checkOutTol: 10, lateTolCount: 1, lateDeductionPerPoint: 5000, lateTier1Points: 20, lateTier2Points: 50, lateTier3Points: 100, isFlexible: false },
+    { id: 3, name: 'Ops Console', checkIn: '07:00', checkInTol: 15, checkOut: '16:00', checkOutTol: 15, lateTolCount: 1, lateDeductionPerPoint: 5000, lateTier1Points: 20, lateTier2Points: 50, lateTier3Points: 100, isFlexible: false }
+  ];
+
+  function loadShifts() {
+    var ver = parseInt(localStorage.getItem(SHIFT_VKEY), 10);
+    if (ver !== SHIFT_VER) {
+      localStorage.setItem(SHIFT_KEY, JSON.stringify(SHIFT_SEED));
+      localStorage.setItem(SHIFT_VKEY, String(SHIFT_VER));
+      return SHIFT_SEED.slice();
+    }
+    try { return JSON.parse(localStorage.getItem(SHIFT_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveShifts(shifts) {
+    localStorage.setItem(SHIFT_KEY, JSON.stringify(shifts));
+  }
+
+  function timeToMins(t) {
+    var p = t.split(':');
+    return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+  }
+
+  function fmtDuration(checkIn, checkOut) {
+    if (!checkIn || !checkOut || checkOut <= checkIn) return '—';
+    var mins = timeToMins(checkOut) - timeToMins(checkIn);
+    var h = Math.floor(mins / 60);
+    var m = mins % 60;
+    if (m === 0) return h + ' hr';
+    return h + ' hr ' + m + ' min';
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── Page init ── */
+  var currentShiftId = null;
+  var currentShift   = null;
+
+  var SVG_VIEW = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+  var SVG_DEL  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  (function init() {
+    var params = new URLSearchParams(window.location.search);
+    var id = parseInt(params.get('id'), 10);
+    if (!id) { window.location.replace('settings.html?section=employee-shift'); return; }
+
+    var shifts = loadShifts();
+    var s = shifts.find(function(x) { return x.id === id; });
+    if (!s) { window.location.replace('settings.html?section=employee-shift'); return; }
+
+    currentShiftId = s.id;
+    currentShift   = s;
+    renderPage(s);
+    renderEmpTable('');
+  })();
+
+  function renderPage(s) {
+    document.title = 'QuadraNG — ' + s.name;
+    document.getElementById('page-shift-name').textContent = s.name;
+    document.getElementById('sd-cin-time').textContent  = s.checkIn;
+    document.getElementById('sd-cin-tol').textContent   = s.checkInTol + ' minutes';
+    document.getElementById('sd-cout-time').textContent = s.checkOut;
+    document.getElementById('sd-cout-tol').textContent  = s.checkOutTol + ' minutes';
+    document.getElementById('sd-duration').textContent  = fmtDuration(s.checkIn, s.checkOut);
+    document.getElementById('sd-late').textContent      = s.lateTolCount + 'x';
+    document.getElementById('sd-late-rate').textContent = 'IDR ' + Number(s.lateDeductionPerPoint || 0).toLocaleString('id-ID') + ' / point';
+    document.getElementById('sd-tier1').textContent     = s.lateTier1Points !== undefined ? s.lateTier1Points : 20;
+    document.getElementById('sd-tier2').textContent     = s.lateTier2Points !== undefined ? s.lateTier2Points : 50;
+    document.getElementById('sd-tier3').textContent     = s.lateTier3Points !== undefined ? s.lateTier3Points : 100;
+    var flexEl    = document.getElementById('sd-flexible');
+    var flexSubEl = document.getElementById('sd-flexible-sub');
+    if (s.isFlexible) {
+      flexEl.innerHTML = '<span class="tag tag-success">Yes — Flexible</span>';
+      flexSubEl.textContent = 'Late deductions do not apply in payroll';
+    } else {
+      flexEl.textContent = 'No';
+      flexSubEl.textContent = '';
+    }
+    document.getElementById('delete-shift-nm').textContent = s.name;
+    updateEmpCount(s.name);
+  }
+
+  /* ── Employee data layer ── */
+  var EMP_LS_KEY = 'quadra_employees';
+
+  function loadEmployees() {
+    try {
+      var stored = JSON.parse(localStorage.getItem(EMP_LS_KEY));
+      if (stored && stored.length) return stored;
+    } catch(e) {}
+    return QUADRA_EMPLOYEES.slice();
+  }
+
+  function saveEmployees(emps) {
+    localStorage.setItem(EMP_LS_KEY, JSON.stringify(emps));
+  }
+
+  function getEnrolled(allEmps, shiftName) {
+    return allEmps.filter(function(e) { return e.shift === shiftName; });
+  }
+
+  function updateEmpCount(shiftName) {
+    var count = getEnrolled(loadEmployees(), shiftName).length;
+    var el = document.getElementById('page-emp-count');
+    if (el) el.textContent = count + ' employee' + (count !== 1 ? 's' : '');
+  }
+
+  /* ── Employee table ── */
+  function renderEmpTable(query) {
+    var allEmps  = loadEmployees();
+    var enrolled = getEnrolled(allEmps, currentShift.name);
+    var q        = (query || '').toLowerCase().trim();
+    var filtered = q ? enrolled.filter(function(e) {
+      return e.name.toLowerCase().indexOf(q) >= 0 ||
+             e.badge.toLowerCase().indexOf(q) >= 0 ||
+             (e.project || '').toLowerCase().indexOf(q) >= 0 ||
+             (e.pos || '').toLowerCase().indexOf(q) >= 0;
+    }) : enrolled;
+
+    var countEl = document.getElementById('emp-count');
+    if (countEl) {
+      if (q && filtered.length !== enrolled.length) {
+        countEl.innerHTML = '<span>' + filtered.length + '</span> of <span>' + enrolled.length + '</span> employees';
+      } else {
+        countEl.innerHTML = '<span>' + enrolled.length + '</span> employee' + (enrolled.length !== 1 ? 's' : '');
+      }
+    }
+
+    var tbody = document.getElementById('emp-tbody');
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div style="padding:32px;text-align:center;color:#9CA3AF;font-size:13px">' +
+        (q ? 'No employees match &ldquo;' + escHtml(query) + '&rdquo;' : 'No employees assigned to this shift yet') +
+        '</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = filtered.map(function(emp) {
+      return '<tr data-badge="' + emp.badge + '">' +
+        '<td><div class="emp-cell">' +
+          '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>' +
+          '<div><div class="emp-name">' + escHtml(emp.name) + '</div><div class="emp-id">' + emp.badge + '</div></div>' +
+        '</div></td>' +
+        '<td>' + escHtml(emp.project || '—') + '</td>' +
+        '<td>' + escHtml(emp.pos || '—') + '</td>' +
+        '<td><div class="action-btns">' +
+          '<button class="icon-btn" title="View" data-badge="' + emp.badge + '">' + SVG_VIEW + '</button>' +
+          '<button class="icon-btn" title="Remove" style="color:#EF4444" onclick="openRemoveModal(\'' + emp.badge.replace(/'/g,"\\'") + '\')">' + SVG_DEL + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function goToEmployee(badge) {
+    var ref     = 'shift-' + currentShift.id;
+    var refname = encodeURIComponent(currentShift.name);
+    window.location.href = 'employee-detail.html?badge=' + badge + '&ref=' + ref + '&refname=' + refname;
+  }
+
+  document.getElementById('emp-tbody').addEventListener('click', function(e) {
+    if (e.target.closest('[title="Remove"]')) return;
+    var viewBtn = e.target.closest('[data-badge]');
+    if (viewBtn) { goToEmployee(viewBtn.dataset.badge); return; }
+    var row = e.target.closest('tr[data-badge]');
+    if (row) goToEmployee(row.dataset.badge);
+  });
+
+  /* ── Add Employee modal ── */
+  var selectedBadge = null;
+
+  function openAddModal() {
+    selectedBadge = null;
+    document.getElementById('add-emp-search').value = '';
+    document.getElementById('add-modal-title').textContent = 'Add Employee to ' + currentShift.name;
+    setAddBtn(false);
+    renderAddList('');
+    document.getElementById('add-emp-modal').classList.add('show');
+    setTimeout(function() { document.getElementById('add-emp-search').focus(); }, 50);
+  }
+
+  function closeAddModal() {
+    document.getElementById('add-emp-modal').classList.remove('show');
+    selectedBadge = null;
+  }
+
+  function setAddBtn(enabled) {
+    var btn = document.getElementById('add-emp-btn');
+    btn.style.opacity = enabled ? '1' : '0.5';
+    btn.style.pointerEvents = enabled ? '' : 'none';
+  }
+
+  function renderAddList(query) {
+    var allEmps   = loadEmployees();
+    var q         = (query || '').toLowerCase().trim();
+    var available = allEmps.filter(function(e) { return e.shift !== currentShift.name; });
+    if (q) available = available.filter(function(e) {
+      return e.name.toLowerCase().indexOf(q) >= 0 || e.badge.toLowerCase().indexOf(q) >= 0;
+    });
+
+    var list = document.getElementById('add-emp-list');
+    if (!available.length) {
+      list.innerHTML = '<div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px">' +
+        (q ? 'No employees match &ldquo;' + escHtml(query) + '&rdquo;' : 'All employees are already assigned to this shift') +
+        '</div>';
+      return;
+    }
+    list.innerHTML = available.map(function(emp) {
+      var sel       = (emp.badge === selectedBadge);
+      var shiftNote = emp.shift
+        ? '<div style="font-size:11px;color:#B45309;margin-top:2px">Currently in <strong>' + escHtml(emp.shift) + '</strong> — will be reassigned</div>'
+        : '';
+      return '<div class="add-emp-item' + (sel ? ' selected' : '') + '" onclick="selectAddEmp(\'' + emp.badge.replace(/'/g,"\\'") + '\')">' +
+        '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>' +
+        '<div>' +
+          '<div class="emp-name">' + escHtml(emp.name) + '</div>' +
+          '<div class="emp-id">' + emp.badge + (emp.pos ? ' · ' + escHtml(emp.pos) : '') + '</div>' +
+          shiftNote +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function selectAddEmp(badge) {
+    selectedBadge = badge;
+    setAddBtn(true);
+    renderAddList(document.getElementById('add-emp-search').value);
+  }
+
+  function confirmAddEmployee() {
+    if (!selectedBadge) return;
+    var emps = loadEmployees();
+    var emp  = emps.find(function(e) { return e.badge === selectedBadge; });
+    if (emp) { emp.shift = currentShift.name; saveEmployees(emps); }
+    closeAddModal();
+    renderEmpTable('');
+    document.getElementById('emp-search').value = '';
+    updateEmpCount(currentShift.name);
+    if (emp) QuadraToast.show(emp.name + ' added to ' + currentShift.name + '.', 'success');
+  }
+
+  /* ── Remove Employee modal ── */
+  var removingBadge = null;
+
+  function openRemoveModal(badge) {
+    removingBadge = badge;
+    var emp = loadEmployees().find(function(e) { return e.badge === badge; });
+    document.getElementById('remove-emp-nm').textContent    = emp ? emp.name : 'this employee';
+    document.getElementById('remove-shift-nm').textContent  = currentShift.name;
+    document.getElementById('remove-emp-modal').classList.add('show');
+  }
+
+  function closeRemoveModal() {
+    document.getElementById('remove-emp-modal').classList.remove('show');
+    removingBadge = null;
+  }
+
+  function confirmRemoveEmployee() {
+    if (!removingBadge) return;
+    var emps = loadEmployees();
+    var emp  = emps.find(function(e) { return e.badge === removingBadge; });
+    if (emp) { emp.shift = null; saveEmployees(emps); }
+    closeRemoveModal();
+    renderEmpTable('');
+    document.getElementById('emp-search').value = '';
+    updateEmpCount(currentShift.name);
+    if (emp) QuadraToast.show(emp.name + ' removed from ' + currentShift.name + '.', 'success');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeShiftModal(); closeDeleteModal(); closeAddModal(); closeRemoveModal(); }
+  });
+
+  /* ── Edit modal ── */
+  function openEditShift() {
+    var s = loadShifts().find(function(x) { return x.id === currentShiftId; });
+    if (!s) return;
+    document.getElementById('shift-name').value     = s.name;
+    document.getElementById('shift-cin').value      = s.checkIn;
+    document.getElementById('shift-cin-tol').value  = s.checkInTol;
+    document.getElementById('shift-cout').value     = s.checkOut;
+    document.getElementById('shift-cout-tol').value = s.checkOutTol;
+    document.getElementById('shift-late').value         = s.lateTolCount;
+    document.getElementById('shift-late-rate').value    = s.lateDeductionPerPoint;
+    document.getElementById('shift-late-tier1').value   = s.lateTier1Points !== undefined ? s.lateTier1Points : 20;
+    document.getElementById('shift-late-tier2').value   = s.lateTier2Points !== undefined ? s.lateTier2Points : 50;
+    document.getElementById('shift-late-tier3').value   = s.lateTier3Points !== undefined ? s.lateTier3Points : 100;
+    document.getElementById('shift-flexible').checked   = !!s.isFlexible;
+    ['shift-name','shift-cin','shift-cin-tol','shift-cout','shift-cout-tol','shift-late','shift-late-rate','shift-late-tier1','shift-late-tier2','shift-late-tier3'].forEach(clearShiftFieldErr);
+    clearShiftWarns();
+    onFlexibleChange();
+    checkToleranceWarn();
+    checkLateWarn();
+    document.getElementById('shift-modal').classList.add('show');
+    setTimeout(function() { var n = document.getElementById('shift-name'); n.focus(); n.select(); }, 50);
+  }
+
+  function closeShiftModal() {
+    document.getElementById('shift-modal').classList.remove('show');
+  }
+
+  function clearShiftFieldErr(id) {
+    var inp = document.getElementById(id);
+    var err = document.getElementById(id + '-err');
+    if (inp) {
+      inp.classList.remove('is-error');
+      var w = inp.closest('.f-input,.affix-w');
+      if (w) w.classList.remove('is-error');
+    }
+    if (err) { err.textContent = ''; err.classList.remove('show'); }
+  }
+
+  function showShiftFieldErr(id, msg) {
+    var inp = document.getElementById(id);
+    var err = document.getElementById(id + '-err');
+    if (inp) {
+      inp.classList.add('is-error');
+      var w = inp.closest('.f-input,.affix-w');
+      if (w) w.classList.add('is-error');
+      inp.focus();
+    }
+    if (err) { err.textContent = msg; err.classList.add('show'); }
+  }
+
+  function clearShiftWarns() {
+    ['shift-cin-tol-warn','shift-cout-tol-warn','shift-late-warn'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('show');
+    });
+  }
+
+  function checkToleranceWarn() {
+    var ciT  = document.getElementById('shift-cin').value;
+    var coT  = document.getElementById('shift-cout').value;
+    var cinW  = document.getElementById('shift-cin-tol-warn');
+    var coutW = document.getElementById('shift-cout-tol-warn');
+    if (!ciT || !coT || coT <= ciT) { cinW.classList.remove('show'); coutW.classList.remove('show'); return; }
+    var dur    = timeToMins(coT) - timeToMins(ciT);
+    var cinTol = parseInt(document.getElementById('shift-cin-tol').value, 10);
+    var coTol  = parseInt(document.getElementById('shift-cout-tol').value, 10);
+    if (!isNaN(cinTol) && cinTol > 0 && cinTol >= dur) {
+      cinW.textContent = 'Tolerance (' + cinTol + ' min) meets or exceeds the shift duration (' + dur + ' min).';
+      cinW.classList.add('show');
+    } else { cinW.classList.remove('show'); }
+    if (!isNaN(coTol) && coTol > 0 && coTol >= dur) {
+      coutW.textContent = 'Tolerance (' + coTol + ' min) meets or exceeds the shift duration (' + dur + ' min).';
+      coutW.classList.add('show');
+    } else { coutW.classList.remove('show'); }
+  }
+
+  function checkLateWarn() {
+    var w = document.getElementById('shift-late-warn');
+    if (document.getElementById('shift-late').value === '0') {
+      w.textContent = 'All late arrivals will be recorded — no grace period.';
+      w.classList.add('show');
+    } else { w.classList.remove('show'); }
+  }
+
+  function onFlexibleChange() {
+    var isFlexible = document.getElementById('shift-flexible').checked;
+    var group = document.getElementById('shift-late-group');
+    if (group) {
+      group.style.opacity = isFlexible ? '0.4' : '';
+      group.style.pointerEvents = isFlexible ? 'none' : '';
+    }
+  }
+
+  function saveShift() {
+    var name     = (document.getElementById('shift-name').value    || '').trim();
+    var ciT      =  document.getElementById('shift-cin').value;
+    var ciTol    =  document.getElementById('shift-cin-tol').value;
+    var coT      =  document.getElementById('shift-cout').value;
+    var coTol    =  document.getElementById('shift-cout-tol').value;
+    var lt       =  document.getElementById('shift-late').value;
+    var lateRate =  document.getElementById('shift-late-rate').value;
+    var tier1    =  document.getElementById('shift-late-tier1').value;
+    var tier2    =  document.getElementById('shift-late-tier2').value;
+    var tier3    =  document.getElementById('shift-late-tier3').value;
+
+    if (!name)                                                 { showShiftFieldErr('shift-name',    'Shift name is required.'); return; }
+    if (!ciT)                                                  { showShiftFieldErr('shift-cin',     'Check-in time is required.'); return; }
+    if (ciTol === '' || isNaN(+ciTol) || +ciTol < 0)          { showShiftFieldErr('shift-cin-tol', 'Enter 0 or more minutes.'); return; }
+    if (Math.floor(+ciTol) !== +ciTol || +ciTol > 120)        { showShiftFieldErr('shift-cin-tol', 'Enter a whole number between 0 and 120.'); return; }
+    if (!coT)                                                  { showShiftFieldErr('shift-cout',    'Check-out time is required.'); return; }
+    if (coTol === '' || isNaN(+coTol) || +coTol < 0)          { showShiftFieldErr('shift-cout-tol','Enter 0 or more minutes.'); return; }
+    if (Math.floor(+coTol) !== +coTol || +coTol > 120)        { showShiftFieldErr('shift-cout-tol','Enter a whole number between 0 and 120.'); return; }
+    if (ciT && coT && coT <= ciT)                              { showShiftFieldErr('shift-cout',    'Check-out time must be after check-in time.'); return; }
+    if (lt === '' || isNaN(+lt) || +lt < 0)                   { showShiftFieldErr('shift-late',    'Enter 0 or more.'); return; }
+    if (Math.floor(+lt) !== +lt || +lt > 99)                  { showShiftFieldErr('shift-late',    'Enter a whole number between 0 and 99.'); return; }
+    if (lateRate === '' || isNaN(+lateRate) || +lateRate < 0) { showShiftFieldErr('shift-late-rate','Enter 0 or more.'); return; }
+    if (Math.floor(+lateRate) !== +lateRate)                  { showShiftFieldErr('shift-late-rate','Enter a whole number.'); return; }
+    if (tier1 === '' || isNaN(+tier1) || +tier1 < 0 || Math.floor(+tier1) !== +tier1) { showShiftFieldErr('shift-late-tier1', 'Enter 0 or more (whole number).'); return; }
+    if (tier2 === '' || isNaN(+tier2) || +tier2 < 0 || Math.floor(+tier2) !== +tier2) { showShiftFieldErr('shift-late-tier2', 'Enter 0 or more (whole number).'); return; }
+    if (tier3 === '' || isNaN(+tier3) || +tier3 < 0 || Math.floor(+tier3) !== +tier3) { showShiftFieldErr('shift-late-tier3', 'Enter 0 or more (whole number).'); return; }
+
+    var shifts = loadShifts();
+    var dup = shifts.find(function(s) { return s.name.toLowerCase() === name.toLowerCase() && s.id !== currentShiftId; });
+    if (dup) { showShiftFieldErr('shift-name', 'A shift with this name already exists.'); return; }
+
+    var isFlexible = document.getElementById('shift-flexible').checked;
+    var rec = { id: currentShiftId, name: name, checkIn: ciT, checkInTol: +ciTol, checkOut: coT, checkOutTol: +coTol,
+      lateTolCount: +lt, lateDeductionPerPoint: +lateRate,
+      lateTier1Points: +tier1, lateTier2Points: +tier2, lateTier3Points: +tier3,
+      isFlexible: isFlexible };
+    var oldName = currentShift.name;
+    saveShifts(shifts.map(function(s) { return s.id === currentShiftId ? rec : s; }));
+    /* Cascade name change to employee shift assignments */
+    if (oldName !== rec.name) {
+      var emps = loadEmployees();
+      emps.forEach(function(e) { if (e.shift === oldName) e.shift = rec.name; });
+      saveEmployees(emps);
+    }
+    currentShift = rec;
+    closeShiftModal();
+    renderPage(rec);
+    renderEmpTable(document.getElementById('emp-search').value);
+    QuadraToast.show('Shift updated.', 'success');
+  }
+
+  /* ── Delete modal ── */
+  function openDeleteShift() {
+    var count  = getEnrolled(loadEmployees(), currentShift.name).length;
+    var warnEl = document.getElementById('delete-shift-emp-warn');
+    if (count > 0) {
+      warnEl.textContent = 'This shift has ' + count + ' employee' + (count !== 1 ? 's' : '') + ' assigned. They will be unassigned.';
+      warnEl.style.display = 'block';
+    } else {
+      warnEl.style.display = 'none';
+    }
+    document.getElementById('shift-delete-modal').classList.add('show');
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('shift-delete-modal').classList.remove('show');
+  }
+
+  function confirmDeleteShift() {
+    var shifts = loadShifts();
+    var s = shifts.find(function(x) { return x.id === currentShiftId; });
+    saveShifts(shifts.filter(function(x) { return x.id !== currentShiftId; }));
+    if (s) {
+      var emps = loadEmployees();
+      var changed = false;
+      emps.forEach(function(e) { if (e.shift === s.name) { e.shift = null; changed = true; } });
+      if (changed) saveEmployees(emps);
+      localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ msg: 'Shift "' + s.name + '" has been deleted.', type: 'success' }));
+    }
+    window.location.href = 'settings.html?section=employee-shift';
+  }
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

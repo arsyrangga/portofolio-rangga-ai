@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Edit Work Info</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style></style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="employees" data-active-sub="list-employee"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><div class="bell-wrap"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg><div class="bell-badge">9</div></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user"><div class="user-avatar">SE</div><span class="user-name">Steradian</span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="employees-list.html">Employee Directory</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="employee-detail.html#work">Budi Santoso</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Edit Work Info</span>
+  </div>
+
+  <div class="detail-layout">
+  <main class="main-content">
+
+    <div style="width:100%;">
+      <a href="employee-detail.html#work" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#6B7280;text-decoration:none;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Budi Santoso
+      </a>
+    </div>
+
+    <!-- Work Details -->
+    <div class="section-card">
+      <div class="section-head"><h3>Work Details</h3></div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Department</label>
+            <div class="select-w" id="sel-dept" data-required="true"></div>
+          </div>
+          <div class="f-field">
+            <label>Position</label>
+            <div class="select-w" id="sel-position" data-required="true"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Reporting Manager</label>
+            <div class="select-w" id="sel-supervisor" data-required="true"></div>
+          </div>
+          <div class="f-field">
+            <label>Attendance Leader</label>
+            <div class="select-w" id="sel-att-leader" data-required="true"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Leave Approver</label>
+            <div class="select-w" id="sel-leave-approver" data-required="true"></div>
+          </div>
+          <div class="f-field">
+            <label>Shift</label>
+            <div class="select-w" id="sel-shift" data-required="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bank Information -->
+    <div class="section-card">
+      <div class="section-head"><h3>Bank Information</h3></div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Bank Name</label>
+            <div class="select-w" id="sel-bank" data-required="true"></div>
+          </div>
+          <div class="f-field">
+            <label>Account Number</label>
+            <input type="text" class="text-input" id="inp-account-no" value="1234567890" inputmode="numeric" autocomplete="off" data-required="true" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Account Name</label>
+            <input type="text" class="text-input" id="inp-account-name" value="Budi Santoso" data-required="true" />
+          </div>
+          <div class="f-field"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Details -->
+    <div class="section-card">
+      <div class="section-head"><h3>Change Details</h3></div>
+      <div class="section-body">
+        <div class="f-field">
+          <label>Note (Optional)</label>
+          <input type="text" class="text-input" placeholder="e.g. Department transfer, promotion, project assignment" />
+        </div>
+        <div class="audit-note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <p>All changes are saved to the employee's audit history with a timestamp and the user who made the change.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="emp-profile-panel">
+    <div class="epp-avatar" id="epp-avatar" style="background:#E04A2A">BS</div>
+    <div class="epp-identity">
+      <div class="epp-name" id="epp-name">Budi Santoso</div>
+      <div class="epp-position" id="epp-position">Senior Staff</div>
+      <div class="epp-status-row"><span class="tag tag-dot tag-success" id="epp-status">Active</span></div>
+    </div>
+    <div class="epp-email-row">
+      <span id="epp-email">budi.s@steradian.id</span>
+      <button class="epp-copy-btn" type="button" onclick="copyEppEmail()" aria-label="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 10V3a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-info-row"><span class="epp-label">Badge ID</span><span class="epp-value" id="epp-badge">000000001</span></div>
+      <div class="epp-info-row"><span class="epp-label">Department</span><span class="epp-value" id="epp-department">Engineering</span></div>
+    </div>
+  </aside>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <button class="btn btn-primary" id="save-btn" disabled>Save Changes</button>
+  </div>
+  </div><!-- /detail-layout -->
+
+</div>
+
+<script src="employees-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  /* EXPERIMENTAL — real per-employee wiring (was: hardcoded to Budi Santoso
+     regardless of ?badge=). See employee-work-edit.html.before-badge-wiring.bak
+     to roll back. Persists edits to localStorage (quadra_work_override_<badge>),
+     read back by this page and by employee-detail.html (Work Info tab + its
+     experimental side panel). */
+  function findEmpByBadge(badge) {
+    for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) if (QUADRA_EMPLOYEES[i].badge === badge) return QUADRA_EMPLOYEES[i];
+    return null;
+  }
+  function findEmpByName(name) {
+    for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) if (QUADRA_EMPLOYEES[i].name === name) return QUADRA_EMPLOYEES[i];
+    return null;
+  }
+  function getWorkOverride(badge) {
+    try { return JSON.parse(localStorage.getItem('quadra_work_override_' + badge)) || null; } catch (e) { return null; }
+  }
+  function loadGroupAssignments() {
+    try { return JSON.parse(localStorage.getItem('QUADRA_USER_GROUP_ASSIGN_P2')) || {}; } catch (e) { return {}; }
+  }
+  /* Falls back to every employee when nobody is assigned to groupName yet
+     (e.g. a fresh browser session that never opened Settings > User
+     Group, so QUADRA_USER_GROUP_ASSIGN_P2 doesn't exist) — matches the
+     same graceful-fallback shape onboarding-step2-work-info.html uses
+     (Task 6's namesInGroup), so this dropdown is never left empty. */
+  function employeesInGroup(groupName) {
+    var map = loadGroupAssignments();
+    var filtered = QUADRA_EMPLOYEES.filter(function(e) { return map[e.badge] === groupName; });
+    return filtered.length ? filtered : QUADRA_EMPLOYEES;
+  }
+
+  var __badge = new URLSearchParams(window.location.search).get('badge');
+  var __emp = __badge ? findEmpByBadge(__badge) : null;
+  window.__BADGE = __badge || null;
+  var __override = __badge ? getWorkOverride(__badge) : null;
+
+  var INITIAL;
+  if (__emp) {
+    var __supBadge = (__override && __override.supervisorBadge !== undefined) ? __override.supervisorBadge : __emp.supervisorBadge;
+    var __supEmp = __supBadge ? findEmpByBadge(__supBadge) : null;
+    var __attBadge = (__override && __override.attendanceLeaderBadge !== undefined) ? __override.attendanceLeaderBadge : __emp.attendanceLeaderBadge;
+    var __attEmp = __attBadge ? findEmpByBadge(__attBadge) : null;
+    var __leaveBadge = (__override && __override.leaveApproverBadge !== undefined) ? __override.leaveApproverBadge : __emp.leaveApproverBadge;
+    var __leaveEmp = __leaveBadge ? findEmpByBadge(__leaveBadge) : null;
+    INITIAL = {
+      dept:          (__override && __override.department) || __emp.department,
+      position:      (__override && __override.position)   || __emp.pos,
+      supervisor:    __supEmp ? __supEmp.name : '',
+      attLeader:     __attEmp ? __attEmp.name : '',
+      leaveApprover: __leaveEmp ? __leaveEmp.name : '',
+      shift:         (__override && __override.shift)       || __emp.shift,
+      bank:          (__override && __override.bank)        || 'BCA',
+      accountNo:     (__override && __override.accountNo)   || '1234567890',
+      accountName:   (__override && __override.accountName) || __emp.name
+    };
+  } else {
+    /* No ?badge= — standalone demo mode, same defaults as before */
+    INITIAL = { dept:'Engineering', position:'Senior Staff', supervisor:'Ahmad Fauzi', attLeader:'', leaveApprover:'', shift:'NDS', bank:'BCA', accountNo:'1234567890', accountName:'Budi Santoso' };
+  }
+  var current = Object.assign({}, INITIAL);
+
+  function changed() { return Object.keys(INITIAL).some(function(k){ return current[k] !== INITIAL[k]; }); }
+
+  function updateSave() {
+    document.getElementById('save-btn').disabled = !changed();
+  }
+
+  /* ── Error helpers ── */
+  function setError(field, message) {
+    field.classList.add('error');
+    var col = field.closest('.f-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (!msg) {
+      msg = document.createElement('span');
+      msg.className = 'err-msg';
+      field.insertAdjacentElement('afterend', msg);
+    }
+    msg.textContent = message || 'This field is required';
+    msg.classList.add('show');
+  }
+  function clearError(field) {
+    field.classList.remove('error');
+    var col = field.closest('.f-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (msg) msg.classList.remove('show');
+  }
+  document.addEventListener('input', function(e) {
+    if (e.target.dataset.required) clearError(e.target);
+  });
+
+  function validateForm() {
+    var errors = [];
+    document.querySelectorAll('[data-required]').forEach(function(field) {
+      var empty = (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA')
+        ? field.value.trim() === ''
+        : !field.dataset.selectedValue;
+      if (empty) { setError(field); errors.push(field); }
+      else clearError(field);
+    });
+    if (errors.length) errors[0].closest('.f-field').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return errors.length === 0;
+  }
+
+  /* ── Dept → Position dependency ── */
+  var DEPT_POSITIONS = {
+    'Engineering': ['Staff', 'Senior Staff', 'Specialist', 'Team Lead', 'Manager', 'Senior Manager'],
+    'Operations':  ['Staff', 'Coordinator', 'Supervisor', 'Manager', 'Senior Manager'],
+    'Finance':     ['Staff', 'Senior Staff', 'Analyst', 'Supervisor', 'Manager', 'Senior Manager'],
+    'HR':          ['Staff', 'Senior Staff', 'Specialist', 'Supervisor', 'Manager', 'Senior Manager'],
+    'Marketing':   ['Staff', 'Senior Staff', 'Specialist', 'Supervisor', 'Manager', 'Senior Manager']
+  };
+
+  var positionSel = document.getElementById('sel-position');
+  QuadraDropdown.init(positionSel, [], { placeholder: 'Select department first' });
+  positionSel.classList.add('is-disabled');
+
+  function updatePositionOptions(dept, preselect) {
+    var positions = dept ? (DEPT_POSITIONS[dept] || []) : [];
+    delete positionSel.dataset.selectedValue;
+    positionSel.classList.remove('error', 'open');
+    var valSpan = positionSel.querySelector('.select-val');
+    if (valSpan) {
+      valSpan.textContent = dept ? 'Select position' : 'Select department first';
+      valSpan.className = 'select-val placeholder';
+    }
+    var panel = positionSel.querySelector('.select-options');
+    if (!panel) return;
+    panel.innerHTML = '';
+    positions.forEach(function(pos) {
+      var optEl = document.createElement('div');
+      optEl.className = 'select-option';
+      optEl.dataset.value = pos;
+      optEl.textContent = pos;
+      optEl.addEventListener('click', function(e) {
+        e.stopPropagation();
+        panel.querySelectorAll('[data-value]').forEach(function(i) {
+          i.classList.toggle('selected', i.dataset.value === pos);
+        });
+        if (valSpan) { valSpan.textContent = pos; valSpan.className = 'select-val'; }
+        positionSel.dataset.selectedValue = pos;
+        positionSel.classList.remove('error');
+        current.position = pos;
+        clearError(positionSel);
+        updateSave();
+        QuadraDropdown.closeAll();
+      });
+      panel.appendChild(optEl);
+    });
+    if (positions.length) positionSel.classList.remove('is-disabled');
+    else positionSel.classList.add('is-disabled');
+    if (preselect && positions.indexOf(preselect) >= 0) {
+      if (valSpan) { valSpan.textContent = preselect; valSpan.className = 'select-val'; }
+      positionSel.dataset.selectedValue = preselect;
+      var optToSelect = panel.querySelector('[data-value="' + preselect + '"]');
+      if (optToSelect) optToSelect.classList.add('selected');
+    }
+  }
+
+  var DEPARTMENTS = (function() {
+    var SEED_VER = 2, SEED = ['IT', 'Human Resource'];
+    try {
+      if (parseInt(localStorage.getItem('QUADRA_DEPARTMENTS_V'), 10) === SEED_VER) {
+        var stored = JSON.parse(localStorage.getItem('QUADRA_DEPARTMENTS'));
+        if (stored && stored.length) return stored.map(function(d) { return d.name; });
+      }
+    } catch(e) {}
+    return SEED;
+  })();
+
+  QuadraDropdown.init(document.getElementById('sel-dept'),
+    DEPARTMENTS,
+    { value: INITIAL.dept, onChange: function(v) {
+      current.dept = v;
+      current.position = '';
+      updatePositionOptions(v);
+      updateSave();
+    }});
+
+  /* Seed position with the employee's current dept + position */
+  updatePositionOptions(INITIAL.dept, INITIAL.position);
+
+  var __supervisorOptions = employeesInGroup('Reporting Manager').filter(function (e) { return !__emp || e.badge !== __emp.badge; }).map(function (e) { return e.name; });
+  QuadraDropdown.init(document.getElementById('sel-supervisor'),
+    __supervisorOptions,
+    { value: INITIAL.supervisor, onChange: function(v) { current.supervisor = v; updateSave(); } });
+
+  var __attLeaderOptions = employeesInGroup('Attendance Leader').filter(function (e) { return !__emp || e.badge !== __emp.badge; }).map(function (e) { return e.name; });
+  QuadraDropdown.init(document.getElementById('sel-att-leader'),
+    __attLeaderOptions,
+    { value: INITIAL.attLeader, onChange: function(v) { current.attLeader = v; updateSave(); } });
+
+  var __leaveApproverOptions = employeesInGroup('Leave Approver').filter(function (e) { return !__emp || e.badge !== __emp.badge; }).map(function (e) { return e.name; });
+  QuadraDropdown.init(document.getElementById('sel-leave-approver'),
+    __leaveApproverOptions,
+    { value: INITIAL.leaveApprover, onChange: function(v) { current.leaveApprover = v; updateSave(); } });
+  QuadraDropdown.init(document.getElementById('sel-shift'),
+    ['NDS','Morning','Afternoon','Night'],
+    { value: INITIAL.shift, onChange: function(v) { current.shift = v; updateSave(); } });
+  QuadraDropdown.init(document.getElementById('sel-bank'),
+    ['BCA','Mandiri','BNI','BRI','CIMB'],
+    { value: INITIAL.bank, onChange: function(v) { current.bank = v; clearError(document.getElementById('sel-bank')); updateSave(); } });
+
+  document.getElementById('inp-account-no').addEventListener('input', function() { current.accountNo = this.value; updateSave(); });
+  document.getElementById('inp-account-name').addEventListener('input', function() { current.accountName = this.value; updateSave(); });
+
+  /* ── Account Number: numeric only ── */
+  (function() {
+    var input = document.getElementById('inp-account-no');
+    input.addEventListener('keydown', function(e) {
+      var allowed = ['Backspace','Delete','Tab','Enter','ArrowLeft','ArrowRight','Home','End'];
+      if (e.ctrlKey || e.metaKey) return;
+      if (allowed.indexOf(e.key) >= 0) return;
+      if (!/^\d$/.test(e.key)) {
+        e.preventDefault();
+        setError(this, 'Account number must contain numbers only.');
+      }
+    });
+    input.addEventListener('input', function() {
+      var clean = this.value.replace(/\D/g, '');
+      if (this.value !== clean) {
+        this.value = clean;
+        current.accountNo = clean;
+        setError(this, 'Account number must contain numbers only.');
+        return;
+      }
+      if (clean.length > 0) clearError(this);
+    });
+    input.addEventListener('focus', function() { clearError(this); });
+  })();
+
+  document.getElementById('save-btn').addEventListener('click', function() {
+    if (this.disabled) return;
+    if (!validateForm()) return;
+    if (window.__BADGE) {
+      var supEmp    = findEmpByName(current.supervisor);
+      var attEmp     = findEmpByName(current.attLeader);
+      var leaveEmp   = findEmpByName(current.leaveApprover);
+      localStorage.setItem('quadra_work_override_' + window.__BADGE, JSON.stringify({
+        department:            current.dept,
+        position:              current.position,
+        supervisorBadge:       supEmp ? supEmp.badge : null,
+        attendanceLeaderBadge: attEmp ? attEmp.badge : null,
+        leaveApproverBadge:    leaveEmp ? leaveEmp.badge : null,
+        shift:                 current.shift,
+        bank:                  current.bank,
+        accountNo:             current.accountNo,
+        accountName:           current.accountName
+      }));
+    }
+    localStorage.setItem('quadra_work_saved', 'Work information has been updated successfully.');
+    __goToDetail('#work');
+  });
+
+  function handleCancel() {
+    if (!document.getElementById('save-btn').disabled) {
+      document.getElementById('cancel-modal').classList.add('show');
+    } else {
+      __goToDetail('#work');
+    }
+  }
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Discard Changes</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Discard unsaved changes?</div>
+        <div class="modal-sub-desc">You have unsaved changes. Leaving now will discard all edits.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="__goToDetail('#work')">Discard Changes</button>
+    </div>
+  </div>
+</div>
+<script>
+function __goToDetail(hash) {
+  var b = window.__BADGE;
+  var url = 'employee-detail.html';
+  if (b) url += '?badge=' + b;
+  if (hash) url += hash;
+  window.location.href = url;
+}
+(function() {
+  var badge = new URLSearchParams(window.location.search).get('badge');
+  if (!badge) return;
+  var emp = null;
+  for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) {
+    if (QUADRA_EMPLOYEES[i].badge === badge) { emp = QUADRA_EMPLOYEES[i]; break; }
+  }
+  if (!emp) return;
+  window.__BADGE = badge;
+  var STATUS_TAG_CLASS = { 'Active': 'tag-success', 'Probation': 'tag-warning', 'On Leave': 'tag-info', 'Inactive': 'tag-neutral' };
+  var eppAvatar = document.getElementById('epp-avatar');
+  if (eppAvatar) { eppAvatar.textContent = emp.initials; eppAvatar.style.background = emp.color; }
+  document.getElementById('epp-name').textContent = emp.name;
+  document.getElementById('epp-position').textContent = emp.pos;
+  var eppStatusEl = document.getElementById('epp-status');
+  eppStatusEl.textContent = emp.status;
+  eppStatusEl.className = 'tag tag-dot ' + (STATUS_TAG_CLASS[emp.status] || 'tag-neutral');
+  document.getElementById('epp-email').textContent = emp.email || '—';
+  document.getElementById('epp-badge').textContent = emp.badge;
+  document.getElementById('epp-department').textContent = emp.department || '—';
+  document.querySelectorAll('a[href*="employee-detail.html"]').forEach(function(a) {
+    var h = a.getAttribute('href');
+    if (h.indexOf('badge=') < 0) {
+      var hi = h.indexOf('#');
+      a.setAttribute('href', hi >= 0 ? h.slice(0,hi) + '?badge=' + badge + h.slice(hi) : h + '?badge=' + badge);
+    }
+    a.innerHTML = a.innerHTML.replace(/Budi Santoso/g, emp.name).replace(/Ahmad Fauzi/g, emp.name);
+  });
+  document.querySelectorAll('button').forEach(function(btn) {
+    if (/Back to (Budi Santoso|Ahmad Fauzi)/.test(btn.innerHTML)) {
+      btn.innerHTML = btn.innerHTML.replace(/Budi Santoso|Ahmad Fauzi/g, emp.name);
+    }
+  });
+})();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

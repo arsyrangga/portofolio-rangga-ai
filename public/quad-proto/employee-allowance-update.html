@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Update Allowance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* Muted one-off subtitle span inside this page's .section-head; no
+       other page pairs a plain subtitle span with .section-head h3. */
+    .section-head span { font-size: 12px; color: #6B7280; }
+
+    /* .allowance-item/.ai-header/.ai-meta/.ai-meta-item and
+       .update-btn/.update-panel/.up-title/.up-title-badge/.up-actions
+       are now shared components — see layout.css ("Allowance list
+       row" + "INLINE UPDATE PANEL", near the ITEM ROW typography). */
+    /* .audit-note is the shared component (layout.css) — only the
+       bottom margin needed in this per-item panel context is page-specific. */
+    .audit-note { margin-bottom: 16px; }
+    /* Scheduled-change banner here reuses the shared .scheduled-banner/.sb-*
+       component (layout.css) — only the outer margin (20px top, 0
+       elsewhere) is page-specific, set inline per instance below. */
+
+    /* .allowance-entry/.ae-meta — RESOLVED in Task 11: now use the
+       shared .allowance-entry.standalone / .ae-meta.nowrap variants in
+       layout.css (COMMON PATTERNS GROUP 4), including the
+       .ae-meta.nowrap .date-select-w width rule. */
+    /* Fixed pixel widths tuned to this page's specific add-row layout —
+       one-off, not reused elsewhere. */
+    .add-amount-w { width: 190px; flex-shrink: 0; }
+    .ae-sep { font-size: 13px; color: #9CA3AF; flex-shrink: 0; }
+    /* Dims the end-date picker while "No time limit" is checked. */
+    .ae-dp-disabled { opacity: 0.4; pointer-events: none; }
+    /* Shared .add-row-btn (layout.css) — only padding is page-specific. */
+    .add-row-btn { padding: 12px 24px; }
+    /* Compact text-only empty state for this inline "add new entry"
+       panel — lighter than the shared .empty-state (no icon, 32px vs
+       48px padding); that component is sized for a full table/section,
+       not a small add-row list. Kept page-specific. */
+    .ae-empty { padding: 32px 24px; text-align: center; }
+    .ae-empty-text { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; }
+
+    /* Close cousin of the shared .audit-note (layout.css) but kept
+       page-specific: align-items:center (vs flex-start) for this
+       single-line hint, tighter 8px vertical padding, and an
+       indented margin-left to line up under the new-entry row. */
+    .ae-hint { display: none; align-items: center; gap: 8px; padding: 8px 12px; background: #EFF6FF; border: 1px solid #BFDBFE; margin-left: 68px; }
+    .ae-hint.show { display: flex; }
+    .ae-hint p { font-size: 12px; color: #1E40AF; line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar" data-active-menu="employee" data-active-sub="list"></aside>
+
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="employees-list.html">Employee Directory</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="employee-detail.html#allowance">Ahmad Fauzi</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Update Allowance</span>
+  </div>
+
+  <div class="detail-layout">
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Back -->
+    <div style="width:100%;">
+      <a href="employee-detail.html#allowance" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#6B7280;text-decoration:none;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Ahmad Fauzi
+      </a>
+    </div>
+
+    <!-- Current Allowances -->
+    <div class="section-card">
+      <div class="section-head">
+        <h3>Current Allowances</h3>
+        <span>Click "Update" to change an allowance amount</span>
+      </div>
+
+      <!-- Laptop -->
+      <div class="allowance-item" id="item-laptop" style="display:none">
+        <div class="ai-header">
+          <span class="ai-name">Laptop</span>
+          <span class="ai-amount" id="amt-laptop">—</span>
+          <button class="update-btn" data-target="laptop">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Update
+          </button>
+          <button class="icon-btn danger" data-target="laptop" title="Delete" aria-label="Delete allowance">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="ai-meta">
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Valid: no limit
+          </span>
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M6 3v3l2 2" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Every 25th of month
+          </span>
+        </div>
+        <div class="scheduled-banner" id="scheduled-laptop" style="display:none; margin: 20px 0 0;">
+          <div class="sb-body">
+            <div class="sb-title">Scheduled Change</div>
+            <div class="sb-detail">
+              <div class="sb-value"></div>
+              <div class="sb-meta"></div>
+            </div>
+          </div>
+          <button class="sb-cancel" id="cancel-scheduled-laptop">Cancel</button>
+        </div>
+        <div class="update-panel" id="panel-laptop">
+          <div class="up-title">Update: Laptop</div>
+          <div class="up-grid">
+            <div class="up-field">
+              <label>Current Amount</label>
+              <div class="f-readonly" id="cur-laptop">—</div>
+            </div>
+            <div class="up-field">
+              <label>New Amount</label>
+              <div class="f-input">
+                <span class="input-prefix">IDR</span>
+                <input type="text" placeholder="Enter new amount" class="new-amount-input" data-id="laptop" />
+              </div>
+            </div>
+            <div class="up-field">
+              <label>Effective From</label>
+              <div class="date-select-w" id="dp-laptop"></div>
+              <div class="effective-hint" id="hint-laptop"></div>
+            </div>
+          </div>
+          <div class="up-field" style="margin-bottom:14px;">
+            <label>Note (Optional)</label>
+            <input type="text" class="text-input" placeholder="e.g. Annual review" />
+          </div>
+          <div class="conflict-warn" id="conflict-laptop">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 2L1 14h14L8 2z" stroke="#F97316" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="#F97316" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <p>There is already a scheduled change for this allowance. Saving this will <strong>replace</strong> the existing scheduled change.</p>
+          </div>
+          <div class="audit-note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <p>The current amount will be saved to the audit history. If effective date is in the future, the change will be marked as <strong>Scheduled</strong> and won't affect payroll until that date.</p>
+          </div>
+          <div class="up-actions">
+            <button class="btn btn-outline btn-cancel" data-target="laptop">Cancel</button>
+            <button class="btn btn-primary btn-save" data-target="laptop" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- On-site -->
+      <div class="allowance-item" id="item-on-site" style="display:none">
+        <div class="ai-header">
+          <span class="ai-name">On-site <span style="font-size:11px;font-weight:400;color:#9CA3AF">/ day</span></span>
+          <span class="ai-amount" id="amt-on-site">—</span>
+          <button class="update-btn" data-target="on-site">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Update
+          </button>
+          <button class="icon-btn danger" data-target="on-site" title="Delete" aria-label="Delete allowance">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="ai-meta">
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Valid: no limit
+          </span>
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M6 3v3l2 2" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Every 25th of month
+          </span>
+        </div>
+        <div class="scheduled-banner" id="scheduled-on-site" style="display:none; margin: 20px 0 0;">
+          <div class="sb-body">
+            <div class="sb-title">Scheduled Change</div>
+            <div class="sb-detail">
+              <div class="sb-value"></div>
+              <div class="sb-meta"></div>
+            </div>
+          </div>
+          <button class="sb-cancel" id="cancel-scheduled-on-site">Cancel</button>
+        </div>
+        <div class="update-panel" id="panel-on-site">
+          <div class="up-title">Update: On-site Daily Rate</div>
+          <div class="up-grid">
+            <div class="up-field">
+              <label>Current Rate</label>
+              <div class="f-readonly" id="cur-on-site">—</div>
+            </div>
+            <div class="up-field">
+              <label>New Rate</label>
+              <div class="f-input">
+                <span class="input-prefix">IDR</span>
+                <input type="text" placeholder="Enter daily rate" class="new-amount-input" data-id="on-site" />
+              </div>
+            </div>
+            <div class="up-field">
+              <label>Effective From</label>
+              <div class="date-select-w" id="dp-on-site"></div>
+              <div class="effective-hint" id="hint-on-site"></div>
+            </div>
+          </div>
+          <div class="up-field" style="margin-bottom:14px;">
+            <label>Note (Optional)</label>
+            <input type="text" class="text-input" placeholder="e.g. Policy update" />
+          </div>
+          <div class="conflict-warn" id="conflict-on-site">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 2L1 14h14L8 2z" stroke="#F97316" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="#F97316" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <p>There is already a scheduled change for this allowance. Saving this will <strong>replace</strong> the existing scheduled change.</p>
+          </div>
+          <div class="audit-note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <p>The current rate will be saved to the audit history. If effective date is in the future, the change will be marked as <strong>Scheduled</strong> and won't affect payroll until that date.</p>
+          </div>
+          <div class="up-actions">
+            <button class="btn btn-outline btn-cancel" data-target="on-site">Cancel</button>
+            <button class="btn btn-primary btn-save" data-target="on-site" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Internet -->
+      <div class="allowance-item" id="item-internet" style="display:none">
+        <div class="ai-header">
+          <span class="ai-name">Internet</span>
+          <span class="ai-amount" id="amt-internet">—</span>
+          <button class="update-btn" data-target="internet">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Update
+          </button>
+          <button class="icon-btn danger" data-target="internet" title="Delete" aria-label="Delete allowance">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="ai-meta">
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Valid: no limit
+          </span>
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M6 3v3l2 2" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Every 25th of month
+          </span>
+        </div>
+        <div class="scheduled-banner" id="scheduled-internet" style="display:none; margin: 20px 0 0;">
+          <div class="sb-body">
+            <div class="sb-title">Scheduled Change</div>
+            <div class="sb-detail">
+              <div class="sb-value"></div>
+              <div class="sb-meta"></div>
+            </div>
+          </div>
+          <button class="sb-cancel" id="cancel-scheduled-internet">Cancel</button>
+        </div>
+        <div class="update-panel" id="panel-internet">
+          <div class="up-title">Update: Internet</div>
+          <div class="up-grid">
+            <div class="up-field">
+              <label>Current Amount</label>
+              <div class="f-readonly" id="cur-internet">—</div>
+            </div>
+            <div class="up-field">
+              <label>New Amount</label>
+              <div class="f-input">
+                <span class="input-prefix">IDR</span>
+                <input type="text" placeholder="Enter new amount" class="new-amount-input" data-id="internet" />
+              </div>
+            </div>
+            <div class="up-field">
+              <label>Effective From</label>
+              <div class="date-select-w" id="dp-internet"></div>
+              <div class="effective-hint" id="hint-internet"></div>
+            </div>
+          </div>
+          <div class="up-field" style="margin-bottom:14px;">
+            <label>Note (Optional)</label>
+            <input type="text" class="text-input" placeholder="e.g. Policy update" />
+          </div>
+          <div class="conflict-warn" id="conflict-internet">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 2L1 14h14L8 2z" stroke="#F97316" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="#F97316" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <p>There is already a scheduled change for this allowance. Saving this will <strong>replace</strong> the existing scheduled change.</p>
+          </div>
+          <div class="audit-note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <p>The current amount will be saved to the audit history. If effective date is in the future, the change will be marked as <strong>Scheduled</strong> and won't affect payroll until that date.</p>
+          </div>
+          <div class="up-actions">
+            <button class="btn btn-outline btn-cancel" data-target="internet">Cancel</button>
+            <button class="btn btn-primary btn-save" data-target="internet" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leader -->
+      <div class="allowance-item" id="item-leader" style="display:none">
+        <div class="ai-header">
+          <span class="ai-name">Leader</span>
+          <span class="ai-amount" id="amt-leader">—</span>
+          <button class="update-btn" data-target="leader">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Update
+          </button>
+          <button class="icon-btn danger" data-target="leader" title="Delete" aria-label="Delete allowance">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="ai-meta">
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Valid: no limit
+          </span>
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M6 3v3l2 2" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Every 25th of month
+          </span>
+        </div>
+        <div class="scheduled-banner" id="scheduled-leader" style="display:none; margin: 20px 0 0;">
+          <div class="sb-body">
+            <div class="sb-title">Scheduled Change</div>
+            <div class="sb-detail">
+              <div class="sb-value"></div>
+              <div class="sb-meta"></div>
+            </div>
+          </div>
+          <button class="sb-cancel" id="cancel-scheduled-leader">Cancel</button>
+        </div>
+        <div class="update-panel" id="panel-leader">
+          <div class="up-title">Update: Leader</div>
+          <div class="up-grid">
+            <div class="up-field">
+              <label>Current Amount</label>
+              <div class="f-readonly" id="cur-leader">—</div>
+            </div>
+            <div class="up-field">
+              <label>New Amount</label>
+              <div class="f-input">
+                <span class="input-prefix">IDR</span>
+                <input type="text" placeholder="Enter new amount" class="new-amount-input" data-id="leader" />
+              </div>
+            </div>
+            <div class="up-field">
+              <label>Effective From</label>
+              <div class="date-select-w" id="dp-leader"></div>
+              <div class="effective-hint" id="hint-leader"></div>
+            </div>
+          </div>
+          <div class="up-field" style="margin-bottom:14px;">
+            <label>Note (Optional)</label>
+            <input type="text" class="text-input" placeholder="e.g. Position change" />
+          </div>
+          <div class="conflict-warn" id="conflict-leader">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 2L1 14h14L8 2z" stroke="#F97316" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="#F97316" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <p>There is already a scheduled change for this allowance. Saving this will <strong>replace</strong> the existing scheduled change.</p>
+          </div>
+          <div class="audit-note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <p>The current amount will be saved to the audit history. If effective date is in the future, the change will be marked as <strong>Scheduled</strong> and won't affect payroll until that date.</p>
+          </div>
+          <div class="up-actions">
+            <button class="btn btn-outline btn-cancel" data-target="leader">Cancel</button>
+            <button class="btn btn-primary btn-save" data-target="leader" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="allowance-item" id="item-skills" style="display:none">
+        <div class="ai-header">
+          <span class="ai-name">Skills</span>
+          <span class="ai-amount" id="amt-skills">—</span>
+          <button class="update-btn" data-target="skills">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Update
+          </button>
+          <button class="icon-btn danger" data-target="skills" title="Delete" aria-label="Delete allowance">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="ai-meta">
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Valid: no limit
+          </span>
+          <span class="ai-meta-item">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M6 3v3l2 2" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Every 25th of month
+          </span>
+        </div>
+        <div class="scheduled-banner" id="scheduled-skills" style="display:none; margin: 20px 0 0;">
+          <div class="sb-body">
+            <div class="sb-title">Scheduled Change</div>
+            <div class="sb-detail">
+              <div class="sb-value"></div>
+              <div class="sb-meta"></div>
+            </div>
+          </div>
+          <button class="sb-cancel" id="cancel-scheduled-skills">Cancel</button>
+        </div>
+        <div class="update-panel" id="panel-skills">
+          <div class="up-title">Update: Skills</div>
+          <div class="up-grid">
+            <div class="up-field">
+              <label>Current Amount</label>
+              <div class="f-readonly" id="cur-skills">—</div>
+            </div>
+            <div class="up-field">
+              <label>New Amount</label>
+              <div class="f-input">
+                <span class="input-prefix">IDR</span>
+                <input type="text" placeholder="Enter new amount" class="new-amount-input" data-id="skills" />
+              </div>
+            </div>
+            <div class="up-field">
+              <label>Effective From</label>
+              <div class="date-select-w" id="dp-skills"></div>
+              <div class="effective-hint" id="hint-skills"></div>
+            </div>
+          </div>
+          <div class="up-field" style="margin-bottom:14px;">
+            <label>Note (Optional)</label>
+            <input type="text" class="text-input" placeholder="e.g. Skills development program" />
+          </div>
+          <div class="conflict-warn" id="conflict-skills">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 2L1 14h14L8 2z" stroke="#F97316" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="#F97316" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <p>There is already a scheduled change for this allowance. Saving this will <strong>replace</strong> the existing scheduled change.</p>
+          </div>
+          <div class="audit-note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <p>The current amount will be saved to the audit history. If effective date is in the future, the change will be marked as <strong>Scheduled</strong> and won't affect payroll until that date.</p>
+          </div>
+          <div class="up-actions">
+            <button class="btn btn-outline btn-cancel" data-target="skills">Cancel</button>
+            <button class="btn btn-primary btn-save" data-target="skills" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /current allowances -->
+
+    <!-- Add Allowance -->
+    <div class="section-card" id="add-section">
+      <div class="section-head">
+        <h3>Add Allowance</h3>
+      </div>
+
+      <!-- Empty state -->
+      <div class="ae-empty" id="add-empty">
+        <div class="ae-empty-text">No allowance added yet. Click the button below to add one.</div>
+        <button class="add-row-btn" onclick="addAllowanceRow()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add Allowance
+        </button>
+      </div>
+
+      <!-- Dynamic entries (onboarding style) -->
+      <div id="add-rows"></div>
+
+      <!-- Add another button (shown when rows exist) -->
+      <div id="add-more-wrap" style="display:none; border-top:1px solid #F3F4F6;">
+        <button class="add-row-btn" onclick="addAllowanceRow()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add Another
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="emp-profile-panel">
+    <div class="epp-avatar" id="epp-avatar" style="background:#E04A2A">AF</div>
+    <div class="epp-identity">
+      <div class="epp-name" id="epp-name">Ahmad Fauzi</div>
+      <div class="epp-position" id="epp-position">Senior Staff</div>
+      <div class="epp-status-row"><span class="tag tag-dot tag-success" id="epp-status">Active</span></div>
+    </div>
+    <div class="epp-email-row">
+      <span id="epp-email">ahmad.f@steradian.id</span>
+      <button class="epp-copy-btn" type="button" onclick="copyEppEmail()" aria-label="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 10V3a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-info-row"><span class="epp-label">Badge ID</span><span class="epp-value" id="epp-badge">000000142</span></div>
+      <div class="epp-info-row"><span class="epp-label">Department</span><span class="epp-value" id="epp-department">Operations</span></div>
+    </div>
+  </aside>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <button class="btn btn-primary" id="save-btn" disabled onclick="saveNewAllowances()">Save New Allowances</button>
+  </div>
+  </div><!-- /detail-layout -->
+
+</div><!-- /right-panel -->
+
+<div class="modal-overlay" id="delete-allowance-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Allowance</span>
+      <button class="modal-close" onclick="document.getElementById('delete-allowance-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="modal-sub-label">Delete <span id="delete-allowance-name"></span>?</div>
+          <div class="modal-sub-desc">This will remove this allowance from the employee's payroll profile. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('delete-allowance-modal').classList.remove('show')">Cancel</button>
+      <button class="btn btn-danger" id="confirm-delete-allowance-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="allowances-data.js"></script>
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script>
+
+  /* ── Amount formatting ─────────────────────────────────── */
+  function formatIDR(input) {
+    var pos = input.selectionStart, oldLen = input.value.length;
+    var raw = input.value.replace(/\./g, '').replace(/\D/g, '');
+    input.value = raw === '' ? '' : raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    var diff = input.value.length - oldLen;
+    try { input.setSelectionRange(pos + diff, pos + diff); } catch(e) {}
+    return raw;
+  }
+
+  /* ── Panel state ───────────────────────────────────────── */
+  var panelData = {}; // id → { newAmount, effectiveDate, isFuture }
+
+  var scheduledState = { laptop: false, 'on-site': false, internet: false, leader: false, skills: false };
+
+  /* ── Cancel scheduled change (all types) ───────────────── */
+  ['laptop', 'on-site', 'internet', 'leader', 'skills'].forEach(function(id) {
+    var btn = document.getElementById('cancel-scheduled-' + id);
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      var banner = document.getElementById('scheduled-' + id);
+      banner.style.opacity = '0.5';
+      banner.style.pointerEvents = 'none';
+      var note = document.createElement('div');
+      note.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 0 2px;font-size:12px;color:#EF4444;';
+      note.innerHTML = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#EF4444" stroke-width="1.3"/><path d="M4 4l6 6M10 4l-6 6" stroke="#EF4444" stroke-width="1.3" stroke-linecap="round"/></svg> Scheduled change cancelled. The audit history has been updated.';
+      banner.parentNode.insertBefore(note, banner.nextSibling);
+      scheduledState[id] = false;
+      this.disabled = true;
+      if (window.__BADGE) localStorage.removeItem('quadra_sched_allowance_' + id + '_' + window.__BADGE);
+      checkSaveable(id);
+    });
+  });
+
+  function checkSaveable(id) {
+    var d = panelData[id] || {};
+    var btn = document.querySelector('.btn-save[data-target="' + id + '"]');
+    if (!btn) return;
+    var ok = !!(d.newAmount && d.effectiveDate);
+    btn.disabled = !ok;
+    if (ok && d.isFuture) {
+      btn.textContent = 'Schedule Change';
+    } else {
+      btn.textContent = 'Save Changes';
+    }
+    btn.className = 'btn btn-primary btn-save';
+    /* conflict warning */
+    var warn = document.getElementById('conflict-' + id);
+    if (warn) { warn.classList.toggle('show', !!(scheduledState[id] && d.isFuture && d.newAmount)); }
+  }
+
+  /* ── Update button: toggle panel ──────────────────────── */
+  document.querySelectorAll('.update-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.dataset.target;
+      var panel = document.getElementById('panel-' + id);
+      var isOpen = panel.classList.contains('open');
+      // close all panels
+      document.querySelectorAll('.update-panel.open').forEach(function(p) { p.classList.remove('open'); });
+      if (!isOpen) panel.classList.add('open');
+    });
+  });
+
+  /* ── Cancel ────────────────────────────────────────────── */
+  document.querySelectorAll('.btn-cancel').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.dataset.target;
+      document.getElementById('panel-' + id).classList.remove('open');
+      panelData[id] = {};
+      // reset inputs
+      var panel = document.getElementById('panel-' + id);
+      panel.querySelectorAll('input[type="text"]').forEach(function(i) { i.value = ''; });
+      var dpEl = panel.querySelector('.date-select-w');
+      if (dpEl) { var lbl = dpEl.querySelector('.dp-label'); if (lbl) { lbl.textContent = 'Select date'; lbl.className = 'dp-label placeholder'; } delete dpEl.dataset.selectedValue; if (dpEl._qdpState) dpEl._qdpState.selected = null; }
+      checkSaveable(id);
+    });
+  });
+
+  /* ── Amount inputs ─────────────────────────────────────── */
+  document.querySelectorAll('.new-amount-input').forEach(function(input) {
+    input.addEventListener('input', function() {
+      var raw = formatIDR(this);
+      var id = this.dataset.id;
+      panelData[id] = panelData[id] || {};
+      panelData[id].newAmount = raw;
+      checkSaveable(id);
+    });
+  });
+
+  /* ── Date pickers ───────────────────────────────────────── */
+  ['laptop', 'on-site', 'internet', 'leader', 'skills'].forEach(function(id) {
+    QuadraDatePicker.init(document.getElementById('dp-' + id), {
+      placeholder: 'Select date',
+      markFuture: true,
+      onChange: function(sel) {
+        panelData[id] = panelData[id] || {};
+        panelData[id].effectiveDate = sel.label;
+        panelData[id].isFuture = sel.isFuture;
+        var hint = document.getElementById('hint-' + id);
+        if (hint) {
+          if (sel.isFuture) { hint.textContent = 'Effective date is in the future — will be saved as a Scheduled change'; hint.className = 'effective-hint future'; }
+          else { hint.textContent = 'Effective date is today or past — change will be applied immediately'; hint.className = 'effective-hint immediate'; }
+        }
+        checkSaveable(id);
+      }
+    });
+  });
+
+  /* ── Save Changes ──────────────────────────────────────── */
+  var LABELS = { laptop: 'Laptop', 'on-site': 'On-site', internet: 'Internet', leader: 'Leader', skills: 'Skills' };
+
+  document.querySelectorAll('.btn-save').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.dataset.target;
+      var d = panelData[id] || {};
+      if (!d.newAmount || !d.effectiveDate) return;
+
+      var formatted = d.newAmount.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      // Persist to localStorage if scheduled
+      var badge = window.__BADGE;
+      if (badge) {
+        var lsKey = 'quadra_sched_allowance_' + id + '_' + badge;
+        if (d.isFuture) {
+          var now = new Date();
+          var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          var todayFmt = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+          localStorage.setItem(lsKey, JSON.stringify({
+            amount: parseInt(d.newAmount),
+            effectiveDate: d.effectiveDate,
+            recordedDate: todayFmt,
+            recordedBy: 'HR Admin'
+          }));
+          scheduledState[id] = true;
+        } else {
+          localStorage.removeItem(lsKey);
+          scheduledState[id] = false;
+        }
+      }
+
+      // Update the displayed amount
+      var amtEl = document.getElementById('amt-' + id);
+      amtEl.textContent = 'IDR ' + formatted;
+
+      // Close panel + reset
+      document.getElementById('panel-' + id).classList.remove('open');
+
+      // Reset state
+      panelData[id] = {};
+      var panel = document.getElementById('panel-' + id);
+      panel.querySelectorAll('input[type="text"]').forEach(function(i) { i.value = ''; });
+      var dpEl = panel.querySelector('.date-select-w');
+      if (dpEl) { var lbl = dpEl.querySelector('.dp-label'); if (lbl) { lbl.textContent = 'Select date'; lbl.className = 'dp-label placeholder'; } delete dpEl.dataset.selectedValue; if (dpEl._qdpState) dpEl._qdpState.selected = null; }
+      checkSaveable(id);
+
+      // Toast
+      var title = d.isFuture ? 'Change Scheduled' : 'Changes Saved';
+      var desc  = d.isFuture
+        ? 'IDR ' + formatted + ' · Effective ' + d.effectiveDate
+        : 'Allowance updated to IDR ' + formatted + '. Audit record created.';
+      QuadraToast.show(title, desc);
+    });
+  });
+
+  function copyEppEmail() {
+    var email = document.getElementById('epp-email').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(email);
+    if (window.QuadraToast) QuadraToast.show('Email copied', email);
+  }
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script>
+  /* ── Add Allowance section (onboarding style) ──────────── */
+  var addRows = [];
+  var addRowIdx = 0;
+
+  var ALLOWANCE_OPTIONS = QUADRA_ALLOWANCES.map(function(a) { return a.name; });
+
+  /* names already assigned to this employee (from Current Allowances section) */
+  var existingAllowances = new Set();
+  document.querySelectorAll('.ai-name').forEach(function(el) {
+    existingAllowances.add(el.textContent.trim());
+  });
+
+  /* options available to a specific row (excludes existing + other rows' picks) */
+  function getAvailableOptions(excludeIdx) {
+    return ALLOWANCE_OPTIONS.filter(function(o) {
+      if (existingAllowances.has(o)) return false;
+      for (var i = 0; i < addRows.length; i++) {
+        if (addRows[i].idx !== excludeIdx && addRows[i].name === o) return false;
+      }
+      return true;
+    });
+  }
+
+  /* re-init every row's dropdown with its updated option list */
+  function refreshAllDropdowns() {
+    QuadraDropdown.closeAll();
+    addRows.forEach(function(r) {
+      var selEl = document.getElementById('add-sel-' + r.idx);
+      if (!selEl) return;
+      var available = getAvailableOptions(r.idx);
+      /* keep own current value even if it somehow ended up unavailable */
+      if (r.name && available.indexOf(r.name) === -1) available = [r.name].concat(available);
+      var capturedIdx = r.idx;
+      QuadraDropdown.init(selEl, available, {
+        placeholder: 'Select allowance',
+        value: r.name || null,
+        onChange: function(val) {
+          var row = addRows.find(function(x) { return x.idx === capturedIdx; });
+          if (row) row.name = val;
+          refreshAllDropdowns();
+          updateSaveBtn();
+        }
+      });
+    });
+  }
+
+  /* ── Delivery dropdown helpers ─────────────────────────── */
+  function ordinalSuffix(n) {
+    var s = ['th','st','nd','rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  var DELIVERY_OPTIONS = (function() {
+    var opts = [];
+    for (var i = 1; i <= 31; i++) opts.push({ value: String(i), label: ordinalSuffix(i) });
+    opts.push({ value: 'last', label: 'Last day' });
+    return opts;
+  })();
+
+  function initDeliveryDropdown(dropW) {
+    if (dropW._delInit) return;
+    dropW._delInit = true;
+    var valEl = dropW.querySelector('.del-drop-val');
+    var panel = dropW.querySelector('.del-drop-panel');
+    var selected = '1';
+    function renderOpts() {
+      panel.innerHTML = '';
+      DELIVERY_OPTIONS.forEach(function(o) {
+        var item = document.createElement('div');
+        item.className = 'del-drop-opt' + (o.value === selected ? ' selected' : '');
+        item.textContent = o.label;
+        item.addEventListener('click', function(e) {
+          e.stopPropagation();
+          selected = o.value; valEl.textContent = o.label;
+          panel.classList.remove('open'); dropW.classList.remove('open');
+        });
+        panel.appendChild(item);
+      });
+    }
+    dropW.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = panel.classList.contains('open');
+      document.querySelectorAll('.del-drop-panel.open').forEach(function(p) { p.classList.remove('open'); });
+      document.querySelectorAll('.del-drop-w.open').forEach(function(w) { w.classList.remove('open'); });
+      if (!wasOpen) { renderOpts(); panel.classList.add('open'); dropW.classList.add('open'); }
+    });
+  }
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.del-drop-panel.open').forEach(function(p) { p.classList.remove('open'); });
+    document.querySelectorAll('.del-drop-w.open').forEach(function(w) { w.classList.remove('open'); });
+  });
+
+  /* ── UI state ──────────────────────────────────────────── */
+  function updateAddUI() {
+    var empty    = document.getElementById('add-empty');
+    var moreWrap = document.getElementById('add-more-wrap');
+    var hasRows  = addRows.length > 0;
+    empty.style.display    = hasRows ? 'none' : '';
+    moreWrap.style.display = hasRows ? '' : 'none';
+    updateSaveBtn();
+  }
+
+  function updateSaveBtn() {
+    var valid = addRows.some(function(r) { return r.name && r.amount && r.startDate; });
+    document.getElementById('save-btn').disabled = !valid;
+  }
+
+  /* ── Add row ───────────────────────────────────────────── */
+  function addAllowanceRow() {
+    var idx = addRowIdx++;
+    addRows.push({ idx: idx, name: '', amount: '', startDate: '', endDate: '', noLimit: false, startIsFuture: false });
+
+    var CHV = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    var entry = document.createElement('div');
+    entry.className = 'allowance-entry standalone';
+    entry.id = 'add-row-' + idx;
+    entry.innerHTML =
+      '<div class="allowance-row">' +
+        '<div class="select-w" id="add-sel-' + idx + '" style="flex:1;min-width:0;"></div>' +
+        '<div class="f-input add-amount-w">' +
+          '<span class="input-prefix">IDR</span>' +
+          '<input type="text" id="add-amt-' + idx + '" placeholder="Enter amount" />' +
+        '</div>' +
+        '<button class="remove-btn" onclick="removeAddRow(' + idx + ')" type="button">' +
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+        '</button>' +
+      '</div>' +
+      '<div class="ae-meta nowrap">' +
+        '<span class="ae-meta-label">Validity</span>' +
+        '<div class="date-select-w" id="add-dp-start-' + idx + '"></div>' +
+        '<span class="ae-sep">—</span>' +
+        '<div class="date-select-w" id="add-dp-end-' + idx + '"></div>' +
+        '<label class="no-limit-opt">' +
+          '<input type="checkbox" id="add-nolimit-' + idx + '" />' +
+          '<span>No time limit</span>' +
+        '</label>' +
+      '</div>' +
+      '<div class="ae-hint" id="add-hint-' + idx + '">' +
+        '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>' +
+        '<p id="add-hint-text-' + idx + '"></p>' +
+      '</div>' +
+      '<div class="ae-meta nowrap">' +
+        '<span class="ae-meta-label">Delivery</span>' +
+        '<div class="delivery-inline">' +
+          '<span>Every</span>' +
+          '<div class="del-drop-w" id="add-del-' + idx + '">' +
+            '<span class="del-drop-val">1st</span>' +
+            CHV +
+            '<div class="del-drop-panel"></div>' +
+          '</div>' +
+          '<span>of month</span>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('add-rows').appendChild(entry);
+
+    /* Allowance name dropdown */
+    QuadraDropdown.init(document.getElementById('add-sel-' + idx), getAvailableOptions(idx), {
+      placeholder: 'Select allowance',
+      onChange: function(val) {
+        var r = addRows.find(function(x) { return x.idx === idx; });
+        if (r) r.name = val;
+        refreshAllDropdowns();
+        updateSaveBtn();
+      }
+    });
+
+    /* Start date */
+    QuadraDatePicker.init(document.getElementById('add-dp-start-' + idx), {
+      placeholder: 'Start date',
+      markFuture: true,
+      onChange: function(sel) {
+        var r = addRows.find(function(x) { return x.idx === idx; });
+        if (r) { r.startDate = sel.label; r.startIsFuture = !!sel.isFuture; }
+        var hint = document.getElementById('add-hint-' + idx);
+        var hintText = document.getElementById('add-hint-text-' + idx);
+        if (sel.isFuture) {
+          hintText.textContent = 'Start date is in the future — this allowance will be scheduled and become active on ' + sel.label + '.';
+          hint.classList.add('show');
+        } else {
+          hint.classList.remove('show');
+        }
+        updateSaveBtn();
+      }
+    });
+
+    /* End date */
+    QuadraDatePicker.init(document.getElementById('add-dp-end-' + idx), {
+      placeholder: 'End date',
+      onChange: function(sel) {
+        var r = addRows.find(function(x) { return x.idx === idx; });
+        if (r) r.endDate = sel.label;
+      }
+    });
+
+    /* No time limit toggle */
+    document.getElementById('add-nolimit-' + idx).addEventListener('change', function() {
+      var r = addRows.find(function(x) { return x.idx === idx; });
+      if (r) r.noLimit = this.checked;
+      var endDp = document.getElementById('add-dp-end-' + idx);
+      if (this.checked) {
+        endDp.classList.add('ae-dp-disabled');
+      } else {
+        endDp.classList.remove('ae-dp-disabled');
+      }
+    });
+
+    /* Delivery dropdown */
+    initDeliveryDropdown(document.getElementById('add-del-' + idx));
+
+    /* Amount input */
+    document.getElementById('add-amt-' + idx).addEventListener('input', function() {
+      var raw = formatIDR(this);
+      var r = addRows.find(function(x) { return x.idx === idx; });
+      if (r) r.amount = raw;
+      updateSaveBtn();
+    });
+
+    updateAddUI();
+  }
+
+  function removeAddRow(idx) {
+    addRows = addRows.filter(function(r) { return r.idx !== idx; });
+    var el = document.getElementById('add-row-' + idx);
+    if (el) el.remove();
+    refreshAllDropdowns();
+    updateAddUI();
+  }
+
+  function saveNewAllowances() {
+    var valid = addRows.filter(function(r) { return r.name && r.amount && r.startDate; });
+    if (!valid.length) return;
+
+    var currentCard = document.querySelector('.section-card');
+    valid.forEach(function(r) {
+      var formatted = r.amount.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      var id = 'new-' + Date.now() + '-' + r.idx;
+      var validityText = r.noLimit
+        ? r.startDate + ' — no limit'
+        : r.startDate + (r.endDate ? ' — ' + r.endDate : ' — no limit');
+
+      var item = document.createElement('div');
+      item.className = 'allowance-item';
+      item.id = 'item-' + id;
+      item.innerHTML =
+        '<div class="ai-header">' +
+          '<span class="ai-name">' + r.name + '</span>' +
+          '<span class="ai-amount" id="amt-' + id + '">IDR ' + formatted + '</span>' +
+          '<button class="update-btn" data-target="' + id + '">' +
+            '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Update' +
+          '</button>' +
+          '<button class="icon-btn danger" data-target="' + id + '" title="Delete" aria-label="Delete allowance">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="ai-meta">' +
+          '<span class="ai-meta-item">' +
+            '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>' +
+            'Valid: ' + validityText +
+          '</span>' +
+        '</div>';
+      currentCard.appendChild(item);
+
+      var newBtn = item.querySelector('.update-btn');
+      newBtn.addEventListener('click', function() {
+        var t = this.dataset.target;
+        var panel = document.getElementById('panel-' + t);
+        if (!panel) return;
+        var isOpen = panel.classList.contains('open');
+        document.querySelectorAll('.update-panel.open').forEach(function(p) { p.classList.remove('open'); });
+        if (!isOpen) panel.classList.add('open');
+      });
+    });
+
+    /* mark saved names as existing so they're excluded from future adds */
+    valid.forEach(function(r) { existingAllowances.add(r.name); });
+
+    addRows = [];
+    document.getElementById('add-rows').innerHTML = '';
+    updateAddUI();
+
+    var immediate = valid.filter(function(r) { return !r.startIsFuture; });
+    var scheduled = valid.filter(function(r) { return r.startIsFuture; });
+
+    if (immediate.length) {
+      var names = immediate.map(function(r) { return r.name; }).join(', ');
+      QuadraToast.show('Allowance Added', names + ' has been added to payroll profile.');
+    }
+    if (scheduled.length) {
+      var sNames = scheduled.map(function(r) { return r.name + ' (from ' + r.startDate + ')'; }).join(', ');
+      QuadraToast.show('Allowance Scheduled', sNames + ' will become active on the specified date.');
+    }
+  }
+
+  function handleCancel() {
+    __goToDetail('#allowance');
+  }
+
+  /* ── Delete allowance ──────────────────────────────────── */
+  var pendingDeleteId = null;
+  var pendingDeleteName = null;
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.icon-btn.danger[data-target]');
+    if (!btn) return;
+    pendingDeleteId = btn.dataset.target;
+    var item = document.getElementById('item-' + pendingDeleteId);
+    var nameEl = item ? item.querySelector('.ai-name') : null;
+    pendingDeleteName = nameEl ? nameEl.textContent.trim() : 'this allowance';
+    document.getElementById('delete-allowance-name').textContent = pendingDeleteName;
+    document.getElementById('delete-allowance-modal').classList.add('show');
+  });
+
+  document.getElementById('confirm-delete-allowance-btn').addEventListener('click', function() {
+    if (!pendingDeleteId) return;
+    var item = document.getElementById('item-' + pendingDeleteId);
+    if (item) item.remove();
+    existingAllowances.delete(pendingDeleteName);
+    refreshAllDropdowns();
+    document.getElementById('delete-allowance-modal').classList.remove('show');
+    QuadraToast.show('Allowance Removed', pendingDeleteName + ' has been removed from this employee\'s allowances.');
+    pendingDeleteId = null;
+    pendingDeleteName = null;
+  });
+</script>
+<script src="employees-data.js"></script>
+<script>
+function __goToDetail(hash) {
+  var b = window.__BADGE;
+  var url = 'employee-detail.html';
+  if (b) url += '?badge=' + b;
+  if (hash) url += hash;
+  window.location.href = url;
+}
+(function() {
+  var badge = new URLSearchParams(window.location.search).get('badge');
+  if (!badge) return;
+  var emp = null;
+  for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) {
+    if (QUADRA_EMPLOYEES[i].badge === badge) { emp = QUADRA_EMPLOYEES[i]; break; }
+  }
+  if (!emp) return;
+  window.__BADGE = badge;
+  var STATUS_TAG_CLASS = { 'Active': 'tag-success', 'Probation': 'tag-warning', 'On Leave': 'tag-info', 'Inactive': 'tag-neutral' };
+  var eppAvatar = document.getElementById('epp-avatar');
+  if (eppAvatar) { eppAvatar.textContent = emp.initials; eppAvatar.style.background = emp.color; }
+  document.getElementById('epp-name').textContent = emp.name;
+  document.getElementById('epp-position').textContent = emp.pos;
+  var eppStatusEl = document.getElementById('epp-status');
+  eppStatusEl.textContent = emp.status;
+  eppStatusEl.className = 'tag tag-dot ' + (STATUS_TAG_CLASS[emp.status] || 'tag-neutral');
+  document.getElementById('epp-email').textContent = emp.email || '—';
+  document.getElementById('epp-badge').textContent = emp.badge;
+  document.getElementById('epp-department').textContent = emp.department || '—';
+  document.querySelectorAll('a[href*="employee-detail.html"]').forEach(function(a) {
+    var h = a.getAttribute('href');
+    if (h.indexOf('badge=') < 0) {
+      var hi = h.indexOf('#');
+      a.setAttribute('href', hi >= 0 ? h.slice(0,hi) + '?badge=' + badge + h.slice(hi) : h + '?badge=' + badge);
+    }
+    a.innerHTML = a.innerHTML.replace(/Budi Santoso/g, emp.name).replace(/Ahmad Fauzi/g, emp.name);
+  });
+  document.querySelectorAll('button').forEach(function(btn) {
+    if (/Back to (Budi Santoso|Ahmad Fauzi)/.test(btn.innerHTML)) {
+      btn.innerHTML = btn.innerHTML.replace(/Budi Santoso|Ahmad Fauzi/g, emp.name);
+    }
+  });
+
+  /* Show only the allowances this employee has */
+  var KEY_MAP = { 'laptop': 'laptop', 'on-site': 'on-site', 'internet': 'internet', 'leader': 'leader', 'skills': 'skills' };
+  var LABEL_MAP = { 'laptop': 'Laptop', 'on-site': 'On-site', 'internet': 'Internet', 'leader': 'Leader', 'skills': 'Skills' };
+  var activeKeys = {};
+  (emp.allowances || []).forEach(function(allowObj) {
+    var id = KEY_MAP[allowObj.id];
+    if (!id) return;
+    activeKeys[id] = true;
+    var item = document.getElementById('item-' + id);
+    if (item) item.style.display = '';
+    /* Update displayed amount from employee data */
+    var allowDef = QUADRA_ALLOWANCES.find(function(a) { return a.id === allowObj.id; });
+    var suffix = (allowDef && allowDef.type === 'daily') ? ' / day' : ' / month';
+    var formatted = String(allowObj.amount).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    var amtEl = document.getElementById('amt-' + id);
+    if (amtEl) amtEl.textContent = 'IDR ' + formatted;
+    var curEl = document.getElementById('cur-' + id);
+    if (curEl) curEl.textContent = 'IDR ' + formatted + suffix;
+  });
+  /* Re-sync existingAllowances so "Add Allowance" only excludes what employee actually has */
+  existingAllowances.clear();
+  Object.keys(activeKeys).forEach(function(id) {
+    if (LABEL_MAP[id]) existingAllowances.add(LABEL_MAP[id]);
+  });
+
+  /* Show/hide scheduled banners from localStorage */
+  ['laptop', 'on-site', 'internet', 'leader', 'skills'].forEach(function(id) {
+    var lsRaw = null;
+    try { lsRaw = localStorage.getItem('quadra_sched_allowance_' + id + '_' + badge); } catch(e) {}
+    if (lsRaw) {
+      try {
+        var sched = JSON.parse(lsRaw);
+        var banner = document.getElementById('scheduled-' + id);
+        if (banner) {
+          var amtEl = banner.querySelector('.sb-value');
+          var metaEl = banner.querySelector('.sb-meta');
+          if (amtEl) amtEl.textContent = 'IDR ' + String(sched.amount).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+          if (metaEl) metaEl.textContent = 'Effective ' + sched.effectiveDate + ' · Recorded ' + sched.recordedDate + ' by ' + sched.recordedBy;
+          banner.style.display = '';
+        }
+        scheduledState[id] = true;
+      } catch(e) {}
+    }
+  });
+})();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

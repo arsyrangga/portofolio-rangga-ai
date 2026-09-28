@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Edit Employee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .section-icon and .f-field.w2 promoted to layout.css (SECTION
+       CONTAINERS / FORM LAYOUT groups) — see components.html "Cards &
+       Containers" / "Form Layout" sections. */
+
+    /* This whole page is "Approach A — Global Edit", explicit dev/demo
+       scaffolding kept side-by-side with the "Approach B" per-tab edit
+       pages (employee-personal-edit.html etc. — see the .demo-bar /
+       .approach-a / .approach-b comments in employee-detail.html) for
+       a UX comparison. Its footer intentionally uses its own boxed
+       860px-wide treatment with a "N fields changed" status label,
+       rather than the shared .fixed-footer full-width bar the Approach
+       B pages use — visually distinguishing the two approaches is the
+       point of the comparison, so this is kept page-specific rather
+       than forced to match .fixed-footer. */
+    .form-footer { width: 100%; max-width: 860px; background: #fff; border: 1px solid #E5E7EB; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-left { font-size: 13px; color: #6B7280; }
+    .footer-right { display: flex; gap: 10px; }
+
+    /* Same "Approach A" reasoning as .form-footer above: this page
+       shows its own bottom-center confirmation toast inline, before
+       navigating back to employee-detail.html, instead of the shared
+       QuadraToast.show() + localStorage-relay pattern the Approach B
+       pages use (which shows the toast only after landing back on the
+       detail page). Migrating this to QuadraToast would also require
+       teaching employee-detail.html's toast-relay listener a new
+       "global edit" save key — out of scope for a CSS-only audit of a
+       non-shipped comparison page; flagged for a future task instead
+       of silently redesigning this page's demo behavior. */
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #111827; color: #fff; padding: 12px 20px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.25s ease; pointer-events: none; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="employees" data-active-sub="list-employee"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="employees-list.html">Employee Directory</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="employee-detail.html">Budi Santoso</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Edit Employee</span>
+  </div>
+
+  <main class="main-content">
+
+    <!-- Back -->
+    <div style="width:100%;max-width:860px;">
+      <a href="employee-detail.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#6B7280;text-decoration:none;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Budi Santoso
+      </a>
+    </div>
+
+    <!-- Employee bar -->
+    <div class="emp-bar">
+      <div class="emp-avatar">BS</div>
+      <div class="emp-info">
+        <div class="emp-name">Budi Santoso</div>
+        <div class="emp-meta">Engineering · Senior Staff · 000000001</div>
+      </div>
+      <div class="emp-badge">Active</div>
+    </div>
+
+    <!-- ── SECTION: Personal Info ── -->
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#6B7280" stroke-width="1.4"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Personal Information</h3>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field w2">
+            <label>Full Name</label>
+            <div class="f-input"><input type="text" value="Budi Santoso" /></div>
+          </div>
+          <div class="f-field">
+            <label>Badge ID</label>
+            <div class="f-readonly">000000001</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Date of Birth</label>
+            <div class="date-select-w" id="dp-dob"></div>
+          </div>
+          <div class="f-field">
+            <label>Gender</label>
+            <div class="select-w" id="sel-gender"></div>
+          </div>
+          <div class="f-field">
+            <label>Marital Status</label>
+            <div class="select-w" id="sel-marital"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Phone Number</label>
+            <div class="f-input"><input type="text" value="081234567890" /></div>
+          </div>
+          <div class="f-field">
+            <label>Personal Email</label>
+            <div class="f-input"><input type="email" value="budi.santoso@gmail.com" /></div>
+          </div>
+          <div class="f-field">
+            <label>KTP / National ID</label>
+            <div class="f-input"><input type="text" value="3201234567890001" /></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field w2">
+            <label>Address</label>
+            <div class="f-input"><input type="text" value="Jl. Merdeka No. 12, Jakarta Selatan" /></div>
+          </div>
+          <div class="f-field">
+            <label>Religion</label>
+            <div class="select-w" id="sel-religion"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: Contract Details ── -->
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1" stroke="#6B7280" stroke-width="1.4"/><path d="M5 5h6M5 8h6M5 11h4" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Contract Details</h3>
+        <span style="font-size:12px;color:#9CA3AF;margin-left:4px;">Salary is managed separately</span>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Work Type</label>
+            <div class="select-w" id="sel-worktype"></div>
+          </div>
+          <div class="f-field" id="duration-field" style="display:none;">
+            <label>Contract Duration</label>
+            <div class="f-input">
+              <input type="number" id="dur-input" min="1" max="60" placeholder="e.g. 12" style="padding-right:0;" />
+              <span style="padding:0 12px;font-size:13px;color:#6B7280;white-space:nowrap;">months</span>
+            </div>
+          </div>
+          <div class="f-field">
+            <label>Filling Status (PTKP)</label>
+            <div class="select-w" id="sel-ptkp"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Joining Date</label>
+            <div class="date-select-w" id="dp-joining"></div>
+          </div>
+          <div class="f-field">
+            <label>End Date</label>
+            <div class="f-readonly" id="end-date-display" style="color:#9CA3AF;font-style:italic;">Permanent (no end date)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: Work Info ── -->
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="10" rx="1" stroke="#6B7280" stroke-width="1.4"/><path d="M5 4V3a2 2 0 014 0v1" stroke="#6B7280" stroke-width="1.4"/><path d="M1 8h14" stroke="#6B7280" stroke-width="1.4"/></svg>
+        </div>
+        <h3>Work Information</h3>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Department</label>
+            <div class="select-w" id="sel-dept"></div>
+          </div>
+          <div class="f-field">
+            <label>Position</label>
+            <div class="select-w" id="sel-position"></div>
+          </div>
+          <div class="f-field">
+            <label>Direct Supervisor</label>
+            <div class="select-w" id="sel-supervisor"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Shift</label>
+            <div class="select-w" id="sel-shift"></div>
+          </div>
+          <div class="f-field">
+            <label>Project</label>
+            <div class="select-w" id="sel-project"></div>
+          </div>
+          <div class="f-field">
+            <!-- spacer -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: Bank Information ── -->
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="10" rx="1" stroke="#6B7280" stroke-width="1.4"/><path d="M1 8h14M5 11h2M10 11h1" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/><path d="M4 4V3a4 4 0 018 0v1" stroke="#6B7280" stroke-width="1.4"/></svg>
+        </div>
+        <h3>Bank Information</h3>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Bank Name</label>
+            <div class="select-w" id="sel-bank"></div>
+          </div>
+          <div class="f-field">
+            <label>Account Number</label>
+            <div class="f-input"><input type="text" value="1234567890" /></div>
+          </div>
+          <div class="f-field">
+            <label>Account Name</label>
+            <div class="f-input"><input type="text" value="Budi Santoso" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: Effective Date + Note ── -->
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#6B7280" stroke-width="1.4"/><path d="M1 6h14M5 1v2M11 1v2" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Change Details</h3>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Effective From</label>
+            <div class="date-select-w" id="dp-effective"></div>
+            <div class="effective-hint" id="effective-hint"></div>
+          </div>
+          <div class="f-field w2">
+            <label>Note (Optional)</label>
+            <div class="f-input"><input type="text" id="note-input" placeholder="e.g. Annual review, department transfer, contract renewal" /></div>
+          </div>
+        </div>
+        <div class="audit-note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <p>All changes are saved to the employee's audit history with a timestamp and the user who made the change. If the effective date is in the future, the changes will be marked as <strong>Scheduled</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form footer -->
+    <div class="form-footer">
+      <span class="footer-left" id="change-count">No changes yet</span>
+      <div class="footer-right">
+        <button class="btn btn-outline btn-cancel" onclick="__goToDetail()">Cancel</button>
+        <button class="btn btn-primary btn-save" id="save-btn" disabled>Save Changes</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#22C55E" stroke-width="1.5"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span id="toast-msg">Changes saved.</span>
+</div>
+
+<script>
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var DURATION_TYPES = ['PKWT', 'Prohire', 'Internship', 'Freelance'];
+
+  /* ── State tracking ────────────────────────────────────── */
+  var INITIAL = {
+    name: 'Budi Santoso', dob: '12 March 1992', gender: 'Male', marital: 'Married',
+    phone: '081234567890', email: 'budi.santoso@gmail.com', ktp: '3201234567890001',
+    address: 'Jl. Merdeka No. 12, Jakarta Selatan', religion: 'Islam',
+    workType: 'PKWTT', ptkp: 'K/1', joiningDate: '15 January 2021',
+    dept: 'Engineering', position: 'Senior Staff', supervisor: 'Ahmad Fauzi',
+    shift: 'NDS', project: 'QuadraNG',
+    bank: 'BCA', accountNo: '1234567890', accountName: 'Budi Santoso'
+  };
+  var current = Object.assign({}, INITIAL);
+  var effectiveDate = null, isFuture = false;
+
+  function countChanges() {
+    var n = 0;
+    Object.keys(INITIAL).forEach(function(k) { if (current[k] !== INITIAL[k]) n++; });
+    return n;
+  }
+
+  function updateFooter() {
+    var n = countChanges();
+    var label = document.getElementById('change-count');
+    label.textContent = n === 0 ? 'No changes yet' : n + ' field' + (n > 1 ? 's' : '') + ' changed';
+    var btn = document.getElementById('save-btn');
+    var ok = n > 0 && effectiveDate;
+    btn.disabled = !ok;
+    if (ok && isFuture) {
+      btn.textContent = 'Schedule Change';
+      btn.className = 'btn btn-primary btn-scheduled btn-save';
+    } else if (ok) {
+      btn.textContent = 'Save Changes';
+      btn.className = 'btn btn-primary btn-save';
+    } else {
+      btn.textContent = 'Save Changes';
+      btn.className = 'btn btn-primary btn-save';
+    }
+  }
+
+  /* ── Text inputs: track changes ────────────────────────── */
+  function watchInput(input, key) {
+    input.addEventListener('input', function() { current[key] = this.value; updateFooter(); });
+  }
+  document.querySelectorAll('.f-input input').forEach(function(inp) {
+    var labels = { 'Budi Santoso': 'name', '081234567890': 'phone', 'budi.santoso@gmail.com': 'email',
+      '3201234567890001': 'ktp', 'Jl. Merdeka No. 12, Jakarta Selatan': 'address',
+      '1234567890': 'accountNo', 'Budi Santoso_bank': 'accountName' };
+    /* map by placeholder or value */
+  });
+
+
+  /* ── Duration field visibility ─────────────────────────── */
+  function updateDuration() {
+    var show = DURATION_TYPES.indexOf(current.workType) >= 0;
+    document.getElementById('duration-field').style.display = show ? '' : 'none';
+    if (!show) {
+      document.getElementById('end-date-display').textContent = 'Permanent (no end date)';
+      document.getElementById('end-date-display').style.cssText = 'color:#9CA3AF;font-style:italic;';
+    }
+  }
+
+  document.getElementById('dur-input').addEventListener('input', function() {
+    var dur = parseInt(this.value);
+    var joining = current.joiningDate;
+    if (!joining || isNaN(dur) || dur < 1) {
+      document.getElementById('end-date-display').textContent = '—';
+      return;
+    }
+    var parts = joining.split(' ');
+    var d = parseInt(parts[0]), m = MONTHS.indexOf(parts[1]), y = parseInt(parts[2]);
+    var end = new Date(y, m + dur, d);
+    end.setDate(end.getDate() - 1);
+    document.getElementById('end-date-display').textContent = end.getDate() + ' ' + MONTHS[end.getMonth()] + ' ' + end.getFullYear();
+    document.getElementById('end-date-display').style.cssText = '';
+    updateFooter();
+  });
+
+  /* ── Date pickers ──────────────────────────────────────── */
+  /* DOB and Joining init after dropdown.js/datepicker.js are loaded (see second script block) */
+
+  /* ── Save ──────────────────────────────────────────────── */
+  document.getElementById('save-btn').addEventListener('click', function() {
+    if (this.disabled) return;
+    var n = countChanges();
+    var msg = (isFuture ? 'Scheduled: ' : '') + n + ' field' + (n > 1 ? 's' : '') + ' updated. Effective ' + effectiveDate + '.';
+    document.getElementById('toast-msg').textContent = msg;
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+      setTimeout(function() { __goToDetail(); }, 300);
+    }, 2000);
+  });
+</script>
+
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script>
+  QuadraDatePicker.init(document.getElementById('dp-dob'), { value: { d: 12, m: 2, y: 1992 } });
+  QuadraDatePicker.init(document.getElementById('dp-joining'), {
+    value: { d: 15, m: 0, y: 2021 },
+    onChange: function(sel) { current.joiningDate = sel.label; updateFooter(); }
+  });
+  QuadraDatePicker.init(document.getElementById('dp-effective'), {
+    placeholder: 'Select date',
+    markFuture: true,
+    onChange: function(sel) {
+      effectiveDate = sel.label;
+      isFuture = sel.isFuture;
+      var hint = document.getElementById('effective-hint');
+      if (sel.isFuture) {
+        hint.textContent = 'Effective date is in the future — changes will be saved as Scheduled.';
+        hint.className = 'effective-hint future';
+      } else {
+        hint.textContent = 'Effective date is today or past — changes will be applied immediately.';
+        hint.className = 'effective-hint immediate';
+      }
+      updateFooter();
+    }
+  });
+
+  QuadraDropdown.init(document.getElementById('sel-gender'), ['Male','Female'], { value: 'Male', onChange: function(val) { current.gender = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-marital'), ['Single','Married','Divorced'], { value: 'Married', onChange: function(val) { current.marital = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-religion'), ['Islam','Christian','Catholic','Hindu','Buddhist','Confucian'], { value: 'Islam', onChange: function(val) { current.religion = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-worktype'), ['PKWT','PKWTT','Karyawan Tetap','Prohire','Internship','Freelance'], { value: 'PKWTT', onChange: function(val) { current.workType = val; updateDuration(); updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-ptkp'), ['TK/0','K/0','K/1','K/2','K/3'], { value: 'K/1', onChange: function(val) { current.ptkp = val; updateFooter(); } });
+  var DEPT_LIST = (function() {
+    var SEED_VER = 2, SEED = ['IT', 'Human Resource'];
+    try {
+      if (parseInt(localStorage.getItem('QUADRA_DEPARTMENTS_V'), 10) === SEED_VER) {
+        var stored = JSON.parse(localStorage.getItem('QUADRA_DEPARTMENTS'));
+        if (stored && stored.length) return stored.map(function(d) { return d.name; });
+      }
+    } catch(e) {}
+    return SEED;
+  })();
+  QuadraDropdown.init(document.getElementById('sel-dept'), DEPT_LIST, { value: INITIAL.dept, onChange: function(val) { current.dept = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-position'), ['Staff','Senior Staff','Specialist','Supervisor','Manager','Senior Manager'], { value: 'Senior Staff', onChange: function(val) { current.position = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-supervisor'), ['Ahmad Fauzi','Dewi Rahayu','Budi Santoso'], { value: 'Ahmad Fauzi', onChange: function(val) { current.supervisor = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-shift'), ['NDS','Morning','Afternoon','Night'], { value: 'NDS', onChange: function(val) { current.shift = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-project'), ['QuadraNG','Internal','Client A','Client B'], { value: 'QuadraNG', onChange: function(val) { current.project = val; updateFooter(); } });
+  QuadraDropdown.init(document.getElementById('sel-bank'), ['BCA','Mandiri','BNI','BRI','CIMB'], { value: 'BCA', onChange: function(val) { current.bank = val; updateFooter(); } });
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script src="employees-data.js"></script>
+<script>
+function __goToDetail(hash) {
+  var b = window.__BADGE;
+  var url = 'employee-detail.html';
+  if (b) url += '?badge=' + b;
+  if (hash) url += hash;
+  window.location.href = url;
+}
+(function() {
+  var badge = new URLSearchParams(window.location.search).get('badge');
+  if (!badge) return;
+  var emp = null;
+  for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) {
+    if (QUADRA_EMPLOYEES[i].badge === badge) { emp = QUADRA_EMPLOYEES[i]; break; }
+  }
+  if (!emp) return;
+  window.__BADGE = badge;
+  var nameInp = document.querySelector('.section-card .f-input input[type="text"]');
+  if (nameInp) nameInp.value = emp.name;
+  var badgeRo = document.querySelector('.section-card .f-readonly');
+  if (badgeRo) badgeRo.textContent = emp.badge;
+  var av = document.querySelector('.emp-avatar');
+  if (av) { av.textContent = emp.initials; av.style.background = emp.color; }
+  document.querySelectorAll('.emp-name').forEach(function(el) { el.textContent = emp.name; });
+  document.querySelectorAll('.emp-meta').forEach(function(el) { el.textContent = emp.project + ' · ' + emp.pos + ' · ' + emp.badge; });
+  document.querySelectorAll('a[href*="employee-detail.html"]').forEach(function(a) {
+    var h = a.getAttribute('href');
+    if (h.indexOf('badge=') < 0) {
+      var hi = h.indexOf('#');
+      a.setAttribute('href', hi >= 0 ? h.slice(0,hi) + '?badge=' + badge + h.slice(hi) : h + '?badge=' + badge);
+    }
+    a.innerHTML = a.innerHTML.replace(/Budi Santoso/g, emp.name).replace(/Ahmad Fauzi/g, emp.name);
+  });
+  document.querySelectorAll('button').forEach(function(btn) {
+    if (/Back to (Budi Santoso|Ahmad Fauzi)/.test(btn.innerHTML)) {
+      btn.innerHTML = btn.innerHTML.replace(/Budi Santoso|Ahmad Fauzi/g, emp.name);
+    }
+  });
+})();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

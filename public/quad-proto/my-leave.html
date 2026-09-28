@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — My Leave Requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="leave"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <span class="bc-current">My Leave Requests</span>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">My Leave Requests</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-primary" onclick="openCreateModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Create
+        </button>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="section-label">Leave Balances</div>
+      <div class="info-grid" id="balance-row"></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th class="col-right">Requested Days</th>
+            <th>Status</th>
+            <th class="col-actions">Options</th>
+          </tr>
+        </thead>
+        <tbody id="requests-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- Create Leave Request modal -->
+<div class="modal-overlay" id="create-modal" onclick="if(event.target===this)closeCreateModal()">
+  <div class="modal-box" style="width:520px">
+    <div class="modal-head">
+      <span class="modal-head-title">Create Leave Request</span>
+      <button class="modal-close" onclick="closeCreateModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-col">
+          <label class="field-label">Start date <span class="req">*</span></label>
+          <input type="date" class="text-input" id="cr-start-date" onchange="recalcRequestedDays()" />
+        </div>
+        <div class="form-col">
+          <label class="field-label">Start Date Breakdown</label>
+          <div class="select-w" id="cr-start-breakdown"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-col">
+          <label class="field-label">End date <span class="req">*</span></label>
+          <input type="date" class="text-input" id="cr-end-date" onchange="recalcRequestedDays()" />
+        </div>
+        <div class="form-col">
+          <label class="field-label">End Date Breakdown</label>
+          <div class="select-w" id="cr-end-breakdown"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Leave Type <span class="req">*</span></label>
+        <div class="select-w" id="cr-type"></div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Requested Days</label>
+        <div class="f-readonly" id="cr-requested-days">—</div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Description</label>
+        <textarea class="textarea" id="cr-description" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Attachment</label>
+        <div class="file-upload" id="cr-attachment-upload">
+          <input type="file" class="file-upload-input" id="cr-attachment" />
+          <div class="file-upload-empty">
+            <svg class="file-upload-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 13V3M10 3L6 7M10 3l4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+            <div class="file-upload-hint">Up to 10MB</div>
+          </div>
+          <div class="file-upload-selected">
+            <svg class="file-upload-file-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l3 3v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#E04A2A" stroke-width="1.3" stroke-linejoin="round"/><path d="M11 2v3h3" stroke="#E04A2A" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            <span class="file-upload-name"></span>
+            <button type="button" class="file-upload-remove" aria-label="Remove file"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="field-error" id="cr-error" style="display:none">Start date, end date, and leave type are required.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeCreateModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitCreateRequest()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel confirm modal -->
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)closeCancelModal()">
+  <div class="modal-box" style="width:460px">
+    <div class="modal-head">
+      <span class="modal-head-title">Cancel Leave Request</span>
+      <button class="modal-close" onclick="closeCancelModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Cancel this leave request?</div>
+        <div class="modal-sub-desc">This request will be marked as cancelled. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeCancelModal()">Keep Request</button>
+      <button class="btn btn-danger" onclick="confirmCancelRequest()">Cancel Request</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="leave-data.js"></script>
+<script src="dropdown.js"></script>
+<script src="fileupload.js"></script>
+<script>
+
+  var ALL_REQUESTS = getStoredLeaveRequests();
+  var activeBadge = localStorage.getItem('quadra_active_badge');
+  var activeEmp = QUADRA_EMPLOYEES.find(function(e) { return e.badge === activeBadge; });
+  if (!activeEmp) {
+    document.querySelector('main.main-content').innerHTML =
+      '<div class="empty-state">'
+      + '<div class="empty-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>'
+      + '<div class="empty-title">No employee record found</div>'
+      + '<div class="empty-desc">Your account isn\'t linked to an employee record. Please contact HR.</div>'
+      + '</div>';
+  }
+
+  var attachmentUpload = QuadraFileUpload.init(document.getElementById('cr-attachment-upload'));
+
+  var STATUS_TAG = {
+    requested: 'tag tag-warning',
+    approved:  'tag tag-success',
+    cancelled: 'tag tag-neutral',
+    rejected:  'tag tag-danger'
+  };
+  var STATUS_LABEL = {
+    requested: 'Requested',
+    approved:  'Approved',
+    cancelled: 'Cancelled',
+    rejected:  'Rejected'
+  };
+
+  function fmtDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function canCancel(req) {
+    if (req.status === 'requested') return true;
+    if (req.status === 'approved') {
+      var today = new Date(); today.setHours(0,0,0,0);
+      var start = new Date(req.startDate + 'T00:00:00');
+      return start > today;
+    }
+    return false;
+  }
+
+  function renderBalances() {
+    var rows = QUADRA_LEAVE_BALANCES[activeBadge] || [];
+    var el = document.getElementById('balance-row');
+    el.innerHTML = rows.map(function(b) {
+      var t = getLeaveType(b.typeId);
+      return '<div class="info-group">'
+        + '<div class="info-label">' + t.name + '</div>'
+        + '<div class="info-value">' + b.total.toFixed(1) + ' days</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  function renderRequests() {
+    var myRequests = ALL_REQUESTS.filter(function(r) { return r.empBadge === activeBadge; })
+      .slice().sort(function(a, b) { return b.startDate.localeCompare(a.startDate); });
+    var tbody = document.getElementById('requests-tbody');
+    if (!myRequests.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">No leave requests yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = myRequests.map(function(r) {
+      var t = getLeaveType(r.typeId);
+      var enabled = canCancel(r);
+      var cancelBtn = enabled
+        ? '<button class="btn btn-danger-outline" onclick="openCancelModal(\'' + r.id + '\')">Cancel</button>'
+        : '<button class="btn btn-danger-outline" disabled>Cancel</button>';
+      return '<tr>'
+        + '<td><div class="emp-cell"><div class="emp-avatar" style="background:' + t.avatarBg + '">' + t.initials + '</div><div>' + t.name + '</div></div></td>'
+        + '<td>' + fmtDate(r.startDate) + '</td>'
+        + '<td>' + fmtDate(r.endDate) + '</td>'
+        + '<td class="col-right">' + r.requestedDays.toFixed(1) + '</td>'
+        + '<td><span class="' + STATUS_TAG[r.status] + '">' + STATUS_LABEL[r.status] + '</span></td>'
+        + '<td>' + cancelBtn + '</td>'
+        + '</tr>';
+    }).join('');
+  }
+
+  /* ── Create Leave Request modal ── */
+  var BREAKDOWN_OPTIONS = ['Full Day', 'First Half', 'Second Half'];
+
+  function openCreateModal() {
+    document.getElementById('cr-start-date').value = '';
+    document.getElementById('cr-end-date').value = '';
+    document.getElementById('cr-description').value = '';
+    attachmentUpload.clear();
+    document.getElementById('cr-requested-days').textContent = '—';
+    document.getElementById('cr-error').style.display = 'none';
+
+    QuadraDropdown.init(document.getElementById('cr-start-breakdown'), BREAKDOWN_OPTIONS, { value: 'Full Day', onChange: recalcRequestedDays });
+    QuadraDropdown.init(document.getElementById('cr-end-breakdown'), BREAKDOWN_OPTIONS, { value: 'Full Day', onChange: recalcRequestedDays });
+
+    var typeOptions = LEAVE_TYPES.map(function(t) { return { value: t.id, label: t.name }; });
+    QuadraDropdown.init(document.getElementById('cr-type'), typeOptions, { placeholder: '----------' });
+
+    document.getElementById('create-modal').classList.add('open');
+  }
+  function closeCreateModal() {
+    document.getElementById('create-modal').classList.remove('open');
+    QuadraDropdown.closeAll();
+  }
+
+  function loadHolidaysForLeave() {
+    try { return JSON.parse(localStorage.getItem('QUADRA_HOLIDAYS')) || []; } catch (e) { return []; }
+  }
+
+  function isNonDeductingHolidayDate(iso) {
+    return loadHolidaysForLeave().some(function(h) {
+      return iso >= h.startDate && iso <= h.endDate && !h.deductsBalance;
+    });
+  }
+
+  function isoFromDate(d) {
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + mm + '-' + dd;
+  }
+
+  function calcRequestedDays(startIso, endIso, startBreakdown, endBreakdown) {
+    if (!startIso || !endIso) return null;
+    var start = new Date(startIso + 'T00:00:00');
+    var end   = new Date(endIso + 'T00:00:00');
+    if (end < start) return null;
+
+    if (startIso === endIso) {
+      if (isNonDeductingHolidayDate(startIso)) return 0;
+      var sameDayHalf = (startBreakdown !== 'Full Day' || endBreakdown !== 'Full Day');
+      return sameDayHalf ? 0.5 : 1;
+    }
+
+    var total = 0;
+    var cursor = new Date(start);
+    while (cursor <= end) {
+      var iso = isoFromDate(cursor);
+      if (!isNonDeductingHolidayDate(iso)) {
+        var weight = 1;
+        if (iso === startIso && startBreakdown !== 'Full Day') weight -= 0.5;
+        if (iso === endIso && endBreakdown !== 'Full Day') weight -= 0.5;
+        total += weight;
+      }
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    return total;
+  }
+
+  function recalcRequestedDays() {
+    var startIso = document.getElementById('cr-start-date').value;
+    var endIso   = document.getElementById('cr-end-date').value;
+    var startBd  = document.getElementById('cr-start-breakdown').dataset.selectedValue || 'Full Day';
+    var endBd    = document.getElementById('cr-end-breakdown').dataset.selectedValue || 'Full Day';
+    var days = calcRequestedDays(startIso, endIso, startBd, endBd);
+    document.getElementById('cr-requested-days').textContent = days === null ? '—' : days.toFixed(1);
+  }
+
+  function submitCreateRequest() {
+    var startIso = document.getElementById('cr-start-date').value;
+    var endIso   = document.getElementById('cr-end-date').value;
+    var typeId   = document.getElementById('cr-type').dataset.selectedValue || '';
+    var startBd  = document.getElementById('cr-start-breakdown').dataset.selectedValue || 'Full Day';
+    var endBd    = document.getElementById('cr-end-breakdown').dataset.selectedValue || 'Full Day';
+    var desc     = document.getElementById('cr-description').value;
+
+    if (!startIso || !endIso || !typeId) {
+      document.getElementById('cr-error').style.display = 'block';
+      return;
+    }
+    var days = calcRequestedDays(startIso, endIso, startBd, endBd);
+    if (days === null) {
+      document.getElementById('cr-error').textContent = 'End date must be on or after start date.';
+      document.getElementById('cr-error').style.display = 'block';
+      return;
+    }
+
+    var newReq = {
+      id: 'LV' + Date.now(),
+      empBadge: activeBadge,
+      typeId: typeId,
+      startDate: startIso,
+      endDate: endIso,
+      startBreakdown: startBd,
+      endBreakdown: endBd,
+      requestedDays: days,
+      description: desc,
+      status: 'requested',
+      createdDate: new Date().toISOString().slice(0, 10)
+    };
+    ALL_REQUESTS.push(newReq);
+    saveLeaveRequests(ALL_REQUESTS);
+    closeCreateModal();
+    renderRequests();
+    if (typeof QuadraToast !== 'undefined') QuadraToast.show('Leave request submitted.', 'success');
+  }
+
+  /* ── Cancel flow ── */
+  var pendingCancelId = null;
+  function openCancelModal(id) {
+    pendingCancelId = id;
+    document.getElementById('cancel-modal').classList.add('open');
+  }
+  function closeCancelModal() {
+    pendingCancelId = null;
+    document.getElementById('cancel-modal').classList.remove('open');
+  }
+  function confirmCancelRequest() {
+    var req = ALL_REQUESTS.find(function(r) { return r.id === pendingCancelId; });
+    if (req) req.status = 'cancelled';
+    saveLeaveRequests(ALL_REQUESTS);
+    closeCancelModal();
+    renderRequests();
+    if (typeof QuadraToast !== 'undefined') QuadraToast.show('Leave request cancelled.', 'success');
+  }
+
+  if (activeEmp) {
+    renderBalances();
+    renderRequests();
+  }
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+
+</body>
+</html>

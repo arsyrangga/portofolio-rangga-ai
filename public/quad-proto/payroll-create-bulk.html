@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Create Bulk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* Settings bar — editable-fields strip (period/cutoff/notes) at the
+       top of the bulk-create form, divided into cells by border-right.
+       Close cousin of the shared .period-bar (payroll-edit-bulk.html)
+       but genuinely different in purpose: .period-bar is a read-only
+       display strip, this is a row of live inputs — kept separate. */
+    .settings-bar { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 12px 24px; display: flex; align-items: flex-end; gap: 0; flex-shrink: 0; }
+    .settings-field { display: flex; flex-direction: column; padding: 0 20px; border-right: 1px solid #E5E7EB; }
+    .settings-field:first-child { padding-left: 0; }
+    .settings-field.grow { flex: 1; }
+    .settings-field:last-child { border-right: none; }
+    .settings-period-row { display: flex; gap: 8px; }
+
+    /* Secondary employee-row meta line (ID · shift). Close cousin of the
+       shared .loan-meta/.emp-meta (11px/t4) but adds tabular-nums for
+       the numeric ID and a 3px (not 2px) top margin — single use, kept
+       page-specific rather than forcing a merge. */
+    .emp-breakdown  { font-size: 11px; color: #9CA3AF; margin-top: 3px; font-variant-numeric: tabular-nums; }
+
+    /* Compact inline "OT" indicator next to an employee row — reuses
+       .tag-info's exact color triad (bg #EFF6FF / border #BFDBFE /
+       text #2563EB) at a smaller, denser size (16px height, 10px text)
+       than the standard .tag component, for inline placement next to
+       employee names. Single use, kept page-specific. */
+    .ot-badge     { display: inline-flex; align-items: center; height: 16px; padding: 0 5px; font-size: 10px; font-weight: 600; background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; margin-left: 6px; vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="payroll-summary"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="payroll-summary.html">Payroll Summary</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Create Bulk Payroll</span>
+  </div>
+
+  <div class="body-wrap">
+
+    <!-- ═══ Settings Bar ═══ -->
+    <div class="settings-bar">
+      <div class="settings-field">
+        <label class="field-label">Payroll Period</label>
+        <div class="settings-period-row">
+          <div class="select-w" id="dd-month" style="width:140px"></div>
+          <div class="select-w" id="dd-year" style="width:82px"></div>
+        </div>
+      </div>
+      <div class="settings-field">
+        <label class="field-label">Attendance Cut-off</label>
+        <div class="date-select-w" id="dp-cutoff" style="width:160px"></div>
+      </div>
+      <div class="settings-field grow">
+        <label class="field-label">Notes</label>
+        <input type="text" class="text-input" placeholder="Optional notes for this payroll run…">
+      </div>
+    </div>
+
+    <!-- ═══ Employee Selector ═══ -->
+    <div class="emp-panel">
+
+      <div class="emp-panel-toolbar">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input type="text" class="text-input" placeholder="Search employee…" oninput="filterTable(this.value)">
+        </div>
+
+        <div class="select-w" id="filter-contract" style="width:150px"></div>
+        <div class="select-w" id="filter-shift" style="width:160px"></div>
+        <button class="filter-chip" id="chip-loan" onclick="toggleLoanFilter()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1.5" width="10" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M4 5.5h4M4 7.5h2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Has Loan
+        </button>
+
+        <div class="sel-count-badge">
+          <strong id="sel-count">0</strong>&nbsp;of <strong id="total-count">0</strong> selected
+        </div>
+      </div>
+
+      <div class="emp-table-wrap">
+        <table id="emp-table">
+          <thead>
+            <tr>
+              <th style="width:40px;text-align:center">
+                <div class="cb-wrap" onclick="toggleAll()" title="Select / deselect all visible" style="margin:0 auto">
+                  <div class="cb indeterminate" id="cb-all">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </div>
+                </div>
+              </th>
+              <th>Employee</th>
+              <th style="width:140px">Timesheet</th>
+              <th class="num" style="width:130px">Base Salary</th>
+              <th class="num" style="width:120px">Allowances</th>
+              <th class="num" style="width:100px">Overtime</th>
+              <th class="num" style="width:110px">Loan Ded.</th>
+              <th class="num" style="width:110px">Late Ded.</th>
+              <th class="num" style="width:120px">Deductions</th>
+              <th class="num" style="width:130px">Net Salary</th>
+            </tr>
+          </thead>
+          <tbody id="emp-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="footer-bar">
+        <div class="footer-summary">
+          <div class="footer-stat">
+            <div class="footer-stat-label">Selected</div>
+            <div class="footer-stat-value" id="footer-count">15 employees</div>
+          </div>
+          <div class="footer-divider"></div>
+          <div class="footer-stat">
+            <div class="footer-stat-label">Est. Net Salary</div>
+            <div class="footer-stat-value" id="footer-base">—</div>
+          </div>
+          <div class="footer-divider"></div>
+          <div class="footer-stat">
+            <div class="footer-stat-label">Period</div>
+            <div class="footer-stat-value" id="footer-period">May 2026</div>
+          </div>
+        </div>
+        <div class="footer-actions">
+          <a href="payroll-summary.html" class="btn btn-outline">Cancel</a>
+          <button class="btn btn-primary" id="create-btn" onclick="openConfirm()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+            Create Payroll
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM MODAL ══ -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Create Bulk Payroll</span>
+      <button class="modal-close" onclick="closeConfirm()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">Review and confirm the payroll run before creating.</div>
+    <div class="modal-summary">
+      <div class="modal-summary-row">
+        <span class="lbl">Period</span>
+        <span class="val" id="modal-period">May 2026</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Employees</span>
+        <span class="val" id="modal-count">15 employees</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Est. Net Salary</span>
+        <span class="val" id="modal-base">—</span>
+      </div>
+      <div class="modal-summary-row" id="modal-defer-row" style="display:none">
+        <span class="lbl">Deferred Loans</span>
+        <span class="val" id="modal-defer-count" style="color:#D97706">—</span>
+      </div>
+      <div class="modal-summary-row" id="modal-no-loans-row" style="display:none">
+        <span class="lbl">Loans</span>
+        <span class="val" style="color:#6B7280">No active loans</span>
+      </div>
+    </div>
+    <div id="modal-all-deferred-note" style="display:none;margin-top:12px;padding:10px 12px;background:#DBEAFE;border:1px solid #BFDBFE;align-items:flex-start;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#2563EB" stroke-width="1.4"/><path d="M8 7v4M8 5v.5" stroke="#2563EB" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span style="font-size:13px;color:#1E40AF;line-height:1.4">All loan deductions are deferred this period. No loan balances will be reduced.</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmCreate()">Confirm &amp; Create</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="payroll-timesheet-gate.js"></script>
+<script src="timesheet-seed.js"></script>
+<script src="loans-data.js"></script>
+<script src="payroll-batching.js"></script>
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script>
+
+  var MONTHS_LIST = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  var _now          = new Date();
+  var _curMonth     = MONTHS_LIST[_now.getMonth()];
+  var _curYear      = _now.getFullYear();
+
+  function _monthlyDed(loan) { return loan.tenor > 0 ? Math.ceil(loan.total / loan.tenor) : 0; }
+  function _overdueCount(loan, pMonth, pYear) {
+    var start   = new Date(loan.startDate);
+    var elapsed = (pYear - start.getFullYear()) * 12 + (pMonth - start.getMonth());
+    var due     = Math.min(elapsed, loan.tenor);
+    var paid    = _monthlyDed(loan) > 0 ? Math.floor(loan.paid / _monthlyDed(loan)) : 0;
+    return Math.max(0, due - paid);
+  }
+  function _catchupAmt(loan, pMonth, pYear) {
+    var s = new Date(loan.startDate);
+    if (pYear < s.getFullYear() || (pYear === s.getFullYear() && pMonth < s.getMonth())) return 0;
+    var oc = _overdueCount(loan, pMonth, pYear);
+    return Math.min(_monthlyDed(loan) * (oc + 1), loan.total - loan.paid);
+  }
+  var _cutoffM      = _now.getMonth() === 0 ? 11 : _now.getMonth() - 1;
+  var _cutoffY      = _now.getMonth() === 0 ? _curYear - 1 : _curYear;
+  var _yearOptions  = [String(_curYear - 1), String(_curYear), String(_curYear + 1)];
+
+  function rebuildEmployeeLoans() {
+    if (!EMPLOYEES) return;
+    var month  = QuadraDropdown.getValue(document.getElementById('dd-month'));
+    var year   = QuadraDropdown.getValue(document.getElementById('dd-year'));
+    var pMonth = MONTHS_LIST.indexOf(month || _curMonth);
+    var pYear  = parseInt(year || _curYear);
+    EMPLOYEES.forEach(function(e) {
+      var empLoans = (QUADRA_LOANS || []).filter(function(l) {
+        if (l.empBadge !== e.id || (l.status !== 'active' && l.status !== 'overdue')) return false;
+        var s = new Date(l.startDate);
+        return pYear > s.getFullYear() || (pYear === s.getFullYear() && pMonth >= s.getMonth());
+      });
+      e.loanDed    = empLoans.reduce(function(s, l) { return s + _catchupAmt(l, pMonth, pYear); }, 0);
+      e.maxOverdue = empLoans.reduce(function(m, l) { return Math.max(m, _overdueCount(l, pMonth, pYear)); }, 0);
+      e.net        = e.base + e.allowTotal + e.otAmt - e.dedTotal - e.loanDed - e.lateDed;
+    });
+  }
+
+  function syncPeriod() {
+    var month = QuadraDropdown.getValue(document.getElementById('dd-month'));
+    var year  = QuadraDropdown.getValue(document.getElementById('dd-year'));
+    var label = (month || _curMonth) + ' ' + (year || _curYear);
+    document.getElementById('footer-period').textContent = label;
+    document.getElementById('modal-period').textContent  = label;
+    var monthIdx = MONTHS_LIST.indexOf(month || _curMonth);
+    QuadraDatePicker.setValue(document.getElementById('dp-cutoff'), { d: 25, m: monthIdx, y: parseInt(year || _curYear) });
+    rebuildEmployeeLoans();
+    refreshLockedIds();
+    refreshTimesheetEligibility();
+    if (EMPLOYEES) renderTable();
+  }
+
+  /* ── Settings bar controls ── */
+  QuadraDatePicker.init(document.getElementById('dp-cutoff'), { value: { d: 25, m: _now.getMonth(), y: _curYear } });
+
+  seedAllTimesheetsIfNeeded();
+
+  QuadraDropdown.init(document.getElementById('dd-month'), MONTHS_LIST,
+    { value: _curMonth, onChange: syncPeriod });
+  QuadraDropdown.init(document.getElementById('dd-year'), _yearOptions,
+    { value: String(_curYear), onChange: syncPeriod });
+
+  syncPeriod(); // no-op here — EMPLOYEES/selected/lockedIds/timesheetIneligibleIds aren't
+                // assigned yet at this point in the script (all guard on !EMPLOYEES and
+                // return early); the real initialization is the syncPeriod() call further
+                // down, after those are declared.
+
+  /* ══════════════════════════════════════
+     EMPLOYEE TABLE
+  ══════════════════════════════════════ */
+  function calcPPh21(salary) {
+    var taxable = Math.max(0, salary * 12 - 54000000);
+    var tax = taxable <= 60000000  ? taxable * 0.05
+            : taxable <= 250000000 ? 3000000 + (taxable - 60000000) * 0.15
+                                   : 31500000 + (taxable - 250000000) * 0.25;
+    return Math.round(tax / 12);
+  }
+
+  var DUMMY_OT = {
+    '000000001': 225000,   // Budi Santoso  — 3h × Rp 75.000
+    '000000002': 208000,   // Dewi Rahayu   — 4h based on level
+    '000000003': 600000,   // Ahmad Fauzi   — 5h × Rp 120.000
+    '000000008': 494000,   // Rina Kusuma   — 6h based on level
+  };
+
+  var DUMMY_LATE = {
+    '000000002': 90000,    // Dewi Rahayu   — 3× terlambat
+    '000000004': 60000,    // Siti Nurhaliza — 2× terlambat
+    '000000007': 120000,   // Dimas Pratama — 4× terlambat
+    '000000010': 45000,    // Maya Sari     — 3× terlambat
+  };
+
+  var EMPLOYEES = QUADRA_EMPLOYEES
+    .filter(function(e) { return e.status === 'Active'; })
+    .map(function(e) {
+      var allowTotal = (e.allowances || []).reduce(function(s, a) { return s + a.amount; }, 0);
+      var dedTotal   = (e.deductions  || [])
+        .filter(function(d) { return d.paidBy === 'personal'; })
+        .reduce(function(s, d) {
+          var rate = d.id === 'bpjs-kes' ? 0.01 : d.id === 'bpjs-tk' ? 0.02 : null;
+          return s + (rate !== null ? Math.round(e.salary * rate) : calcPPh21(e.salary));
+        }, 0);
+      var _empLoans = (QUADRA_LOANS || [])
+        .filter(function(l) { return l.empBadge === e.badge && (l.status === 'active' || l.status === 'overdue'); });
+      var loanDed     = _empLoans.reduce(function(s, l) { return s + _catchupAmt(l, _now.getMonth(), _now.getFullYear()); }, 0);
+      var maxOverdue  = _empLoans.reduce(function(m, l) { return Math.max(m, _overdueCount(l, _now.getMonth(), _now.getFullYear())); }, 0);
+      var otAmt   = (e.overtimeType !== 'No Overtime' && DUMMY_OT[e.badge])  ? DUMMY_OT[e.badge]  : 0;
+      var lateDed = DUMMY_LATE[e.badge] ? DUMMY_LATE[e.badge] : 0;
+      return {
+        id: e.badge, name: e.name, init: e.initials, color: e.color,
+        dept: e.project, shift: e.shift, contract: e.contract, base: e.salary,
+        allowTotal: allowTotal, otAmt: otAmt, dedTotal: dedTotal, loanDed: loanDed, maxOverdue: maxOverdue, lateDed: lateDed,
+        net: e.salary + allowTotal + otAmt - dedTotal - loanDed - lateDed,
+        hasOT: e.overtimeType !== 'No Overtime'
+      };
+    });
+
+  var selected        = new Set(EMPLOYEES.map(function(e){ return e.id; }));
+  var deferredBadges  = new Set();
+  /* Pre-populate from loans deferred on the Loan page */
+  (QUADRA_LOANS || []).forEach(function(l) { if (l.deferred && (l.status === 'active' || l.status === 'overdue')) deferredBadges.add(l.empBadge); });
+  var lockedIds       = new Set();
+  var timesheetIneligibleIds = new Set();
+  var currentContract = '';
+  var currentShift    = '';
+  var currentSearch   = '';
+  var filterHasLoan   = false;
+
+  function getLockedIds(period) {
+    try {
+      var raw = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      if (!raw) return new Set();
+      var ids = [];
+      JSON.parse(raw).filter(function(p) { return p.period === period; }).forEach(function(p) {
+        ids = ids.concat(p.employeeIds || []);
+      });
+      return new Set(ids);
+    } catch(e) { return new Set(); }
+  }
+
+  // Deliberately does NOT render: its only caller, syncPeriod(), renders once
+  // after refreshTimesheetEligibility() has also run, so the table is never
+  // painted with locked IDs from the new period but eligibility from the old.
+  function refreshLockedIds() {
+    if (!EMPLOYEES || !selected) return; // called before table init — skip
+    var period = document.getElementById('modal-period').textContent;
+    lockedIds  = getLockedIds(period);
+    lockedIds.forEach(function(id) { selected.delete(id); });
+  }
+
+  function refreshTimesheetEligibility() {
+    if (!EMPLOYEES || !selected) return; // called before table init — skip
+    var period = document.getElementById('modal-period').textContent;
+    timesheetIneligibleIds = new Set(
+      EMPLOYEES.filter(function(e) { return !isTimesheetApprovedForPeriod(e.id, period); })
+               .map(function(e) { return e.id; })
+    );
+    timesheetIneligibleIds.forEach(function(id) { selected.delete(id); });
+  }
+
+  function toggleLoanFilter() {
+    filterHasLoan = !filterHasLoan;
+    document.getElementById('chip-loan').classList.toggle('active', filterHasLoan);
+    renderTable();
+  }
+
+  function toggleDefer(badge, event) {
+    event.stopPropagation();
+    if (deferredBadges.has(badge)) { deferredBadges.delete(badge); }
+    else { deferredBadges.add(badge); }
+    renderTable();
+  }
+
+  function fmt(n) {
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+
+  function fmtK(n) {
+    if (n >= 1000000) {
+      var v = Math.round(n / 100000) / 10;
+      return v.toString().replace('.', ',') + ' jt';
+    }
+    if (n >= 1000) return Math.round(n / 1000) + ' rb';
+    return n.toString();
+  }
+
+  function matchesFilters(e) {
+    if (lockedIds.has(e.id)) return false;
+    var matchContract = !currentContract || e.contract === currentContract;
+    var matchShift    = !currentShift    || e.shift === currentShift;
+    var matchLoan     = !filterHasLoan   || e.loanDed > 0;
+    var q = currentSearch.toLowerCase();
+    var matchSearch   = !q || e.name.toLowerCase().includes(q) || e.id.includes(q) || e.shift.toLowerCase().includes(q);
+    return matchContract && matchShift && matchLoan && matchSearch;
+  }
+
+  function visibleIds() {
+    return EMPLOYEES.filter(matchesFilters).map(function(e){ return e.id; });
+  }
+
+  function renderTable() {
+    var tbody = document.getElementById('emp-tbody');
+    var period = document.getElementById('modal-period').textContent;
+    var rows  = '';
+    EMPLOYEES.forEach(function(e) {
+      if (!matchesFilters(e)) return;
+      var isSel = selected.has(e.id);
+      var tsStatus = getTimesheetStatusForPeriod(e.id, period);
+      var tsTagClass = tsStatus === 'Approved' ? 'tag-success' : tsStatus === 'Rejected' ? 'tag-danger' : tsStatus === 'Submitted' ? 'tag-warning' : 'tag-neutral';
+      var tsLabel = tsStatus || 'No Timesheet';
+      var isIneligible = timesheetIneligibleIds.has(e.id);
+      rows += '<tr class="' + (isSel ? 'selected' : '') + (isIneligible ? ' ineligible' : '') + '"' + (isIneligible ? ' aria-disabled="true"' : '') + ' onclick="toggleRow(\'' + e.id + '\')" style="cursor:' + (isIneligible ? 'not-allowed' : 'pointer') + '">' +
+        '<td><div class="cb-wrap" style="' + (isIneligible ? 'opacity:0.35;cursor:not-allowed' : '') + '"><div class="cb ' + (isSel ? 'checked' : '') + '">' +
+          (isSel ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') +
+        '</div></div></td>' +
+        '<td><div class="emp-cell">' +
+          '<div class="emp-avatar" style="background:' + e.color + '">' + e.init + '</div>' +
+          '<div>' +
+            '<div class="emp-name">' + e.name + '</div>' +
+            '<div style="font-size:11px;color:#9CA3AF;margin-top:2px">' + e.id + ' · ' + e.shift + '</div>' +
+          '</div>' +
+        '</div></td>' +
+        '<td class="ts-cell"><span class="tag ' + tsTagClass + '">' + tsLabel + '</span></td>' +
+        '<td class="num"><span class="sal-val">' + fmt(e.base) + '</span></td>' +
+        '<td class="num">' + (e.allowTotal > 0 ? '<span class="sal-allow">+' + fmt(e.allowTotal) + '</span>' : '<span class="sal-none">—</span>') + '</td>' +
+        '<td class="num">' + (e.otAmt > 0 ? '<span class="sal-allow">+' + fmt(e.otAmt) + '</span>' : '<span class="sal-none">—</span>') + '</td>' +
+        (function() {
+          if (e.loanDed <= 0) return '<td class="num"><span class="sal-none">—</span></td>';
+          var overdueTag = (!deferredBadges.has(e.id) && e.maxOverdue > 0)
+            ? '<span style="font-size:10px;color:#D97706;background:rgba(217,119,6,0.08);padding:1px 5px;white-space:nowrap">' + (e.maxOverdue + 1) + '×</span>'
+            : '';
+          if (deferredBadges.has(e.id)) return '<td class="num" style="white-space:nowrap"><span style="text-decoration:line-through;color:#D1D5DB">−' + fmt(e.loanDed) + '</span><button class="defer-btn is-deferred" onclick="toggleDefer(\'' + e.id + '\', event)">Undo</button></td>';
+          return '<td class="num" style="white-space:nowrap">' + overdueTag + ' <span class="sal-loan">−' + fmt(e.loanDed) + '</span><button class="defer-btn" onclick="toggleDefer(\'' + e.id + '\', event)">Defer</button></td>';
+        })() +
+        '<td class="num">' + (e.lateDed  > 0 ? '<span class="sal-deduct">−' + fmt(e.lateDed)  + '</span>' : '<span class="sal-none">—</span>') + '</td>' +
+        '<td class="num">' + (e.dedTotal > 0 ? '<span class="sal-deduct">−' + fmt(e.dedTotal) + '</span>' : '<span class="sal-none">—</span>') + '</td>' +
+        (function() { var effLoan = deferredBadges.has(e.id) ? 0 : e.loanDed; return '<td class="num"><span class="sal-net">' + fmt(e.base + e.allowTotal + e.otAmt - e.dedTotal - effLoan - e.lateDed) + '</span></td>'; })() +
+      '</tr>';
+    });
+    tbody.innerHTML = rows || '<tr><td colspan="10" style="text-align:center;color:#9CA3AF;padding:32px">No employees found</td></tr>';
+    updateCounts();
+  }
+
+  function toggleRow(id) {
+    if (timesheetIneligibleIds.has(id)) {
+      QuadraToast.show('This employee\'s timesheet has not been approved for this period.', 'error');
+      return;
+    }
+    if (selected.has(id)) { selected.delete(id); } else { selected.add(id); }
+    renderTable();
+  }
+
+  function toggleAll() {
+    var vis        = visibleIds();
+    var selectable = vis.filter(function(id){ return !timesheetIneligibleIds.has(id); });
+    var allSel     = selectable.length > 0 && selectable.every(function(id){ return selected.has(id); });
+    if (allSel) { selectable.forEach(function(id){ selected.delete(id); }); }
+    else         { selectable.forEach(function(id){ selected.add(id); }); }
+    renderTable();
+  }
+
+  function updateCounts() {
+    var count = selected.size;
+    var net   = EMPLOYEES.filter(function(e){ return selected.has(e.id); })
+                         .reduce(function(s, e){
+                           var effLoan = deferredBadges.has(e.id) ? 0 : e.loanDed;
+                           return s + e.base + e.allowTotal + e.otAmt - e.dedTotal - effLoan - e.lateDed;
+                         }, 0);
+    // Denominator excludes employees already locked into another payroll for
+    // this period — matchesFilters() hides them from the table entirely, so
+    // counting them would promise more rows than the table can ever show.
+    var availableTotal = EMPLOYEES.filter(function(e){ return !lockedIds.has(e.id); }).length;
+
+    document.getElementById('sel-count').textContent    = count;
+    document.getElementById('total-count').textContent  = availableTotal;
+    document.getElementById('footer-count').textContent  = count + ' employee' + (count !== 1 ? 's' : '');
+    document.getElementById('footer-base').textContent   = fmt(net);
+    document.getElementById('modal-count').textContent   = count + ' of ' + availableTotal + ' employee' + (availableTotal !== 1 ? 's' : '');
+    document.getElementById('modal-base').textContent    = fmt(net);
+
+    /* Header checkbox state */
+    var vis        = visibleIds();
+    var selectable = vis.filter(function(id){ return !timesheetIneligibleIds.has(id); });
+    var allSel     = selectable.length > 0 && selectable.every(function(id){ return selected.has(id); });
+    var noneSel    = selectable.every(function(id){ return !selected.has(id); });
+    var cbAll   = document.getElementById('cb-all');
+    cbAll.className = 'cb ' + (allSel ? 'checked' : noneSel ? '' : 'indeterminate');
+    cbAll.innerHTML = allSel
+      ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : noneSel
+      ? ''
+      : '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+    document.getElementById('create-btn').disabled = count === 0;
+  }
+
+  QuadraDropdown.init(document.getElementById('filter-contract'),
+    ['All Contracts', 'PKWTT', 'PKWT', 'Freelance', 'Internship'],
+    { value: 'All Contracts', onChange: function(v) { currentContract = v === 'All Contracts' ? '' : v; renderTable(); } });
+
+  QuadraDropdown.init(document.getElementById('filter-shift'),
+    ['All Shifts', 'Bendi', 'NDS', 'Ops Console'],
+    { value: 'All Shifts', onChange: function(v) { currentShift = v === 'All Shifts' ? '' : v; renderTable(); } });
+
+  function filterTable(q) {
+    currentSearch = q;
+    renderTable();
+  }
+
+  function openConfirm() {
+    var selEmps   = EMPLOYEES.filter(function(e){ return selected.has(e.id); });
+    var loanEmps  = selEmps.filter(function(e){ return e.loanDed > 0; });
+    var deferCount = loanEmps.filter(function(e){ return deferredBadges.has(e.id); }).length;
+    var allDeferred = loanEmps.length > 0 && deferCount === loanEmps.length;
+
+    var deferRow = document.getElementById('modal-defer-row');
+    deferRow.style.display = deferCount > 0 ? 'flex' : 'none';
+    if (deferCount > 0) {
+      document.getElementById('modal-defer-count').textContent = deferCount + ' employee loan' + (deferCount !== 1 ? 's' : '') + ' deferred';
+    }
+
+    document.getElementById('modal-no-loans-row').style.display = loanEmps.length === 0 ? 'flex' : 'none';
+
+    var allDeferredNote = document.getElementById('modal-all-deferred-note');
+    allDeferredNote.style.display = allDeferred ? 'flex' : 'none';
+
+    document.getElementById('confirm-modal').classList.add('open');
+  }
+  function closeConfirm() {
+    document.getElementById('confirm-modal').classList.remove('open');
+  }
+  var SEED_VERSION = 5;
+
+  function _fmtCreatedDate(d) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function confirmCreate() {
+    if (selected.size === 0) {
+      QuadraToast.show('Select at least one employee before creating payroll.', 'error');
+      closeConfirm();
+      return;
+    }
+    closeConfirm();
+
+    var period = document.getElementById('modal-period').textContent;
+    var count  = selected.size;
+
+    /* Build per-loan decisions */
+    var loanDecisions = [];
+    EMPLOYEES.forEach(function(e) {
+      if (!selected.has(e.id) || e.loanDed <= 0) return;
+      (QUADRA_LOANS || [])
+        .filter(function(l) { return l.empBadge === e.id && (l.status === 'active' || l.status === 'overdue'); })
+        .forEach(function(l) {
+          var ded = _catchupAmt(l, _now.getMonth(), _now.getFullYear());
+          loanDecisions.push({
+            loanId:  l.id,
+            action:  deferredBadges.has(e.id) ? 'defer' : 'confirm',
+            amount:  deferredBadges.has(e.id) ? 0 : ded
+          });
+        });
+    });
+
+    /* totalNet reflects deferred state */
+    var totalNet = EMPLOYEES
+      .filter(function(e) { return selected.has(e.id); })
+      .reduce(function(s, e) {
+        var effLoan = deferredBadges.has(e.id) ? 0 : e.loanDed;
+        return s + e.base + e.allowTotal + e.otAmt - e.dedTotal - effLoan - e.lateDed;
+      }, 0);
+
+    var toastMsg = 'Payroll for ' + period + ' has been created.';
+
+    try {
+      var raw     = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      var periods = raw ? JSON.parse(raw) : [];
+
+      /* Find entries for the same period month */
+      var samePeriod = periods.filter(function(p) { return p.period === period; });
+      var draftEntry = samePeriod.find(function(p) { return p.status === 'draft'; });
+
+      if (draftEntry) {
+        /* Merge into existing draft — add new employees & their loan decisions */
+        var mergedIds  = (draftEntry.employeeIds || []).concat(Array.from(selected));
+        var mergedDecs = (draftEntry.loanDecisions || []).concat(loanDecisions);
+        draftEntry.employeeIds   = mergedIds;
+        draftEntry.loanDecisions = mergedDecs;
+        draftEntry.employees     = mergedIds.length;
+        draftEntry.totalNet      = (draftEntry.totalNet || 0) + totalNet;
+        toastMsg = count + ' employee' + (count !== 1 ? 's' : '') + ' added to payroll for ' + period + '.';
+      } else {
+        /* No draft exists — create a new separate entry (first entry or additional entry after paid) */
+        var cutoff     = QuadraDatePicker.getValue(document.getElementById('dp-cutoff')) || '';
+        var activeEmps = Array.from(selected).map(function(b) {
+          return QUADRA_EMPLOYEES.find(function(q) { return q.badge === b; });
+        }).filter(Boolean);
+        var batches = deriveBatches(cutoff, activeEmps);
+        periods.unshift({
+          id: 'PR' + Date.now(),
+          period: period,
+          createdDate: _fmtCreatedDate(new Date()),
+          employees: count,
+          totalNet: totalNet,
+          status: 'draft',
+          createdBy: 'Admin',
+          payslipDate: null,
+          salaryCutoff: cutoff,
+          batches: batches,
+          loanDecisions: loanDecisions,
+          employeeIds: Array.from(selected)
+        });
+      }
+
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS', JSON.stringify(periods));
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS_V', SEED_VERSION);
+    } catch(e) {}
+
+    try { localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: toastMsg, type: 'success' })); } catch(e) {}
+    window.location.href = 'payroll-summary.html';
+  }
+
+  document.getElementById('confirm-modal').addEventListener('click', function(e){
+    if (e.target === this) closeConfirm();
+  });
+
+  syncPeriod(); // initializes period label + locked IDs + table
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+
+<script src="clockwidget.js"></script>
+</body>
+</html>

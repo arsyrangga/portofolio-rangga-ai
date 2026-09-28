@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Notification Rule</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    .nre-form { display: flex; flex-direction: column; }
+    .nre-schedule-row { display: flex; align-items: center; gap: 8px; }
+    .nre-schedule-row input[type="number"] { width: 70px; }
+    .nre-preview-empty { padding: 24px 16px; text-align: center; font-size: 13px; color: #9CA3AF; }
+    /* Preview rows are read-only — cancel the global tbody tr pointer/hover
+       affordance so they don't look clickable. */
+    .nre-preview-body tbody tr { cursor: default; }
+    .nre-preview-body tbody tr:hover,
+    .nre-preview-body tbody tr:hover td { background: transparent; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="" data-active-sub=""></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action gear-active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="settings.html">Settings</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="settings.html?section=notification-management">Notification Management</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bc-mode">Create Rule</span>
+  </div>
+
+  <main class="main-content">
+
+    <a class="back-link" href="settings.html?section=notification-management" onclick="event.preventDefault(); confirmLeave(function(){ location.href='settings.html?section=notification-management'; })">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Back to Notification Management</span>
+    </a>
+
+    <div class="page-header">
+      <div>
+        <div class="page-title" id="page-title-mode">Create Notification Rule</div>
+      </div>
+    </div>
+
+    <div class="nre-form">
+
+      <div class="section-card">
+        <div class="section-head"><h3>Rule Details</h3></div>
+        <div class="section-body">
+
+          <div class="f-field">
+            <label id="nre-trigger-label">Trigger Type</label>
+            <div class="select-w" id="nre-trigger-select" aria-labelledby="nre-trigger-label"></div>
+            <div class="field-hint">What this rule counts down to. The Schedule below always means "days before this date."</div>
+          </div>
+
+          <div class="f-field">
+            <label for="nre-name">Rule Name</label>
+            <input type="text" class="text-input" id="nre-name" maxlength="80" placeholder="e.g. Contract Expiry Reminder" />
+            <div class="field-error" id="nre-name-err" style="display:none" role="alert"></div>
+          </div>
+
+          <div class="f-field">
+            <label for="email-chip-input">Recipients</label>
+            <div class="emp-combo">
+              <div class="emp-combo-input chips" id="email-chip-wrap">
+                <span id="email-chip-container"></span>
+                <!-- No aria-label here: the visible <label for="email-chip-input">
+                     above ("Recipients") is the accessible name, consistent with
+                     every other field on this page. An aria-label would override it. -->
+                <input type="email" id="email-chip-input" placeholder="Type email, press Enter…" autocomplete="off" />
+              </div>
+              <!-- Suggestions only — typing any email (not just an employee's)
+                   and pressing Enter/comma still works, matching this field's
+                   original "recipients don't have to be employees" scope. -->
+              <div class="emp-combo-list" id="email-suggest-list"></div>
+            </div>
+            <div class="field-hint" id="email-chip-hint" aria-live="polite">0 of 10 recipients</div>
+            <div class="field-error" id="email-chip-err" style="display:none" role="alert"></div>
+          </div>
+
+          <div class="f-field">
+            <label for="nre-subject">Subject</label>
+            <textarea class="textarea" id="nre-subject" rows="2" placeholder="Email subject"></textarea>
+            <div class="field-hint">Available placeholders: {{employee_name}}, {{end_date}}, {{days_left}}</div>
+            <div class="field-error" id="nre-subject-err" style="display:none" role="alert"></div>
+          </div>
+
+          <div class="f-field">
+            <label id="nre-body-label">Body</label>
+            <div class="rte-wrap">
+              <div class="rte-toolbar" role="toolbar" aria-label="Formatting">
+                <button type="button" class="rte-btn" data-cmd="bold" aria-label="Bold" aria-pressed="false" title="Bold"><b>B</b></button>
+                <button type="button" class="rte-btn" data-cmd="italic" aria-label="Italic" aria-pressed="false" title="Italic"><i>I</i></button>
+                <button type="button" class="rte-btn" data-cmd="underline" aria-label="Underline" aria-pressed="false" title="Underline"><u>U</u></button>
+                <button type="button" class="rte-btn" data-cmd="insertUnorderedList" aria-label="Bullet list" aria-pressed="false" title="Bullet list"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="2" cy="3.5" r="1" fill="currentColor"/><circle cx="2" cy="7" r="1" fill="currentColor"/><circle cx="2" cy="10.5" r="1" fill="currentColor"/><path d="M5.5 3.5h7M5.5 7h7M5.5 10.5h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+                <button type="button" class="rte-btn" data-cmd="insertOrderedList" aria-label="Numbered list" aria-pressed="false" title="Numbered list"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><text x="0" y="4.6" font-size="4" fill="currentColor" font-family="Inter, sans-serif">1</text><text x="0" y="8.1" font-size="4" fill="currentColor" font-family="Inter, sans-serif">2</text><text x="0" y="11.6" font-size="4" fill="currentColor" font-family="Inter, sans-serif">3</text><path d="M5.5 3.5h7M5.5 7h7M5.5 10.5h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+              </div>
+              <div class="rte-editor" contenteditable="true" id="rte-body" role="textbox" aria-multiline="true" aria-labelledby="nre-body-label"></div>
+            </div>
+            <div class="field-hint">Available placeholders: {{employee_name}}, {{end_date}}, {{days_left}}</div>
+            <div class="field-error" id="nre-body-err" style="display:none" role="alert"></div>
+          </div>
+
+          <div class="f-field">
+            <label id="nre-schedule-label">Schedule</label>
+            <div role="group" aria-labelledby="nre-schedule-label">
+              <div class="nre-schedule-row">
+                <label class="no-limit-opt"><input type="checkbox" id="sched-30" /><span>30 days before</span></label>
+              </div>
+              <div class="nre-schedule-row" style="margin-top:8px">
+                <label class="no-limit-opt"><input type="checkbox" id="sched-14" /><span>14 days before</span></label>
+              </div>
+              <div class="nre-schedule-row" style="margin-top:8px">
+                <label class="no-limit-opt"><input type="checkbox" id="sched-custom" /><span>Custom:</span></label>
+                <input type="number" class="text-input" id="sched-custom-days" min="1" max="365" disabled aria-label="Custom days before" />
+                <span style="font-size:13px;color:#374151">days before</span>
+              </div>
+              <div class="field-error" id="nre-custom-err" style="display:none" role="alert"></div>
+            </div>
+            <div class="field-error" id="nre-schedule-err" style="display:none" role="alert"></div>
+          </div>
+
+          <div class="f-field">
+            <label for="nre-send-time">Send Time</label>
+            <input type="time" class="text-input" id="nre-send-time" style="max-width:160px" />
+            <div class="field-error" id="nre-send-time-err" style="display:none" role="alert"></div>
+          </div>
+
+          <label class="toggle-row" for="nre-active">
+            <div class="toggle-wrap">
+              <input type="checkbox" id="nre-active" checked>
+              <span class="toggle-track"></span>
+              <span class="toggle-knob"></span>
+            </div>
+            <div>
+              <div class="field-label" style="margin-bottom:0">Active</div>
+            </div>
+          </label>
+
+        </div>
+      </div>
+
+      <div class="section-card" style="margin-top:20px">
+        <div class="section-head"><h3>Live Preview — Employees Matching Current Schedule</h3></div>
+        <!-- aria-live sits on the results wrapper, not the section-card, so
+             changing the schedule announces only the new matches and not
+             the static header text each time. -->
+        <div class="nre-preview-body" aria-live="polite">
+          <table>
+            <thead>
+              <tr><th>Employee</th><th id="nre-preview-date-col">End Date</th><th>Days Left</th><th>Next Reminder</th></tr>
+            </thead>
+            <tbody id="nre-preview-tbody"></tbody>
+          </table>
+          <div class="nre-preview-empty" id="nre-preview-empty">No employees currently match this schedule.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="confirmLeave(function(){ location.href='settings.html?section=notification-management'; })">Cancel</button>
+    <button class="btn btn-primary" onclick="saveRule()" id="nre-save-btn">Create Rule</button>
+  </div>
+
+</div>
+
+<!-- Unsaved Changes Confirm Modal — only for in-app navigation (Back-link,
+     Cancel) that this script controls. Closing the tab/refreshing/typing a
+     new URL is still the native browser beforeunload prompt — no custom UI
+     is possible there, browsers block it for security. -->
+<div class="modal-overlay" id="unsaved-changes-modal" onclick="if(event.target===this)confirmLeaveCancel()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Unsaved Changes</span>
+      <button class="modal-close-btn" onclick="confirmLeaveCancel()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Leave without saving?</div>
+        <div class="sub-desc">You have unsaved changes to this rule. If you leave now, they'll be lost.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="confirmLeaveCancel()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmLeaveProceed()">Leave Without Saving</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  function escHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* ── Unsaved-changes guard ──
+     Any real edit (typed text, checkbox flip, chip add/remove, RTE
+     formatting) marks the form dirty. Cancel/Back-link go through the
+     custom Unsaved Changes modal below (matches Living DS, not the
+     browser's native confirm()); a successful save clears the flag first
+     so the intentional redirect never triggers the warning. Programmatic
+     prefill in initMode() sets .value/.checked directly, which doesn't
+     fire input/change events, so it never marks the form dirty on load. */
+  var formDirty = false;
+  var pendingLeaveAction = null;
+  function markDirty() { formDirty = true; }
+  function confirmLeave(onConfirm) {
+    if (!formDirty) { onConfirm(); return; }
+    pendingLeaveAction = onConfirm;
+    document.getElementById('unsaved-changes-modal').classList.add('show');
+  }
+  function confirmLeaveCancel() {
+    pendingLeaveAction = null;
+    document.getElementById('unsaved-changes-modal').classList.remove('show');
+  }
+  function confirmLeaveProceed() {
+    document.getElementById('unsaved-changes-modal').classList.remove('show');
+    // User chose to leave anyway — clear the flag so the native
+    // beforeunload prompt (unavoidable for tab-close/refresh/typed URLs —
+    // browsers block any custom UI there) doesn't immediately re-ask.
+    formDirty = false;
+    var action = pendingLeaveAction;
+    pendingLeaveAction = null;
+    if (action) action();
+  }
+  window.addEventListener('beforeunload', function(e) {
+    if (formDirty) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  /* ── localStorage (same keys/version as settings.html) ──
+     ⚠ NOTIF_VER IS DUPLICATED IN settings.html (Notification Management
+     section). Both pages read/write QUADRA_NOTIFICATION_RULES and each wipes
+     the store whenever the persisted version tag doesn't match ITS OWN
+     constant — so if the schema ever changes, BUMP BOTH FILES IN THE SAME
+     COMMIT. Bumping only one makes the two pages reset each other's data on
+     every navigation between them, silently destroying all saved rules. */
+  var NOTIF_KEY  = 'QUADRA_NOTIFICATION_RULES';
+  var NOTIF_VKEY = 'QUADRA_NOTIFICATION_RULES_V';
+  var NOTIF_VER  = 1;   // keep in sync with settings.html
+
+  function loadNotificationRules() {
+    var ver = parseInt(localStorage.getItem(NOTIF_VKEY), 10);
+    if (ver !== NOTIF_VER) {
+      saveNotificationRules([]);
+      localStorage.setItem(NOTIF_VKEY, String(NOTIF_VER));
+      return [];
+    }
+    try { return JSON.parse(localStorage.getItem(NOTIF_KEY)) || []; } catch(e) { return []; }
+  }
+  function saveNotificationRules(rules) {
+    localStorage.setItem(NOTIF_KEY, JSON.stringify(rules));
+  }
+  function nextNotificationRuleId(rules) {
+    if (!rules.length) return 1;
+    return Math.max.apply(null, rules.map(function(r) { return r.id; })) + 1;
+  }
+
+  /* ── Trigger Type ── selects WHICH date the Schedule counts down to.
+     Contract Expiry (default) and Birthday share the exact same Schedule
+     UI/semantics ("N days before"); only the source date + whether it
+     recurs differs. Adding a third trigger type = one more branch in
+     resolveTriggerDate(), nothing else changes. Initialized before
+     initMode() below, which needs the widget ready to set its value when
+     editing/duplicating an existing rule. */
+  var TRIGGER_TYPES = ['Contract Expiry', 'Birthday'];
+  QuadraDropdown.init(document.getElementById('nre-trigger-select'), TRIGGER_TYPES, {
+    value: 'Contract Expiry',
+    onChange: function() { markDirty(); updatePreviewDateColumnLabel(); renderLivePreview(); }
+  });
+  function getTriggerType() {
+    return QuadraDropdown.getValue(document.getElementById('nre-trigger-select'));
+  }
+  function updatePreviewDateColumnLabel() {
+    document.getElementById('nre-preview-date-col').textContent = getTriggerType() === 'Birthday' ? 'Birthday' : 'End Date';
+  }
+
+  /* ── Mode: create vs edit vs duplicate ──
+     ?id=N        → edit that rule in place (Save updates it).
+     ?duplicate=N → prefill a NEW rule from N's fields (Save creates a
+     fresh rule, editingRuleId stays null) so the user reviews/renames
+     before it's persisted, rather than an implicit auto-copy. */
+  var editingRuleId = null;
+  var recipients = [];
+  (function initMode() {
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id');
+    var dupId = params.get('duplicate');
+    var isDuplicate = !id && !!dupId;
+    var lookupId = id || dupId;
+    if (!lookupId) return;
+    var rule = loadNotificationRules().find(function(r) { return String(r.id) === lookupId; });
+    if (!rule) {
+      // ?id=/?duplicate= pointed at a rule that no longer exists — fall back
+      // to create mode, but say so instead of silently swapping the user's intent.
+      if (window.QuadraToast) QuadraToast.show('Notification rule not found.', 'error');
+      return;
+    }
+    if (!isDuplicate) {
+      editingRuleId = rule.id;
+      document.getElementById('bc-mode').textContent = 'Edit Rule';
+      document.getElementById('page-title-mode').textContent = 'Edit Notification Rule';
+      document.getElementById('nre-save-btn').textContent = 'Save';
+    }
+    QuadraDropdown.setValue(document.getElementById('nre-trigger-select'), rule.triggerType || 'Contract Expiry');
+    document.getElementById('nre-name').value = isDuplicate ? rule.name + ' (Copy)' : rule.name;
+    recipients = rule.recipients.slice();
+    document.getElementById('nre-subject').value = rule.subject;
+    document.getElementById('rte-body').innerHTML = rule.bodyHtml;
+    document.getElementById('sched-30').checked = rule.scheduleDays.indexOf(30) !== -1;
+    document.getElementById('sched-14').checked = rule.scheduleDays.indexOf(14) !== -1;
+    var customDay = rule.scheduleDays.filter(function(d) { return d !== 30 && d !== 14; })[0];
+    if (customDay) {
+      document.getElementById('sched-custom').checked = true;
+      document.getElementById('sched-custom-days').disabled = false;
+      document.getElementById('sched-custom-days').value = customDay;
+    }
+    document.getElementById('nre-send-time').value = rule.sendTime;
+    document.getElementById('nre-active').checked = rule.active;
+    renderEmailChips();
+  })();
+
+  /* ── Email chip input ── */
+  function renderEmailChips() {
+    document.getElementById('email-chip-container').innerHTML = recipients.map(function(email, i) {
+      return '<span class="emp-chip">' + escHtml(email) +
+        '<button type="button" class="emp-chip-remove" aria-label="Remove ' + escHtml(email) + '" onclick="removeEmailChip(' + i + ')">' +
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
+        '</button></span>';
+    }).join('');
+    var input = document.getElementById('email-chip-input');
+    var full = recipients.length >= 10;
+    input.style.display = full ? 'none' : '';
+    document.getElementById('email-chip-hint').textContent = recipients.length + ' of 10 recipients' + (full ? ' (maximum reached)' : '');
+    document.getElementById('email-chip-hint').style.color = full ? 'var(--primary)' : 'var(--t4)';
+  }
+
+  function removeEmailChip(i) {
+    clearEmailChipError();
+    recipients.splice(i, 1);
+    renderEmailChips();
+    markDirty();
+  }
+
+  function commitEmailChip() {
+    var input = document.getElementById('email-chip-input');
+    var val = input.value.trim().replace(/,$/, '');
+    if (!val) return;
+    if (recipients.length >= 10) { input.value = ''; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      showEmailChipError('Enter a valid email address.');
+      return;
+    }
+    if (recipients.some(function(e) { return e.toLowerCase() === val.toLowerCase(); })) {
+      showEmailChipError('This email is already added.');
+      return;
+    }
+    recipients.push(val);
+    input.value = '';
+    clearEmailChipError();
+    renderEmailChips();
+    markDirty();
+    closeEmailSuggestions();
+    // No preview refresh here: the live preview depends only on schedule days.
+  }
+
+  /* ── Recipient autocomplete — suggestions only, typing any email (not just
+     an employee's) and pressing Enter/comma still works via commitEmailChip()
+     above. Reuses the Employee Combo dropdown component (.emp-combo-list). ── */
+  function renderEmailSuggestions(query) {
+    var list = document.getElementById('email-suggest-list');
+    if (!query) { closeEmailSuggestions(); return; }
+    var q = query.toLowerCase();
+    var matches = QUADRA_EMPLOYEES.filter(function(e) {
+      return e.email && (e.name.toLowerCase().indexOf(q) !== -1 || e.email.toLowerCase().indexOf(q) !== -1)
+        && recipients.indexOf(e.email) === -1;
+    }).slice(0, 6);
+    list.innerHTML = matches.length ? matches.map(function(e) {
+      return '<div class="emp-combo-item" data-email="' + escHtml(e.email) + '">' +
+        '<div class="emp-combo-item-avatar" style="background:' + e.color + '">' + escHtml(e.initials) + '</div>' +
+        '<div><div class="emp-combo-item-name">' + escHtml(e.name) + '</div><div class="emp-combo-item-meta">' + escHtml(e.email) + '</div></div>' +
+      '</div>';
+    }).join('') : '<div class="emp-combo-empty">No matching employees</div>';
+    list.classList.add('open');
+  }
+
+  function closeEmailSuggestions() {
+    var list = document.getElementById('email-suggest-list');
+    list.classList.remove('open');
+    list.innerHTML = '';
+  }
+
+  function selectSuggestedEmail(email) {
+    var input = document.getElementById('email-chip-input');
+    input.value = email;
+    commitEmailChip();
+    input.focus();
+  }
+
+  document.getElementById('email-chip-input').addEventListener('input', function() {
+    renderEmailSuggestions(this.value.trim());
+  });
+  document.getElementById('email-suggest-list').addEventListener('mousedown', function(e) {
+    var item = e.target.closest('.emp-combo-item');
+    if (!item) return;
+    e.preventDefault(); // keep the input focused so this doesn't race the blur handler below
+    selectSuggestedEmail(item.dataset.email);
+  });
+
+  function showEmailChipError(msg) {
+    document.getElementById('email-chip-wrap').classList.add('is-error');
+    var err = document.getElementById('email-chip-err');
+    err.textContent = msg; err.style.display = 'block';
+  }
+  function clearEmailChipError() {
+    document.getElementById('email-chip-wrap').classList.remove('is-error');
+    var err = document.getElementById('email-chip-err');
+    err.textContent = ''; err.style.display = 'none';
+  }
+
+  document.getElementById('email-chip-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); commitEmailChip(); }
+    else if (e.key === 'Escape') { closeEmailSuggestions(); }
+    else if (e.key === 'Backspace' && !this.value && recipients.length) { removeEmailChip(recipients.length - 1); }
+    else { clearEmailChipError(); }
+  });
+  /* Committing only on Enter/comma silently loses an email that was typed and
+     then clicked away from. Blur commits it too — same validation path, so an
+     invalid or duplicate address still surfaces its error instead of vanishing.
+     (A suggestion click uses mousedown+preventDefault above, so it never
+     triggers this blur in the first place.) */
+  document.getElementById('email-chip-input').addEventListener('blur', function() {
+    commitEmailChip();
+    closeEmailSuggestions();
+  });
+
+  /* ── Rich text editor ── */
+  document.querySelectorAll('.rte-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.execCommand(btn.dataset.cmd, false, null);
+      document.getElementById('rte-body').focus();
+      updateToolbarState();
+    });
+  });
+
+  /* Roving tabindex — an ARIA toolbar is ONE tab stop; Left/Right (and
+     Home/End) move focus between its buttons. */
+  var rteButtons = Array.prototype.slice.call(document.querySelectorAll('.rte-toolbar .rte-btn'));
+  var rteFocusIndex = 0;
+  function setRteFocusIndex(i, doFocus) {
+    if (!rteButtons.length) return;
+    rteFocusIndex = (i + rteButtons.length) % rteButtons.length;
+    rteButtons.forEach(function(b, bi) {
+      b.setAttribute('tabindex', bi === rteFocusIndex ? '0' : '-1');
+    });
+    if (doFocus) rteButtons[rteFocusIndex].focus();
+  }
+  setRteFocusIndex(0, false);
+  rteButtons.forEach(function(btn, i) {
+    // Clicking a button makes it the toolbar's tab stop, per the ARIA pattern.
+    btn.addEventListener('mousedown', function() { setRteFocusIndex(i, false); });
+    btn.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight')      { e.preventDefault(); setRteFocusIndex(i + 1, true); }
+      else if (e.key === 'ArrowLeft')  { e.preventDefault(); setRteFocusIndex(i - 1, true); }
+      else if (e.key === 'Home')       { e.preventDefault(); setRteFocusIndex(0, true); }
+      else if (e.key === 'End')        { e.preventDefault(); setRteFocusIndex(rteButtons.length - 1, true); }
+    });
+  });
+  function updateToolbarState() {
+    document.querySelectorAll('.rte-btn').forEach(function(btn) {
+      var isActive = document.queryCommandState(btn.dataset.cmd);
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+  document.getElementById('rte-body').addEventListener('keyup', updateToolbarState);
+  document.getElementById('rte-body').addEventListener('mouseup', updateToolbarState);
+
+  /* ── Schedule checkboxes ── */
+  document.getElementById('sched-custom').addEventListener('change', function() {
+    document.getElementById('sched-custom-days').disabled = !this.checked;
+    if (!this.checked) hideFieldErr('nre-custom-err');
+    renderLivePreview();
+  });
+  ['sched-30', 'sched-14'].forEach(function(id) {
+    document.getElementById(id).addEventListener('change', renderLivePreview);
+  });
+  document.getElementById('sched-custom-days').addEventListener('input', function() {
+    hideFieldErr('nre-custom-err');
+    renderLivePreview();
+  });
+
+  /* Returns true when Custom is checked but its value is missing or outside
+     1–365 — the caller shows a specific error instead of the generic
+     "select at least one schedule option". */
+  function isCustomScheduleInvalid() {
+    if (!document.getElementById('sched-custom').checked) return false;
+    var n = parseInt(document.getElementById('sched-custom-days').value, 10);
+    return isNaN(n) || n < 1 || n > 365;
+  }
+
+  function getScheduleDays() {
+    var days = [];
+    if (document.getElementById('sched-30').checked) days.push(30);
+    if (document.getElementById('sched-14').checked) days.push(14);
+    if (document.getElementById('sched-custom').checked) {
+      var n = parseInt(document.getElementById('sched-custom-days').value, 10);
+      if (!isNaN(n) && n >= 1 && n <= 365) days.push(n);
+    }
+    // Custom may duplicate a preset (e.g. 30 checked AND custom = 30) —
+    // dedupe so the stored rule round-trips losslessly.
+    days = days.filter(function(d, i) { return days.indexOf(d) === i; });
+    days.sort(function(a, b) { return b - a; });
+    return days;
+  }
+
+  /* ── Live preview ── */
+  function parseEndContractDate(str) {
+    if (!str) return null;
+    var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var parts = str.split(' ');
+    if (parts.length !== 3) return null;
+    var d = parseInt(parts[0], 10), m = MONTHS.indexOf(parts[1]), y = parseInt(parts[2], 10);
+    if (isNaN(d) || m === -1 || isNaN(y)) return null;
+    return new Date(y, m, d);
+  }
+
+  /* emp.dob is "15 March 1990" — full month name, unlike endContract's
+     3-letter abbreviation above. Same parsing convention this app already
+     uses for DOB elsewhere (employee-personal-edit.html's inline datepicker,
+     employee-edit.html), duplicated locally per this prototype's
+     per-page-script convention. */
+  function parseFullDateStr(str) {
+    if (!str) return null;
+    var MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var parts = str.split(' ');
+    if (parts.length !== 3) return null;
+    var d = parseInt(parts[0], 10), m = MONTHS_FULL.indexOf(parts[1]), y = parseInt(parts[2], 10);
+    if (isNaN(d) || m === -1 || isNaN(y)) return null;
+    return new Date(y, m, d);
+  }
+
+  /* Birthdays recur every year — unlike a contract end date, one that
+     already passed this year isn't "gone," it's simply due again next
+     year. Roll forward to whichever occurrence is next (today still
+     counts as "occurring today", not "already passed"). */
+  function nextBirthdayOccurrence(dob, today) {
+    var next = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+    if (next < today) next.setFullYear(next.getFullYear() + 1);
+    return next;
+  }
+
+  /* Per-trigger-type date resolution — the one place a new trigger type
+     needs a new branch. Returns { date, label } or null if this employee
+     has no usable date for the current trigger type. */
+  function resolveTriggerDate(emp, triggerType, today) {
+    if (triggerType === 'Birthday') {
+      var dob = parseFullDateStr(emp.dob);
+      if (!dob) return null;
+      return { date: nextBirthdayOccurrence(dob, today), label: emp.dob };
+    }
+    var latest = getLatestContractEntry(emp);
+    var end = latest ? parseEndContractDate(latest.endContract) : null;
+    if (!end) return null;
+    return { date: end, label: latest.endContract };
+  }
+
+  /* Contract history = static seed (employees-data.js) + renewals written to
+     localStorage by employee-contract-renew.html / employee-salary-update.html.
+     Same shape as getFullContractHistory() in employee-detail.html,
+     employee-contract-edit.html and employee-contract-renew.html — duplicated
+     locally per this prototype's per-page-script convention. */
+  function getFullContractHistory(emp, badge) {
+    var extra = [];
+    try { extra = JSON.parse(localStorage.getItem('quadra_contract_history_' + badge)) || []; } catch(e) {}
+    return (emp.contractHistory || []).concat(extra);
+  }
+
+  /* The employee's current contract period. Two things matter here:
+     - order by startContract DESC (employee-detail.html's convention), not
+       array position — a renewal is appended but may not be chronologically last;
+     - only type:'contract' entries define a contract period. A salary update
+       appends a type:'salary' entry with endContract:null, which would
+       otherwise make the employee vanish from this preview. */
+  function getLatestContractEntry(emp) {
+    return getFullContractHistory(emp, emp.badge)
+      .filter(function(e) { return (e.type || 'contract') === 'contract'; })
+      .slice()
+      .sort(function(a, b) { return new Date(b.startContract) - new Date(a.startContract); })[0] || null;
+  }
+
+  /* A schedule tier `d` means "email when the contract has exactly d days
+     left". Days-left counts DOWN, so a tier is still AHEAD of an employee
+     (i.e. the rule will actually email them) only while d <= daysLeft:
+       - d  <  daysLeft → fires in (daysLeft - d) days
+       - d === daysLeft → fires today
+       - d  >  daysLeft → that tier already passed and will never fire again
+     An employee therefore matches the rule when at least one tier is still
+     ahead, and the NEXT tier to fire is the LARGEST of those (largest d =
+     smallest remaining wait). The earlier `daysLeft <= max(scheduleDays)`
+     window did the reverse: it showed people whose triggers had all passed
+     and hid people about to be emailed (e.g. 15 days left, tier [14] — one
+     day from being emailed, yet filtered out). */
+  function computeLivePreviewMatches(scheduleDays) {
+    if (!scheduleDays.length) return [];
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var triggerType = getTriggerType();
+    var matches = [];
+    QUADRA_EMPLOYEES.forEach(function(emp) {
+      var resolved = resolveTriggerDate(emp, triggerType, today);
+      if (!resolved) return;
+      var daysLeft = Math.round((resolved.date - today) / 86400000);
+      if (daysLeft < 0) return;   // already passed with no recurrence left to fire
+      var upcoming = scheduleDays.filter(function(d) { return d <= daysLeft; });
+      if (!upcoming.length) return;
+      var trigger = Math.max.apply(null, upcoming);
+      matches.push({ badge: emp.badge, name: emp.name, endDate: resolved.label, daysLeft: daysLeft, trigger: trigger });
+    });
+    matches.sort(function(a, b) { return a.daysLeft - b.daysLeft; });
+    return matches;
+  }
+
+  function renderLivePreview() {
+    var matches = computeLivePreviewMatches(getScheduleDays());
+    var tbody = document.getElementById('nre-preview-tbody');
+    var empty = document.getElementById('nre-preview-empty');
+    if (!matches.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    tbody.innerHTML = matches.map(function(m) {
+      return '<tr>' +
+        '<td>' + escHtml(m.name) + '</td>' +
+        '<td>' + escHtml(m.endDate) + '</td>' +
+        '<td>' + m.daysLeft + '</td>' +
+        '<td>' + m.trigger + 'd before</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* ── Save / validate ── */
+  function clearAllFieldErrors() {
+    ['nre-name-err', 'email-chip-err', 'nre-subject-err', 'nre-body-err', 'nre-custom-err', 'nre-schedule-err', 'nre-send-time-err'].forEach(function(id) {
+      var el = document.getElementById(id);
+      el.textContent = ''; el.style.display = 'none';
+    });
+  }
+
+  function saveRule() {
+    clearAllFieldErrors();
+
+    /* Flush an email that was typed but never committed (no Enter/comma, and
+       Save was clicked directly — mousedown on the footer button doesn't
+       always land a blur before the click handler runs). */
+    commitEmailChip();
+    if (document.getElementById('email-chip-input').value.trim()) {
+      // commitEmailChip() rejected it (bad format / duplicate) and already
+      // showed why — don't save while a recipient is still pending.
+      focusFieldForErr('email-chip-err');
+      return;
+    }
+
+    var name = document.getElementById('nre-name').value.trim();
+    if (!name) { showFieldErr('nre-name-err', 'Rule name is required.'); return; }
+
+    if (!recipients.length) { showFieldErr('email-chip-err', 'Add at least one recipient.'); return; }
+
+    var subject = document.getElementById('nre-subject').value.trim();
+    if (!subject) { showFieldErr('nre-subject-err', 'Subject is required.'); return; }
+
+    var bodyHtml = document.getElementById('rte-body').innerHTML;
+    var bodyText = document.getElementById('rte-body').textContent.trim();
+    if (!bodyText) { showFieldErr('nre-body-err', 'Body is required.'); return; }
+
+    if (isCustomScheduleInvalid()) { showFieldErr('nre-custom-err', 'Enter 1-365 days.'); return; }
+
+    var scheduleDays = getScheduleDays();
+    if (!scheduleDays.length) { showFieldErr('nre-schedule-err', 'Select at least one schedule option.'); return; }
+
+    var sendTime = document.getElementById('nre-send-time').value;
+    if (!sendTime) { showFieldErr('nre-send-time-err', 'Send time is required.'); return; }
+
+    var active = document.getElementById('nre-active').checked;
+    var triggerType = getTriggerType();
+    var rules = loadNotificationRules();
+
+    if (editingRuleId !== null) {
+      var existing = rules.find(function(r) { return r.id === editingRuleId; });
+      if (!existing) {
+        // Deleted from another tab between page load and save.
+        formDirty = false;
+        if (window.QuadraToast) QuadraToast.show('This rule no longer exists. It may have been deleted.', 'error');
+        setTimeout(function() { window.location.href = 'settings.html?section=notification-management'; }, 1200);
+        return;
+      }
+      Object.assign(existing, { triggerType: triggerType, name: name, recipients: recipients, subject: subject, bodyHtml: bodyHtml, scheduleDays: scheduleDays, sendTime: sendTime, active: active });
+    } else {
+      rules.push({
+        id: nextNotificationRuleId(rules), triggerType: triggerType, name: name, recipients: recipients, subject: subject,
+        bodyHtml: bodyHtml, scheduleDays: scheduleDays, sendTime: sendTime, active: active,
+        createdAt: new Date().toISOString()
+      });
+    }
+    saveNotificationRules(rules);
+    formDirty = false;
+
+    try {
+      localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({
+        message: 'Notification rule has been ' + (editingRuleId !== null ? 'updated' : 'created') + '.',
+        type: 'success'
+      }));
+    } catch(e) {}
+    window.location.href = 'settings.html?section=notification-management';
+  }
+
+  /* Error element id → the form control it belongs to. The page is taller than
+     the viewport and the Save button lives in a fixed footer, so Save can be
+     pressed while the offending field is scrolled off-screen — showing the
+     message alone would be invisible. Every showFieldErr() therefore also
+     moves focus to (and scrolls to) the control that failed. */
+  var FIELD_ERR_TARGET = {
+    'nre-name-err':      'nre-name',
+    'email-chip-err':    'email-chip-input',
+    'nre-subject-err':   'nre-subject',
+    'nre-body-err':      'rte-body',
+    'nre-custom-err':    'sched-custom-days',
+    'nre-schedule-err':  'sched-30',
+    'nre-send-time-err': 'nre-send-time'
+  };
+
+  function focusFieldForErr(errId) {
+    var target = document.getElementById(FIELD_ERR_TARGET[errId]);
+    // #email-chip-input is display:none once 10 recipients exist; focusing a
+    // hidden element is a silent no-op, so guard the scroll too.
+    if (!target || !target.offsetParent && target.offsetHeight === 0) return;
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function showFieldErr(id, msg) {
+    var el = document.getElementById(id);
+    el.textContent = msg; el.style.display = 'block';
+    focusFieldForErr(id);
+  }
+  function hideFieldErr(id) {
+    var el = document.getElementById(id);
+    el.textContent = ''; el.style.display = 'none';
+  }
+
+  /* Delegated dirty-tracking: covers every real field (text/textarea/number
+     inputs, checkboxes, the RTE's contenteditable body — execCommand fires a
+     native 'input' event too) without a listener per control. */
+  document.querySelector('.nre-form').addEventListener('input', markDirty);
+  document.querySelector('.nre-form').addEventListener('change', markDirty);
+
+  updatePreviewDateColumnLabel();
+  renderLivePreview();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

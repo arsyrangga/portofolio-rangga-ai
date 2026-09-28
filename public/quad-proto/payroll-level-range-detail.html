@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Level Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .emp-hero-sub span (unguarded, same 13px/#6B7280 values as the shared
+       layout.css .emp-hero-sub span:not(.tag)) was dead code on this page —
+       this page's hero markup has no .emp-hero-sub at all (hero only shows
+       avatar + name + actions). Deleted rather than fixed/kept, per the
+       dead-code rule (verified via grep: zero .emp-hero-sub usage in this
+       file's body). Flagged in Task 8; resolved here in Task 9. */
+
+    /* .stat-row — RESOLVED in Task 11: now uses the shared
+       .stat-row.flex variant in layout.css (COMMON PATTERNS GROUP 3).
+       See the JS template markup below. */
+
+    /* Close cousin of the shared .emp-meta (13px/t3) but a smaller/lighter
+       variant (12px/#6B7280, 1px margin) used only for the position line
+       under an employee name in this page's table. Single use, kept
+       page-specific rather than forcing a merge with .emp-meta. */
+    .emp-pos  { font-size: 12px; color: #6B7280; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="level-range"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="payroll-level-range.html">Level Range</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bc-level">Level</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="main-content">
+    <!-- populated by JS -->
+  </main>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<!-- ═══ EDIT LEVEL MODAL ═══ -->
+<div id="edit-overlay" class="modal-overlay">
+  <div class="modal-box" style="width:480px">
+    <div class="modal-head">
+      <span class="modal-head-title" id="edit-modal-title">Edit Level</span>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="m-field">
+          <label>Level Number</label>
+          <input type="number" id="edit-level-num" class="text-input" disabled>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="m-field">
+          <label>Minimum Wage <span style="color:#EF4444">*</span></label>
+          <div class="f-input">
+            <span class="input-prefix">IDR</span>
+            <input type="text" id="edit-min-wage" placeholder="e.g. 5.000.000" class="text-input">
+          </div>
+          <div class="m-err" id="edit-err-min"></div>
+        </div>
+        <div class="m-field">
+          <label style="display:flex;align-items:center;gap:5px;">Maximum Wage
+            <span class="m-tooltip-w" data-tip='Leave empty for "No upper limit"'>
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#9CA3AF" stroke-width="1.3"/><path d="M7 6v4" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4.5" r="0.6" fill="#9CA3AF"/></svg>
+            </span>
+          </label>
+          <div class="f-input">
+            <span class="input-prefix">IDR</span>
+            <input type="text" id="edit-max-wage" placeholder="e.g. 10.000.000" class="text-input">
+          </div>
+          <div class="m-err" id="edit-err-max"></div>
+        </div>
+      </div>
+      <div class="m-field">
+        <label>Overtime Rate <span style="color:#EF4444">*</span></label>
+        <div class="f-input">
+          <span class="input-prefix">IDR</span>
+          <input type="text" id="edit-ot-rate" placeholder="e.g. 50.000" class="text-input">
+          <span class="input-suffix">/ hour</span>
+        </div>
+        <div class="m-err" id="edit-err-ot"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditLevel()">Save Level</button>
+    </div>
+  </div>
+</div>
+
+<div id="delete-overlay" class="modal-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Level</span>
+      <button class="modal-close" onclick="closeDelete()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Delete <span id="delete-level-name">this level</span>?</div>
+        <div class="modal-sub-desc">Employees currently assigned to this level will lose their salary band reference. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDelete()">Cancel</button>
+      <button class="btn btn-danger" onclick="executeDelete()">Delete Level</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script>
+  /* ── Data ────────────────────────────────────────────── */
+  var DEFAULT_LEVELS = [
+    { level: 1, minWage: 0,        maxWage: 4999999,   otRate: 25000  },
+    { level: 2, minWage: 5000000,  maxWage: 7999999,   otRate: 40000  },
+    { level: 3, minWage: 8000000,  maxWage: 11999999,  otRate: 55000  },
+    { level: 4, minWage: 12000000, maxWage: 19999999,  otRate: 85000  },
+    { level: 5, minWage: 20000000, maxWage: null,       otRate: 130000 }
+  ];
+
+  var LEVEL_COLORS = [
+    '#6B7280', '#22C55E', '#3B82F6', '#E04A2A', '#7C3AED'
+  ];
+
+
+  var STATUS_CLS = {
+    'Active':    'tag tag-dot tag-success',
+    'Probation': 'tag tag-dot tag-warning',
+    'On Leave':  'tag tag-dot tag-info',
+    'Inactive':  'tag tag-dot tag-neutral'
+  };
+
+  function getLevels() {
+    try { var d = JSON.parse(localStorage.getItem('quadra_level_ranges')); return (d && d.length) ? d : DEFAULT_LEVELS.slice(); }
+    catch(e) { return DEFAULT_LEVELS.slice(); }
+  }
+  function saveLevels(levels) { localStorage.setItem('quadra_level_ranges', JSON.stringify(levels)); }
+  function fmtNum(n) { return 'IDR ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  /* ── Read level from URL ─────────────────────────────── */
+  var params = new URLSearchParams(window.location.search);
+  var levelNum = parseInt(params.get('level')) || 1;
+
+  var sortedLevels = getLevels().sort(function(a, b) { return a.level - b.level; });
+  var levelIdx = sortedLevels.findIndex(function(x) { return x.level === levelNum; });
+  var lvl = sortedLevels[levelIdx];
+
+  if (!lvl) {
+    document.getElementById('main-content').innerHTML =
+      '<div style="padding:48px;text-align:center;color:#9CA3AF;font-size:14px">Level not found. <a href="payroll-level-range.html" style="color:#E04A2A">Go back</a></div>';
+  } else {
+    var badgeColor = LEVEL_COLORS[levelIdx % LEVEL_COLORS.length];
+    var maxWageStr = lvl.maxWage !== null ? fmtNum(lvl.maxWage) : 'No upper limit';
+
+    var rangeStr = lvl.maxWage !== null
+      ? fmtNum(lvl.minWage) + ' – ' + fmtNum(lvl.maxWage)
+      : '≥ ' + fmtNum(lvl.minWage);
+
+    document.title = 'QuadraNG — Level ' + levelNum;
+    document.getElementById('bc-level').textContent = 'Level ' + levelNum;
+
+    var employees = QUADRA_EMPLOYEES.filter(function(e) {
+      if (e.salary < lvl.minWage) return false;
+      if (lvl.maxWage !== null && e.salary > lvl.maxWage) return false;
+      return true;
+    });
+
+    var viewSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+
+    function buildEmpRows(q) {
+      var filtered = q
+        ? employees.filter(function(e) {
+            var s = q.toLowerCase();
+            return e.name.toLowerCase().indexOf(s) !== -1
+                || e.badge.toLowerCase().indexOf(s) !== -1
+                || (e.pos  || '').toLowerCase().indexOf(s) !== -1;
+          })
+        : employees;
+      if (filtered.length === 0) {
+        return '<tr><td colspan="5"><div class="empty-state">' +
+          '<svg class="empty-state-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.5"/><path d="M20 13v8M20 25v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+          '<div class="empty-state-text">' + (q ? 'No employees match your search' : 'No employees registered in this level') + '</div>' +
+        '</div></td></tr>';
+      }
+      return filtered.map(function(emp) {
+        var cls = STATUS_CLS[emp.status] || 'tag tag-dot tag-neutral';
+        return '<tr data-badge="' + emp.badge + '">' +
+          '<td class="emp-id">' + emp.badge + '</td>' +
+          '<td><div class="emp-info">' +
+            '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>' +
+            '<div><div class="emp-name">' + emp.name + '</div><div class="emp-pos">' + emp.pos + '</div></div>' +
+          '</div></td>' +
+          '<td style="font-size:13px;font-weight:500;color:#111827;font-variant-numeric:tabular-nums;">' + fmtNum(emp.salary) + '</td>' +
+          '<td><span class="' + cls + '">' + emp.status + '</span></td>' +
+          '<td><div class="action-btns">' +
+            '<button class="icon-btn" title="View Employee">' + viewSvg + '</button>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function filterEmps(q) {
+      var rows = buildEmpRows(q);
+      var filtered = q
+        ? employees.filter(function(e) {
+            var s = q.toLowerCase();
+            return e.name.toLowerCase().indexOf(s) !== -1
+                || e.badge.toLowerCase().indexOf(s) !== -1
+                || (e.pos || '').toLowerCase().indexOf(s) !== -1;
+          })
+        : employees;
+      document.getElementById('emp-tbody').innerHTML = rows;
+      document.getElementById('emp-count-badge').textContent = filtered.length;
+    }
+
+    var empRows = buildEmpRows('');
+
+    document.getElementById('main-content').innerHTML =
+      /* Back link */
+      '<div style="width:100%;">' +
+        '<a href="payroll-level-range.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#6B7280;text-decoration:none;" onmouseover="this.style.color=\'#111827\'" onmouseout="this.style.color=\'#6B7280\'">' +
+          '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          'Back to Level Range' +
+        '</a>' +
+      '</div>' +
+
+      /* Hero Header */
+      '<div class="emp-hero">' +
+        '<div class="emp-avatar-lg" style="background:' + badgeColor + '">' + levelNum + '</div>' +
+        '<div class="emp-hero-info">' +
+          '<div class="emp-hero-name">Level ' + levelNum + '</div>' +
+        '</div>' +
+        '<div class="emp-hero-actions">' +
+          '<button class="btn btn-outline" onclick="openEditModal()">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Edit Level' +
+          '</button>' +
+          '<button class="btn btn-danger-outline" onclick="confirmDelete()">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Delete Level' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+
+      /* Stat Cards */
+      '<div class="stat-row flex">' +
+        '<div class="stat-card">' +
+          '<div class="stat-label">Minimum Wage</div>' +
+          '<div class="stat-value">' + fmtNum(lvl.minWage) + '</div>' +
+        '</div>' +
+        '<div class="stat-card">' +
+          '<div class="stat-label">Maximum Wage</div>' +
+          '<div class="stat-value' + (lvl.maxWage === null ? ' muted' : '') + '">' + maxWageStr + '</div>' +
+        '</div>' +
+        '<div class="stat-card">' +
+          '<div class="stat-label">Overtime Rate / hr</div>' +
+          '<div class="stat-value">' + fmtNum(lvl.otRate) + '</div>' +
+        '</div>' +
+      '</div>' +
+
+      /* Employees Table */
+      '<div class="section-card">' +
+        '<div class="section-head">' +
+          '<div class="section-title">Registered Employees <span class="count-badge" id="emp-count-badge">' + employees.length + '</span></div>' +
+        '</div>' +
+        '<div class="table-toolbar">' +
+          '<div class="search-w">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9CA3AF" stroke-width="1.4"/><path d="M9.5 9.5l3 3" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>' +
+            '<input type="text" id="emp-search" placeholder="Search employee…" oninput="filterEmps(this.value)">' +
+          '</div>' +
+        '</div>' +
+        '<table>' +
+          '<thead><tr>' +
+            '<th style="width:110px">Employee ID</th>' +
+            '<th>Employee</th>' +
+            '<th style="width:200px">Current Salary</th>' +
+            '<th style="width:120px">Status</th>' +
+            '<th style="width:72px;text-align:right">Actions</th>' +
+          '</tr></thead>' +
+          '<tbody id="emp-tbody">' + empRows + '</tbody>' +
+        '</table>' +
+      '</div>';
+  }
+
+  /* ── Employee row navigation ────────────────────────── */
+  var empTbody = document.getElementById('emp-tbody');
+  if (empTbody) {
+    empTbody.addEventListener('click', function(e) {
+      var row = e.target.closest('tr[data-badge]');
+      if (row) window.location.href = 'employee-detail.html?badge=' + row.dataset.badge + '&ref=level-' + levelNum + '#contract';
+    });
+  }
+
+  /* ── Edit modal ─────────────────────────────────────── */
+  function openEditModal() {
+    if (!lvl) return;
+    document.getElementById('edit-modal-title').textContent = 'Edit Level ' + levelNum;
+    document.getElementById('edit-level-num').value = lvl.level;
+    document.getElementById('edit-min-wage').value  = String(lvl.minWage).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    document.getElementById('edit-max-wage').value  = lvl.maxWage !== null ? String(lvl.maxWage).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+    document.getElementById('edit-ot-rate').value   = String(lvl.otRate).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    ['edit-err-min','edit-err-max','edit-err-ot'].forEach(function(id) {
+      var el = document.getElementById(id); el.textContent = ''; el.classList.remove('show');
+    });
+    ['edit-min-wage','edit-max-wage','edit-ot-rate'].forEach(function(id) {
+      document.getElementById(id).classList.remove('is-error');
+    });
+    document.getElementById('edit-overlay').classList.add('open');
+  }
+
+  function closeEditModal() { document.getElementById('edit-overlay').classList.remove('open'); }
+
+  function saveEditLevel() {
+    var minRaw = document.getElementById('edit-min-wage').value.replace(/\./g, '');
+    var maxRaw = document.getElementById('edit-max-wage').value.replace(/\./g, '');
+    var otRaw  = document.getElementById('edit-ot-rate').value.replace(/\./g, '');
+
+    function showErr(inputId, errId, msg) {
+      var inp = document.getElementById(inputId), err = document.getElementById(errId);
+      inp.classList.add('is-error'); err.textContent = msg; err.classList.add('show'); inp.focus();
+    }
+    if (!minRaw) { showErr('edit-min-wage', 'edit-err-min', 'Minimum wage is required.'); return; }
+    if (!otRaw)  { showErr('edit-ot-rate',  'edit-err-ot',  'Overtime rate is required.'); return; }
+
+    var minWage = parseInt(minRaw), maxWage = maxRaw ? parseInt(maxRaw) : null, otRate = parseInt(otRaw);
+
+    if (maxWage !== null && minWage >= maxWage) {
+      showErr('edit-min-wage', 'edit-err-min', 'Minimum wage must be less than maximum wage.'); return;
+    }
+
+    /* Overlap check */
+    var levels = getLevels();
+    var newMaxVal = maxWage === null ? Infinity : maxWage;
+    for (var i = 0; i < levels.length; i++) {
+      var lv = levels[i];
+      if (lv.level === levelNum) continue;
+      var lvMax = lv.maxWage === null ? Infinity : lv.maxWage;
+      if (minWage <= lvMax && lv.minWage <= newMaxVal) {
+        function lvLabel(x) {
+          if (x.maxWage === null) return '≥ ' + fmtNum(x.minWage);
+          if (x.minWage === 0)    return '< ' + fmtNum(x.maxWage + 1);
+          return fmtNum(x.minWage) + ' – ' + fmtNum(x.maxWage);
+        }
+        showErr('edit-min-wage', 'edit-err-min', 'Range overlaps with Level ' + lv.level + ' (' + lvLabel(lv) + ').'); return;
+      }
+    }
+
+    var idx = levels.findIndex(function(l) { return l.level === levelNum; });
+    if (idx >= 0) levels[idx] = { level: levelNum, minWage: minWage, maxWage: maxWage, otRate: otRate };
+    saveLevels(levels);
+
+    /* Update local reference and re-render page content */
+    lvl = levels[idx];
+    var rangeStr = lvl.maxWage !== null
+      ? fmtNum(lvl.minWage) + ' – ' + fmtNum(lvl.maxWage)
+      : '≥ ' + fmtNum(lvl.minWage);
+    var maxWageStr = lvl.maxWage !== null ? fmtNum(lvl.maxWage) : 'No upper limit';
+
+    /* Hero name (stays same) — update stat cards */
+    var statCards = document.querySelectorAll('.stat-card .stat-value');
+    if (statCards[0]) statCards[0].textContent = fmtNum(lvl.minWage);
+    if (statCards[1]) { statCards[1].textContent = maxWageStr; statCards[1].className = 'stat-value' + (lvl.maxWage === null ? ' muted' : ''); }
+    if (statCards[2]) statCards[2].textContent = fmtNum(lvl.otRate);
+
+    closeEditModal();
+    QuadraToast.show('Level ' + levelNum + ' has been updated.', 'success');
+  }
+
+  function fmtInput(input) {
+    var pos = input.selectionStart, oldLen = input.value.length;
+    var raw = input.value.replace(/\./g, '').replace(/\D/g, '');
+    input.value = raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+    var diff = input.value.length - oldLen;
+    input.setSelectionRange(pos + diff, pos + diff);
+  }
+
+  document.getElementById('edit-min-wage').addEventListener('input', function() {
+    fmtInput(this);
+    this.classList.remove('is-error');
+    document.getElementById('edit-err-min').classList.remove('show');
+  });
+  document.getElementById('edit-max-wage').addEventListener('input', function() {
+    fmtInput(this);
+    this.classList.remove('is-error');
+    document.getElementById('edit-err-max').classList.remove('show');
+  });
+  document.getElementById('edit-ot-rate').addEventListener('input', function() {
+    fmtInput(this);
+    this.classList.remove('is-error');
+    document.getElementById('edit-err-ot').classList.remove('show');
+  });
+
+  /* ── Delete ──────────────────────────────────────────── */
+  function confirmDelete() {
+    document.getElementById('delete-level-name').textContent = 'Level ' + levelNum;
+    document.getElementById('delete-overlay').classList.add('open');
+  }
+  function closeDelete() {
+    document.getElementById('delete-overlay').classList.remove('open');
+  }
+  function executeDelete() {
+    saveLevels(getLevels().filter(function(l) { return l.level !== levelNum; }));
+    closeDelete();
+    QuadraToast.show('Level ' + levelNum + ' has been deleted.', 'success');
+    setTimeout(function() { window.location.href = 'payroll-level-range.html'; }, 1500);
+  }
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeEditModal(); closeDelete(); } });
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+
+<script src="clockwidget.js"></script>
+</body>
+</html>

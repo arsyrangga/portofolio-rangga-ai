@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Group Permissions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style></style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="" data-active-sub=""></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action gear-active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="settings.html">Settings</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="settings.html?section=user-group">User Group</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bc-current">Create User Group</span>
+  </div>
+
+  <main class="main-content">
+
+    <button class="back-link" onclick="confirmLeave(function(){ window.location.href='settings.html?section=user-group'; })">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to User Group
+    </button>
+
+    <div class="hero-card">
+      <div class="hero-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#E04A2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V5l7-3z"/></svg>
+      </div>
+      <div class="hero-info">
+        <div class="hero-name" id="hero-title">Create User Group</div>
+        <div class="hero-sub">User Group permissions</div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-danger-outline" id="hero-delete-btn" onclick="openDeleteGroup()" style="display:none">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><h3>Group Name</h3></div>
+      <div class="section-body">
+        <div class="form-field" style="max-width:400px">
+          <label class="field-label">Group Name</label>
+          <input type="text" class="text-input" id="group-name-input" placeholder="e.g. Super Admin" maxlength="80" oninput="clearNameErr(); markDirty();" />
+          <span class="field-error" id="group-name-err" style="display:none"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><h3>Assigned Employees</h3></div>
+      <div class="section-body">
+        <div class="form-field">
+          <label class="field-label">Add Employee</label>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div class="emp-combo" id="emp-combo" style="flex:1;">
+              <div class="emp-combo-input chips" id="emp-combo-input">
+                <span id="emp-chip-container"></span>
+                <input type="text" id="emp-add-search" placeholder="Search by name or employee ID…" autocomplete="off" />
+              </div>
+              <div class="emp-combo-list" id="emp-combo-list"></div>
+            </div>
+            <button class="btn btn-primary" id="add-emp-confirm-btn" onclick="addSelectedEmployees()" style="opacity:0.5;pointer-events:none;flex-shrink:0;">Add Employee</button>
+          </div>
+        </div>
+      </div>
+      <div class="table-toolbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="emp-search" type="text" placeholder="Search assigned employee…" oninput="renderAssignedTable(this.value)">
+          </div>
+          <div class="toolbar-count" id="emp-count"></div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th style="width:180px">Department</th>
+            <th style="width:200px">Position</th>
+            <th class="col-actions" style="width:72px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="assigned-emp-tbody"></tbody>
+      </table>
+    </div>
+
+    <div id="perm-matrix"></div>
+
+  </main>
+
+  <div class="fixed-footer">
+    <button class="btn btn-outline" onclick="confirmLeave(function(){ window.location.href='settings.html?section=user-group'; })">Cancel</button>
+    <button class="btn btn-primary" id="save-btn" onclick="saveGroup()">Create Group</button>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="group-delete-modal" onclick="if(event.target===this)closeGroupDeleteModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete User Group</span>
+      <button class="modal-close-btn" onclick="closeGroupDeleteModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-group-name"></span>?</div>
+        <div class="sub-desc">This user group will be permanently deleted. This action cannot be undone.</div>
+        <div id="delete-group-emp-warn" style="display:none;margin-top:8px;font-size:13px;color:#B45309"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeGroupDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteGroup()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="remove-emp-modal" onclick="if(event.target===this)closeRemoveModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Remove Employee</span>
+      <button class="modal-close-btn" onclick="closeRemoveModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Remove <span id="remove-emp-nm">this employee</span>?</div>
+        <div class="sub-desc">They will no longer be assigned to <span id="remove-group-nm">this group</span>. You can re-add them at any time.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRemoveModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmRemoveEmployee()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- Unsaved Changes Confirm Modal — only for in-app navigation (Back-link,
+     Cancel) that this script controls. Closing the tab/refreshing/typing a
+     new URL is still the native browser beforeunload prompt — no custom UI
+     is possible there, browsers block it for security. -->
+<div class="modal-overlay" id="unsaved-changes-modal" onclick="if(event.target===this)confirmLeaveCancel()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Unsaved Changes</span>
+      <button class="modal-close-btn" onclick="confirmLeaveCancel()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Leave without saving?</div>
+        <div class="sub-desc">You have unsaved changes to this user group. If you leave now, they'll be lost.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="confirmLeaveCancel()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmLeaveProceed()">Leave Without Saving</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script>
+
+  /* ── Unsaved-changes guard ──
+     Any real edit (group name, permission checkbox, assigned-employee
+     add/remove) marks the form dirty. Cancel/Back-link go through this
+     custom modal (matches Living DS, not the browser's native confirm());
+     a successful save/delete clears the flag first so the intentional
+     redirect never triggers the warning. */
+  var formDirty = false;
+  var pendingLeaveAction = null;
+  function markDirty() { formDirty = true; }
+  function confirmLeave(onConfirm) {
+    if (!formDirty) { onConfirm(); return; }
+    pendingLeaveAction = onConfirm;
+    document.getElementById('unsaved-changes-modal').classList.add('show');
+  }
+  function confirmLeaveCancel() {
+    pendingLeaveAction = null;
+    document.getElementById('unsaved-changes-modal').classList.remove('show');
+  }
+  function confirmLeaveProceed() {
+    document.getElementById('unsaved-changes-modal').classList.remove('show');
+    formDirty = false;
+    var action = pendingLeaveAction;
+    pendingLeaveAction = null;
+    if (action) action();
+  }
+  window.addEventListener('beforeunload', function(e) {
+    if (formDirty) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var USER_GROUP_CATEGORIES = [
+    { key: 'employee', label: 'Employee', entities: [
+      { key: 'personal-info', label: 'Personal Info' },
+      { key: 'work-info',     label: 'Work Info' },
+      { key: 'contract',      label: 'Contract' },
+      { key: 'allowance',     label: 'Allowance' },
+      { key: 'deduction',     label: 'Deduction' },
+      { key: 'overtime',      label: 'Overtime' },
+      { key: 'payroll',       label: 'Payroll' },
+      { key: 'history',       label: 'History' }
+    ]},
+    { key: 'payroll', label: 'Payroll', entities: [
+      { key: 'level-range',     label: 'Level Range' },
+      { key: 'allowance',       label: 'Allowance' },
+      { key: 'deduction',       label: 'Deduction' },
+      { key: 'payroll-summary', label: 'Payroll Summary' },
+      { key: 'loan',            label: 'Loan / Advance Salary' },
+      { key: 'encashments',     label: 'Encashments & Reimbursements' },
+      { key: 'income-tax',      label: 'Income Tax' }
+    ]},
+    { key: 'settings', label: 'Settings', entities: [
+      { key: 'notification-management', label: 'Notification Management' }
+    ]},
+    { key: 'timesheet', label: 'Timesheet', entities: [
+      { key: 'timesheet-approval', label: 'Timesheet Approval' }
+    ]},
+    { key: 'offboarding', label: 'Offboarding', entities: [
+      { key: 'offboarding-requests',  label: 'Offboarding Requests' },
+      { key: 'offboarding-checklist', label: 'Offboarding Checklist' }
+    ]}
+  ];
+
+  var GROUP_AVATAR_COLORS = ['#E04A2A','#3B82F6','#8B5CF6','#22C55E','#F59E0B','#EC4899','#06B6D4','#10B981'];
+
+  function groupInitials(label) {
+    var words = label.split(/\s+/).filter(function(w) { return /^[A-Za-z]/.test(w); });
+    if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+    return (words[0] || label).slice(0, 2).toUpperCase();
+  }
+
+  function buildPermissions(fn) {
+    var perms = {};
+    USER_GROUP_CATEGORIES.forEach(function(cat) {
+      perms[cat.key] = {};
+      cat.entities.forEach(function(ent) {
+        perms[cat.key][ent.key] = fn(cat.key, ent.key);
+      });
+    });
+    return perms;
+  }
+
+  var GROUP_KEY  = 'QUADRA_USER_GROUPS_P2';
+  var GROUP_VKEY = 'QUADRA_USER_GROUPS_P2_V';
+  var GROUP_VER  = 3;
+  var GROUP_SEED = [
+    { id: 1, name: 'Super Admin', permissions: buildPermissions(function() {
+        return { create: true, view: true, edit: true, delete: true };
+      }) },
+    { id: 2, name: 'HR Staff', permissions: buildPermissions(function(catKey) {
+        return catKey === 'employee'
+          ? { create: false, view: true, edit: true, delete: false }
+          : { create: false, view: true, edit: false, delete: false };
+      }) }
+  ];
+
+  var SPECIAL_GROUP_NAMES = ['Reporting Manager', 'Attendance Leader', 'Leave Approver'];
+
+  function ensureSpecialGroups(groups) {
+    var changed = false;
+    SPECIAL_GROUP_NAMES.forEach(function(name) {
+      if (!groups.some(function(g) { return g.name === name; })) {
+        groups.push({ id: nextUserGroupId(groups), name: name, permissions: buildPermissions(function() {
+          return { create: false, view: false, edit: false, delete: false };
+        }) });
+        changed = true;
+      }
+    });
+    return changed;
+  }
+
+  function loadUserGroups() {
+    var ver = parseInt(localStorage.getItem(GROUP_VKEY), 10);
+    var groups;
+    if (ver !== GROUP_VER) {
+      saveUserGroups(GROUP_SEED);
+      localStorage.setItem(GROUP_VKEY, String(GROUP_VER));
+      groups = GROUP_SEED.slice();
+    } else {
+      try { groups = JSON.parse(localStorage.getItem(GROUP_KEY)) || []; } catch(e) { groups = []; }
+    }
+    if (ensureSpecialGroups(groups)) saveUserGroups(groups);
+    return groups;
+  }
+
+  function saveUserGroups(groups) {
+    localStorage.setItem(GROUP_KEY, JSON.stringify(groups));
+  }
+
+  function nextUserGroupId(groups) {
+    if (!groups.length) return 1;
+    return Math.max.apply(null, groups.map(function(g) { return g.id; })) + 1;
+  }
+
+  var ASSIGN_KEY = 'QUADRA_USER_GROUP_ASSIGN_P2';
+
+  function loadAssignments() {
+    try { return JSON.parse(localStorage.getItem(ASSIGN_KEY)) || {}; } catch(e) { return {}; }
+  }
+
+  function saveAssignments(map) {
+    localStorage.setItem(ASSIGN_KEY, JSON.stringify(map));
+  }
+
+</script>
+<script>
+
+  var currentPermissions = null;
+  var currentGroupId = null;
+  var currentGroupName = null;
+  var assignedBadges = [];
+
+  function computeColumnState(cat, permissions, action) {
+    var total = cat.entities.length;
+    var onCount = cat.entities.filter(function(ent) { return permissions[cat.key][ent.key][action]; }).length;
+    if (onCount === 0) return 'unchecked';
+    if (onCount === total) return 'checked';
+    return 'indeterminate';
+  }
+
+  function renderPermMatrix(permissions) {
+    var container = document.getElementById('perm-matrix');
+    var plusSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+    var eyeSvg  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/></svg>';
+    var editSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var delSvg  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var icons = [plusSvg, eyeSvg, editSvg, delSvg];
+    var actions = ['create', 'view', 'edit', 'delete'];
+
+    container.innerHTML = USER_GROUP_CATEGORIES.map(function(cat) {
+      var onCount = 0;
+      cat.entities.forEach(function(ent) {
+        actions.forEach(function(a) { if (permissions[cat.key][ent.key][a]) onCount++; });
+      });
+
+      var rowsHtml = cat.entities.map(function(ent, idx) {
+        var p = permissions[cat.key][ent.key];
+        var locked = p.edit || p.delete;
+        var color = GROUP_AVATAR_COLORS[idx % GROUP_AVATAR_COLORS.length];
+        var toggles = actions.map(function(a) {
+          var isLockedCol = (a === 'view' && locked);
+          return '<div class="perm-toggle-col">' +
+            '<input type="checkbox" class="perm-bulk-cb" data-cat="' + cat.key + '" data-entity="' + ent.key + '" data-action="' + a + '"' +
+              (p[a] ? ' checked' : '') + (isLockedCol ? ' disabled' : '') +
+              ' onchange="onEntityToggle(\'' + cat.key + '\',\'' + ent.key + '\',\'' + a + '\',this.checked)">' +
+          '</div>';
+        }).join('');
+        return '<div class="perm-ent-row">' +
+          '<div class="perm-ent-avatar" style="background:' + color + '">' + groupInitials(ent.label) + '</div>' +
+          '<div class="perm-ent-label">' + escHtml(ent.label) + '</div>' +
+          toggles +
+        '</div>';
+      }).join('');
+
+      var headerCols = actions.map(function(a, i) {
+        var state = computeColumnState(cat, permissions, a);
+        var cbId = 'bulk-' + cat.key + '-' + a;
+        return '<div class="perm-action-col">' + icons[i] +
+          '<input type="checkbox" class="perm-bulk-cb" id="' + cbId + '"' +
+            (state === 'checked' ? ' checked' : '') +
+            ' onchange="onColumnBulkToggle(\'' + cat.key + '\',\'' + a + '\',this.checked)">' +
+        '</div>';
+      }).join('');
+
+      return '<div class="perm-section" data-cat="' + cat.key + '">' +
+        '<div class="perm-cat-head">' +
+          '<span class="perm-cat-label">' + escHtml(cat.label) + '</span>' +
+          '<span class="perm-cat-badge' + (onCount > 0 ? ' on' : '') + '">' + onCount + '/' + (cat.entities.length * 4) + '</span>' +
+        '</div>' +
+        '<div class="perm-actions-row">' +
+          '<div class="perm-ent-label-spacer">Actions</div>' +
+          headerCols +
+        '</div>' +
+        rowsHtml +
+      '</div>';
+    }).join('');
+
+    USER_GROUP_CATEGORIES.forEach(function(cat) {
+      actions.forEach(function(a) {
+        var state = computeColumnState(cat, permissions, a);
+        var cb = document.getElementById('bulk-' + cat.key + '-' + a);
+        if (cb) cb.indeterminate = (state === 'indeterminate');
+      });
+    });
+  }
+
+  function onEntityToggle(catKey, entKey, action, checked) {
+    currentPermissions[catKey][entKey][action] = checked;
+    if ((action === 'edit' || action === 'delete') && checked) {
+      currentPermissions[catKey][entKey].view = true;
+    }
+    markDirty();
+    renderPermMatrix(currentPermissions);
+  }
+
+  function onColumnBulkToggle(catKey, action, checked) {
+    var cat = USER_GROUP_CATEGORIES.find(function(c) { return c.key === catKey; });
+    cat.entities.forEach(function(ent) {
+      var p = currentPermissions[catKey][ent.key];
+      var locked = p.edit || p.delete;
+      if (action === 'view' && !checked && locked) return;
+      p[action] = checked;
+      if ((action === 'edit' || action === 'delete') && checked) p.view = true;
+    });
+    markDirty();
+    renderPermMatrix(currentPermissions);
+  }
+
+</script>
+<script>
+
+  function clearNameErr() {
+    var inp = document.getElementById('group-name-input');
+    var err = document.getElementById('group-name-err');
+    inp.classList.remove('error');
+    err.style.display = 'none';
+    err.textContent = '';
+  }
+
+  function showNameErr(msg) {
+    var inp = document.getElementById('group-name-input');
+    var err = document.getElementById('group-name-err');
+    inp.classList.add('error');
+    err.textContent = msg;
+    err.style.display = 'block';
+    inp.focus();
+  }
+
+  function saveGroup() {
+    var name = (document.getElementById('group-name-input').value || '').trim();
+    if (!name) { showNameErr('Group name is required.'); return; }
+
+    var groups = loadUserGroups();
+    var nameLower = name.toLowerCase();
+    var dup = groups.find(function(g) {
+      return g.name.toLowerCase() === nameLower && g.id !== currentGroupId;
+    });
+    if (dup) { showNameErr('A user group with this name already exists.'); return; }
+
+    if (currentGroupId !== null) {
+      groups = groups.map(function(g) {
+        return g.id === currentGroupId ? { id: g.id, name: name, permissions: currentPermissions } : g;
+      });
+      saveUserGroups(groups);
+    } else {
+      groups.push({ id: nextUserGroupId(groups), name: name, permissions: currentPermissions });
+      saveUserGroups(groups);
+    }
+
+    /* Reconcile employee assignment: anyone in assignedBadges gets
+       mapped to this group name; anyone previously mapped to the old
+       name (rename case) but no longer in assignedBadges is cleared. */
+    var map = loadAssignments();
+    Object.keys(map).forEach(function(badge) {
+      if (currentGroupName && map[badge] === currentGroupName && assignedBadges.indexOf(badge) < 0) {
+        delete map[badge];
+      }
+    });
+    assignedBadges.forEach(function(badge) { map[badge] = name; });
+    saveAssignments(map);
+
+    formDirty = false;
+    window.location.href = 'settings.html?section=user-group';
+  }
+
+  function openDeleteGroup() {
+    var name = document.getElementById('group-name-input').value || '';
+    document.getElementById('delete-group-name').textContent = name;
+    var map = loadAssignments();
+    var count = Object.keys(map).filter(function(b) { return map[b] === currentGroupName; }).length;
+    var warnEl = document.getElementById('delete-group-emp-warn');
+    if (count > 0) {
+      warnEl.textContent = 'This group has ' + count + ' employee' + (count !== 1 ? 's' : '') + ' assigned. They will be unassigned.';
+      warnEl.style.display = 'block';
+    } else {
+      warnEl.style.display = 'none';
+    }
+    document.getElementById('group-delete-modal').classList.add('show');
+  }
+
+  function closeGroupDeleteModal() {
+    document.getElementById('group-delete-modal').classList.remove('show');
+  }
+
+  function confirmDeleteGroup() {
+    if (currentGroupId === null) return;
+    var groups = loadUserGroups();
+    saveUserGroups(groups.filter(function(x) { return x.id !== currentGroupId; }));
+    var map = loadAssignments();
+    var changed = false;
+    Object.keys(map).forEach(function(badge) { if (map[badge] === currentGroupName) { delete map[badge]; changed = true; } });
+    if (changed) saveAssignments(map);
+    formDirty = false;
+    window.location.href = 'settings.html?section=user-group';
+  }
+
+  /* ── Assigned employees table ── */
+  function renderAssignedTable(query) {
+    var map = loadAssignments();
+    var allEmps  = QUADRA_EMPLOYEES;
+    var assigned = allEmps.filter(function(e) { return assignedBadges.indexOf(e.badge) >= 0; });
+    var q        = (query || '').toLowerCase().trim();
+    var filtered = q ? assigned.filter(function(e) {
+      return e.name.toLowerCase().indexOf(q) >= 0 ||
+             e.badge.toLowerCase().indexOf(q) >= 0 ||
+             (e.department || '').toLowerCase().indexOf(q) >= 0 ||
+             (e.pos || '').toLowerCase().indexOf(q) >= 0;
+    }) : assigned;
+
+    var countEl = document.getElementById('emp-count');
+    if (q && filtered.length !== assigned.length) {
+      countEl.innerHTML = '<span>' + filtered.length + '</span> of <span>' + assigned.length + '</span> employees';
+    } else {
+      countEl.innerHTML = '<span>' + assigned.length + '</span> employee' + (assigned.length !== 1 ? 's' : '');
+    }
+
+    var viewSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+    var delSvg  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    var tbody = document.getElementById('assigned-emp-tbody');
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div style="padding:32px;text-align:center;color:#9CA3AF;font-size:13px">' +
+        (q ? 'No employees match &ldquo;' + escHtml(query) + '&rdquo;' : 'No employees assigned to this group yet') +
+        '</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = filtered.map(function(emp) {
+      return '<tr>' +
+        '<td><div class="emp-cell">' +
+          '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>' +
+          '<div><div class="emp-name">' + escHtml(emp.name) + '</div><div class="emp-id">' + emp.badge + '</div></div>' +
+        '</div></td>' +
+        '<td>' + escHtml(emp.department || '—') + '</td>' +
+        '<td>' + escHtml(emp.pos || '—') + '</td>' +
+        '<td><div class="action-btns">' +
+          '<button class="icon-btn" title="View" onclick="viewEmployee(\'' + emp.badge + '\')">' + viewSvg + '</button>' +
+          '<button class="icon-btn" style="color:#EF4444" title="Remove" onclick="openRemoveModal(\'' + emp.badge.replace(/'/g,"\\'") + '\')">' + delSvg + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function viewEmployee(badge) {
+    window.location.href = 'employee-detail.html?badge=' + badge;
+  }
+
+  /* ── Add Employee combo (inline chips, multi-select, explicit confirm) ── */
+  var pendingAddBadges = [];
+
+  function renderEmpCombo(q) {
+    var map = loadAssignments();
+    var available = QUADRA_EMPLOYEES.filter(function(e) {
+      return assignedBadges.indexOf(e.badge) < 0 && pendingAddBadges.indexOf(e.badge) < 0;
+    });
+    var matches = q ? available.filter(function(e) {
+      return e.name.toLowerCase().indexOf(q) >= 0 || e.badge.toLowerCase().indexOf(q) >= 0;
+    }) : available;
+
+    var list = document.getElementById('emp-combo-list');
+    if (matches.length === 0) {
+      list.innerHTML = '<div class="emp-combo-empty">' +
+        (q ? 'No employees match &ldquo;' + escHtml(q) + '&rdquo;' : 'All employees are already assigned or selected') +
+        '</div>';
+    } else {
+      list.innerHTML = matches.map(function(e) {
+        var groupNote = map[e.badge] ? ' · currently in ' + escHtml(map[e.badge]) : '';
+        return '<div class="emp-combo-item" onmousedown="selectEmpCombo(\'' + e.badge + '\')">' +
+          '<div class="emp-combo-item-avatar" style="background:' + e.color + '">' + e.initials + '</div>' +
+          '<div><div class="emp-combo-item-name">' + escHtml(e.name) + '</div>' +
+          '<div class="emp-combo-item-meta">' + e.badge + (e.pos ? ' · ' + escHtml(e.pos) : '') + groupNote + '</div></div>' +
+        '</div>';
+      }).join('');
+    }
+    list.classList.add('open');
+  }
+
+  function selectEmpCombo(badge) {
+    pendingAddBadges.push(badge);
+    document.getElementById('emp-add-search').value = '';
+    renderChips();
+    renderEmpCombo('');
+    setAddConfirmBtn(true);
+    document.getElementById('emp-add-search').focus();
+    markDirty();
+  }
+
+  function renderChips() {
+    document.getElementById('emp-chip-container').innerHTML = pendingAddBadges.map(function(badge) {
+      var e = QUADRA_EMPLOYEES.find(function(x) { return x.badge === badge; });
+      if (!e) return '';
+      return '<span class="emp-chip">' +
+        '<span class="emp-chip-avatar" style="background:' + e.color + '">' + e.initials + '</span>' +
+        escHtml(e.name) +
+        '<button type="button" class="emp-chip-remove" onclick="removeChip(\'' + badge + '\')">' +
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
+        '</button>' +
+      '</span>';
+    }).join('');
+  }
+
+  function removeChip(badge) {
+    pendingAddBadges = pendingAddBadges.filter(function(b) { return b !== badge; });
+    renderChips();
+    setAddConfirmBtn(pendingAddBadges.length > 0);
+    if (document.getElementById('emp-combo-list').classList.contains('open')) {
+      renderEmpCombo(document.getElementById('emp-add-search').value.toLowerCase().trim());
+    }
+  }
+
+  function setAddConfirmBtn(enabled) {
+    var btn = document.getElementById('add-emp-confirm-btn');
+    btn.style.opacity = enabled ? '1' : '0.5';
+    btn.style.pointerEvents = enabled ? '' : 'none';
+  }
+
+  function addSelectedEmployees() {
+    if (!pendingAddBadges.length) return;
+    pendingAddBadges.forEach(function(badge) { assignedBadges.push(badge); });
+    pendingAddBadges = [];
+    renderChips();
+    setAddConfirmBtn(false);
+    document.getElementById('emp-add-search').value = '';
+    renderAssignedTable(document.getElementById('emp-search').value);
+    markDirty();
+  }
+
+  document.getElementById('emp-add-search').addEventListener('input', function() {
+    renderEmpCombo(this.value.toLowerCase().trim());
+  });
+  document.getElementById('emp-add-search').addEventListener('focus', function() {
+    renderEmpCombo(this.value.toLowerCase().trim());
+  });
+  document.getElementById('emp-add-search').addEventListener('blur', function() {
+    document.getElementById('emp-combo-list').classList.remove('open');
+  });
+
+  /* ── Remove Employee modal ── */
+  var removingBadge = null;
+
+  function openRemoveModal(badge) {
+    removingBadge = badge;
+    var emp = QUADRA_EMPLOYEES.find(function(e) { return e.badge === badge; });
+    document.getElementById('remove-emp-nm').textContent   = emp ? emp.name : 'this employee';
+    document.getElementById('remove-group-nm').textContent = document.getElementById('group-name-input').value || 'this group';
+    document.getElementById('remove-emp-modal').classList.add('show');
+  }
+
+  function closeRemoveModal() {
+    document.getElementById('remove-emp-modal').classList.remove('show');
+    removingBadge = null;
+  }
+
+  function confirmRemoveEmployee() {
+    if (!removingBadge) return;
+    assignedBadges = assignedBadges.filter(function(b) { return b !== removingBadge; });
+    closeRemoveModal();
+    renderAssignedTable('');
+    document.getElementById('emp-search').value = '';
+    markDirty();
+  }
+
+  /* ── Init: read ?id= to decide Create vs Edit mode ── */
+  (function() {
+    var idParam = new URLSearchParams(window.location.search).get('id');
+    if (idParam) {
+      var id = parseInt(idParam, 10);
+      var groups = loadUserGroups();
+      var g = groups.find(function(x) { return x.id === id; });
+      if (g) {
+        currentGroupId = id;
+        currentGroupName = g.name;
+        currentPermissions = JSON.parse(JSON.stringify(g.permissions));
+        document.getElementById('hero-title').textContent = 'Edit: ' + g.name;
+        document.getElementById('bc-current').textContent = g.name;
+        document.getElementById('group-name-input').value = g.name;
+        document.getElementById('save-btn').textContent = 'Save Changes';
+        document.getElementById('hero-delete-btn').style.display = '';
+        var map = loadAssignments();
+        assignedBadges = Object.keys(map).filter(function(b) { return map[b] === g.name; });
+      }
+    }
+    if (currentPermissions === null) {
+      currentGroupId = null;
+      currentPermissions = buildPermissions(function() {
+        return { create: false, view: false, edit: false, delete: false };
+      });
+    }
+    renderPermMatrix(currentPermissions);
+    renderAssignedTable('');
+  })();
+
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

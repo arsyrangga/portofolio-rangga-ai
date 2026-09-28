@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Offboarding Requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="offboarding" data-active-sub="offboarding-requests"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <span class="bc-current">Offboarding Requests</span>
+  </div>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">Offboarding Requests</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Submitted Date</th>
+            <th>Resignation Letter</th>
+            <th>Status</th>
+            <th class="col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="offboarding-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- Reject confirmation modal -->
+<div class="modal-overlay" id="reject-modal">
+  <div class="modal-box" style="width:420px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Reject Resignation</span>
+      <button class="modal-close" onclick="closeRejectModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Reject this resignation request?</div>
+        <div class="modal-sub-desc">The employee will be able to submit a new one.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Reason <span class="req">*</span></label>
+        <textarea class="textarea" id="reject-reason" placeholder="Explain why this request is being rejected..."></textarea>
+      </div>
+      <div class="field-error" id="reject-reason-error" style="display:none">Please provide a reason.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRejectModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmReject()">Reject</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="offboarding-data.js"></script>
+<script>
+(function () {
+  var pendingActionBadge = null;
+
+  var STATUS_TAG = { pending: 'tag tag-warning', approved: 'tag tag-info', rejected: 'tag tag-danger', completed: 'tag tag-success' };
+  var STATUS_LABEL = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected', completed: 'Completed' };
+
+  function fmtRow(emp, req) {
+    var actions = req.status === 'pending'
+      ? '<button class="btn btn-danger-outline" onclick="event.stopPropagation();openRejectModal(\'' + emp.badge + '\')">Reject</button>'
+      : '—';
+    return '<tr onclick="window.location.href=\'offboarding-checklist.html?badge=' + emp.badge + '\'" style="cursor:pointer">'
+      + '<td><div class="emp-cell">'
+      + '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>'
+      + '<div><div class="emp-name">' + emp.name + '</div><div class="emp-email">' + emp.badge + '</div></div>'
+      + '</div></td>'
+      + '<td>' + req.submittedDate + '</td>'
+      + '<td>' + (req.letterFileName
+          ? '<a class="doc-link" href="document-preview-placeholder.pdf" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + req.letterFileName + '</a>'
+          : '—') + '</td>'
+      + '<td><span class="' + STATUS_TAG[req.status] + '">' + STATUS_LABEL[req.status] + '</span></td>'
+      + '<td>' + actions + '</td>'
+      + '</tr>';
+  }
+
+  function render() {
+    var all = getAllResignRequests();
+    var rows = QUADRA_EMPLOYEES
+      .filter(function (emp) { return all[emp.badge]; })
+      .map(function (emp) { return fmtRow(emp, all[emp.badge]); })
+      .join('');
+    document.getElementById('offboarding-tbody').innerHTML = rows
+      || '<tr><td colspan="5" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">No resignation requests yet.</td></tr>';
+  }
+
+  function fmtToday() {
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var d = new Date();
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  window.openRejectModal = function (badge) {
+    pendingActionBadge = badge;
+    document.getElementById('reject-reason').value = '';
+    document.getElementById('reject-reason-error').style.display = 'none';
+    document.getElementById('reject-modal').classList.add('open');
+  };
+  window.closeRejectModal = function () {
+    document.getElementById('reject-modal').classList.remove('open');
+  };
+  window.confirmReject = function () {
+    var reasonInput = document.getElementById('reject-reason');
+    if (!reasonInput.value.trim()) {
+      document.getElementById('reject-reason-error').style.display = 'block';
+      return;
+    }
+    var req = getResignRequest(pendingActionBadge);
+    if (req.status === 'approved' || req.status === 'completed') {
+      QuadraToast.show('This offboarding request has already been processed.', 'error');
+      closeRejectModal();
+      return;
+    }
+    req.status = 'rejected';
+    req.rejectedDate = fmtToday();
+    req.rejectionReason = reasonInput.value.trim();
+    saveResignRequest(pendingActionBadge, req);
+    closeRejectModal();
+    render();
+    QuadraToast.show('Resignation rejected.', 'success');
+  };
+
+  document.getElementById('reject-modal').addEventListener('click', function (e) { if (e.target === this) closeRejectModal(); });
+
+  render();
+
+  try {
+    var _pt = localStorage.getItem('QUADRA_PENDING_TOAST');
+    if (_pt) {
+      var _toast = JSON.parse(_pt);
+      localStorage.removeItem('QUADRA_PENDING_TOAST');
+      setTimeout(function () { QuadraToast.show(_toast.message, _toast.type); }, 200);
+    }
+  } catch (e) {}
+})();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

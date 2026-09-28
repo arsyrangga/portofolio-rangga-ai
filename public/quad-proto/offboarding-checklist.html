@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Offboarding Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* This page's section-cards should fill the content column, not the
+       shared component's default 760px cap (meant for stacked form fields
+       on narrower edit pages like employee-edit.html). */
+    .section-card { max-width: none; }
+
+    /* The shared .checklist-card/.checklist-body (layout.css) scroll
+       internally by default, sized to fill a fixed-height parent. This
+       page's .main-content already scrolls as a whole, so let the
+       checklist grow to its natural height instead of adding a second,
+       nested scrollbar inside it. */
+    .checklist-card { flex: none; min-height: 0; }
+    .checklist-body { overflow-y: visible; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="offboarding" data-active-sub="offboarding-requests"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="offboarding-requests.html">Offboarding Requests</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bcEmpName">Offboarding Checklist</span>
+  </div>
+
+  <div class="detail-layout">
+  <main class="main-content">
+
+    <a class="back-link" href="offboarding-requests.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Offboarding Requests
+    </a>
+
+    <div class="page-header">
+      <div class="page-title">Offboarding Checklist</div>
+    </div>
+
+    <!-- Progress card -->
+    <div class="emp-card spacious" id="checklist-progress-card">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="checklist-title">Checklist Progress</div>
+        <div class="progress-complete" id="progressComplete" style="margin-top:0;">
+          <span class="tag tag-success" style="display:inline-flex;align-items:center;gap:4px;">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Checklist Complete
+          </span>
+        </div>
+      </div>
+      <div class="progress-box">
+        <div class="progress-count"><span id="doneCount">0</span><span class="progress-total"> / 11</span></div>
+        <div class="progress-label subtitle">checklist items completed</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+
+    <div class="section-card" id="resignation-letter-section">
+      <div class="section-label">Resignation Letter</div>
+      <div class="section-body-light">
+        <div class="info-value"><a class="doc-link" href="document-preview-placeholder.pdf" target="_blank" rel="noopener" id="letterLink">—</a></div>
+      </div>
+    </div>
+
+    <div class="section-card" id="resign-reason-section">
+      <div class="section-label">Resign Reason</div>
+      <div class="section-body-light">
+        <div class="form-group" style="max-width:320px">
+          <label class="field-label">Reason <span class="req">*</span></label>
+          <div class="select-w" id="reason-select"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card" id="handover-section">
+      <div class="section-label">Handover Document</div>
+      <div class="section-body-light">
+        <div class="info-grid">
+          <div class="info-group"><div class="info-label">Document</div><div class="info-value" id="handoverDoc">—</div></div>
+          <div class="info-group"><div class="info-label">Uploaded Date</div><div class="info-value" id="handoverDate">—</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklist card -->
+    <div class="checklist-card" id="offboarding-checklist-card">
+      <div class="checklist-head">
+        <div>
+          <div class="checklist-title">Offboarding Checklist</div>
+          <div class="checklist-subtitle">Check off each item as it is completed · Progress saves automatically</div>
+        </div>
+      </div>
+      <div class="checklist-body" id="checklistBody"></div>
+    </div>
+
+  </main>
+
+  <aside class="emp-profile-panel">
+    <div class="epp-avatar" id="epp-avatar">—</div>
+    <div class="epp-identity">
+      <div class="epp-name" id="epp-name">—</div>
+      <div class="epp-position" id="epp-position">—</div>
+      <div class="epp-status-row"><span class="tag tag-dot" id="epp-status">—</span></div>
+    </div>
+    <div class="epp-email-row">
+      <span id="epp-email">—</span>
+      <button class="epp-copy-btn" type="button" onclick="copyEppEmail()" aria-label="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 10V3a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-info-row"><span class="epp-label">Badge ID</span><span class="epp-value" id="epp-badge">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Join Date</span><span class="epp-value" id="epp-join">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Department</span><span class="epp-value" id="epp-department">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Work Type</span><span class="epp-value" id="epp-worktype">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Shift</span><span class="epp-value" id="epp-shift">—</span></div>
+    </div>
+    <div class="epp-divider" id="epp-resignation-divider" style="display:none"></div>
+    <div class="epp-section" id="epp-resignation-section" style="display:none">
+      <div class="epp-section-title">Resignation</div>
+      <div class="epp-info-row"><span class="epp-label">Letter</span><span class="epp-value"><a class="doc-link" href="document-preview-placeholder.pdf" target="_blank" rel="noopener" id="epp-resign-letter">—</a></span></div>
+      <div class="epp-info-row"><span class="epp-label">Reason</span><span class="epp-value" id="epp-resign-reason">—</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Reporting Manager</div>
+      <div class="epp-supervisor-row" id="epp-supervisor-row">
+        <div class="epp-supervisor-avatar" id="epp-supervisor-avatar">—</div>
+        <div class="epp-supervisor-info">
+          <div class="epp-supervisor-name" id="epp-supervisor-name">—</div>
+          <div class="epp-supervisor-position" id="epp-supervisor-position">—</div>
+        </div>
+      </div>
+      <div class="epp-info-row" id="epp-no-supervisor-row" style="display:none"><span class="epp-label">No supervisor assigned</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Attendance Leader</div>
+      <div class="epp-supervisor-row" id="epp-att-leader-row">
+        <div class="epp-supervisor-avatar" id="epp-att-leader-avatar">—</div>
+        <div class="epp-supervisor-info">
+          <div class="epp-supervisor-name" id="epp-att-leader-name">—</div>
+          <div class="epp-supervisor-position" id="epp-att-leader-position">—</div>
+        </div>
+      </div>
+      <div class="epp-info-row" id="epp-no-att-leader-row" style="display:none"><span class="epp-label">No attendance leader assigned</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Leave Approver</div>
+      <div class="epp-supervisor-row" id="epp-leave-approver-row">
+        <div class="epp-supervisor-avatar" id="epp-leave-approver-avatar">—</div>
+        <div class="epp-supervisor-info">
+          <div class="epp-supervisor-name" id="epp-leave-approver-name">—</div>
+          <div class="epp-supervisor-position" id="epp-leave-approver-position">—</div>
+        </div>
+      </div>
+      <div class="epp-info-row" id="epp-no-leave-approver-row" style="display:none"><span class="epp-label">No leave approver assigned</span></div>
+    </div>
+  </aside>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="window.location.href='offboarding-requests.html'">Cancel</button>
+    <div class="foot-btns">
+      <button class="btn btn-danger-outline" id="reject-btn" onclick="openRejectModal()">Reject</button>
+      <button class="btn btn-danger-outline" id="cancel-resign-btn" onclick="openCancelResignModal()" style="display:none;">Cancel Resignation</button>
+      <button class="btn btn-primary" id="approve-btn" onclick="handleApprove()" disabled>Approve</button>
+    </div>
+  </div>
+  </div><!-- /detail-layout -->
+</div>
+
+<!-- Reject confirmation modal -->
+<div class="modal-overlay" id="reject-modal">
+  <div class="modal-box" style="width:420px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Reject Resignation</span>
+      <button class="modal-close" onclick="closeRejectModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Reject this resignation request?</div>
+        <div class="modal-sub-desc">The employee will be able to submit a new one.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Reason <span class="req">*</span></label>
+        <textarea class="textarea" id="reject-reason" placeholder="Explain why this request is being rejected..."></textarea>
+      </div>
+      <div class="field-error" id="reject-reason-error" style="display:none">Please provide a reason.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRejectModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmReject()">Reject</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add New Reason modal -->
+<div class="modal-overlay" id="add-reason-modal">
+  <div class="modal-box" style="width:400px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Add New Reason</span>
+      <button class="modal-close" onclick="closeAddReasonModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="field-label">Reason <span class="req">*</span></label>
+        <input type="text" class="text-input" id="new-reason-input" placeholder="e.g. Merger Perusahaan" />
+      </div>
+      <div class="field-error" id="new-reason-error" style="display:none">Please enter a reason.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeAddReasonModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAddReason()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Resignation confirmation modal -->
+<div class="modal-overlay" id="cancel-resign-modal">
+  <div class="modal-box" style="width:420px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Cancel Resignation</span>
+      <button class="modal-close" onclick="closeCancelResignModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Cancel this approved resignation?</div>
+        <div class="modal-sub-desc">The request will be withdrawn entirely and offboarding progress lost. The employee will need to submit a new request to resign again.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeCancelResignModal()">Keep Request</button>
+      <button class="btn btn-danger" onclick="confirmCancelResign()">Cancel Resignation</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="offboarding-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var badge = params.get('badge');
+  if (!badge) { window.location.replace('offboarding-requests.html'); return; }
+
+  var emp = QUADRA_EMPLOYEES.find(function (e) { return e.badge === badge; });
+  var request = getResignRequest(badge);
+  if (!emp || !request) { window.location.replace('offboarding-requests.html'); return; }
+
+  var ADD_NEW_SENTINEL = '__add_new__';
+
+  document.getElementById('bcEmpName').textContent = emp.name + ' — Offboarding Checklist';
+  document.title = 'QuadraNG — ' + emp.name + ' Offboarding Checklist';
+
+  document.getElementById('letterLink').textContent = request.letterFileName || '—';
+
+  /* Profile panel — same standard identity block as employee-detail.html /
+     my-profile.html, using raw emp.* fields (this page has no personal/work
+     edit capability, so there's nothing to override). */
+  var STATUS_TAG_CLASS = {
+    'Active':    'tag tag-dot tag-success',
+    'Probation': 'tag tag-dot tag-warning',
+    'On Leave':  'tag tag-dot tag-info',
+    'Inactive':  'tag tag-dot tag-neutral'
+  };
+  document.getElementById('epp-avatar').textContent = emp.initials || '?';
+  document.getElementById('epp-avatar').style.background = emp.color || '#9CA3AF';
+  document.getElementById('epp-name').textContent = emp.name;
+  document.getElementById('epp-position').textContent = emp.pos;
+  document.getElementById('epp-email').textContent = emp.email || '—';
+  var eppStatusEl = document.getElementById('epp-status');
+  eppStatusEl.textContent = emp.status;
+  eppStatusEl.className = STATUS_TAG_CLASS[emp.status] || 'tag tag-dot tag-neutral';
+
+  document.getElementById('epp-badge').textContent = emp.badge;
+  document.getElementById('epp-join').textContent = emp.join;
+  document.getElementById('epp-department').textContent = emp.department || '—';
+  document.getElementById('epp-worktype').textContent = emp.contract;
+  document.getElementById('epp-shift').textContent = emp.shift || '—';
+
+  var eppSupervisor = emp.supervisorBadge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === emp.supervisorBadge; }) : null;
+  var eppSupRow = document.getElementById('epp-supervisor-row');
+  var eppNoSupRow = document.getElementById('epp-no-supervisor-row');
+  if (eppSupervisor) {
+    document.getElementById('epp-supervisor-avatar').style.background = eppSupervisor.color;
+    document.getElementById('epp-supervisor-avatar').textContent = eppSupervisor.initials;
+    document.getElementById('epp-supervisor-name').textContent = eppSupervisor.name;
+    document.getElementById('epp-supervisor-position').textContent = eppSupervisor.pos;
+    eppSupRow.style.display = 'flex';
+    eppNoSupRow.style.display = 'none';
+  } else {
+    eppSupRow.style.display = 'none';
+    eppNoSupRow.style.display = 'flex';
+  }
+
+  function renderEppApprover(badge, rowId, noRowId, avatarId, nameId, posId) {
+    var person = badge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === badge; }) : null;
+    var row = document.getElementById(rowId);
+    var noRow = document.getElementById(noRowId);
+    if (person) {
+      document.getElementById(avatarId).style.background = person.color;
+      document.getElementById(avatarId).textContent = person.initials;
+      document.getElementById(nameId).textContent = person.name;
+      document.getElementById(posId).textContent = person.pos;
+      row.style.display = 'flex';
+      noRow.style.display = 'none';
+    } else {
+      row.style.display = 'none';
+      noRow.style.display = 'flex';
+    }
+  }
+  renderEppApprover(emp.attendanceLeaderBadge, 'epp-att-leader-row', 'epp-no-att-leader-row', 'epp-att-leader-avatar', 'epp-att-leader-name', 'epp-att-leader-position');
+  renderEppApprover(emp.leaveApproverBadge, 'epp-leave-approver-row', 'epp-no-leave-approver-row', 'epp-leave-approver-avatar', 'epp-leave-approver-name', 'epp-leave-approver-position');
+
+  window.copyEppEmail = function () {
+    var email = document.getElementById('epp-email').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(email);
+    if (window.QuadraToast) QuadraToast.show('Email copied', email);
+  };
+
+  function buildReasonOptions() {
+    return getResignReasonOptions().map(function (r) { return { value: r, label: r }; })
+      .concat([{ value: ADD_NEW_SENTINEL, label: '+ Add new reason...' }]);
+  }
+
+  function updateApproveButtonState() {
+    var selected = QuadraDropdown.getValue(document.getElementById('reason-select'));
+    document.getElementById('approve-btn').disabled = !selected || selected === ADD_NEW_SENTINEL;
+  }
+
+  function updateApprovalState() {
+    var req = getResignRequest(badge);
+    var isApproved = req.status === 'approved';
+    var isCompleted = req.status === 'completed';
+    document.getElementById('approve-btn').style.display = (isApproved || isCompleted) ? 'none' : 'inline-flex';
+    document.getElementById('reject-btn').style.display = (isApproved || isCompleted) ? 'none' : 'inline-flex';
+    document.getElementById('cancel-resign-btn').style.display = isApproved ? 'inline-flex' : 'none';
+
+    /* Checklist Progress + Handover Document + Offboarding Checklist only
+       matter once the resignation is approved — nothing to track, hand
+       over, or check off before that, so keep them hidden until then. */
+    var postApproval = isApproved || isCompleted;
+    document.getElementById('checklist-progress-card').style.display = postApproval ? '' : 'none';
+    document.getElementById('handover-section').style.display = postApproval ? '' : 'none';
+    document.getElementById('offboarding-checklist-card').style.display = postApproval ? '' : 'none';
+
+    /* Once approved, the letter + reason are finalized — move them out of
+       the editable main-content cards and into the side panel as
+       read-only info, freeing the main column for the checklist itself. */
+    document.getElementById('resignation-letter-section').style.display = postApproval ? 'none' : '';
+    document.getElementById('resign-reason-section').style.display = postApproval ? 'none' : '';
+    document.getElementById('epp-resignation-divider').style.display = postApproval ? '' : 'none';
+    document.getElementById('epp-resignation-section').style.display = postApproval ? '' : 'none';
+    if (postApproval) {
+      document.getElementById('epp-resign-letter').textContent = req.letterFileName || '—';
+      document.getElementById('epp-resign-reason').textContent = req.resignReason || '—';
+    }
+  }
+  updateApprovalState();
+
+  window.openCancelResignModal = function () {
+    document.getElementById('cancel-resign-modal').classList.add('open');
+  };
+  window.closeCancelResignModal = function () {
+    document.getElementById('cancel-resign-modal').classList.remove('open');
+  };
+  window.confirmCancelResign = function () {
+    var name = emp.name;
+    deleteResignRequest(badge);
+    try {
+      localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: 'Resignation for ' + name + ' has been cancelled.', type: 'success' }));
+    } catch (e) {}
+    window.location.href = 'offboarding-requests.html';
+  };
+  document.getElementById('cancel-resign-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeCancelResignModal();
+  });
+
+  function fmtToday() {
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var d = new Date();
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  window.openRejectModal = function () {
+    document.getElementById('reject-reason').value = '';
+    document.getElementById('reject-reason-error').style.display = 'none';
+    document.getElementById('reject-modal').classList.add('open');
+  };
+  window.closeRejectModal = function () {
+    document.getElementById('reject-modal').classList.remove('open');
+  };
+  window.confirmReject = function () {
+    var reasonInput = document.getElementById('reject-reason');
+    if (!reasonInput.value.trim()) {
+      document.getElementById('reject-reason-error').style.display = 'block';
+      return;
+    }
+    var currentReq = getResignRequest(badge);
+    if (currentReq.status === 'approved' || currentReq.status === 'completed') {
+      QuadraToast.show('This offboarding request has already been processed.', 'error');
+      closeRejectModal();
+      return;
+    }
+    currentReq.status = 'rejected';
+    currentReq.rejectedDate = fmtToday();
+    currentReq.rejectionReason = reasonInput.value.trim();
+    saveResignRequest(badge, currentReq);
+    closeRejectModal();
+    try {
+      localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: 'Resignation for ' + emp.name + ' has been rejected.', type: 'success' }));
+    } catch (e) {}
+    window.location.href = 'offboarding-requests.html';
+  };
+  document.getElementById('reject-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeRejectModal();
+  });
+
+  function initReasonDropdown(selectedValue) {
+    QuadraDropdown.init(document.getElementById('reason-select'), buildReasonOptions(), {
+      placeholder: 'Select reason',
+      value: selectedValue || undefined,
+      onChange: function (value) {
+        if (value === ADD_NEW_SENTINEL) {
+          openAddReasonModal();
+          return;
+        }
+        updateApproveButtonState();
+      }
+    });
+    updateApproveButtonState();
+  }
+  initReasonDropdown(request.resignReason);
+
+  window.openAddReasonModal = function () {
+    document.getElementById('new-reason-input').value = '';
+    document.getElementById('new-reason-error').style.display = 'none';
+    document.getElementById('add-reason-modal').classList.add('open');
+  };
+  window.closeAddReasonModal = function () {
+    document.getElementById('add-reason-modal').classList.remove('open');
+    var current = getResignReasonOptions().indexOf(request.resignReason) !== -1 ? request.resignReason : null;
+    initReasonDropdown(current);
+  };
+  window.confirmAddReason = function () {
+    var val = document.getElementById('new-reason-input').value.trim();
+    if (!val) {
+      document.getElementById('new-reason-error').style.display = 'block';
+      return;
+    }
+    addResignReasonOption(val);
+    document.getElementById('add-reason-modal').classList.remove('open');
+    initReasonDropdown(val);
+  };
+  document.getElementById('add-reason-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeAddReasonModal();
+  });
+
+  window.handleApprove = function () {
+    var currentReq = getResignRequest(badge);
+    if (currentReq.status === 'approved' || currentReq.status === 'completed') {
+      QuadraToast.show('This offboarding request has already been processed.', 'error');
+      return;
+    }
+    var reason = QuadraDropdown.getValue(document.getElementById('reason-select'));
+    if (!reason || reason === ADD_NEW_SENTINEL) return;
+    currentReq.status = 'approved';
+    currentReq.resignReason = reason;
+    saveResignRequest(badge, currentReq);
+    request = currentReq;
+    updateApprovalState();
+    QuadraToast.show('Resignation approved.', 'success');
+  };
+
+  function renderHandover() {
+    var req = getResignRequest(badge);
+    document.getElementById('handoverDoc').innerHTML = req.handoverFileName
+      ? '<a class="doc-link" href="document-preview-placeholder.pdf" target="_blank" rel="noopener">' + req.handoverFileName + '</a>'
+      : '—';
+    document.getElementById('handoverDate').textContent = req.handoverDate || '—';
+  }
+  renderHandover();
+
+  var CHECKLIST_ITEMS = [
+    'Paklaring',
+    'Surat Pengakhiran Kerjasama',
+    'Surat UPK',
+    'Penonaktifan BPJS TK & KS',
+    'Penonaktifan Email',
+    'Grup Lark',
+    'Grup WA',
+    'Akun Terkait Pekerjaan',
+    'Pengembalian ID Card',
+    'Exit Interview HR',
+    'Exit Interview User'
+  ];
+  var TOTAL = CHECKLIST_ITEMS.length;
+
+  function fmtDate(d) {
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  var checklistBody = document.getElementById('checklistBody');
+
+  function updateProgress() {
+    var req = getResignRequest(badge);
+    var state = req.offboardingChecklist || {};
+    var done = Object.keys(state).filter(function (k) { return state[k] && state[k].done; }).length;
+    document.getElementById('doneCount').textContent = done;
+    var pct = (done / TOTAL * 100).toFixed(1);
+    document.getElementById('progressFill').style.width = pct + '%';
+    var allDone = done === TOTAL;
+    document.getElementById('progressComplete').style.display = allDone ? 'inline-flex' : 'none';
+
+    /* Auto-transition the employee to Inactive once every checklist item
+       is done — no manual status change needed. Persisted to
+       quadra_status_override_<badge> (same override-key convention as
+       quadra_work_override_/quadra_personal_override_ in
+       employee-work-edit.html/employee-personal-edit.html); applied
+       centrally in employees-data.js right after QUADRA_EMPLOYEES is
+       defined, so every page that loads it — Employee Directory, Employee
+       Detail, payroll creation's "Active employees only" filter, etc. —
+       sees the change automatically, not just this page.
+       statusAutoUpdated guards the toast to only fire the first time
+       completion is actually reached, not on every reload or re-render
+       of an already-completed checklist. */
+    if (allDone) {
+      emp.status = 'Inactive';
+      var eppStatusEl = document.getElementById('epp-status');
+      eppStatusEl.textContent = emp.status;
+      eppStatusEl.className = STATUS_TAG_CLASS[emp.status];
+      /* Written every time allDone is true (not just once) — otherwise a
+         checklist that was already fully checked before this override key
+         existed would never get it persisted, leaving other pages stuck
+         showing the stale Active status forever. */
+      try { localStorage.setItem('quadra_status_override_' + badge, JSON.stringify({ status: 'Inactive' })); } catch (e) {}
+      if (!req.statusAutoUpdated) {
+        req.statusAutoUpdated = true;
+        saveResignRequest(badge, req);
+        QuadraToast.show(emp.name + '’s status has been updated to Inactive — offboarding checklist complete.', 'success');
+      }
+    }
+  }
+
+  function toggle(idx, checked, row) {
+    var req = getResignRequest(badge);
+    var state = req.offboardingChecklist || {};
+    if (checked) {
+      state[idx] = { done: true, date: fmtDate(new Date()) };
+    } else {
+      state[idx] = { done: false };
+    }
+    req.offboardingChecklist = state;
+    saveResignRequest(badge, req);
+    row.classList.toggle('done', checked);
+    row.querySelector('.ci-date').textContent = checked ? state[idx].date : '';
+    updateProgress();
+  }
+
+  function renderChecklist() {
+    var req = getResignRequest(badge);
+    var state = req.offboardingChecklist || {};
+    checklistBody.innerHTML = '';
+    CHECKLIST_ITEMS.forEach(function (label, idx) {
+      var s = state[idx] || {};
+      var row = document.createElement('div');
+      row.className = 'ci' + (s.done ? ' done' : '');
+      row.dataset.id = idx;
+      row.innerHTML =
+        '<input type="checkbox" class="ci-check"' + (s.done ? ' checked' : '') + ' />'
+        + '<div class="ci-num">' + (idx + 1) + '</div>'
+        + '<div class="ci-text">' + label + '</div>'
+        + '<div class="ci-date">' + (s.done && s.date ? s.date : '') + '</div>';
+      var cb = row.querySelector('.ci-check');
+      row.addEventListener('click', function (e) { if (e.target !== cb) cb.click(); });
+      cb.addEventListener('change', function () { toggle(idx, cb.checked, row); });
+      checklistBody.appendChild(row);
+    });
+    updateProgress();
+  }
+
+  renderChecklist();
+})();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

@@ -1,0 +1,2133 @@
+/* ============================================================
+   layout.css — QuadraNG page-level layout components
+   Include on pages that use: tables, modals, hero cards,
+   stat cards, info boxes, tab bars, wizard steps, settings nav.
+
+   Include AFTER base.css and fields.css.
+
+   Contents:
+     1.  Table (wrap · toolbar · thead · tbody · pagination)
+     2.  Empty State
+     3.  Tab Bar
+     4.  Modal
+     5.  Fixed Footer (wizard pages)
+     6.  Wizard Step Indicator
+     7.  Hero Card
+     8.  Stat Cards — Variant A (separated)
+     9.  Stat Cards — Variant B (connected strip)
+     10. Info Box
+     11. Scheduled Change Banner
+     12. Level Badge (circular — payroll level range)
+     13. Settings Nav (two-panel layout)
+     14. History Timeline (change-log / audit trail)
+   ============================================================ */
+
+
+/* ——————————————————————————————————————————
+   1. TABLE
+   All list pages use this structure:
+     .table-wrap > .table-toolbar + <table> + .table-pagination
+
+   th: 11px/600 uppercase, bg #F9FAFB
+   td: 13px, pad 14px 16px
+   Row hover: #FAFAFA · Selected row: #FFF5F3
+
+   PATTERN: always border-collapse collapse, no border-radius.
+            Sort icons go inside <th> as trailing SVG.
+            Action column is always last, text-align right.
+            Never use native <select> inside toolbar — use .filter-pill.
+   —————————————————————————————————————————— */
+.table-wrap {
+  background: #fff;
+  border: 1px solid var(--bd);
+  overflow-x: auto;
+}
+
+/* Toolbar: search + filter pills + export button */
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-12) var(--sp-16);
+  border-bottom: 1px solid var(--bd);
+  flex-wrap: wrap;
+}
+
+/* Search field inside toolbar */
+.search-w {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  border: 1px solid var(--bd-input);
+  height: 36px;
+  padding: 0 var(--sp-10);
+  background: #fff;
+  flex: 1;
+  max-width: 280px;
+}
+.search-w input {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: var(--fs-13);
+  color: var(--t1);
+  flex: 1;
+  background: transparent;
+}
+.search-w input::placeholder { color: var(--t4); }
+
+/* Filter pills: status, department, etc.
+   PATTERN: default = outline, active = #E04A2A accent fill.
+            The first pill with the funnel icon is the dropdown trigger. */
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  height: 32px;
+  padding: 0 var(--sp-10);
+  border: 1px solid var(--bd-input);
+  background: #fff;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  color: var(--t2);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+.filter-pill.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Bulk-selection bar — replaces (or sits alongside) .table-toolbar
+   once one or more rows are checked via the .col-check column.
+   Promoted from employees-list.html. */
+.selection-bar {
+  display: none;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-8) 14px;
+  background: #FFF7F5;
+  border: 1px solid #FBBCAD;
+}
+.selection-bar.show    { display: flex; }
+.selection-count       { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--primary); }
+.selection-clear       { font-size: var(--fs-12); color: var(--t3); cursor: pointer; text-decoration: underline; margin-left: var(--sp-4); }
+.selection-clear:hover { color: var(--t2); }
+.selection-bar-right   { margin-left: auto; }
+
+/* Table element */
+table { width: 100%; border-collapse: collapse; }
+
+thead { background: var(--page-bg); }
+
+thead th,
+th {
+  padding: 11px var(--sp-16);
+  font-size: var(--fs-11);
+  font-weight: var(--fw-semibold);
+  color: var(--t3);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--page-bg);
+  border-bottom: 1px solid var(--bd);
+  white-space: nowrap;
+}
+thead th.col-right,
+th.col-right { text-align: right; }
+th.num       { text-align: right; }
+
+/* Sortable column header — trailing stacked asc/desc caret built from
+   CSS borders (no icon font/SVG needed). Promoted from
+   employees-list.html. */
+th.sortable { cursor: pointer; }
+th.sortable:hover { color: var(--t2); }
+th .sort-icon { display: inline-flex; flex-direction: column; gap: 1px; vertical-align: middle; margin-left: var(--sp-4); opacity: 0.4; }
+th .sort-icon span { display: block; width: 0; height: 0; }
+th .sort-icon .asc  { border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 4px solid var(--t2); }
+th .sort-icon .desc { border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid var(--t2); }
+
+/* Checkbox column — fixed-width leading column for row selection.
+   Promoted from employees-list.html. */
+th.col-check, td.col-check { width: 44px; padding-left: var(--sp-16); padding-right: var(--sp-4); }
+/* Native checkbox input used for row/select-all selection in this
+   column (as opposed to the custom .checkbox-box div used elsewhere —
+   both are valid selection-control recipes; this one matches native
+   <input type="checkbox"> semantics for simpler row-array binding). */
+.col-check input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--primary); cursor: pointer; }
+
+tbody tr          { cursor: pointer; }
+tbody tr:last-child td,
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover td,
+tbody tr:hover    { background: #FAFAFA; }
+tbody tr.selected td { background: var(--primary-light); }
+
+tbody td,
+td {
+  padding: 14px var(--sp-16);
+  font-size: var(--fs-13);
+  color: var(--t2);
+  vertical-align: middle;
+  border-bottom: 1px solid #F3F4F6;
+}
+tbody td.col-right,
+td.col-right  { text-align: right; }
+tbody td.col-muted  { color: var(--t4); }
+td.num        { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Sub-row separator (e.g. payroll period employee list) */
+tbody tr.sub-row td { background: var(--page-bg); border-top: 1px solid #F3F4F6; border-bottom: none; }
+
+/* Pagination row — table-footer wraps page-info + page-size-w + pagination.
+   PATTERN: JS renders numbered .page-btn elements into #pagination,
+            with .page-ellipsis for skipped ranges. */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-12) var(--sp-16);
+  background: #fff;
+  border: 1px solid var(--bd);
+  border-top: none;
+}
+.page-info { font-size: var(--fs-13); color: var(--t3); }
+
+.page-size-w      { display: flex; align-items: center; gap: var(--sp-8); font-size: var(--fs-12); color: var(--t3); }
+.page-size-select {
+  height: 32px;
+  padding: 0 var(--sp-24) 0 var(--sp-8);
+  border: 1px solid var(--bd);
+  background: #fff url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 4l3 3 3-3' stroke='%236B7280' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 8px center;
+  appearance: none;
+  font-size: var(--fs-13);
+  color: var(--t2);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+}
+
+.pagination   { display: flex; align-items: center; gap: 2px; }
+.page-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 var(--sp-6);
+  border: 1px solid var(--bd);
+  background: #fff;
+  font-size: var(--fs-13);
+  color: var(--t2);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-btn:hover:not(:disabled):not(.active) { background: var(--page-bg); }
+.page-btn.active   { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: var(--fw-semibold); cursor: default; }
+.page-btn:disabled { opacity: 0.35; cursor: default; }
+.page-ellipsis {
+  min-width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-13);
+  color: var(--t4);
+}
+
+/* Read-only "detail table" variant — a bordered, horizontally-
+   scrollable table inside a detail-page tab pane. Promoted from
+   employee-detail.html. Its thead/th/td overrides were dropped:
+   they were near-duplicates (1-2px padding) of the generic
+   thead/th/td rules above, which already apply to any <table>
+   including this one. */
+.detail-table-wrap { border: 1px solid var(--bd); overflow-x: auto; }
+.detail-table       { width: 100%; border-collapse: collapse; min-width: 540px; }
+.detail-table .mandatory-tag {
+  display: inline-block;
+  font-size: var(--fs-11);
+  color: var(--t3);
+  border: 1px solid var(--bd);
+  padding: 1px var(--sp-6);
+  margin-left: var(--sp-6);
+}
+
+/* Large number + small unit suffix, baseline-aligned (e.g. an hourly
+   overtime rate). Promoted from employee-detail.html. */
+.rate-box       { display: inline-flex; align-items: baseline; gap: var(--sp-6); font-size: var(--fs-20); font-weight: var(--fw-bold); color: var(--t1); }
+.rate-box small { font-size: var(--fs-13); font-weight: var(--fw-regular); color: var(--t3); }
+
+
+/* ——————————————————————————————————————————
+   2. EMPTY STATE
+   Used inside <tbody> as a full-width <td colspan="N">.
+
+   PATTERN: icon 32×32px stroke #D1D5DB 1.5px (no fill).
+            Primary text 13px #9CA3AF.
+            Secondary hint 12px #D1D5DB.
+            Never put a CTA button inside the empty state — use the
+            page-level action button (top right) instead.
+   —————————————————————————————————————————— */
+.table-empty {
+  padding: 48px var(--sp-16);
+  text-align: center;
+}
+.table-empty-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-10);
+}
+.table-empty-text { font-size: var(--fs-13); color: var(--t4); }
+.table-empty-hint { font-size: var(--fs-12); color: var(--bd-input); }
+
+
+/* ——————————————————————————————————————————
+   3. TAB BAR
+   Horizontal scrollable tab strip — used on detail pages.
+   (employee-detail, loan-detail, payroll-summary-detail)
+
+   PATTERN: active tab has border-bottom 2px #E04A2A (bottom border).
+            Tab panes (.tab-pane) are display:none by default;
+            only the active one gets display:flex via JS (activateTab()).
+            Hash-based navigation: URL #contract activates the contract tab.
+   —————————————————————————————————————————— */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--bd);
+  padding: 0 var(--sp-8);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: 14px var(--sp-16);
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  color: var(--t3);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tab-btn.active        { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-btn:hover:not(.active) { color: var(--t2); }
+
+/* Size variant — default .tab-btn above is the "LG" size (14px/16px pad,
+   13px font). .sm on the parent .tab-bar is a smaller variant (e.g. a tab
+   bar merged into a breadcrumb-height header, employee-detail.html). */
+.tab-bar.sm .tab-btn { padding: var(--sp-10) var(--sp-12); font-size: var(--fs-12); }
+
+/* Tab pane — hidden by default, JS adds .active */
+.tab-pane        { display: none; padding: var(--sp-24); flex-direction: column; gap: var(--sp-24); }
+.tab-pane.active { display: flex; }
+
+
+/* ——————————————————————————————————————————
+   4. MODAL
+   width 440px · overlay rgba(0,0,0,0.35) · no border-radius.
+   Labels INSIDE modal are 13px (not 12px like page labels).
+
+   PATTERN: overlay gets class .show via JS to display.
+            Cancel → btn-outline, Confirm → btn-primary,
+            Destructive → btn-danger.
+            Confirm modal uses .modal-warn-icon (red circle, ⚠ SVG).
+            Never use native <dialog> — always .modal-overlay + .modal-box.
+
+   Structure:
+     <div class="modal-overlay" id="...">
+       <div class="modal-box">
+         <div class="modal-head">
+           <div class="modal-head-title">Title</div>
+           <button class="modal-close">×</button>
+         </div>
+         <div class="modal-body"> … fields … </div>
+         <div class="modal-actions"> … buttons … </div>
+       </div>
+     </div>
+   —————————————————————————————————————————— */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 900;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show,
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: #fff;
+  border: 1px solid var(--bd);
+  width: 440px;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-16) var(--sp-20);
+  border-bottom: 1px solid var(--bd);
+  flex-shrink: 0;
+}
+.modal-head-title { font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--t1); }
+
+.modal-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--t4);
+  border: none;
+  background: transparent;
+}
+.modal-close:hover { color: var(--t2); }
+
+.modal-body {
+  padding: var(--sp-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  overflow-y: auto;
+}
+
+.modal-actions {
+  padding: var(--sp-12) var(--sp-20);
+  border-top: 1px solid var(--bd);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-8);
+  flex-shrink: 0;
+}
+
+/* Sub-section label/desc inside modal body */
+.modal-sub-label {
+  font-size: var(--fs-14);
+  font-weight: var(--fw-semibold);
+  color: var(--t1);
+  margin-bottom: var(--sp-6);
+}
+.modal-sub-desc { font-size: var(--fs-13); color: var(--t3); line-height: 1.5; }
+
+/* Confirm/delete modal — warning icon circle */
+.modal-warn-icon {
+  width: 44px;
+  height: 44px;
+  background: #FEF2F2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* Positive-confirmation variant (e.g. Approve) — same shape, green tint
+   instead of the default red warning tint. */
+.modal-warn-icon.icon-success { background: #ECFDF5; }
+
+/* Confirm modal icon+text row — nests inside .modal-body (which already
+   has its own padding), so .modal-warn-icon sits beside the sub-label/
+   sub-desc text instead of stacking above it. */
+.modal-confirm-body {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: flex-start;
+}
+.modal-confirm-title { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); margin-bottom: var(--sp-6); }
+.modal-confirm-desc  { font-size: var(--fs-13); color: var(--t3); line-height: 1.5; }
+
+
+/* ——————————————————————————————————————————
+   5. FIXED FOOTER (Wizard pages)
+   Sticks to bottom of page shell. Contains Back + Next buttons
+   and the step counter text.
+
+   PATTERN: Back btn-outline left, Next btn-primary right.
+            Step counter (e.g. "Step 1 of 6") in center — color #6B7280.
+            Height 64px, pad 0 28px.
+   —————————————————————————————————————————— */
+.fixed-footer {
+  flex-shrink: 0;
+  height: 64px;
+  background: #fff;
+  border-top: 1px solid var(--bd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-28);
+}
+.fixed-footer-center {
+  font-size: var(--fs-13);
+  color: var(--t3);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+/* ——————————————————————————————————————————
+   6. WIZARD STEP INDICATOR
+   Horizontal strip of dots + connectors + labels.
+   Lives inside a form page between the navbar and form card.
+
+   States: active (filled red), inactive (outlined gray), done (filled red — same as active)
+
+   PATTERN: wstep-dot numbers match the logical step order.
+            wconn.done = completed connector (red).
+            wconn.pending = future connector (gray).
+            Steps hidden by role use class .wiz-finance — toggled by quadra_role.
+   —————————————————————————————————————————— */
+.wizard-steps {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--sp-20) var(--sp-28) 0;
+  gap: 0;
+}
+.wstep {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-8);
+}
+.wstep-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+}
+.wstep-dot.active   { background: var(--primary); color: #fff; font-weight: var(--fw-semibold); }
+.wstep-dot.inactive { background: #fff; border: 2px solid var(--bd); color: var(--t4); }
+
+.wstep-label           { font-size: var(--fs-12); text-align: center; white-space: nowrap; }
+.wstep-label.active    { color: var(--primary); font-weight: var(--fw-semibold); }
+.wstep-label.inactive  { color: var(--t4); }
+
+.wconn         { flex: 1; height: 2px; margin-top: var(--sp-16); flex-shrink: 0; }
+.wconn.done    { background: var(--primary); }
+.wconn.pending { background: var(--bd); }
+
+
+/* ——————————————————————————————————————————
+   7. HERO CARD
+   Full-width card at top of detail pages.
+   Avatar + name + subtitle row + action buttons.
+
+   PATTERN: hero-avatar 56px circle (avatar-lg equivalent).
+            Subtitle uses hero-sub-dot (3px circles) as separators.
+            Status badge sits inline in hero-sub.
+            hero-actions right-aligned — Edit button uses hero-icon-btn.
+   —————————————————————————————————————————— */
+.hero-card {
+  background: #fff;
+  border: 1px solid var(--bd);
+  padding: var(--sp-20) var(--sp-24);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-16);
+}
+.hero-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-18);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+.hero-info    { flex: 1; min-width: 0; }
+.hero-name    { font-size: var(--fs-18); font-weight: var(--fw-bold); color: var(--t1); }
+.hero-sub {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  flex-wrap: wrap;
+  margin-top: var(--sp-4);
+  font-size: var(--fs-13);
+  color: var(--t3);
+}
+.hero-sub-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--t4); flex-shrink: 0; }
+.hero-actions { display: flex; gap: var(--sp-8); flex-shrink: 0; }
+/* Icon variant of .hero-avatar — for hero cards on non-person entities
+   (e.g. a shift, not an employee), where a circular initials avatar
+   doesn't apply. Sits in the same slot as .hero-avatar; pairs with the
+   existing .hero-info (used as-is — settings-shift-detail.html's
+   duplicate .hero-text rule set the exact same flex:1;min-width:0 and
+   was dropped in favor of the shared class). Promoted from
+   settings-shift-detail.html. */
+.hero-icon {
+  width: 48px;
+  height: 48px;
+  background: #FFF4F2;
+  border: 1px solid #FDDDD8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+
+/* ——————————————————————————————————————————
+   PERMISSION MATRIX (always expanded, no accordion)
+   Used by settings-group-detail.html's User Group permission grid.
+   Tri-state bulk-toggle checkboxes use the browser's native
+   indeterminate state (a JS-only DOM property, not a CSS class) —
+   plain <input type="checkbox"> with accent-color, not .checkbox-box,
+   since .checkbox-box has no indeterminate visual defined.
+   Edit/Delete=on forces View=on and locks its checkbox (disabled).
+   —————————————————————————————————————————— */
+.perm-section { border: 1px solid var(--bd); background: #fff; }
+.perm-section + .perm-section { margin-top: var(--sp-20); }
+.perm-cat-head { display: flex; align-items: center; gap: var(--sp-10); padding: 14px var(--sp-20); background: var(--page-bg); border-bottom: 1px solid #F3F4F6; }
+.perm-cat-label { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+.perm-cat-badge { min-width: 20px; height: 20px; padding: 0 var(--sp-6); background: var(--bd); color: var(--t3); font-size: var(--fs-11); font-weight: var(--fw-bold); display: inline-flex; align-items: center; justify-content: center; }
+.perm-cat-badge.on { background: var(--primary); color: #fff; }
+.perm-actions-row { display: flex; align-items: center; gap: var(--sp-10); padding: var(--sp-8) var(--sp-20); background: #fff; border-bottom: 1px solid #F3F4F6; }
+.perm-ent-label-spacer { flex: 1; min-width: 0; font-size: var(--fs-11); font-weight: var(--fw-semibold); color: var(--t3); text-transform: uppercase; letter-spacing: 0.05em; }
+.perm-action-col { width: 40px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; color: var(--t4); }
+.perm-bulk-cb { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
+.perm-ent-row { display: flex; align-items: center; gap: var(--sp-10); padding: var(--sp-10) var(--sp-20); border-bottom: 1px solid #F3F4F6; }
+.perm-ent-row:last-child { border-bottom: none; }
+.perm-ent-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: var(--fs-10); font-weight: var(--fw-bold); color: #fff; }
+.perm-ent-label { flex: 1; min-width: 0; font-size: var(--fs-13); color: var(--t2); }
+.perm-toggle-col { width: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+
+/* ——————————————————————————————————————————
+   8. STAT CARDS — VARIANT A (Separated)
+   Used on detail pages — individual bordered cards in a row.
+
+   PATTERN: stat-label 11px uppercase, stat-value 20px/700.
+            Use font-size:16px on stat-value for long numbers (Rp amounts).
+            Use color:#9CA3AF + font-weight:500 for "No upper limit" etc.
+   —————————————————————————————————————————— */
+.stats-row-a { display: flex; gap: var(--sp-12); }
+.stat-card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid var(--bd);
+  padding: var(--sp-16) var(--sp-20);
+}
+.stat-label {
+  font-size: var(--fs-11);
+  font-weight: var(--fw-semibold);
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-6);
+}
+.stat-value { font-size: var(--fs-20); font-weight: var(--fw-bold); color: var(--t1); }
+.stat-sub   { font-size: var(--fs-11); color: var(--t4); margin-top: 3px; }
+/* Muted placeholder value — "No upper limit" etc. This is the concrete
+   class for the pattern the comment above already described in prose.
+   Promoted from payroll-level-range-detail.html. */
+.stat-value.muted { font-size: var(--fs-15); font-weight: var(--fw-regular); color: var(--t4); }
+/* Color modifiers for a colored stat breakdown row (e.g. Present/Late/
+   Absent counts) — put .green/.amber/.red on .stat-card, it recolors
+   just the .stat-value inside. Values are a darker on-white-friendly
+   shade, distinct from the badge-background tokens (--success etc.),
+   so kept as literal hex rather than forced onto an existing token.
+   Promoted from attendance.html. */
+.stat-card.green .stat-value { color: #16A34A; }
+.stat-card.amber .stat-value { color: #D97706; }
+.stat-card.red   .stat-value { color: #DC2626; }
+
+
+/* ——————————————————————————————————————————
+   9. STAT CARDS — VARIANT B (Connected Strip)
+   Used on list pages — full-width strip above the table.
+   4 cards sharing a single outer border, divided by vertical separators.
+
+   PATTERN: grid-template-columns: repeat(4, 1fr).
+            For fewer cards: repeat(3, 1fr) or repeat(2, 1fr).
+            Reuse .stat-label, .stat-value, .stat-sub from Variant A.
+   —————————————————————————————————————————— */
+.stats-row-b {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--bd);
+  background: #fff;
+  margin-bottom: var(--sp-16);
+}
+.stat-card-b {
+  padding: var(--sp-16) var(--sp-20);
+  border-right: 1px solid var(--bd);
+}
+.stat-card-b:last-child { border-right: none; }
+
+
+/* ——————————————————————————————————————————
+   10. INFO BOX
+   Used to surface contextual notices — not errors, not toasts.
+   Three color variants: blue (info), amber (warning), red (danger).
+
+   PATTERN: icon 16×16px stroke-only, aligned to first line of text.
+            Use <strong> inside text for key values (dates, amounts).
+            Max-width unset by default — constrain in page-specific CSS if needed.
+   —————————————————————————————————————————— */
+.info-box {
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  padding: var(--sp-12) var(--sp-16);
+  display: flex;
+  gap: var(--sp-10);
+  font-size: var(--fs-13);
+  color: var(--info-text);
+  line-height: 1.5;
+}
+.info-box-amber {
+  background: var(--amber-bg);
+  border-color: #FDE68A;
+  color: var(--amber-text);
+}
+.info-box-red {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #991B1B;
+}
+/* When info-box text is a <p> (multi-line prose) rather than a <span>,
+   bump line-height slightly for readability. Promoted from
+   onboarding-step6-overtime.html — the page's own .info-box-blue /
+   .info-box-amber background+border+color overrides were dropped as
+   pure duplicates of the defaults above (color: var(--info-text) /
+   var(--amber-text) already match); only the <strong> emphasis color
+   below was new. */
+.info-box p { line-height: 1.6; }
+.info-box-blue strong { color: #1E3A8A; }
+
+
+/* ——————————————————————————————————————————
+   11. SCHEDULED CHANGE BANNER
+   Shown on edit pages when a future change is already pending.
+   Always blue — informational, not a warning.
+
+   PATTERN: .sb-title is the uppercase eyebrow label.
+            .sb-value/.sb-amount (page-specific name) holds the headline value.
+            .sb-cancel lets the user cancel the pending scheduled change.
+            Displayed above the form, below the hero card, separated by .card-divider.
+   —————————————————————————————————————————— */
+.scheduled-banner {
+  margin: 0 var(--sp-24) var(--sp-20);
+  padding: 14px var(--sp-16);
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+.sb-body   { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-8); }
+.sb-title  { font-size: var(--fs-11); font-weight: var(--fw-medium); color: #1D4ED8; letter-spacing: 0.4px; text-transform: uppercase; }
+.sb-detail { display: flex; flex-direction: column; gap: var(--sp-4); }
+.sb-value  { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+.sb-meta   { font-size: var(--fs-12); color: var(--scheduled); }
+.sb-cancel {
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  color: var(--t3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sb-cancel:hover { color: var(--t1); }
+
+
+/* ——————————————————————————————————————————
+   12. LEVEL BADGE (Circular)
+   Used in payroll level range table — colored circle with number.
+   border-radius 50% (exception to global radius-0 rule).
+
+   PATTERN: background color set inline per level (1–5).
+            Lv1 #6B7280, Lv2 #22C55E, Lv3 #3B82F6, Lv4 #E04A2A, Lv5 #7C3AED
+   —————————————————————————————————————————— */
+.level-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-11);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  flex-shrink: 0;
+}
+/* Row pairing a .level-badge with a hint (e.g. wage range for the
+   matched grade) — promoted from onboarding-step3-contract.html. */
+.level-badge-row  { display: flex; align-items: center; gap: var(--sp-8); }
+.level-range-hint { font-size: var(--fs-12); color: var(--t4); }
+
+
+/* ——————————————————————————————————————————
+   13. SETTINGS NAV (Two-Panel Layout)
+   Left nav panel for settings page (Variant D layout).
+   Active item uses left border accent, not bottom border.
+
+   PATTERN: 220px fixed width, border-right separator.
+            Active state: border-left 3px #E04A2A, bg #FFF9F8.
+            Font 14px (not 13px — settings nav is slightly larger).
+   —————————————————————————————————————————— */
+.settings-nav {
+  width: 220px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--bd);
+  overflow-y: auto;
+  padding: var(--sp-8) 0;
+}
+.settings-nav-item {
+  display: block;
+  width: 100%;
+  padding: var(--sp-10) var(--sp-20);
+  font-size: var(--fs-14);
+  color: var(--t2);
+  cursor: pointer;
+  border: none;
+  border-left: 3px solid transparent;
+  background: none;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.settings-nav-item:hover { background: var(--page-bg); }
+.settings-nav-item.active {
+  border-left-color: var(--primary);
+  font-weight: var(--fw-semibold);
+  color: var(--t1);
+  background: #FFF9F8;
+}
+.settings-nav-group-label {
+  padding: var(--sp-10) var(--sp-20);
+  background: var(--page-bg);
+  border-top: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.settings-field-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-16);
+  padding: var(--sp-20) var(--sp-24);
+  border-bottom: 1px solid #F3F4F6;
+}
+.settings-field-row:last-child { border-bottom: none; }
+.settings-field-row .form-group { flex: 1; max-width: 320px; }
+/* Left-nav column wrapper: holds the search box above .settings-nav so the
+   two share one bordered/scrollable column (Task 4, search/filter box).
+   .settings-nav keeps its own border-right/width for standalone use
+   (e.g. the components.html demo); nested inside this column, that
+   border and width are handed off to the column itself instead. */
+.settings-nav-col {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--bd);
+  overflow: hidden;
+}
+.settings-nav-search {
+  height: 60px;
+  padding: var(--sp-12) var(--sp-12);
+  border-bottom: 1px solid var(--bd);
+  flex-shrink: 0;
+}
+/* .section-head is shared across many pages and normally sizes itself off
+   its content — 48px for a title alone, 64px when a Create button is
+   present. Inside Settings' two-panel shell specifically, that variance
+   means the section header doesn't line up with .settings-nav-search
+   above the nav. Pin both to the same 60px so the two panels' top edges
+   align regardless of which section is active. */
+.settings-body .section-head { height: 60px; padding: 0 var(--sp-24); }
+.settings-nav-col .settings-nav { border-right: none; flex: 1; width: auto; }
+/* Outer shell + right panel completing the two-panel layout above
+   (.settings-nav was already shared; these three were still page-local
+   until Task 10). .settings-card is the bordered flex row wrapping
+   .settings-nav + .settings-body; .settings-section/.active is the
+   JS-driven show/hide for whichever settings sub-page is selected.
+   Promoted from settings.html. */
+.settings-card    { display: flex; background: #fff; border: 1px solid var(--bd); flex: 1; min-height: 600px; overflow: hidden; }
+.settings-body    { flex: 1; min-width: 0; overflow-y: auto; }
+.settings-section { display: none; }
+.settings-section.active { display: block; }
+
+
+/* ——————————————————————————————————————————
+   14. HISTORY TIMELINE
+   Vertical change-log/audit-trail list — dot + connecting line on
+   the left, change details on the right. Promoted from
+   employee-detail.html's per-tab change history.
+
+   PATTERN: .hist-filter row of toggle pills above the list.
+            .hist-item = one entry; .hist-dot.init marks the
+            "record created" entry (muted gray, not accent).
+            .hist-change-row lists one or more .hist-field/.hist-before
+            /.hist-after triplets, or a single .hist-sub summary line.
+   —————————————————————————————————————————— */
+.hist-filter        { height: 28px; padding: 0 var(--sp-12); background: #fff; border: 1px solid var(--bd); cursor: pointer; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--t3); font-family: 'Inter', sans-serif; }
+.hist-filter:hover  { border-color: var(--bd-input); color: var(--t2); }
+.hist-filter.active { background: var(--t1); border-color: var(--t1); color: #fff; }
+
+.hist-item          { display: flex; gap: var(--sp-16); padding: var(--sp-16) var(--sp-20); border-bottom: 1px solid #F3F4F6; }
+.hist-item:last-child { border-bottom: none; }
+.hist-item.hidden   { display: none; }
+.hist-line-col      { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; padding-top: 3px; }
+.hist-dot           { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.hist-dot.init      { background: var(--bd-input); }
+.hist-vline         { width: 1px; flex: 1; background: var(--bd); margin-top: 5px; min-height: 16px; }
+.hist-content       { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hist-top           { display: flex; align-items: center; gap: var(--sp-8); flex-wrap: wrap; }
+.hist-ts            { font-size: var(--fs-12); color: var(--t4); }
+.hist-category-tag  { display: inline-flex; align-items: center; padding: 3px var(--sp-8); font-size: var(--fs-12); font-weight: var(--fw-medium); background: #F3F4F6; color: var(--t2); border: 1px solid var(--bd); white-space: nowrap; }
+.hist-actor         { font-size: var(--fs-12); color: var(--t3); font-weight: var(--fw-medium); }
+/* One or more of these per entry — the changed field + before/after values. */
+.hist-change-row    { margin-top: var(--sp-16); display: flex; align-items: center; gap: var(--sp-8); flex-wrap: wrap; }
+.hist-field         { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t3); }
+.hist-field::after  { content: ':'; }
+.hist-before        { font-size: var(--fs-13); color: var(--t4); text-decoration: line-through; }
+.hist-after         { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+/* Plain-text summary line alternative to a .hist-change-row (e.g. "Record created"). */
+.hist-sub           { margin-top: var(--sp-8); font-size: var(--fs-12); color: var(--t4); }
+
+
+/* ============================================================
+   COMMON PAGE PATTERNS
+   Shared across 3+ pages. Grouped by function.
+   ============================================================ */
+
+
+/* ——————————————————————————————————————————
+   PAGE SHELL
+   .main-content: scrollable content area inside right-panel.
+   .body-wrap: inner wrapper when page has a fixed footer.
+   .page-header: top row with title + actions.
+   PATTERN: padding 28px default; override for wizard/form pages.
+   —————————————————————————————————————————— */
+.main-content {
+  flex: 1;
+  background: var(--page-bg);
+  padding: var(--sp-28);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  overflow-y: auto;
+}
+.body-wrap    { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.page-header  { display: flex; align-items: flex-end; justify-content: space-between; }
+.page-title   { font-size: var(--fs-20); font-weight: var(--fw-bold); color: var(--t1); }
+.page-subtitle { font-size: var(--fs-13); color: var(--t3); margin-top: 3px; }
+.page-actions { display: flex; align-items: center; gap: var(--sp-8); }
+
+
+/* ——————————————————————————————————————————
+   SECTION CONTAINERS
+   .section-card: white bordered container, full width.
+   .section-head: header row of a section-card.
+   .section-body: content area of a section-card.
+   .form-card / .card-head / .card-body: wizard step card variant.
+   —————————————————————————————————————————— */
+.section-card  { width: 100%; background: #fff; border: 1px solid var(--bd); }
+.section-head  { padding: 14px var(--sp-24); border-bottom: 1px solid var(--bd); display: flex; align-items: center; justify-content: space-between; }
+.section-head h3 { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+.section-body  { padding: var(--sp-20) var(--sp-24); display: flex; flex-direction: column; gap: var(--sp-20); }
+.section-title { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+/* Neutral count pill following a section/page title (e.g. "Registered
+   Employees 24"). Promoted from payroll-level-range-detail.html. */
+.count-badge   { background: #F3F4F6; color: var(--t3); font-size: var(--fs-11); font-weight: var(--fw-medium); padding: 2px var(--sp-8); }
+/* Small square icon badge preceding a section-head title (e.g.
+   "Personal Information", "Work Information"). Promoted from
+   employee-edit.html, used 5x on that page alone. */
+.section-icon  { width: 28px; height: 28px; background: #F3F4F6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Colored type icon badge (payment batch list rows). Promoted from
+   payroll-summary-detail.html. Same 28×28 footprint as .section-icon
+   above, but FLAGGED: uses border-radius:6px, which is not one of the
+   documented radius-0 exceptions in design-core.md §"Global rule" (avatar
+   50%, company avatar 6px, notification badge 8px, level badge 50%,
+   calendar selected day 50%) — .section-icon, the same-size icon badge
+   directly above, is square-cornered (radius 0). Left as-is (not
+   silently changed to radius:0, which would be a visible fix beyond
+   this audit's promote-only scope) — flagging for a design decision. */
+.batch-icon           { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.batch-icon.salary    { background: #EFF6FF; color: #2563EB; }
+.batch-icon.allowance { background: #F0FDF4; color: #16A34A; }
+
+.form-card     { width: 100%; background: #fff; border: 1px solid var(--bd); display: flex; flex-direction: column; }
+.card-head     { padding: var(--sp-16) var(--sp-24); border-bottom: 1px solid var(--bd); display: flex; align-items: center; justify-content: space-between; }
+.card-head h2  { font-size: var(--fs-16); font-weight: var(--fw-semibold); color: var(--t1); }
+.card-body     { padding: var(--sp-24); display: flex; flex-direction: column; gap: var(--sp-20); }
+.foot-btns     { display: flex; gap: var(--sp-12); }
+
+
+/* ——————————————————————————————————————————
+   FORM LAYOUT
+   .form-row: horizontal field group (default gap 20px).
+   .form-col / .f-field / .up-field: vertical field wrapper.
+   .form-group: stacked wrapper with no gap (add gap in context).
+   .err-msg / .field-warn: inline validation messages.
+   —————————————————————————————————————————— */
+.form-row      { display: flex; gap: var(--sp-20); }
+.form-col      { flex: 1; display: flex; flex-direction: column; gap: var(--sp-8); min-width: 0; }
+.form-col.half { flex: 0 0 calc(50% - 10px); }
+.form-col > label,
+.label-row > label:not(.same-check),
+.duration-field > label { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); display: block; }
+.form-col > label .muted { color: var(--t3); font-weight: var(--fw-regular); }
+/* "(Optional)" suffix inside any label */
+.opt-tag { font-size: var(--fs-11); font-weight: var(--fw-regular); color: var(--t4); }
+/* Label + inline trailing control on the same row (e.g. label + "Same as ID address" checkbox) */
+.label-row     { display: flex; align-items: center; justify-content: space-between; }
+.form-group    { display: flex; flex-direction: column; }
+
+.f-field       { flex: 1; display: flex; flex-direction: column; gap: var(--sp-6); min-width: 0; }
+.f-field > label { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); display: block; }
+/* Double-width modifier for a field that should take twice the flex
+   share of its row siblings (e.g. "Full Name" next to a narrower
+   read-only "Badge ID"). Promoted from employee-edit.html. */
+.f-field.w2    { flex: 2; }
+
+.up-field      { flex: 1; display: flex; flex-direction: column; gap: var(--sp-6); }
+.up-field label { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); }
+/* Hide a whole .up-field (e.g. a conditional row). Promoted from
+   employee-contract-edit.html. */
+.up-field.hidden { display: none; }
+.up-grid       { display: flex; gap: var(--sp-16); }
+
+.err-msg       { font-size: var(--fs-12); color: var(--danger); display: none; }
+.err-msg.show  { display: block; }
+.field-warn    { font-size: var(--fs-12); color: #D97706; display: none; margin-top: var(--sp-4); }
+.field-warn.show { display: block; }
+
+.radio-group   { display: flex; gap: var(--sp-8); }
+.radio-opt     { display: flex; align-items: center; gap: var(--sp-8); cursor: pointer; }
+.radio-opt input[type="radio"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary); flex-shrink: 0; }
+.radio-opt span { font-size: var(--fs-13); color: var(--t1); }
+.toggle-row    { display: flex; align-items: center; gap: var(--sp-8); cursor: pointer; }
+
+
+/* ——————————————————————————————————————————
+   EMPLOYEE DISPLAY
+   .emp-bar: full-width employee info strip (edit/detail pages).
+   .emp-info / .emp-meta / .emp-badge: info cell subcomponents.
+   .emp-hero: large hero card for employee detail pages.
+   .info-grid: 2-col key-value grid inside a section.
+   —————————————————————————————————————————— */
+.emp-bar       { width: 100%; background: #fff; border: 1px solid var(--bd); padding: var(--sp-16) var(--sp-24); display: flex; align-items: center; gap: var(--sp-16); }
+.emp-info      { flex: 1; min-width: 0; }
+.emp-meta      { font-size: var(--fs-13); color: var(--t3); margin-top: 2px; }
+.emp-badge     { padding: 3px var(--sp-10); background: #F0FDF4; border: 1px solid #BBF7D0; font-size: var(--fs-12); font-weight: var(--fw-medium); color: #16A34A; }
+
+.emp-hero      { background: #fff; border: 1px solid var(--bd); padding: var(--sp-20) var(--sp-24); display: flex; align-items: center; gap: var(--sp-16); }
+.emp-hero-info  { flex: 1; min-width: 0; }
+.emp-hero-name  { font-size: var(--fs-18); font-weight: var(--fw-bold); color: var(--t1); }
+.emp-hero-sub   { display: flex; align-items: center; gap: var(--sp-10); margin-top: 5px; flex-wrap: wrap; }
+.emp-hero-sub .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--bd-input); flex-shrink: 0; }
+/* Plain text meta item inside .emp-hero-sub (not a .tag). Promoted
+   from employee-detail.html. NOTE: payroll-level-range-detail.html
+   and payroll-summary-detail.html both already declare a bare
+   `.emp-hero-sub span { font-size: 13px; color: #6B7280; }` (no
+   :not(.tag) guard) — same values, but without the guard it would
+   also recolor any .tag placed inside .emp-hero-sub. Flagging for
+   whoever audits the Payroll batch to reconcile/dedupe against this. */
+.emp-hero-sub span:not(.tag) { font-size: var(--fs-13); color: var(--t3); }
+.emp-hero-actions { display: flex; align-items: center; gap: var(--sp-8); flex-shrink: 0; }
+
+/* ——————————————————————————————————————————
+   DETAIL LAYOUT + PROFILE PANEL
+   .detail-layout: two-column shell (main content + persistent side panel).
+   .emp-profile-panel / .epp-*: the panel itself — avatar, identity,
+   email, key-value info rows, direct supervisor block.
+   Promoted from employee-detail.html/my-profile.html (was page-scoped
+   EXPERIMENTAL CSS in both, duplicated verbatim); now shared so a third
+   page (offboarding-checklist.html) doesn't need its own copy.
+
+   CSS Grid, not flex: edit pages (employee-contract-renew.html,
+   employee-salary-update.html, employee-contract-edit.html,
+   employee-personal-edit.html) nest an optional .fixed-footer as a
+   THIRD child inside .detail-layout, directly below .main-content —
+   the footer must span only the main-content column's width, not
+   stretch across .emp-profile-panel too. Grid gives the footer its own
+   row scoped to column 1, while the panel spans both rows (full
+   height) via grid-row: 1 / -1. For the read-only pages with no
+   footer, row 2 has no content and collapses to 0 height, so the
+   2-column layout renders identically to the previous flex version. */
+.detail-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+}
+.detail-layout > .main-content { grid-column: 1; grid-row: 1; min-width: 0; }
+.detail-layout > .fixed-footer { grid-column: 1; grid-row: 2; }
+.detail-layout > .emp-profile-panel { grid-column: 2; grid-row: 1 / -1; }
+.emp-profile-panel {
+  background: #fff; border-left: 1px solid var(--bd);
+  padding: var(--sp-24); overflow-y: auto; display: flex; flex-direction: column; gap: var(--sp-20);
+}
+.epp-avatar { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; color: #fff; margin: 0 auto; }
+.epp-identity { text-align: center; display: flex; flex-direction: column; gap: 4px; }
+.epp-name { font-size: 16px; font-weight: 600; color: var(--t1); }
+.epp-position { font-size: 13px; color: var(--t3); }
+.epp-status-row { display: flex; justify-content: center; margin-top: 4px; }
+.epp-email-row { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--bd); padding: 10px 12px; font-size: 12.5px; color: var(--t2); gap: 8px; }
+.epp-email-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.epp-copy-btn { background: none; border: none; cursor: pointer; color: var(--t3); flex-shrink: 0; padding: 0; display: flex; }
+.epp-copy-btn:hover { color: var(--t1); }
+.epp-divider { border-top: 1px solid var(--bd); }
+.epp-info-row { display: flex; justify-content: space-between; font-size: 13px; gap: 12px; }
+.epp-info-row .epp-label { color: var(--t3); flex-shrink: 0; }
+.epp-info-row .epp-value { color: var(--t1); font-weight: 500; text-align: right; }
+.epp-section { display: flex; flex-direction: column; gap: 12px; }
+.epp-section-title { font-size: 11px; font-weight: 600; color: var(--t3); text-transform: uppercase; letter-spacing: 0.03em; }
+.epp-supervisor-row { display: flex; align-items: center; gap: 10px; }
+.epp-supervisor-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.epp-supervisor-info { min-width: 0; }
+.epp-supervisor-name { font-size: 13px; font-weight: 600; color: var(--t1); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.epp-supervisor-position { font-size: 12px; color: var(--t3); }
+
+.info-grid     { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-20) 40px; }
+/* Column-count variant of .info-grid — same row-gap/col-gap, single
+   column. Promoted from employee-detail.html. */
+.info-grid-1   { display: grid; grid-template-columns: 1fr; gap: var(--sp-20); }
+
+/* Bordered-row variant of the .info-grid cell — use when rows need a
+   divider line (rather than pure gap spacing) and/or a secondary
+   .info-sub caption underneath the value. Sibling to .info-group above
+   (gap-only, no border, no sub line); pick whichever recipe the page's
+   grid needs. :nth-last-child(-n+2) drops the border on the last ROW of
+   a 2-col grid (matches .info-grid's column count — adjust the count if
+   ever paired with .info-grid-1). Wraps in .info-card (bordered
+   container + eyebrow-style uppercase title), which is deliberately
+   distinct from .section-card/.form-card's non-uppercase h3 title.
+   Promoted from settings-shift-detail.html's Shift Details panel. */
+.info-card        { background: #fff; border: 1px solid var(--bd); }
+.info-card-header { padding: var(--sp-16) var(--sp-24) 14px; border-bottom: 1px solid var(--bd); }
+.info-card-title  { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t2); text-transform: uppercase; letter-spacing: 0.06em; }
+.info-item        { padding: 18px var(--sp-24); border-bottom: 1px solid #F3F4F6; }
+.info-item:nth-last-child(-n+2) { border-bottom: none; }
+.info-lbl         { font-size: var(--fs-11); font-weight: var(--fw-semibold); color: var(--t4); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-6); }
+.info-val         { font-size: var(--fs-15); font-weight: var(--fw-semibold); color: var(--t1); }
+.info-sub         { font-size: var(--fs-12); color: var(--t3); margin-top: var(--sp-4); }
+
+
+/* ——————————————————————————————————————————
+   SEARCH BAR
+   .search-wrap: bordered search input, 36px height.
+   .search-w:focus-within: focus border for custom search widget.
+   —————————————————————————————————————————— */
+.search-wrap   { display: flex; align-items: center; gap: var(--sp-8); padding: 0 var(--sp-12); height: 36px; background: #fff; border: 1px solid var(--bd); width: 260px; }
+.search-wrap input { flex: 1; border: none; outline: none; font-size: var(--fs-13); font-family: 'Inter', sans-serif; color: var(--t1); background: transparent; }
+.search-wrap input::placeholder { color: var(--t4); }
+.search-w:focus-within { border-color: var(--primary); }
+
+
+/* ——————————————————————————————————————————
+   AUDIT NOTE
+   Blue info strip. Used when showing audit trail context.
+   —————————————————————————————————————————— */
+.audit-note    { display: flex; align-items: flex-start; gap: var(--sp-8); padding: var(--sp-10) var(--sp-12); background: var(--info-bg); border: 1px solid var(--info-border); }
+.audit-note p  { font-size: var(--fs-12); color: var(--info-text); line-height: 1.5; }
+
+
+/* ——————————————————————————————————————————
+   FILTER UI
+   .filter-bar: filter strip above tables.
+   .filter-select: wrapper with relative positioning for dropdown.
+   .filter-dropdown: absolute dropdown panel.
+   PATTERN: .filter-btn.has-value → accent color indicates active filter.
+   —————————————————————————————————————————— */
+.filter-bar    { display: flex; align-items: center; gap: var(--sp-10); flex-wrap: nowrap; }
+.filter-select { position: relative; }
+.filter-btn    { height: 36px; padding: 0 var(--sp-12); border: 1px solid var(--bd-input); background: #fff; display: flex; align-items: center; gap: var(--sp-6); cursor: pointer; user-select: none; font-size: var(--fs-13); color: var(--t2); font-family: 'Inter', sans-serif; white-space: nowrap; }
+.filter-btn.has-value  { border-color: var(--primary); color: var(--primary); }
+.filter-dropdown       { position: absolute; top: calc(100% + 1px); left: 0; min-width: 180px; background: #fff; border: 1px solid var(--bd); z-index: 100; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.filter-dropdown.open  { display: block; }
+.filter-option         { padding: 9px var(--sp-12); font-size: var(--fs-13); color: var(--t2); cursor: pointer; font-family: 'Inter', sans-serif; }
+.filter-option:hover   { background: var(--page-bg); }
+.filter-option.active  { color: var(--primary); font-weight: var(--fw-medium); }
+
+
+/* ——————————————————————————————————————————
+   TAB BAR
+   Horizontal tab navigation. Used for in-page content switching.
+   PATTERN: JS sets .active on clicked .tab-item.
+            .tab-count shows count pill — turns accent when tab active.
+   —————————————————————————————————————————— */
+.tab-container { background: #fff; border: 1px solid var(--bd); display: flex; flex-direction: column; }
+.tab-item      { display: flex; align-items: center; gap: var(--sp-6); padding: 13px var(--sp-12); font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t3); cursor: pointer; border-bottom: 2px solid transparent; user-select: none; }
+.tab-item.active              { color: var(--t1); font-weight: var(--fw-semibold); border-bottom-color: var(--primary); }
+.tab-item:hover:not(.active)  { color: var(--t2); }
+.tab-count     { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; font-size: var(--fs-11); font-weight: var(--fw-semibold); background: #F3F4F6; color: var(--t3); }
+.tab-item.active .tab-count   { background: #FEE8E2; color: var(--primary); }
+
+
+/* ——————————————————————————————————————————
+   MODAL EXTRAS
+   .modal-icon: colored icon circle inside confirm modals.
+   .modal-backdrop: alternative overlay (lower z-index, for nested).
+   .modal-summary: summary block inside modal body.
+   —————————————————————————————————————————— */
+.modal-icon    { width: 44px; height: 44px; border-radius: 50%; background: #FEF2F2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-backdrop      { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 500; align-items: center; justify-content: center; }
+.modal-backdrop.open { display: flex; }
+.modal-summary       { background: var(--page-bg); border: 1px solid var(--bd); padding: 14px var(--sp-16); margin-top: var(--sp-16); display: flex; flex-direction: column; gap: var(--sp-16); }
+.modal-summary-row   { display: flex; justify-content: space-between; align-items: center; }
+.modal-summary-row .lbl { font-size: var(--fs-13); color: var(--t3); }
+.modal-summary-row .val { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t1); font-variant-numeric: tabular-nums; }
+
+
+/* ——————————————————————————————————————————
+   FOOTER BAR
+   Sticky bottom strip on bulk/summary pages.
+   Shows aggregated stats + action buttons.
+   —————————————————————————————————————————— */
+.footer-bar        { flex-shrink: 0; background: #fff; border-top: 1px solid var(--bd); padding: 0 var(--sp-20); height: 60px; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-16); }
+.footer-summary    { display: flex; align-items: center; gap: var(--sp-24); }
+.footer-stat       { display: flex; flex-direction: column; gap: 1px; }
+.footer-stat-label { font-size: var(--fs-11); color: var(--t4); text-transform: uppercase; letter-spacing: 0.04em; font-weight: var(--fw-semibold); }
+.footer-stat-value { font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--t1); font-variant-numeric: tabular-nums; }
+.footer-divider    { width: 1px; height: 28px; background: var(--bd); flex-shrink: 0; }
+.footer-actions    { display: flex; align-items: center; gap: var(--sp-8); }
+
+
+/* ——————————————————————————————————————————
+   TOOLBAR EXTRAS
+   .toolbar-count: "Showing N of M" text in table toolbar.
+   th.col-actions: right-aligned actions column header.
+   .remove-btn: icon-only remove/delete button inside table rows.
+   .add-row-btn: ghost/text "+ Add X" trigger below a repeatable row
+   list (deduction rows, allowance entries, ...). Promoted from
+   employee-deduction-update.html + employee-allowance-update.html,
+   which both had byte-identical typography/color here — only
+   padding/margin/align-self differ per page and stay page-specific.
+   —————————————————————————————————————————— */
+.toolbar-count      { font-size: var(--fs-13); color: var(--t3); }
+.toolbar-count span { font-weight: var(--fw-semibold); color: var(--t1); }
+th.col-actions      { text-align: right; }
+.remove-btn         { width: 32px; height: 32px; flex-shrink: 0; background: none; border: none; cursor: pointer; color: var(--t4); display: flex; align-items: center; justify-content: center; }
+.remove-btn:hover   { color: var(--danger); }
+.add-row-btn        { display: inline-flex; align-items: center; gap: var(--sp-6); padding: 0; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--primary); }
+.add-row-btn:hover  { color: var(--primary-hover); }
+
+
+/* ——————————————————————————————————————————
+   WIZARD STATE EXTRAS
+   Extends .wstep-dot and .wstep-label from the base wizard-steps block.
+   —————————————————————————————————————————— */
+.wstep-dot.done   { background: var(--primary); color: #fff; font-weight: var(--fw-semibold); }
+.wstep-label.done { color: var(--primary); }
+
+
+/* ——————————————————————————————————————————
+   CALENDAR HEADER
+   Day-of-week label row inside datepicker.
+   —————————————————————————————————————————— */
+.cal-header { font-size: var(--fs-11); color: var(--t4); padding: var(--sp-4) 0 var(--sp-6); font-family: 'Inter', sans-serif; }
+
+
+/* ——————————————————————————————————————————
+   EFFECTIVE HINT
+   Inline hint showing when a salary/contract change takes effect.
+   hidden by default; .future or .immediate shown by JS.
+   —————————————————————————————————————————— */
+.effective-hint           { font-size: var(--fs-12); margin-top: var(--sp-4); display: none; }
+.effective-hint.future    { color: var(--t3); display: block; }
+.effective-hint.immediate { color: var(--t3); display: block; }
+
+
+/* ——————————————————————————————————————————
+   SALARY DISPLAY
+   Color-coded salary component amounts in tables.
+   .allowance-row: row inside add-allowance form.
+   —————————————————————————————————————————— */
+.sal-allow   { font-size: var(--fs-13); color: #059669; font-variant-numeric: tabular-nums; }
+.sal-deduct  { font-size: var(--fs-13); color: #DC2626; font-variant-numeric: tabular-nums; }
+.sal-none    { font-size: var(--fs-13); color: var(--bd-input); }
+.allowance-row { display: flex; align-items: center; gap: var(--sp-12); }
+
+/* Bold record-name table cell — identical rule used verbatim on both
+   payroll-allowance.html and payroll-deduction.html (used on 2+ pages,
+   promoted rather than kept as 2 duplicate inline copies). Close cousin
+   of .emp-name but semibold (600) instead of medium (500). */
+.allowance-name,
+.deduction-name { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t1); }
+
+
+/* ——————————————————————————————————————————
+   EMPTY STATE (page-level)
+   For list pages with zero items. Different from .table-empty
+   which is used inside table cells.
+   —————————————————————————————————————————— */
+.empty-state      { padding: 48px var(--sp-24); display: flex; flex-direction: column; align-items: center; gap: var(--sp-12); }
+.empty-icon       { width: 40px; height: 40px; border-radius: 50%; background: #F3F4F6; display: flex; align-items: center; justify-content: center; }
+.empty-state-icon { width: 40px; height: 40px; color: var(--bd-input); }
+.empty-title      { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); margin-bottom: var(--sp-4); }
+/* Text piece completing the two .empty-state variants above — promoted
+   from the Payroll batch (Task 9). .empty-state-text pairs with
+   .empty-state-icon (payroll-level-range-detail.html, inside a table
+   <td>); .empty-desc pairs with .empty-icon/.empty-title (payroll-
+   summary-detail.html, generic panel — its loans tab empty state).
+   text-align:center added in Task 10 — settings.html reuses this exact
+   trio (.empty-state/.empty-state-icon/.empty-state-text) at the page
+   level (not inside a table <td>) for its "no departments/shifts yet"
+   states AND its "section not yet available" placeholder (previously 3
+   near-duplicate page-local rules: .empty-state p, .placeholder-section,
+   .placeholder-section p — all consolidated onto this one shared trio).
+   Those page-level uses have 2-line <br>-separated copy that needs
+   centering; single-line usage elsewhere is unaffected (a centered
+   single line looks identical to a left-aligned one). */
+.empty-state-text { font-size: var(--fs-13); color: var(--t4); text-align: center; }
+.empty-desc       { font-size: var(--fs-13); color: var(--t4); max-width: 380px; line-height: 1.6; }
+
+
+/* ============================================================
+   COMMON PATTERNS — GROUP 2
+   Additional selectors shared across 2+ pages, found in a
+   second full-repo audit pass.
+   ============================================================ */
+
+
+/* ——————————————————————————————————————————
+   TOGGLE SWITCH
+   Checkbox-driven switch. Structure:
+   <label class="toggle-wrap">
+     <input type="checkbox" hidden />
+     <span class="toggle-track"></span>
+     <span class="toggle-knob"></span>
+   </label>
+   PATTERN: checked state moves knob via transform: translateX(16px).
+   —————————————————————————————————————————— */
+.toggle-wrap  { position: relative; width: 36px; height: 20px; flex-shrink: 0; margin-top: 2px; display: inline-block; cursor: pointer; }
+.toggle-track { display: block; width: 36px; height: 20px; background: var(--bd-input); border-radius: 10px; transition: background 0.15s; }
+.toggle-wrap input:checked + .toggle-track { background: var(--primary); }
+.toggle-knob  { position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: #fff; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: transform 0.15s; pointer-events: none; }
+.toggle-wrap input:checked ~ .toggle-knob { transform: translateX(16px); }
+/* The real checkbox is `position:absolute; opacity:0; width:0; height:0`
+   (declared further down this file), so the browser's default focus ring
+   paints on a zero-size invisible box. Draw the keyboard focus ring on the
+   visible track instead. :focus-visible, not :focus — a mouse click on the
+   toggle must not leave a ring behind. */
+.toggle-wrap input:focus-visible + .toggle-track { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+
+/* ——————————————————————————————————————————
+   DELETE CONFIRM MODAL BODY
+   Alternate confirm-modal body layout (icon + heading + description).
+   <div class="delete-confirm-body">
+     <div class="warn-icon">…svg…</div>
+     <div class="warn-text">
+       <div class="sub-label">Delete this shift?</div>
+       <div class="sub-desc">This action cannot be undone.</div>
+     </div>
+   </div>
+   —————————————————————————————————————————— */
+.delete-confirm-body            { padding: var(--sp-20); display: flex; gap: var(--sp-12); align-items: flex-start; }
+.delete-confirm-body .warn-icon { width: 36px; height: 36px; background: #FEF2F2; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.delete-confirm-body .warn-text .sub-label { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); margin-bottom: var(--sp-6); }
+.delete-confirm-body .warn-text .sub-desc  { font-size: var(--fs-13); color: var(--t3); line-height: 1.5; }
+
+
+/* ——————————————————————————————————————————
+   INFO GROUP
+   Key-value pair used inside .info-grid on detail pages.
+   <div class="info-group"><span class="info-label">Label</span><span class="info-value">Value</span></div>
+   —————————————————————————————————————————— */
+.info-group        { display: flex; flex-direction: column; gap: 5px; }
+.info-label        { font-size: var(--fs-11); font-weight: var(--fw-semibold); color: var(--t4); text-transform: uppercase; letter-spacing: 0.05em; }
+.info-value        { font-size: var(--fs-14); color: var(--t1); line-height: 1.5; }
+.info-value.empty  { color: var(--t4); font-style: italic; }
+
+
+/* ——————————————————————————————————————————
+   CURRENT VALUE LABEL
+   Shared eyebrow label (11px/700 uppercase gray) used above a
+   "current value" summary — employee-overtime-update.html's
+   .curr-label and employee-salary-update.html's .salary-label were
+   byte-identical apart from .salary-label's own margin-bottom.
+   The value styles themselves (.curr-value / .salary-amount /
+   .snap-value in employee-contract-edit.html) stay page-specific —
+   each has different emphasis for a different context.
+   —————————————————————————————————————————— */
+.curr-label,
+.salary-label { font-size: var(--fs-11); font-weight: var(--fw-bold); color: var(--t4); letter-spacing: 0.5px; text-transform: uppercase; }
+.salary-label { margin-bottom: var(--sp-6); }
+
+/* Item-row name/amount typography shared between
+   employee-allowance-update.html (.ai-name/.ai-amount) and
+   employee-deduction-update.html (.ded-name/.ded-amount) — both rows
+   list an editable value with the same "name (flex) + amount
+   (right-aligned)" look, just in a single-line vs stacked-with-meta
+   container (kept separate below). */
+.ai-name, .ded-name     { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--t1); flex: 1; }
+.ai-amount, .ded-amount { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); flex-shrink: 0; }
+
+/* Allowance list row — one item's header + meta pair. Promoted from
+   employee-allowance-update.html. .ai-name/.ai-amount are shared
+   above; the container/meta wrapper stays under this page's own
+   naming since employee-deduction-update.html's row is a single flex
+   line instead (its own .ded-row inline). */
+.allowance-item            { padding: var(--sp-16) var(--sp-24); border-bottom: 1px solid #F3F4F6; }
+.allowance-item:last-child { border-bottom: none; }
+.ai-header                 { display: flex; align-items: center; gap: var(--sp-12); }
+.ai-meta                   { margin-top: var(--sp-4); display: flex; align-items: center; gap: var(--sp-16); }
+.ai-meta-item               { display: flex; align-items: center; gap: 5px; font-size: var(--fs-12); color: var(--t3); }
+
+/* Inline "update" trigger + expandable panel — click .update-btn to
+   reveal .update-panel below a list row. Promoted from
+   employee-allowance-update.html (currently the only page with a
+   list of independently-updatable items; plausible reuse anywhere
+   an item needs an inline edit-in-place form instead of navigating
+   to a separate page). */
+.update-btn       { height: 32px; padding: 0 14px; background: #fff; border: 1px solid var(--bd-input); cursor: pointer; font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: var(--sp-6); flex-shrink: 0; }
+.update-btn:hover { background: var(--page-bg); border-color: var(--primary); color: var(--primary); }
+.update-panel      { display: none; margin-top: 14px; background: #FAFAFA; border: 1px solid var(--bd); padding: var(--sp-20); }
+.update-panel.open { display: block; }
+.up-title       { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t1); margin-bottom: var(--sp-16); display: flex; align-items: center; gap: var(--sp-8); }
+.up-title-badge { padding: 2px var(--sp-8); background: #FEF3C7; border: 1px solid #FDE68A; font-size: var(--fs-11); font-weight: var(--fw-medium); color: var(--amber-text); }
+/* Right-aligned button row inside an .update-panel (or any inline
+   panel footer) — a leaner alternative to .modal-actions (no
+   border/padding of its own). */
+.up-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-10); }
+
+
+/* ——————————————————————————————————————————
+   DETAIL SECTION
+   Vertical section wrapper inside a detail page's tab pane.
+   .section-label default is 14px; employee-detail.html's primary
+   tab sections use a larger 16px variant — kept as a page override.
+   —————————————————————————————————————————— */
+.detail-section { display: flex; flex-direction: column; gap: var(--sp-16); }
+.section-label   { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t2); padding-bottom: var(--sp-12); border-bottom: 1px solid #F3F4F6; }
+/* .section-label as a .section-card's own header (light variant of .section-head —
+   no icon/h3, just the existing label style) — full padding + card-matched border
+   instead of the padding-bottom-only treatment .section-label has inside .detail-section. */
+.section-card > .section-label { padding: 14px var(--sp-20); margin: 0; border-bottom-color: var(--bd); }
+.section-card > .section-body-light { padding: var(--sp-16) var(--sp-20); }
+
+
+/* ——————————————————————————————————————————
+   WIZARD CARD SHELL
+   Wraps .wstep-dot indicator column + .form-card on wizard step pages.
+   —————————————————————————————————————————— */
+.wizard { width: 100%; display: flex; align-items: flex-start; margin-bottom: var(--sp-28); }
+
+/* Card foot — footer row inside a wizard .form-card (Back / Next buttons) */
+.card-foot { padding: var(--sp-16) var(--sp-24); border-top: 1px solid var(--bd); display: flex; align-items: center; justify-content: space-between; }
+
+/* Step hint — small text next to card-foot buttons, e.g. "Step 2 of 6" */
+.step-hint { font-size: var(--fs-13); color: var(--t3); white-space: nowrap; }
+
+/* Form title — heading at top of a .update-form/.edit-form body.
+   Default has no border; employee-contract-edit.html adds its own
+   border-bottom + padding-bottom as a page-specific variant. */
+.form-title { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t1); }
+
+
+/* ============================================================
+   COMMON PATTERNS — GROUP 3 (Payroll)
+   ============================================================ */
+
+
+/* Stats row — flex strip of stat figures above a table/list. */
+.stats-row { display: flex; gap: var(--sp-12); }
+
+/* Stat row — two layouts depending on how many stat cells and how
+   much horizontal space is available.
+   .grid-4: fixed 4-column grid (attendance.html — 4 equal stat cells).
+   .flex: flexible row, cells size to content (payroll-level-range-detail.html). */
+.stat-row.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-12); }
+.stat-row.flex   { display: flex; gap: var(--sp-16); }
+
+
+/* Salary values — color-coded read-only figures in payroll bulk tables. */
+.sal-val  { font-size: var(--fs-13); color: var(--t2); font-variant-numeric: tabular-nums; }
+.sal-loan { font-size: var(--fs-13); color: #D97706; font-variant-numeric: tabular-nums; }
+.sal-net  { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t1); font-variant-numeric: tabular-nums; }
+
+
+/* Defer button — tiny inline toggle marking a loan/deduction deferred
+   for this period. Two page-specific names, identical styling. */
+.defer-btn,
+.loan-defer-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 var(--sp-6);
+  font-size: var(--fs-10);
+  font-weight: var(--fw-medium);
+  border: 1px solid var(--bd-input);
+  background: #fff;
+  color: var(--t4);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+.defer-btn            { margin-left: var(--sp-6); vertical-align: middle; }
+.loan-defer-btn        { flex-shrink: 0; }
+.defer-btn:hover,
+.loan-defer-btn:hover { background: var(--page-bg); color: var(--t2); border-color: var(--t4); }
+.defer-btn.is-deferred,
+.loan-defer-btn.is-deferred { border-color: #FCD34D; background: var(--amber-bg); color: var(--amber-text); }
+
+
+/* Employee panel — right-hand employee-selector column on bulk payroll pages. */
+.emp-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+.emp-panel-toolbar {
+  padding: var(--sp-12) var(--sp-20);
+  background: #fff;
+  border-bottom: 1px solid var(--bd);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-10);
+}
+.sel-count-badge        { margin-left: auto; display: flex; align-items: center; gap: var(--sp-6); font-size: var(--fs-13); color: var(--t2); white-space: nowrap; }
+.sel-count-badge strong { font-weight: var(--fw-semibold); color: var(--t1); }
+
+
+/* Split-button dropdown — trigger button + absolute panel of actions.
+   PATTERN: JS toggles .open on .btn-dd; chevron rotates 180deg.
+   min-width 172px covers both pages' label lengths (was 160/172 split). */
+.btn-dd        { position: relative; display: inline-block; }
+.btn-dd-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--bd);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  min-width: 172px;
+  z-index: 200;
+  display: none;
+}
+.btn-dd.open .btn-dd-panel { display: block; }
+.btn-dd-item {
+  padding: var(--sp-10) 14px;
+  font-size: var(--fs-13);
+  color: var(--t2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-10);
+}
+.btn-dd-item:hover { background: var(--page-bg); color: var(--t1); }
+/* Icon color inside a .btn-dd-item + thin divider between items.
+   Promoted from payroll-summary.html. */
+.btn-dd-item svg { flex-shrink: 0; color: var(--t3); }
+.btn-dd-sep      { height: 1px; background: #F3F4F6; margin: 2px 0; }
+.btn-dd-chevron            { transition: transform 0.15s; }
+.btn-dd.open .btn-dd-chevron { transform: rotate(180deg); }
+
+
+/* Loan checklist — scrollable list of loans eligible for this payroll run. */
+.loan-list-label       { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-8); }
+.loan-list-label span  { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); }
+.loan-list-count       { font-size: var(--fs-12); color: var(--t4); font-weight: var(--fw-regular); }
+.loan-checklist        { border: 1px solid var(--bd); max-height: 260px; overflow-y: auto; }
+.loan-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: 11px 14px;
+  border-bottom: 1px solid #F3F4F6;
+  transition: opacity 0.15s;
+}
+.loan-row:last-child { border-bottom: none; }
+.loan-row.deferred   { opacity: 0.45; }
+.loan-emp-name {
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  color: var(--t1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+.loan-meta { font-size: var(--fs-11); color: var(--t4); margin-top: 2px; }
+
+
+/* Confirm footer — sticky total row below a checklist inside a modal. */
+.confirm-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  background: var(--page-bg);
+  border: 1px solid var(--bd);
+  border-top: none;
+}
+.confirm-footer-label { font-size: var(--fs-13); color: var(--t3); }
+.confirm-footer-total  { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+
+
+/* Allowance entry meta label — identical across employee-allowance-update.html
+   and onboarding-step4-allowance.html. */
+.ae-meta-label { font-size: var(--fs-10); font-weight: var(--fw-bold); color: var(--t4); width: 58px; flex-shrink: 0; letter-spacing: 0.6px; text-transform: uppercase; }
+
+/* Allowance entry row — wraps one allowance's fields + validity/delivery
+   meta rows. Two contexts (Task 11):
+   .nested: padding-bottom only (sits inside an already-padded parent
+   card) — onboarding-step4-allowance.html.
+   .standalone: full padding on all sides (its own bordered row in a
+   list) — employee-allowance-update.html. */
+.allowance-entry { display: flex; flex-direction: column; gap: var(--sp-10); }
+.allowance-entry.nested                                    { padding-bottom: var(--sp-16); }
+.allowance-entry.nested + .allowance-entry.nested          { border-top: 1px solid #E5E7EB; padding-top: var(--sp-16); }
+.allowance-entry.standalone                                 { padding: var(--sp-16) var(--sp-24); }
+.allowance-entry.standalone + .allowance-entry.standalone  { border-top: 1px solid #E5E7EB; }
+
+/* Allowance entry meta row — validity/delivery fields inside an
+   .allowance-entry. .wrap allows wrapping to a new line when space is
+   tight (onboarding-step4-allowance.html); .nowrap keeps everything on
+   one line and fixes each date picker to 148px (employee-allowance-
+   update.html, a wider standalone row). */
+.ae-meta { display: flex; align-items: center; gap: var(--sp-10); }
+.ae-meta.wrap   { flex-wrap: wrap; }
+.ae-meta.nowrap { flex-wrap: nowrap; }
+.ae-meta.nowrap .date-select-w { width: 148px; flex-shrink: 0; }
+
+
+/* ============================================================
+   COMMON PATTERNS — GROUP 4
+   NOTE on skipped selectors (kept page-specific, genuine conflicts
+   or dead code found during this audit — not overlooked):
+     .btn-cancel/.btn-save — employee-allowance-update.html (40px/14px)
+                       deviates from the 36px/13px button standard that
+                       employee-edit.html already follows; needs a real
+                       migration to .btn/.btn-outline/.btn-primary, not
+                       a shared-CSS copy of the non-conformant version.
+     .section-header/.empty-state-icon — payroll-level-range-detail.html
+                       and settings.html use different padding; likely
+                       should both migrate to the existing .section-head,
+                       left inline pending that decision.
+     payroll-loan.html also had dead, unused CSS (.confirm-icon with a
+     malformed duplicate declaration, .confirm-title, .confirm-desc,
+     .confirm-body) — removed rather than shared, since nothing used it.
+     (.stat-row and .allowance-entry/.ae-meta/.dur-date-w — formerly
+     listed here as skipped — were resolved into named modifier variants
+     in Task 11; see .stat-row.grid-4/.flex above, .allowance-entry/
+     .ae-meta above, and .dur-date-w.sm/.lg below.)
+   ============================================================ */
+
+.conflict-warn      { padding: var(--sp-10) var(--sp-12); background: #FFF7ED; border: 1px solid #FED7AA; display: none; align-items: flex-start; gap: var(--sp-8); }
+.conflict-warn.show { display: flex; }
+.conflict-warn p    { font-size: var(--fs-12); color: #9A3412; line-height: 1.5; }
+
+/* Delete-schedule dropdown — inline compact select-like trigger + panel */
+.del-drop-w          { position: relative; display: inline-flex; align-items: center; gap: var(--sp-4); height: 26px; padding: 0 var(--sp-8); background: #fff; border: 1px solid var(--bd-input); cursor: pointer; user-select: none; }
+.del-drop-w.open     { border-color: var(--primary); }
+.del-drop-val        { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t1); }
+.del-drop-w > svg           { transition: transform 0.15s; flex-shrink: 0; }
+.del-drop-w.open > svg      { transform: rotate(180deg); }
+.del-drop-panel      { position: absolute; top: calc(100% + 1px); left: -1px; width: 120px; background: #fff; border: 1px solid var(--bd-input); z-index: 200; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; max-height: 200px; overflow-y: auto; }
+.del-drop-panel.open { display: block; }
+.del-drop-opt        { padding: 7px var(--sp-12); font-size: var(--fs-13); color: var(--t1); cursor: pointer; font-family: 'Inter', sans-serif; }
+.del-drop-opt:hover  { background: var(--page-bg); }
+.del-drop-opt.selected { color: var(--primary); font-weight: var(--fw-semibold); }
+
+.delivery-inline { display: flex; align-items: center; gap: var(--sp-6); font-size: var(--fs-13); color: var(--t3); white-space: nowrap; }
+
+.card-divider { height: 1px; background: var(--bd); margin: 0 var(--sp-24); }
+.update-form  { padding: var(--sp-20) var(--sp-24); display: flex; flex-direction: column; gap: var(--sp-16); }
+
+.emp-badge-tag { padding: 3px var(--sp-10); background: #F0FDF4; border: 1px solid #BBF7D0; font-size: var(--fs-12); font-weight: var(--fw-medium); color: #166534; flex-shrink: 0; }
+
+.filter-bar-right { margin-left: auto; display: flex; gap: var(--sp-8); }
+
+.emp-email { font-size: var(--fs-12); color: var(--t4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge-id  { font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--t2); font-variant-numeric: tabular-nums; }
+
+tr.empty-state td       { padding: 56px var(--sp-16); text-align: center; background: #fff; cursor: default; }
+tr.empty-state:hover td { background: #fff; }
+.empty-sub   { font-size: var(--fs-13); color: var(--t4); margin-bottom: 14px; }
+.empty-reset { font-size: var(--fs-13); color: var(--primary); background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; padding: 0; text-decoration: underline; }
+
+.form-section    { border-top: 1px solid var(--bd); padding-top: var(--sp-20); display: flex; flex-direction: column; gap: var(--sp-20); }
+.form-col.empty  { flex: 1; }
+input.error      { border-color: var(--danger) !important; }
+
+.add-allowance-btn       { margin-top: var(--sp-4); background: none; border: none; cursor: pointer; font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--primary); font-family: 'Inter', sans-serif; padding: var(--sp-4) 0; display: flex; align-items: center; text-align: left; }
+.add-allowance-btn:hover { color: var(--primary-hover); }
+
+/* Duration/date-range picker trigger — two sizes depending on context.
+   .sm: 148×34, used inline within a compact allowance-entry row
+   (onboarding-step4-allowance.html).
+   .lg: 172×40, used as a standalone field on its own row
+   (onboarding-step6-overtime.html). State colors are identical
+   across both, so stay shared/unmodified below. */
+.dur-date-w.sm { width: 148px; height: 34px; }
+.dur-date-w.lg { width: 172px; height: 40px; }
+.dur-date-w.open  { border-color: var(--primary); }
+.dur-date-w.error { border-color: var(--danger) !important; }
+.dur-sep          { font-size: var(--fs-13); color: var(--t4); flex-shrink: 0; }
+
+.filter-chip {
+  height: 36px;
+  padding: 0 var(--sp-12);
+  border: 1px solid var(--bd-input);
+  background: #fff;
+  color: var(--t2);
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  white-space: nowrap;
+}
+.filter-chip:hover  { background: var(--page-bg); }
+.filter-chip.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+
+.emp-table-wrap  { flex: 1; overflow-y: auto; }
+tbody tr.selected { background: var(--primary-light); }
+/* Disabled row (bulk payroll: employee whose timesheet isn't approved for the
+   period). The #F9FAFB tint alone is ~1.03:1 against the white table and reads
+   as noise, so the row's own content is dimmed too — the standard disabled
+   affordance. The checkbox cell is excluded because the row markup already
+   dims .cb-wrap to 0.35 inline; stacking both would take it to ~0.19.
+   Rows using this class must also carry aria-disabled="true". */
+tbody tr.ineligible { background: var(--page-bg); }
+tbody tr.ineligible td:not(:first-child) { opacity: 0.55; }
+/* Timesheet status cell (payroll-create-bulk.html) stays at full contrast —
+   it's the one column that explains WHY the row is ineligible, so dimming it
+   along with the rest of the row would hide the explanation right when it
+   matters most. */
+tbody tr.ineligible td.ts-cell { opacity: 1; }
+
+/* Custom checkbox (bulk employee selector — distinct from .checkbox-box) */
+.cb-wrap { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
+.cb {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--bd-input);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.1s, background 0.1s;
+}
+.cb.checked,
+.cb.indeterminate { border-color: var(--primary); background: var(--primary); }
+
+/* Modal field micro-components (payroll level range modal) */
+.m-field       { display: flex; flex-direction: column; gap: var(--sp-6); }
+.m-field label { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); }
+.m-err         { font-size: var(--fs-12); color: var(--danger); display: none; }
+.m-err.show    { display: block; }
+.m-tooltip-w   { position: relative; display: inline-flex; align-items: center; cursor: help; }
+.m-tooltip-w::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--t1);
+  color: #fff;
+  font-size: var(--fs-11);
+  font-weight: var(--fw-regular);
+  padding: var(--sp-4) var(--sp-8);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1100;
+}
+.m-tooltip-w:hover::after { opacity: 1; }
+
+.modal-sm             { width: 400px; }
+.form-row .form-group { flex: 1; min-width: 0; }
+
+/* Radio option — custom radio row (payroll loan deduction source) */
+.radio-option { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 var(--sp-4); cursor: pointer; font-size: var(--fs-13); color: var(--t2); user-select: none; }
+.radio-option input[type="radio"] { display: none; }
+.radio-option .radio-dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--bd-input); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.15s; }
+.radio-option input[type="radio"]:checked ~ .radio-dot { border-color: var(--primary); }
+.radio-option input[type="radio"]:checked ~ .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+.radio-option input[type="radio"]:checked ~ span { color: var(--t1); font-weight: var(--fw-medium); }
+/* Error state — wrap a .radio-option group in .radio-group.is-error
+   (JS-toggled) to flag an unselected required radio group. Promoted
+   from payroll-loan.html. */
+.radio-group.is-error .radio-dot { border-color: #FCA5A5; }
+
+.ded-sched       { display: none; flex-direction: column; gap: var(--sp-12); padding: 14px; background: var(--page-bg); border: 1px solid var(--bd); }
+.ded-sched.open  { display: flex; }
+.ded-sched-title { font-size: var(--fs-11); font-weight: var(--fw-semibold); color: var(--t3); text-transform: uppercase; letter-spacing: 0.05em; }
+.field-info      { font-size: var(--fs-11); color: var(--scheduled-hover); margin-top: var(--sp-4); background: var(--info-bg); border: 1px solid var(--info-border); padding: var(--sp-8) var(--sp-10); line-height: 1.5; }
+.emp-readonly    { height: 36px; border: 1px solid var(--bd); background: var(--page-bg); display: flex; align-items: center; padding: 0 var(--sp-10); font-size: var(--fs-13); color: var(--t2); }
+
+.tab-toolbar       { display: flex; align-items: center; gap: var(--sp-10); padding: var(--sp-12) var(--sp-16); border-bottom: 1px solid var(--bd); flex-wrap: nowrap; }
+.tab-toolbar-right { margin-left: auto; display: flex; gap: var(--sp-8); }
+.helper-text       { font-size: var(--fs-13); color: var(--t3); line-height: 1.6; }
+
+/* Settings page shell */
+.nav-action.gear-active { background: #F3F4F6; }
+.modal-box.modal-wide   { width: 540px; }
+.modal-close-btn        { width: 28px; height: 28px; border: none; background: transparent; cursor: pointer; color: var(--t4); display: flex; align-items: center; justify-content: center; }
+.modal-close-btn:hover  { color: var(--t2); }
+
+.form-row > .form-field { flex: 1; min-width: 0; }
+.form-field              { display: flex; flex-direction: column; }
+.form-field .field-label { margin-bottom: var(--sp-6); }
+.text-input:focus        { border-color: var(--primary); }
+
+input[type="time"].text-input   { cursor: text; }
+input[type="number"].text-input { -moz-appearance: textfield; }
+input[type="number"].text-input::-webkit-inner-spin-button,
+input[type="number"].text-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+/* .date-range-err / .amount-err-msg (onboarding-step4-allowance.html)
+   are the same toggleable-message pattern as .field-err, aliased in
+   rather than duplicated — kept as separate class names because the
+   page's JS creates/queries them by name (className assignment,
+   querySelectorAll) in a repeatable allowance-entry list. */
+.field-err,
+.date-range-err,
+.amount-err-msg { display: none; font-size: var(--fs-12); color: var(--danger); margin-top: var(--sp-4); font-family: 'Inter', sans-serif; line-height: 1.4; }
+.field-err.show,
+.date-range-err.show,
+.amount-err-msg.show { display: block; }
+.date-range-err { padding: 2px 0; }
+.toggle-wrap input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+/* Date picker trigger — shared base + state, two text/hover variants
+   depending on context (Task 11).
+   .plain: muted placeholder-style span (--t4), full width, no hover
+   feedback — used in the onboarding wizard where fields start
+   unfilled (onboarding-step1.html).
+   .solid: dark filled-value span (--t1) plus a :hover border state —
+   used in edit forms where the field already holds a value
+   (employee-personal-edit.html). */
+.date-w { height: 40px; padding: 0 12px; border: 1px solid var(--bd-input); background: #fff; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; position: relative; }
+.date-w.open  { border-color: var(--primary); }
+.date-w.error { border-color: var(--danger) !important; }
+.date-w.plain { width: 100%; }
+.date-w.plain span { font-size: var(--fs-14); color: var(--t4); white-space: nowrap; }
+.date-w.solid:hover { border-color: #9CA3AF; }
+.date-w.open:hover  { border-color: var(--primary); }
+.date-w.solid span { font-size: var(--fs-14); color: var(--t1); }
+
+/* Section error banner — shown above a form section when validation
+   fails. Shared background + show/hide toggle, two color/structure
+   variants (Task 11):
+   .muted: text styled directly on the container (#FECACA border /
+   #991B1B text), gap 8px, align-items:flex-start — used in
+   employee-detail edit forms (employee-personal-edit.html); its
+   markup's <span> text inherits color/size from the container.
+   .vivid: text styled on a child <span> via `.section-err.vivid span`
+   (#FCA5A5 border / #B91C1C text), gap 10px, align-items:center —
+   used in the onboarding wizard (onboarding-step4-allowance.html).
+   Each page keeps its own existing <span> markup — only the modifier
+   class (and which selector carries the color) changes.
+   Text is #B91C1C, not #DC2626: on the shared #FEF2F2 background #DC2626
+   only reaches 4.42:1, under the 4.5:1 AA floor for normal text.
+   Both variants carry the same margin-bottom so a banner that switches
+   modifier (payroll-summary.html's cutoff banner does) doesn't shift. */
+.section-err       { display: none; background: #FEF2F2; }
+.section-err.show  { display: flex; }
+.section-err.muted { padding: 12px 14px; border: 1px solid #FECACA; font-size: var(--fs-13); color: #991B1B; align-items: flex-start; gap: var(--sp-8); margin-bottom: var(--sp-4); }
+.section-err.vivid { align-items: center; gap: var(--sp-10); border: 1px solid #FCA5A5; padding: 12px 16px; color: #B91C1C; font-size: var(--fs-13); margin-bottom: var(--sp-4); }
+.section-err.vivid span { font-size: var(--fs-13); color: #B91C1C; line-height: 1.4; }
+
+
+/* ============================================================
+   COMMON PATTERNS — GROUP 5 (Onboarding batch, Task 7)
+   NOTE on skipped selectors (kept page-specific — genuine conflicts
+   or dead code found during this audit — not overlooked):
+     .btn-spinner (+ its @keyframes spin) — onboarding-step6-
+                   overtime.html. Left inline: the keyframes block
+                   must travel with the class for the animation to
+                   still work, and this audit's instructions were to
+                   leave that @keyframes block untouched.
+     (.emp-card, .progress-label, .section-err, .date-w, and
+     .allowance-entry/.ae-meta — formerly listed here as skipped
+     same-name/different-value conflicts — were resolved into named
+     modifier variants in Task 11; see the relevant rules in this
+     GROUP 5 section and in GROUP 4 above.)
+   ============================================================ */
+
+/* Employee summary card — shared background/border, two layout
+   variants depending on context (Task 11).
+   .compact: 16px/20px padding, 14px gap, no justify-content — a
+   compact employee-preview card (payroll-create-single.html).
+   .spacious: 20px/24px padding, 20px gap, space-between,
+   flex-shrink:0 — a wide summary-header card (onboarding-checklist.html). */
+.emp-card { background: #fff; border: 1px solid #E5E7EB; display: flex; align-items: center; }
+.emp-card.compact  { padding: var(--sp-16) var(--sp-20); gap: 14px; }
+.emp-card.spacious { padding: var(--sp-20) var(--sp-24); justify-content: space-between; gap: var(--sp-20); flex-shrink: 0; }
+.emp-card.spacious .emp-cell { min-width: 0; }
+
+/* Employee summary line — used inside onboarding-checklist.html's
+   .emp-card.spacious variant above. */
+.emp-meta-name  { font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--t1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.emp-meta-sub   { font-size: var(--fs-13); color: var(--t3); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.emp-meta-badge { font-size: var(--fs-12); color: var(--t4); margin-top: 2px; }
+
+/* Progress label — small text describing a progress metric. Two
+   variants (Task 11):
+   .subtitle: 12px/#6B7280 with bottom margin, own line below a
+   progress bar (onboarding-checklist.html — "N of M items completed").
+   .inline: 13px/500/#374151, no margin — sits inline next to a
+   percent value in a progress header row (payroll-loan-detail.html —
+   "N of M installments paid"). */
+.progress-label.subtitle { font-size: var(--fs-12); color: var(--t3); margin: var(--sp-4) 0 var(--sp-10); }
+.progress-label.inline   { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); }
+
+/* Progress bar with count — checklist/task completion tracker. */
+.progress-box       { text-align: right; flex-shrink: 0; min-width: 200px; }
+.progress-count     { font-size: 22px; font-weight: var(--fw-bold); color: var(--t1); line-height: 1; }
+.progress-total     { font-size: var(--fs-14); color: var(--t3); font-weight: var(--fw-regular); }
+.progress-bar-wrap  { width: 200px; height: var(--sp-6); background: var(--bd); margin-left: auto; }
+.progress-bar-fill  { height: 100%; background: #059669; width: 0%; transition: width 0.3s; }
+.progress-complete  { display: none; margin-top: var(--sp-8); }
+.progress-complete .tag-success { display: inline-flex; align-items: center; gap: var(--sp-4); }
+
+/* Actions bar — icon note (left) + primary CTA (right), full-width strip. */
+.actions-bar          { background: #fff; border: 1px solid var(--bd); padding: 14px var(--sp-20); display: flex; align-items: center; justify-content: space-between; gap: var(--sp-16); flex-shrink: 0; }
+.actions-bar-note     { display: flex; align-items: flex-start; gap: var(--sp-10); }
+.actions-bar-note-text { font-size: var(--fs-13); color: var(--t2); line-height: 1.5; }
+.actions-bar-note-sub  { font-size: var(--fs-12); color: var(--t4); margin-top: 1px; }
+
+/* List card — bordered card with header (title + subtitle + actions)
+   and a scrollable body. Generic container for any checklist/list UI. */
+.checklist-card     { background: #fff; border: 1px solid var(--bd); display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.checklist-head     { padding: 14px var(--sp-20); border-bottom: 1px solid var(--bd); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.checklist-title    { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+.checklist-subtitle { font-size: var(--fs-12); color: var(--t3); margin-top: 1px; }
+.checklist-body     { flex: 1; overflow-y: auto; }
+
+/* Checklist item row — checkbox + number + text + completion date. */
+.ci             { display: flex; align-items: center; padding: var(--sp-12) var(--sp-20); border-bottom: 1px solid #F3F4F6; gap: var(--sp-12); transition: background 0.1s; cursor: pointer; }
+.ci:last-child  { border-bottom: none; }
+.ci:hover       { background: #FAFAFA; }
+.ci-check       { width: 15px; height: 15px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+.ci-num         { width: 22px; flex-shrink: 0; font-size: var(--fs-12); color: var(--t4); font-variant-numeric: tabular-nums; text-align: right; }
+.ci-text        { flex: 1; font-size: var(--fs-13); color: var(--t2); line-height: 1.4; transition: color 0.15s; }
+.ci.done .ci-text { text-decoration: line-through; color: var(--t4); }
+.ci-date        { font-size: var(--fs-11); color: var(--t4); flex-shrink: 0; white-space: nowrap; min-width: 80px; text-align: right; }
+
+/* Checklist section divider — small uppercase label above a group of .ci rows. */
+.ci-section       { padding: var(--sp-8) var(--sp-20) 6px; background: var(--page-bg); border-bottom: 1px solid #F3F4F6; }
+.ci-section-label { font-size: var(--fs-11); font-weight: var(--fw-semibold); color: var(--t3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Table "Actions" cell — row of icon buttons. */
+.actions-cell { display: flex; align-items: center; gap: var(--sp-4); }
+
+/* Radio group row (deduction source picker) + faux column headers
+   above a non-table list of form rows. */
+.source-radio-group   { display: flex; align-items: center; gap: var(--sp-16); flex-shrink: 0; }
+.deduction-col-header { display: flex; align-items: center; gap: var(--sp-10); padding-bottom: var(--sp-4); }
+.col-label            { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t2); }
+
+/* Collapsible field group + labeled sub-section separated by a top
+   border (e.g. an "override" block toggled on by a switch). */
+.override-section { border-top: 1px solid var(--bd); padding-top: var(--sp-20); display: flex; flex-direction: column; gap: var(--sp-12); }
+.override-head h3 { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); margin-bottom: 2px; }
+.override-head p  { font-size: var(--fs-13); color: var(--t3); line-height: 1.5; }
+.override-fields  { display: flex; flex-direction: column; gap: var(--sp-16); }
+.override-fields.hidden { display: none; }
+
+/* Inline field row — e.g. a date field + time field side by side. */
+.dur-row { display: flex; align-items: center; gap: var(--sp-8); }
+
+/* Conditional panel — hidden by default, shown via JS toggling
+   .visible. Generic recipe; page keeps its own semantic class name. */
+.overtime-panel { display: none; flex-direction: column; gap: var(--sp-20); }
+.overtime-panel.visible { display: flex; }
+
+
+/* ============================================================
+   COMMON PATTERNS — GROUP 6 (Settings & Attendance batch, Task 10)
+   Final audit batch — settings.html, settings-shift-detail.html,
+   attendance.html. 77 inline rules audited; most were exact duplicates
+   of already-shared selectors (table.settings-tbl/.emp-tbl and their
+   thead/th/td/tr sub-rules all matched the generic unscoped table/th/td
+   rules in section 1 byte-for-byte) or duplicates of an existing
+   component under a different name — both classes of duplicate were
+   deleted from the page and the page's markup switched to the existing
+   shared selector, rather than promoted as a second copy:
+     .btn-create/:hover     — settings.html. Same 40px/primary-bg recipe
+                              as .btn.btn-primary, just 4px taller than
+                              the documented 36px button height. Markup
+                              switched to .btn.btn-primary; rule deleted.
+     .settings-table-wrap   — settings.html. `{ padding: 0; }` on a bare
+                              div is a no-op (divs default to 0 padding)
+                              — dead CSS, not a variant of .table-wrap
+                              (which also carries its own border/bg that
+                              would have doubled the .settings-card
+                              border if swapped in). Deleted; class
+                              attribute dropped from markup too.
+     .empty-state p,
+     .placeholder-section(+p) — settings.html. Three near-duplicate
+                              centered icon+text empty/placeholder
+                              blocks, all consolidated onto the existing
+                              .empty-state/.empty-state-icon/
+                              .empty-state-text trio (see section 2's
+                              updated comment).
+     .hero-text              — settings-shift-detail.html. Identical
+                              `flex:1;min-width:0` to the existing
+                              .hero-info; markup switched, rule deleted.
+     .badge-flex             — settings.html. Green "Flexible" pill,
+                              border-radius:10px (violates the radius-0
+                              rule — same call already made for
+                              .allowance-type-tag in the Employee batch).
+                              settings-shift-detail.html's info panel
+                              independently hardcoded the exact same
+                              green/pill look as a raw inline style=
+                              (not caught by the inline-<style>-block
+                              scanner, but found via cross-page grep for
+                              reuse potential). Both replaced with the
+                              existing tags.css `tag tag-success` class;
+                              .badge-flex rule deleted.
+     .att-tag(+4 variants)   — attendance.html. Present/Late/Absent/On
+                              Leave status pills duplicating the
+                              existing unified tag system almost exactly
+                              (tag-info's own doc comment even lists
+                              "on leave" as a use case). Replaced with
+                              tag tag-success/tag-warning/tag-danger/
+                              tag-info respectively; all 5 rules deleted.
+     .shift-detail-name/-grid/-item/-lbl/-val/-sub (+ :nth-last-child)
+                            — settings.html. Zero matching class="..."
+                              usage anywhere in the file's markup or JS
+                              (verified via grep across the whole
+                              prototype/ directory) — dead code, deleted
+                              outright, not promoted.
+     table.emp-tbl tbody tr { cursor: pointer; } (settings-shift-
+                              detail.html) — the generic `tbody tr {
+                              cursor: pointer; }` in section 1 already
+                              covers this; deleted as redundant.
+
+   (.stat-row — attendance.html's 4-col-grid version, formerly flagged
+   here as the other half of the conflict against payroll-level-range-
+   detail.html's flex version in GROUP 3, was resolved into named
+   modifier variants in Task 11; see .stat-row.grid-4/.flex in GROUP 3
+   above. attendance.html's own inline .stat-row rule was removed and
+   replaced with a "RESOLVED in Task 11" pointer comment.)
+
+   Flagged, NOT resolved here:
+     .filter-select (native <select> collision) — attendance.html
+                 reused the exact class name of the already-shared
+                 `.filter-select` (a position:relative DIV wrapper
+                 around the custom filter-dropdown widget used on
+                 employees-list.html, onboarding-employee-list.html,
+                 payroll-loan.html) on a bare native <select> element
+                 instead — an unrelated element/purpose that happened
+                 to pick the same name. Unlike .stat-row this is not a
+                 deliberate, documented design divergence — it is an
+                 accidental collision with no visual bug today (the
+                 shared rule only sets position:relative, harmless on a
+                 <select>), but a landmine for later edits to either
+                 side. Renamed to .native-filter-select in attendance.html
+                 and kept page-scoped/inline there (not promoted — the
+                 established convention is that toolbar filters use
+                 .filter-pill or the .filter-select dropdown widget, not
+                 a bare native <select>; see section 1's PATTERN note).
+   ============================================================ */
+
+/* "Today's Attendance" snapshot card — header (title + date) above a
+   horizontal row of divided info cells (status/clock-in/clock-out/work
+   hours), each with a label, a value, and an optional sub-caption.
+   .today-info-value.muted uses the same literal #D1D5DB as
+   --bd-input (an exact token-value match, reused here for a "not
+   filled in yet" placeholder text color — --bd-input is otherwise only
+   ever used for borders elsewhere in this codebase, but the instruction
+   is to prefer an existing token over a new literal wherever the value
+   matches). Promoted from attendance.html. */
+.today-card         { background: #fff; border: 1px solid var(--bd); }
+.today-card-header  { padding: 14px var(--sp-20); border-bottom: 1px solid var(--bd); display: flex; align-items: center; justify-content: space-between; }
+.today-card-title   { font-size: var(--fs-14); font-weight: var(--fw-semibold); color: var(--t1); }
+.today-card-date    { font-size: var(--fs-13); color: var(--t3); }
+.today-info-row     { display: flex; align-items: center; }
+.today-info-cell    { flex: 1; padding: var(--sp-16) var(--sp-20); border-right: 1px solid #F3F4F6; }
+.today-info-cell:last-child { border-right: none; }
+.today-info-label   { font-size: var(--fs-11); font-weight: var(--fw-medium); color: var(--t4); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-6); }
+.today-info-value   { font-size: var(--fs-18); font-weight: var(--fw-semibold); color: var(--t1); font-variant-numeric: tabular-nums; }
+.today-info-value.muted { color: var(--bd-input); }
+.today-info-sub     { font-size: var(--fs-12); color: var(--t3); margin-top: 2px; }
+
+
+/* External toolbar variant — sits as a sibling directly above
+   .table-wrap (with its own border, bottom edge open) rather than
+   nested inside it as .table-toolbar. Produces the same visually-
+   merged look as the nested pattern (flush borders, no gap) via a
+   different DOM shape; kept as its own class rather than restructuring
+   attendance.html's markup to nest inside .table-wrap. Promoted from
+   attendance.html. */
+.toolbar { display: flex; align-items: center; gap: var(--sp-8); background: #fff; border: 1px solid var(--bd); border-bottom: none; padding: var(--sp-12) var(--sp-16); }
+
+/* Table-cell time/duration value helpers. .time-val/.time-empty are the
+   plain (unscoped) recipe — a HH:MM reading in a table cell, muted dash
+   when absent (attendance.html's clock in/out columns). .time-cell
+   .time-val/.time-tol compose on top: nest a <span class="time-val">
+   plus a secondary <span class="time-tol"> annotation (e.g. "±15m")
+   inside a <td class="time-cell"> when a tolerance/annotation needs to
+   sit next to the time (settings.html's shift check-in/out columns) —
+   the .time-cell-scoped rule only adds font-weight, so both compose
+   cleanly on the same element rather than conflicting. .work-hrs is the
+   bold sibling used for a computed duration value (e.g. "8h 12m").
+   .late-tol-cell is a plain emphasized-text table cell for a count/
+   multiplier value (e.g. "1x"). Promoted from attendance.html and
+   settings.html. */
+.time-val   { font-size: var(--fs-13); color: var(--t1); font-variant-numeric: tabular-nums; }
+.time-empty { color: var(--bd-input); }
+.work-hrs   { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t1); font-variant-numeric: tabular-nums; }
+.time-cell .time-val { font-weight: var(--fw-medium); color: var(--t1); }
+.time-cell .time-tol { font-size: var(--fs-11); color: var(--t4); margin-left: var(--sp-6); }
+.late-tol-cell { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: var(--t2); }
+
+/* Employee Picker List — always-visible scrollable list of selectable
+   employee rows below a search input inside a modal (settings-shift-
+   detail.html's "Add Employee" modal). Distinct from the Employee Combo
+   component (#emp-combo in components.html): that one is a closed-by-
+   default autocomplete dropdown anchored to a single input trigger;
+   this one is an always-open list box, better suited to a modal where
+   the full candidate list (minus whoever's already assigned) is useful
+   to browse, not just search. Promoted from settings-shift-detail.html. */
+.add-emp-list { max-height: 280px; overflow-y: auto; border: 1px solid var(--bd); margin-top: var(--sp-8); }
+.add-emp-item { display: flex; align-items: center; gap: var(--sp-10); padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #F3F4F6; }
+.add-emp-item:last-child { border-bottom: none; }
+.add-emp-item:hover { background: var(--page-bg); }
+.add-emp-item.selected { background: #FFF4F2; }
+.add-emp-item.selected .emp-name { color: var(--primary); }

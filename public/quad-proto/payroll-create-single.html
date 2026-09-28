@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Create Single</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* This page's .body-wrap holds a left+right SIDE-BY-SIDE split
+       (settings form + live preview), unlike the shared component's
+       column-stacked usage in payroll-create-bulk.html/
+       payroll-edit-bulk.html (settings bar above an employee table).
+       Override the direction here rather than in layout.css so those
+       other pages keep their intended stacked layout. */
+    .body-wrap { flex-direction: row; overflow: hidden; }
+
+    /* Left panel — settings form column (period/employee/cutoff/notes)
+       for the single-employee create flow. Single-use page shell. */
+    .left-panel { width: 340px; flex-shrink: 0; background: #fff; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; overflow-y: auto; }
+    .left-panel-header { padding: 20px 24px 16px; border-bottom: 1px solid #E5E7EB; }
+    .left-panel-title { font-size: 14px; font-weight: 700; color: #111827; }
+    .left-panel-sub { font-size: 12px; color: #9CA3AF; margin-top: 3px; }
+    .left-panel-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+    .form-divider { height: 1px; background: #F3F4F6; }
+    .month-year-row { display: flex; gap: 8px; }
+    .month-year-row .select-w:first-child { flex: 3; }
+    .month-year-row .select-w:last-child  { flex: 2; }
+
+    /* Right panel — live salary breakdown preview, single-use. */
+    .preview-panel { flex: 1; background: #F3F4F6; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .preview-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    .preview-empty-icon { width: 56px; height: 56px; background: #E5E7EB; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .preview-empty-text { font-size: 14px; color: #9CA3AF; text-align: center; max-width: 280px; line-height: 1.6; }
+
+    /* Employee summary card at top of the preview. .emp-card — RESOLVED
+       in Task 11: now uses the shared .emp-card.compact variant in
+       layout.css (COMMON PATTERNS GROUP 5).
+       .emp-card-avatar (44px) is its own size tier, distinct from the
+       shared 32px .emp-avatar / 56px .emp-avatar-lg — single use.
+       .dept-tag is a close cousin of tags.css's .contract-tag (no
+       border, different bg, fixed 20px height) — single use. */
+    .emp-card-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+    .emp-card-info { flex: 1; min-width: 0; }
+    .emp-card-name { font-size: 15px; font-weight: 700; color: #111827; }
+    .emp-card-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .dept-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; font-size: 11px; font-weight: 500; background: #F3F4F6; color: #374151; }
+    .emp-card-pos { font-size: 12px; color: #6B7280; }
+    .emp-card-id { font-size: 11px; color: #9CA3AF; margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .emp-card-base { flex-shrink: 0; text-align: right; }
+    .emp-card-base-label { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+    .emp-card-base-val { font-size: 15px; font-weight: 700; color: #111827; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+    /* Earnings/Deductions breakdown card — repeatable row list with a
+       totals footer. Single-use, specific to this preview layout. */
+    .breakdown-card { background: #fff; border: 1px solid #E5E7EB; }
+    .breakdown-card-header { padding: 11px 20px; border-bottom: 1px solid #F3F4F6; display: flex; align-items: center; justify-content: space-between; }
+    .breakdown-card-title { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; }
+    .breakdown-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 20px; border-bottom: 1px solid #F9FAFB; gap: 12px; }
+    .breakdown-row:last-of-type { border-bottom: none; }
+    .breakdown-row-left { min-width: 0; }
+    .breakdown-row-label { font-size: 13px; color: #374151; }
+    .breakdown-row-detail { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+    .breakdown-row-amount { font-size: 13px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+    .amount-earn { color: #059669; }
+    .amount-base { color: #374151; }
+    .amount-ded  { color: #DC2626; }
+    .breakdown-total-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: #F9FAFB; border-top: 1px solid #E5E7EB; }
+    .breakdown-total-label  { font-size: 13px; font-weight: 600; color: #111827; }
+    .breakdown-total-amount { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    /* Net salary summary strip — single use. */
+    .net-card { background: #fff; border: 1px solid #E5E7EB; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .net-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; }
+    .net-amount { font-size: 24px; font-weight: 700; color: #111827; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="payroll-summary"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="payroll-summary.html">Payroll Summary</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Create Single Payroll</span>
+  </div>
+
+  <div class="body-wrap">
+
+    <!-- ══ LEFT PANEL ══ -->
+    <div class="left-panel">
+      <div class="left-panel-header">
+        <div class="left-panel-title">Payroll Settings</div>
+        <div class="left-panel-sub">Single employee payroll for one period</div>
+      </div>
+      <div class="left-panel-body">
+
+        <!-- Period -->
+        <div class="form-group">
+          <label class="field-label">Pay Period <span class="req">*</span></label>
+          <div class="month-year-row">
+            <div class="select-w" id="dd-month"></div>
+            <div class="select-w" id="dd-year"></div>
+          </div>
+        </div>
+
+        <!-- Employee -->
+        <div class="form-group">
+          <label class="field-label">Employee <span class="req">*</span></label>
+          <div class="select-w" id="dd-emp"></div>
+          <div class="field-error" id="emp-exclusion-note" role="status" aria-live="polite" style="display:none;"></div>
+        </div>
+
+        <!-- Cut-off Date -->
+        <div class="form-group">
+          <label class="field-label">Cut-off Date</label>
+          <div class="date-select-w" id="dp-cutoff"></div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label class="field-label">Notes</label>
+          <textarea class="textarea" placeholder="Additional notes or remarks…"></textarea>
+        </div>
+
+        <div class="form-divider"></div>
+
+      </div>
+    </div>
+
+    <!-- ══ RIGHT PANEL — salary breakdown ══ -->
+    <div class="preview-panel" id="preview-panel">
+
+      <!-- Employee card -->
+      <div class="emp-card compact" id="emp-card">
+        <div class="emp-card-avatar" id="preview-avatar" style="background:#E04A2A;">RK</div>
+        <div class="emp-card-info">
+          <div class="emp-card-name" id="preview-name">Rina Kusuma</div>
+          <div class="emp-card-meta">
+            <span class="dept-tag" id="preview-dept">Human Resources</span>
+            <span class="emp-card-pos" id="preview-pos">Recruiter</span>
+          </div>
+          <div class="emp-card-id" id="preview-id">ID: 001228</div>
+        </div>
+        <div class="emp-card-base">
+          <div class="emp-card-base-label">Base Salary</div>
+          <div class="emp-card-base-val" id="preview-base">Rp 12.000.000</div>
+        </div>
+      </div>
+
+      <!-- Earnings -->
+      <div class="breakdown-card">
+        <div class="breakdown-card-header">
+          <span class="breakdown-card-title">Earnings</span>
+        </div>
+        <div id="earnings-rows">
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">Base Salary</div>
+            </div>
+            <span class="breakdown-row-amount amount-base" id="row-base">Rp 12.000.000</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">Transportation Allowance</div>
+            </div>
+            <span class="breakdown-row-amount amount-earn">Rp 500.000</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">Meal Allowance</div>
+            </div>
+            <span class="breakdown-row-amount amount-earn">Rp 300.000</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">Health Allowance</div>
+            </div>
+            <span class="breakdown-row-amount amount-earn">Rp 250.000</span>
+          </div>
+        </div>
+        <div class="breakdown-total-row">
+          <span class="breakdown-total-label">Total Earnings</span>
+          <span class="breakdown-total-amount" id="total-earnings">Rp 13.050.000</span>
+        </div>
+      </div>
+
+      <!-- Deductions -->
+      <div class="breakdown-card">
+        <div class="breakdown-card-header">
+          <span class="breakdown-card-title">Deductions</span>
+        </div>
+        <div id="deductions-rows">
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">BPJS Ketenagakerjaan</div>
+              <div class="breakdown-row-detail">2% of base salary</div>
+            </div>
+            <span class="breakdown-row-amount amount-ded">Rp 240.000</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">BPJS Kesehatan</div>
+              <div class="breakdown-row-detail">1% of base salary</div>
+            </div>
+            <span class="breakdown-row-amount amount-ded">Rp 120.000</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-row-left">
+              <div class="breakdown-row-label">PPh 21</div>
+              <div class="breakdown-row-detail">Estimated annual calculation</div>
+            </div>
+            <span class="breakdown-row-amount amount-ded">Rp 615.000</span>
+          </div>
+        </div>
+        <div class="breakdown-total-row">
+          <span class="breakdown-total-label">Total Deductions</span>
+          <span class="breakdown-total-amount amount-ded" id="total-deductions">Rp 975.000</span>
+        </div>
+      </div>
+
+      <!-- Net Salary -->
+      <div class="net-card">
+        <span class="net-label">Net Salary</span>
+        <span class="net-amount" id="net-salary">Rp 12.075.000</span>
+      </div>
+
+    </div><!-- /preview-panel -->
+
+  </div><!-- /body-wrap -->
+
+  <!-- ══ FOOTER BAR ══ -->
+  <div class="footer-bar">
+    <div class="footer-summary">
+      <div class="footer-stat">
+        <span class="footer-stat-label">Employee</span>
+        <span class="footer-stat-value" id="ft-employee">Rina Kusuma</span>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-stat">
+        <span class="footer-stat-label">Period</span>
+        <span class="footer-stat-value" id="footer-period">—</span>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-stat">
+        <span class="footer-stat-label">Net Salary</span>
+        <span class="footer-stat-value" id="ft-net">Rp 12.075.000</span>
+      </div>
+    </div>
+    <div class="footer-actions">
+      <button class="btn btn-outline" onclick="window.location.href='payroll-summary.html'">Cancel</button>
+      <button class="btn btn-primary" id="btn-create" onclick="openModal('confirm-modal')">Create Payroll</button>
+    </div>
+  </div>
+
+</div><!-- /right-panel -->
+
+<!-- ══ CONFIRM MODAL ══ -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Create Single Payroll</span>
+      <button class="modal-close" onclick="closeModal('confirm-modal')">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">This will create a payroll entry with status <strong>Draft</strong>. You can review and submit it for approval from the Payroll Summary page.</div>
+    <div class="modal-summary">
+      <div class="modal-summary-row">
+        <span class="lbl">Employee</span>
+        <span class="val" id="modal-employee">Rina Kusuma</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Period</span>
+        <span class="val" id="modal-period">—</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Total Earnings</span>
+        <span class="val" id="modal-earnings">Rp 13.050.000</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Total Deductions</span>
+        <span class="val" id="modal-deductions">Rp 975.000</span>
+      </div>
+      <div style="height:1px;background:#E5E7EB;margin:0 -16px;"></div>
+      <div class="modal-summary-row">
+        <span class="lbl" style="font-weight:600;color:#111827;">Net Salary</span>
+        <span class="val" style="font-size:15px;font-weight:600;" id="modal-net">Rp 12.075.000</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('confirm-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createSinglePayroll()">Create Payroll</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="employees-data.js"></script>
+<script src="payroll-timesheet-gate.js"></script>
+<script src="timesheet-seed.js"></script>
+<script src="loans-data.js"></script>
+<script src="payroll-batching.js"></script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script>
+  /* ── Employee data ── */
+  var ALLOWANCE_LABEL = {
+    'laptop':   'Laptop Allowance',
+    'on-site':  'On-site Allowance',
+    'internet': 'Internet Allowance',
+    'skills':   'Skills Development',
+    'leader':   'Leadership Allowance'
+  };
+
+  var DEDUCTION_INFO = {
+    'bpjs-kes': { name: 'BPJS Kesehatan',       detail: '1% of base salary', rate: 0.01 },
+    'bpjs-tk':  { name: 'BPJS Ketenagakerjaan', detail: '2% of base salary', rate: 0.02 },
+    'pph21':    { name: 'PPh 21',               detail: 'Progressive annual calculation', rate: null }
+  };
+
+  function calcPPh21(salary) {
+    var taxable = Math.max(0, salary * 12 - 54000000);
+    var tax = taxable <= 60000000  ? taxable * 0.05
+            : taxable <= 250000000 ? 3000000 + (taxable - 60000000) * 0.15
+                                   : 31500000 + (taxable - 250000000) * 0.25;
+    return Math.round(tax / 12);
+  }
+
+  var DUMMY_OT = {
+    '000000001': 225000,
+    '000000002': 208000,
+    '000000003': 600000,
+    '000000008': 494000,
+  };
+
+  var DUMMY_LATE = {
+    '000000002': 90000,
+    '000000004': 60000,
+    '000000007': 120000,
+    '000000010': 45000,
+  };
+
+  var EMPLOYEES = QUADRA_EMPLOYEES
+    .filter(function(e) { return e.status === 'Active'; })
+    .map(function(e) {
+      var allowances = (e.allowances || []).map(function(a) {
+        return { name: ALLOWANCE_LABEL[a.id] || a.id, amount: a.amount };
+      });
+      var otAmt = (e.overtimeType !== 'No Overtime' && DUMMY_OT[e.badge]) ? DUMMY_OT[e.badge] : 0;
+      var deductions = (e.deductions || [])
+        .filter(function(d) { return d.paidBy === 'personal'; })
+        .map(function(d) {
+          var info   = DEDUCTION_INFO[d.id] || { name: d.id, detail: '', rate: 0 };
+          var amount = info.rate !== null ? Math.round(e.salary * info.rate) : calcPPh21(e.salary);
+          return { name: info.name, detail: info.detail, amount: amount };
+        });
+      var _initNow = new Date();
+      var loanDeductions = (QUADRA_LOANS || [])
+        .filter(function(l) { return l.empBadge === e.badge && (l.status === 'active' || l.status === 'overdue'); })
+        .map(function(l) {
+          var oc  = _overdueCount(l, _initNow.getMonth(), _initNow.getFullYear());
+          var amt = _catchupAmt(l, _initNow.getMonth(), _initNow.getFullYear());
+          return { loanId: l.id, name: l.type + ' Installment', amount: amt, overdueCount: oc };
+        });
+      var lateDed = DUMMY_LATE[e.badge] || 0;
+      var allowTotal = allowances.reduce(function(s, a) { return s + a.amount; }, 0);
+      var dedTotal   = deductions.reduce(function(s, d) { return s + d.amount; }, 0);
+      var loanTotal  = loanDeductions.reduce(function(s, l) { return s + l.amount; }, 0);
+      return {
+        id: e.badge, name: e.name, init: e.initials, color: e.color,
+        dept: e.project, pos: e.pos, base: e.salary,
+        allowances: allowances, otAmt: otAmt,
+        deductions: deductions, loanDeductions: loanDeductions, lateDed: lateDed,
+        net: e.salary + allowTotal + otAmt - dedTotal - loanTotal - lateDed
+      };
+    });
+
+  var currentEmpId    = EMPLOYEES[0] ? EMPLOYEES[0].id : '';
+  var deferredLoanIds = new Set();
+  /* Pre-populate from loans deferred on the Loan page */
+  (QUADRA_LOANS || []).forEach(function(l) { if (l.deferred && (l.status === 'active' || l.status === 'overdue')) deferredLoanIds.add(l.id); });
+
+  function toggleLoanDefer(loanId) {
+    if (deferredLoanIds.has(loanId)) { deferredLoanIds.delete(loanId); }
+    else { deferredLoanIds.add(loanId); }
+    selectEmployee(currentEmpId);
+  }
+
+  function computeNet(emp) {
+    var allowTotal = emp.allowances.reduce(function(s, a) { return s + a.amount; }, 0);
+    var dedTotal   = emp.deductions.reduce(function(s, d) { return s + d.amount; }, 0);
+    var loanTotal  = emp.loanDeductions
+      .filter(function(l) { return !deferredLoanIds.has(l.loanId); })
+      .reduce(function(s, l) { return s + l.amount; }, 0);
+    return emp.base + allowTotal + emp.otAmt - dedTotal - loanTotal - emp.lateDed;
+  }
+
+  /* ── Format number ── */
+  function fmt(n) {
+    return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  /* ── Select employee & update preview ── */
+  function selectEmployee(id) {
+    if (id !== currentEmpId) {
+      deferredLoanIds.clear();
+      (QUADRA_LOANS || []).forEach(function(l) {
+        if (l.deferred && (l.status === 'active' || l.status === 'overdue') && l.empBadge === id)
+          deferredLoanIds.add(l.id);
+      });
+    }
+    currentEmpId = id;
+    var emp = EMPLOYEES.find(function(e) { return e.id === id; });
+    if (!emp) return;
+
+    /* Recompute loan deductions for the selected period */
+    var _pm = MONTHS_LIST.indexOf(QuadraDropdown.getValue(document.getElementById('dd-month')) || _curMonth);
+    var _py = parseInt(QuadraDropdown.getValue(document.getElementById('dd-year')) || _curYear);
+    emp.loanDeductions = (QUADRA_LOANS || [])
+      .filter(function(l) {
+        if (l.empBadge !== id || (l.status !== 'active' && l.status !== 'overdue')) return false;
+        var s = new Date(l.startDate);
+        return _py > s.getFullYear() || (_py === s.getFullYear() && _pm >= s.getMonth());
+      })
+      .map(function(l) {
+        return { loanId: l.id, name: l.type + ' Installment',
+                 amount: _catchupAmt(l, _pm, _py), overdueCount: _overdueCount(l, _pm, _py) };
+      });
+
+    /* Update employee card */
+    document.getElementById('preview-avatar').textContent = emp.init;
+    document.getElementById('preview-avatar').style.background = emp.color;
+    document.getElementById('preview-name').textContent = emp.name;
+    document.getElementById('preview-dept').textContent = emp.dept;
+    document.getElementById('preview-pos').textContent = emp.pos;
+    document.getElementById('preview-id').textContent = 'ID: ' + emp.id;
+    document.getElementById('preview-base').textContent = fmt(emp.base);
+
+    /* Earnings */
+    var totalEarnings = emp.base;
+    var earningsRows  = document.getElementById('earnings-rows');
+    earningsRows.innerHTML =
+      '<div class="breakdown-row">' +
+        '<div class="breakdown-row-left"><div class="breakdown-row-label">Base Salary</div></div>' +
+        '<span class="breakdown-row-amount amount-base">' + fmt(emp.base) + '</span>' +
+      '</div>';
+    emp.allowances.forEach(function(a) {
+      totalEarnings += a.amount;
+      earningsRows.innerHTML +=
+        '<div class="breakdown-row">' +
+          '<div class="breakdown-row-left"><div class="breakdown-row-label">' + a.name + '</div></div>' +
+          '<span class="breakdown-row-amount amount-earn">' + fmt(a.amount) + '</span>' +
+        '</div>';
+    });
+    if (emp.otAmt > 0) {
+      totalEarnings += emp.otAmt;
+      earningsRows.innerHTML +=
+        '<div class="breakdown-row">' +
+          '<div class="breakdown-row-left"><div class="breakdown-row-label">Overtime</div></div>' +
+          '<span class="breakdown-row-amount amount-earn">' + fmt(emp.otAmt) + '</span>' +
+        '</div>';
+    }
+    document.getElementById('total-earnings').textContent = fmt(totalEarnings);
+
+    /* Deductions */
+    var totalDeductions = 0;
+    var deductionsRows  = document.getElementById('deductions-rows');
+    deductionsRows.innerHTML = '';
+    emp.deductions.forEach(function(d) {
+      totalDeductions += d.amount;
+      deductionsRows.innerHTML +=
+        '<div class="breakdown-row">' +
+          '<div class="breakdown-row-left"><div class="breakdown-row-label">' + d.name + '</div></div>' +
+          '<span class="breakdown-row-amount amount-ded">' + fmt(d.amount) + '</span>' +
+        '</div>';
+    });
+    emp.loanDeductions.forEach(function(l) {
+      var isDeferred = deferredLoanIds.has(l.loanId);
+      if (!isDeferred) totalDeductions += l.amount;
+      var labelStyle  = isDeferred ? 'text-decoration:line-through;color:#D1D5DB' : '';
+      var amountStyle = isDeferred ? 'text-decoration:line-through;color:#D1D5DB' : '';
+      var catchupBadge = (!isDeferred && l.overdueCount > 0)
+        ? '<span style="font-size:10px;color:#D97706;background:rgba(217,119,6,0.08);padding:1px 5px;white-space:nowrap;flex-shrink:0">' + (l.overdueCount + 1) + '× installment</span>'
+        : '';
+      var btnHtml = '<button class="loan-defer-btn' + (isDeferred ? ' is-deferred' : '') + '" onclick="toggleLoanDefer(' + l.loanId + ')">' + (isDeferred ? 'Undo' : 'Defer') + '</button>';
+      deductionsRows.innerHTML +=
+        '<div class="breakdown-row">' +
+          '<div class="breakdown-row-left" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
+            '<div class="breakdown-row-label" style="' + labelStyle + '">' + l.name + '</div>' +
+            catchupBadge +
+            btnHtml +
+          '</div>' +
+          '<span class="breakdown-row-amount amount-ded" style="' + amountStyle + '">' + fmt(l.amount) + '</span>' +
+        '</div>';
+    });
+    if (emp.lateDed > 0) {
+      totalDeductions += emp.lateDed;
+      deductionsRows.innerHTML +=
+        '<div class="breakdown-row">' +
+          '<div class="breakdown-row-left"><div class="breakdown-row-label">Late Deduction</div></div>' +
+          '<span class="breakdown-row-amount amount-ded">' + fmt(emp.lateDed) + '</span>' +
+        '</div>';
+    }
+    document.getElementById('total-deductions').textContent = fmt(totalDeductions);
+
+    /* Net — use computeNet to account for deferred loans */
+    var net = computeNet(emp);
+    document.getElementById('net-salary').textContent = fmt(net);
+
+    /* Footer */
+    document.getElementById('ft-employee').textContent = emp.name;
+    document.getElementById('ft-net').textContent = fmt(net);
+
+    /* Modal */
+    document.getElementById('modal-employee').textContent = emp.name;
+    document.getElementById('modal-earnings').textContent = fmt(totalEarnings);
+    document.getElementById('modal-deductions').textContent = fmt(totalDeductions);
+    document.getElementById('modal-net').textContent = fmt(net);
+  }
+
+
+  /* ── Dynamic date defaults ── */
+  var MONTHS_LIST   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var _now          = new Date();
+  var _curMonth     = MONTHS_LIST[_now.getMonth()];
+  var _curYear      = _now.getFullYear();
+
+  function _monthlyDed(loan) { return loan.tenor > 0 ? Math.ceil(loan.total / loan.tenor) : 0; }
+  function _overdueCount(loan, pMonth, pYear) {
+    var start   = new Date(loan.startDate);
+    var elapsed = (pYear - start.getFullYear()) * 12 + (pMonth - start.getMonth());
+    var due     = Math.min(elapsed, loan.tenor);
+    var paid    = _monthlyDed(loan) > 0 ? Math.floor(loan.paid / _monthlyDed(loan)) : 0;
+    return Math.max(0, due - paid);
+  }
+  function _catchupAmt(loan, pMonth, pYear) {
+    var s = new Date(loan.startDate);
+    if (pYear < s.getFullYear() || (pYear === s.getFullYear() && pMonth < s.getMonth())) return 0;
+    var oc = _overdueCount(loan, pMonth, pYear);
+    return Math.min(_monthlyDed(loan) * (oc + 1), loan.total - loan.paid);
+  }
+  var _cutoffM      = _now.getMonth() === 0 ? 11 : _now.getMonth() - 1;
+  var _cutoffY      = _now.getMonth() === 0 ? _curYear - 1 : _curYear;
+  var _yearOptions  = [String(_curYear - 1), String(_curYear), String(_curYear + 1)];
+
+  var SEED_VERSION = 5;
+
+  function getLockedIds(period) {
+    try {
+      var raw = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      if (!raw) return new Set();
+      var ids = [];
+      JSON.parse(raw).filter(function(p) { return p.period === period; }).forEach(function(p) {
+        ids = ids.concat(p.employeeIds || []);
+      });
+      return new Set(ids);
+    } catch(e) { return new Set(); }
+  }
+
+  function getCurrentPeriod() {
+    var month = QuadraDropdown.getValue(document.getElementById('dd-month'));
+    var year  = QuadraDropdown.getValue(document.getElementById('dd-year'));
+    return (month || _curMonth) + ' ' + (year || _curYear);
+  }
+
+  function refreshEmpDropdown() {
+    var period  = getCurrentPeriod();
+    var locked  = getLockedIds(period);
+    var allEligibleByLock = EMPLOYEES.filter(function(e) { return !locked.has(e.id); });
+    var ineligibleCount = allEligibleByLock.filter(function(e) { return !isTimesheetApprovedForPeriod(e.id, period); }).length;
+    var options = allEligibleByLock
+      .filter(function(e) { return isTimesheetApprovedForPeriod(e.id, period); })
+      .map(function(emp) {
+        return { value: emp.id, label: emp.name, meta: emp.dept + ' · ' + emp.pos,
+                 avatar: { initials: emp.init, color: emp.color } };
+      });
+
+    var ddEl = document.getElementById('dd-emp');
+    ddEl.innerHTML = '';
+
+    var noteEl = document.getElementById('emp-exclusion-note');
+    if (ineligibleCount > 0) {
+      noteEl.textContent = ineligibleCount + ' employee' + (ineligibleCount !== 1 ? 's' : '') + ' excluded — timesheet not yet approved for this period.';
+      noteEl.style.display = 'block';
+    } else {
+      noteEl.style.display = 'none';
+    }
+
+    var allLocked = options.length === 0;
+    var btn = document.getElementById('btn-create');
+    if (btn) {
+      btn.disabled = allLocked;
+      btn.style.opacity = allLocked ? '0.4' : '1';
+      btn.style.cursor  = allLocked ? 'not-allowed' : 'pointer';
+    }
+
+    if (allLocked) {
+      ddEl.innerHTML = '<div style="padding:9px 12px;font-size:13px;color:#9CA3AF;border:1px solid #E5E7EB;background:#F9FAFB">No eligible employees for this period</div>';
+      return;
+    }
+
+    var keepId = options.find(function(o) { return o.value === currentEmpId; })
+      ? currentEmpId : options[0].value;
+
+    QuadraDropdown.init(ddEl, options, {
+      value: keepId,
+      searchable: true,
+      searchPlaceholder: 'Search employee…',
+      onChange: function(value) { selectEmployee(value); }
+    });
+    selectEmployee(keepId);
+  }
+
+  function syncPeriod() {
+    var month = QuadraDropdown.getValue(document.getElementById('dd-month'));
+    var year  = QuadraDropdown.getValue(document.getElementById('dd-year'));
+    var label = (month || _curMonth) + ' ' + (year || _curYear);
+    document.getElementById('footer-period').textContent = label;
+    document.getElementById('modal-period').textContent  = label;
+    var monthIdx = MONTHS_LIST.indexOf(month || _curMonth);
+    QuadraDatePicker.setValue(document.getElementById('dp-cutoff'), { d: 25, m: monthIdx, y: parseInt(year || _curYear) });
+    if (EMPLOYEES && EMPLOYEES.length) refreshEmpDropdown();
+  }
+
+  seedAllTimesheetsIfNeeded();
+
+  /* ── Period dropdowns first, employee dropdown built from syncPeriod ── */
+  QuadraDropdown.init(document.getElementById('dd-month'), MONTHS_LIST,
+    { value: _curMonth, onChange: syncPeriod });
+  QuadraDropdown.init(document.getElementById('dd-year'), _yearOptions,
+    { value: String(_curYear), onChange: syncPeriod });
+  syncPeriod();
+
+  /* ── Date pickers ── */
+  QuadraDatePicker.init(document.getElementById('dp-cutoff'), { value: { d: 25, m: _now.getMonth(), y: _curYear } });
+
+  /* ── Modal ── */
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+    backdrop.addEventListener('click', function(e) {
+      if (e.target === backdrop) backdrop.classList.remove('open');
+    });
+  });
+
+  function _saveToStorage(status) {
+    var period = document.getElementById('modal-period').textContent;
+    var emp    = EMPLOYEES.find(function(e) { return e.id === currentEmpId; });
+    var net    = emp ? computeNet(emp) : 0;
+
+    var loanDecisions = emp ? emp.loanDeductions.map(function(l) {
+      var deferred = deferredLoanIds.has(l.loanId);
+      return { loanId: l.loanId, action: deferred ? 'defer' : 'confirm', amount: deferred ? 0 : l.amount };
+    }) : [];
+
+    try {
+      var raw        = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      var periods    = raw ? JSON.parse(raw) : [];
+      var samePeriod = periods.filter(function(p) { return p.period === period; });
+      var draftEntry = samePeriod.find(function(p) { return p.status === 'draft'; });
+
+      if (draftEntry) {
+        /* Merge into existing draft */
+        var ids = draftEntry.employeeIds || [];
+        if (ids.indexOf(currentEmpId) === -1) {
+          ids.push(currentEmpId);
+          draftEntry.employeeIds   = ids;
+          draftEntry.employees     = ids.length;
+          draftEntry.totalNet      = (draftEntry.totalNet || 0) + net;
+          draftEntry.loanDecisions = (draftEntry.loanDecisions || []).concat(loanDecisions);
+        }
+      } else {
+        /* New period record — first entry or additional entry after paid/in_progress/payslip_sent */
+        var cutoff     = QuadraDatePicker.getValue(document.getElementById('dp-cutoff')) || '';
+        var activeEmps = [currentEmpId].map(function(b) {
+          return QUADRA_EMPLOYEES.find(function(q) { return q.badge === b; });
+        }).filter(Boolean);
+        var batches = deriveBatches(cutoff, activeEmps);
+        var _months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var _today  = new Date();
+        periods.unshift({
+          id: 'PR' + Date.now(),
+          period: period,
+          createdDate: _today.getDate() + ' ' + _months[_today.getMonth()] + ' ' + _today.getFullYear(),
+          employees: 1,
+          totalNet: net,
+          status: status,
+          createdBy: 'Admin',
+          payslipDate: null,
+          salaryCutoff: cutoff,
+          batches: batches,
+          loanDecisions: loanDecisions,
+          employeeIds: [currentEmpId]
+        });
+      }
+
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS', JSON.stringify(periods));
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS_V', SEED_VERSION);
+    } catch(e) {}
+    return period;
+  }
+
+  function createSinglePayroll() {
+    var currentPeriod = getCurrentPeriod();
+    var locked = getLockedIds(currentPeriod);
+    if (locked.has(currentEmpId) || !isTimesheetApprovedForPeriod(currentEmpId, currentPeriod)) {
+      QuadraToast.show('Select an eligible employee before creating payroll.', 'error');
+      closeModal('confirm-modal');
+      return;
+    }
+    closeModal('confirm-modal');
+    var period = _saveToStorage('draft');
+    try { localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: 'Payroll for ' + period + ' has been created.', type: 'success' })); } catch(e) {}
+    window.location.href = 'payroll-summary.html';
+  }
+
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

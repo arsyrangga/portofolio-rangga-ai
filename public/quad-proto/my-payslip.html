@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — My Payslip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    .payslip-row { cursor: pointer; }
+    .payslip-breakdown { display: none; }
+    .payslip-breakdown.open { display: table-row; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="my-payslip"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <span class="bc-current">My Payslip</span>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">My Payslip</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th class="col-right">Net Pay</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="payslipTbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="loans-data.js"></script>
+<script>
+  function fmt(n) {
+    return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+  }
+
+  function statusBadge(s) {
+    if (s === 'draft')        return '<span class="tag tag-neutral">Draft</span>';
+    if (s === 'in_progress')  return '<span class="tag tag-warning">In Progress</span>';
+    if (s === 'paid')         return '<span class="tag tag-info">Paid</span>';
+    if (s === 'payslip_sent') return '<span class="tag tag-success">Payslip Sent</span>';
+    return '';
+  }
+
+  /* ── Load periods (same logic as payroll-summary.html / payroll-summary-detail.html) ── */
+  var SEED_VERSION = 5;
+
+  var DEMO_PERIODS = (function() {
+    var stats = (function() {
+      try {
+        var active = QUADRA_EMPLOYEES.filter(function(e) { return e.status === 'Active'; });
+        var net = active.reduce(function(s, e) {
+          return s + e.salary + (e.allowances || []).reduce(function(a, x) { return a + x.amount; }, 0);
+        }, 0);
+        return { employees: active.length, totalNet: net, ids: active.map(function(e) { return e.badge; }) };
+      } catch(e) { return { employees: 0, totalNet: 0, ids: [] }; }
+    })();
+    return [
+      { id: 'PR1000', period: 'May 2026',   createdDate: '1 Jun 2026',  employees: stats.employees, totalNet: stats.totalNet, status: 'paid',         createdBy: 'Admin', payslipDate: null,         employeeIds: stats.ids },
+      { id: 'PR1001', period: 'April 2026', createdDate: '1 May 2026',  employees: stats.employees, totalNet: stats.totalNet, status: 'payslip_sent',  createdBy: 'Admin', payslipDate: '2 May 2026', employeeIds: stats.ids },
+    ];
+  })();
+
+  function savePeriods(periods) {
+    try {
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS', JSON.stringify(periods));
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS_V', SEED_VERSION);
+    } catch(e) {}
+  }
+
+  function getStoredPeriods() {
+    try {
+      var storedV = parseInt(localStorage.getItem('QUADRA_PAYROLL_PERIODS_V') || '0');
+      if (storedV !== SEED_VERSION) throw new Error('stale');
+      var raw = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      if (raw) {
+        var stored = JSON.parse(raw);
+        if (stored.length) return stored;
+      }
+    } catch (e) {
+      localStorage.removeItem('QUADRA_PAYROLL_PERIODS');
+      localStorage.removeItem('QUADRA_PAYROLL_PERIODS_V');
+    }
+    var seeded = DEMO_PERIODS.map(function(p) { return Object.assign({}, p); });
+    savePeriods(seeded);
+    return seeded;
+  }
+
+  var ALL_PERIODS = getStoredPeriods();
+  var MONTHS_LIST = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function getEmp(badge) {
+    return QUADRA_EMPLOYEES.find(function (e) { return e.badge === badge; }) || null;
+  }
+
+  /* ── Overtime / deduction computation — copied from payroll-summary-detail.html
+     (this codebase duplicates computation logic per-page rather than factoring
+     a shared module; see design-payroll.md §27) ── */
+  var SEED_OT_HOURS = {
+    '000000001': 10, '000000003': 6, '000000005': 8,
+    '000000008': 4,  '000000009': 5
+  };
+  var SEED_LATE = {
+    '000000002': 50000, '000000004': 75000,
+    '000000007': 100000, '000000010': 25000
+  };
+
+  var SHIFT_VER_PAYROLL = 3;
+  var SHIFT_SEED_PAYROLL = [
+    { id: 1, name: 'NDS',         lateDeductionPerPoint: 5000, isFlexible: false },
+    { id: 2, name: 'Bendi',       lateDeductionPerPoint: 5000, isFlexible: false },
+    { id: 3, name: 'Ops Console', lateDeductionPerPoint: 5000, isFlexible: false }
+  ];
+  function loadShiftsForPayroll() {
+    var ver = parseInt(localStorage.getItem('QUADRA_SHIFTS_V'), 10);
+    if (ver !== SHIFT_VER_PAYROLL) return SHIFT_SEED_PAYROLL.slice();
+    try { return JSON.parse(localStorage.getItem('QUADRA_SHIFTS')) || []; } catch(e) { return []; }
+  }
+  var QUADRA_SHIFTS_DATA = loadShiftsForPayroll();
+  function getShift(name) {
+    if (!name) return null;
+    return QUADRA_SHIFTS_DATA.find(function(s) { return s.name === name; }) || null;
+  }
+
+  function calcOvertime(emp) {
+    if (emp.overtimeType === 'No Overtime') return 0;
+    var hours = SEED_OT_HOURS[emp.badge] || 0;
+    if (!hours) return 0;
+    if (emp.overtimeType === 'Specific Amount' && emp.otRate) return emp.otRate * hours;
+    return Math.round((emp.salary / 173) * hours);
+  }
+
+  function calcDeductionLines(emp) {
+    var lines = [];
+    (emp.deductions || []).forEach(function (d) {
+      if (d.paidBy !== 'personal') return;
+      var base = Math.min(emp.salary, 12000000);
+      if (d.id === 'bpjs-kes') lines.push({ label: 'BPJS Kesehatan', amount: Math.round(base * 0.01) });
+      if (d.id === 'bpjs-tk')  lines.push({ label: 'BPJS Ketenagakerjaan', amount: Math.round(base * 0.02) });
+      if (d.id === 'pph21')    lines.push({ label: 'PPh 21', amount: Math.round(Math.max(0, emp.salary - 5400000) * 0.05) });
+    });
+    return lines;
+  }
+
+  var ALLOWANCE_LABEL = { 'laptop':'Laptop', 'on-site':'On-site', 'internet':'Internet', 'skills':'Skills Development', 'leader':'Leadership' };
+
+  function parsePeriod(period) {
+    var parts = period.split(' ');
+    return { month: MONTHS_LIST.indexOf(parts[0]), year: parseInt(parts[1]) };
+  }
+
+  function monthlyDed(loan) {
+    return loan.tenor > 0 ? Math.ceil(loan.total / loan.tenor) : 0;
+  }
+
+  function getOverdueCount(loan, pMonth, pYear) {
+    var start = new Date(loan.startDate);
+    var monthsBeforeP = (pYear - start.getFullYear()) * 12 + (pMonth - start.getMonth());
+    var installmentsDueBeforeP = Math.min(loan.tenor, monthsBeforeP);
+    var ded = monthlyDed(loan);
+    var paidCount = ded > 0 ? Math.floor(loan.paid / ded) : 0;
+    return Math.max(0, installmentsDueBeforeP - paidCount);
+  }
+
+  function calcBatchLoanAmount(loan, period) {
+    var p = parsePeriod(period);
+    var overdueCount = getOverdueCount(loan, p.month, p.year);
+    var suggested = monthlyDed(loan) * (overdueCount + 1);
+    return Math.min(suggested, loan.total - loan.paid);
+  }
+
+  function getLoanDecision(pp, loanId) {
+    if (!pp.loanDecisions || !pp.loanDecisions.length) return null;
+    return pp.loanDecisions.find(function (d) { return d.loanId === loanId; }) || null;
+  }
+
+  function liveLoanAmt(pp, loan) {
+    var dec = getLoanDecision(pp, loan.id);
+    var locked = pp.status === 'paid' || pp.status === 'payslip_sent';
+    if (dec && dec.action === 'confirm' && locked) return dec.amount || 0;
+    return calcBatchLoanAmount(loan, pp.period);
+  }
+
+  function getActiveLoansForPeriod(pp) {
+    var parts  = (pp.period || '').split(' ');
+    var pMonth = MONTHS_LIST.indexOf(parts[0]);
+    var pYear  = parseInt(parts[1]);
+    var pDate  = new Date(pYear, pMonth, 1);
+    var empIds = pp.employeeIds || null;
+    return (typeof QUADRA_LOANS !== 'undefined' ? QUADRA_LOANS : []).filter(function (loan) {
+      if (loan.status !== 'active' && loan.status !== 'overdue') return false;
+      if (empIds && empIds.indexOf(loan.empBadge) === -1) return false;
+      var start     = new Date(loan.startDate);
+      var startDate = new Date(start.getFullYear(), start.getMonth(), 1);
+      var endIdx    = start.getMonth() + loan.tenor - 1;
+      var endDate   = new Date(start.getFullYear() + Math.floor(endIdx / 12), endIdx % 12, 1);
+      return pDate >= startDate && pDate <= endDate;
+    });
+  }
+
+  function getEmpLoanLines(pp, badge) {
+    return getActiveLoansForPeriod(pp)
+      .filter(function (loan) { return loan.empBadge === badge; })
+      .map(function (loan) {
+        var dec = getLoanDecision(pp, loan.id);
+        if (dec && dec.action === 'defer') return null;
+        if (!dec && loan.deferred) return null;
+        return { label: 'Loan Deduction', amount: liveLoanAmt(pp, loan) };
+      })
+      .filter(function (l) { return l !== null; });
+  }
+
+  function computePayslip(pp, emp) {
+    var base   = emp.salary;
+    var ot     = calcOvertime(emp);
+    var allowLines = (emp.allowances || []).map(function (a) {
+      return { label: ALLOWANCE_LABEL[a.id] || a.id, amount: a.amount };
+    });
+    var dedLines  = calcDeductionLines(emp);
+    var loanLines = getEmpLoanLines(pp, emp.badge);
+    var shift      = getShift(emp.shift);
+    var isFlexible = shift ? !!shift.isFlexible : false;
+    var lateAmount = isFlexible ? 0 : (SEED_LATE[emp.badge] || 0);
+    var allowTotal = allowLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var dedTotal   = dedLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var loanTotal  = loanLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var net = base + ot + allowTotal - lateAmount - dedTotal - loanTotal;
+    return {
+      base: base, ot: ot, allowLines: allowLines, dedLines: dedLines,
+      loanLines: loanLines, lateAmount: lateAmount, net: net
+    };
+  }
+
+  function renderBreakdownHtml(computed) {
+    var rows = '<tr><td>Base Salary</td><td class="col-right">' + fmt(computed.base) + '</td></tr>';
+    if (computed.ot > 0) rows += '<tr><td>Overtime</td><td class="col-right" style="color:#059669">+' + fmt(computed.ot) + '</td></tr>';
+    computed.allowLines.forEach(function (l) {
+      rows += '<tr><td>' + l.label + ' (Allowance)</td><td class="col-right" style="color:#059669">+' + fmt(l.amount) + '</td></tr>';
+    });
+    if (computed.lateAmount > 0) {
+      rows += '<tr><td>Late / Tardiness</td><td class="col-right" style="color:#DC2626">−' + fmt(computed.lateAmount) + '</td></tr>';
+    }
+    computed.dedLines.forEach(function (l) {
+      rows += '<tr><td>' + l.label + ' (Deduction)</td><td class="col-right" style="color:#DC2626">−' + fmt(l.amount) + '</td></tr>';
+    });
+    computed.loanLines.forEach(function (l) {
+      rows += '<tr><td>' + l.label + '</td><td class="col-right" style="color:#DC2626">−' + fmt(l.amount) + '</td></tr>';
+    });
+    rows += '<tr><td style="font-weight:600">Net Pay</td><td class="col-right" style="font-weight:600">' + fmt(computed.net) + '</td></tr>';
+    return '<table class="detail-table" style="width:100%"><tbody>' + rows + '</tbody></table>';
+  }
+
+  (function render() {
+    var badge = localStorage.getItem('quadra_active_badge');
+    var emp = getEmp(badge);
+    if (!emp) {
+      document.getElementById('payslipTbody').innerHTML =
+        '<tr><td colspan="3"><div class="empty-state">'
+        + '<div class="empty-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>'
+        + '<div class="empty-title">No employee record found</div>'
+        + '<div class="empty-desc">Your account isn\'t linked to an employee record. Please contact HR.</div>'
+        + '</div></td></tr>';
+      return;
+    }
+
+    var myPeriods = ALL_PERIODS.filter(function (p) {
+      return p.employeeIds && p.employeeIds.indexOf(badge) !== -1;
+    });
+
+    var tbody = document.getElementById('payslipTbody');
+    if (!myPeriods.length) {
+      tbody.innerHTML = '<tr><td colspan="3" style="padding:32px;text-align:center;color:#9CA3AF;font-size:13px">No payroll periods found for your account yet.</td></tr>';
+      return;
+    }
+
+    var html = '';
+    myPeriods.forEach(function (pp, idx) {
+      var rowId = 'breakdown-' + idx;
+      var computed = computePayslip(pp, emp);
+      html += '<tr class="payslip-row" onclick="togglePayslip(\'' + rowId + '\')">'
+        + '<td>' + pp.period + '</td>'
+        + '<td class="col-right">' + fmt(computed.net) + '</td>'
+        + '<td>' + statusBadge(pp.status) + '</td>'
+        + '</tr>';
+      html += '<tr class="payslip-breakdown" id="' + rowId + '"><td colspan="3">' + renderBreakdownHtml(computed) + '</td></tr>';
+    });
+    tbody.innerHTML = html;
+  })();
+
+  function togglePayslip(rowId) {
+    document.getElementById(rowId).classList.toggle('open');
+  }
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+
+</body>
+</html>

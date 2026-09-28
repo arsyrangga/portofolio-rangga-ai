@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .settings-card/.settings-body/.settings-section/.settings-section.active,
+       .empty-state (dept/shift/placeholder), .time-cell .time-val/.time-tol,
+       .late-tol-cell — all promoted to layout.css (Task 10, GROUP 6 / section
+       2 / section 13). .btn-create, .settings-table-wrap, table.settings-tbl
+       (+ its thead/th/td/tr sub-rules), .col-actions, .placeholder-section
+       (+p), the dead .shift-detail-* rules, and .badge-flex were all deleted
+       here — see layout.css GROUP 6's batch note for what each one was
+       replaced with (an existing shared class) or why it was dead code. */
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="" data-active-sub=""></aside>
+
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action gear-active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <h1 class="page-title">Settings</h1>
+
+    <div class="settings-card">
+
+      <!-- Left nav -->
+      <div class="settings-nav-col">
+        <div class="settings-nav-search">
+          <div class="search-w">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9CA3AF" stroke-width="1.4"/><path d="M9.5 9.5l3 3" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <input type="text" id="settings-nav-search" placeholder="Search settings…" oninput="filterSettingsNav(this.value)" />
+          </div>
+        </div>
+        <nav class="settings-nav" id="settings-nav"></nav>
+      </div>
+
+      <!-- Right content -->
+      <div class="settings-body" id="settings-body">
+
+        <!-- Department (functional) -->
+        <div class="settings-section" id="section-department">
+          <div class="section-head">
+            <span class="section-title">Department</span>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th class="col-actions" style="width:100px"></th>
+                </tr>
+              </thead>
+              <tbody id="dept-tbody"></tbody>
+            </table>
+            <div id="dept-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="2" stroke="#D1D5DB" stroke-width="2"/><path d="M4 14h32" stroke="#D1D5DB" stroke-width="2"/><path d="M12 22h8M12 27h5" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="empty-state-text">No departments yet.<br>Click <strong>+ Create</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- General / Regional Settings (functional, merged Currency + Date & Time Format) -->
+        <div class="settings-section" id="section-general-regional">
+          <div class="section-head">
+            <span class="section-title">General / Regional Settings</span>
+          </div>
+          <div class="settings-field-row">
+            <div class="form-group">
+              <label class="field-label" for="gr-currency">Currency Symbol</label>
+              <input class="text-input" id="gr-currency" type="text" maxlength="8" oninput="clearGrFieldErr('currency')" />
+              <span class="field-error" id="gr-currency-err" style="display:none"></span>
+            </div>
+            <button class="btn btn-primary" style="margin-top:22px" onclick="saveGeneralField('currency')">Save</button>
+          </div>
+          <div class="settings-field-row">
+            <div class="form-group">
+              <label class="field-label">Date Format</label>
+              <div class="select-w" id="dd-gr-date-format"></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:22px" onclick="saveGeneralField('dateFormat')">Save</button>
+          </div>
+          <div class="settings-field-row">
+            <div class="form-group">
+              <label class="field-label">Time Format</label>
+              <div class="select-w" id="dd-gr-time-format"></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:22px" onclick="saveGeneralField('timeFormat')">Save</button>
+          </div>
+        </div>
+
+        <!-- Shift Configuration (functional) -->
+        <div class="settings-section" id="section-employee-shift">
+          <div class="section-head">
+            <span class="section-title">Shift Configuration</span>
+            <button class="btn btn-primary" onclick="openCreateShift()">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Shift Name</th>
+                  <th>Check-in</th>
+                  <th>Check-out</th>
+                  <th>Late Tolerance</th>
+                  <th class="col-actions" style="width:100px"></th>
+                </tr>
+              </thead>
+              <tbody id="shift-tbody"></tbody>
+            </table>
+            <div id="shift-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="16" stroke="#D1D5DB" stroke-width="2"/>
+                <path d="M20 12v9l5 3" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p class="empty-state-text">No shifts yet.<br>Click <strong>+ Create</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Group (functional) -->
+        <div class="settings-section" id="section-user-group">
+          <div class="section-head">
+            <span class="section-title">User Group</span>
+            <button class="btn btn-primary" onclick="window.location.href='settings-group-detail.html'">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:200px">Group Name</th>
+                  <th>Permissions</th>
+                  <th class="col-actions" style="width:100px"></th>
+                </tr>
+              </thead>
+              <tbody id="group-tbody"></tbody>
+            </table>
+            <div id="group-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="6" stroke="#D1D5DB" stroke-width="2"/><path d="M8 34c0-6.6 5.4-12 12-12s12 5.4 12 12" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="empty-state-text">No user groups yet.<br>Click <strong>+ Create</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Client (functional) -->
+        <div class="settings-section" id="section-client">
+          <div class="section-head">
+            <span class="section-title">Client</span>
+            <button class="btn btn-primary" onclick="openCreateClientModal()">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Client Name</th>
+                  <th class="col-right" style="width:100px">Projects</th>
+                  <th class="col-actions" style="width:100px"></th>
+                </tr>
+              </thead>
+              <tbody id="client-tbody"></tbody>
+            </table>
+            <div id="client-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="22" rx="2" stroke="#D1D5DB" stroke-width="2"/><path d="M6 16h28" stroke="#D1D5DB" stroke-width="2"/><path d="M13 22h6M13 27h4" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="empty-state-text">No clients yet.<br>Click <strong>+ Create</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project (functional) -->
+        <div class="settings-section" id="section-project">
+          <div class="section-head">
+            <span class="section-title">Project</span>
+            <button class="btn btn-primary" onclick="openCreateProjectModal()">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Project Name</th>
+                  <th>Client</th>
+                  <th>Template</th>
+                  <th class="col-actions" style="width:100px"></th>
+                </tr>
+              </thead>
+              <tbody id="project-tbody"></tbody>
+            </table>
+            <div id="project-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="6" width="28" height="28" rx="2" stroke="#D1D5DB" stroke-width="2"/><path d="M13 15h14M13 20h14M13 25h9" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="empty-state-text">No projects yet.<br>Click <strong>+ Create</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Holiday (functional) -->
+        <div class="settings-section" id="section-holiday">
+          <div class="section-head">
+            <span class="section-title">Holiday</span>
+            <button class="btn btn-primary" onclick="openCreateHolidayModal()">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Holiday Name</th>
+                  <th>Date Range</th>
+                  <th style="width:100px">Recurring</th>
+                  <th style="width:160px">Deducts Leave Balance</th>
+                  <th class="col-actions" style="width:100px"></th>
+                </tr>
+              </thead>
+              <tbody id="holiday-tbody"></tbody>
+            </table>
+            <div id="holiday-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="26" rx="2" stroke="#D1D5DB" stroke-width="2"/><path d="M6 15h28" stroke="#D1D5DB" stroke-width="2"/><path d="M13 5v6M27 5v6" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="empty-state-text">No holidays yet.<br>Click <strong>+ Create</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Management (functional) -->
+        <div class="settings-section" id="section-notification-management">
+          <div class="section-head">
+            <span class="section-title">Notification Management</span>
+            <span class="field-hint" id="notif-count-summary" style="margin-left:10px"></span>
+            <button class="btn btn-primary" onclick="location.href='notification-rule-edit.html'" style="margin-left:auto">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Create Rule
+            </button>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Rule Name</th>
+                  <th style="width:140px">Recipients</th>
+                  <th style="width:260px">Schedule</th>
+                  <th style="width:90px">Status</th>
+                  <th class="col-actions" style="width:120px"></th>
+                </tr>
+              </thead>
+              <tbody id="notification-rule-tbody"></tbody>
+            </table>
+            <div id="notification-rule-empty" class="empty-state" style="display:none;">
+              <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M8 12a3 3 0 013-3h18a3 3 0 013 3v16a3 3 0 01-3 3H11a3 3 0 01-3-3V12z" stroke="#D1D5DB" stroke-width="2"/><path d="M8 13l12 9 12-9" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <p class="empty-state-text">No notification rules yet.<br>Click <strong>+ Create Rule</strong> to add one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder sections (all others) -->
+        <div class="settings-section" id="section-placeholder">
+          <div class="section-head">
+            <span class="section-title" id="placeholder-title">—</span>
+          </div>
+          <div class="empty-state">
+            <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="#E5E7EB" stroke-width="2"/><path d="M20 14v8M20 26v1" stroke="#D1D5DB" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <p class="empty-state-text">This section is not yet available in the prototype.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Create / Edit Modal -->
+<div class="modal-overlay" id="dept-modal" onclick="if(event.target===this)closeDeptModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title" id="dept-modal-title">Create Department</span>
+      <button class="modal-close-btn" onclick="closeDeptModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Department Name</div>
+        <input type="text" class="text-input" id="dept-name-input" placeholder="e.g. Engineering" maxlength="80"
+          onkeydown="if(event.key==='Enter')saveDept()" oninput="clearDeptErr()" />
+        <span class="field-err" id="dept-name-err"></span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeptModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDept()" id="dept-modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)closeDeleteModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Department</span>
+      <button class="modal-close-btn" onclick="closeDeleteModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-dept-name"></span>?</div>
+        <div class="sub-desc">This department will be permanently deleted. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Shift Create / Edit Modal -->
+<div class="modal-overlay" id="shift-modal" onclick="if(event.target===this)closeShiftModal()">
+  <div class="modal-box modal-wide">
+    <div class="modal-head">
+      <span class="modal-head-title" id="shift-modal-title">Create Shift</span>
+      <button class="modal-close-btn" onclick="closeShiftModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <div class="field-label">Shift Name</div>
+        <input type="text" class="text-input" id="shift-name" placeholder="e.g. Morning Shift" maxlength="80"
+          oninput="clearShiftFieldErr('shift-name')" />
+        <span class="field-err" id="shift-name-err"></span>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <div class="field-label">Check-in Time</div>
+          <input type="time" class="text-input" id="shift-cin"
+            oninput="clearShiftFieldErr('shift-cin'); checkToleranceWarn()" />
+          <span class="field-err" id="shift-cin-err"></span>
+        </div>
+        <div class="form-field">
+          <div class="field-label">Check-in Tolerance</div>
+          <input type="number" class="text-input" id="shift-cin-tol" placeholder="15" min="0" max="120"
+            oninput="clearShiftFieldErr('shift-cin-tol'); checkToleranceWarn()" />
+          <div class="field-hint">0–120 min, whole number (0 = no tolerance)</div>
+          <span class="field-err" id="shift-cin-tol-err"></span>
+          <span class="field-warn" id="shift-cin-tol-warn"></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <div class="field-label">Check-out Time</div>
+          <input type="time" class="text-input" id="shift-cout"
+            oninput="clearShiftFieldErr('shift-cout'); checkToleranceWarn()" />
+          <span class="field-err" id="shift-cout-err"></span>
+        </div>
+        <div class="form-field">
+          <div class="field-label">Check-out Tolerance</div>
+          <input type="number" class="text-input" id="shift-cout-tol" placeholder="15" min="0" max="120"
+            oninput="clearShiftFieldErr('shift-cout-tol'); checkToleranceWarn()" />
+          <div class="field-hint">0–120 min, whole number (0 = no tolerance)</div>
+          <span class="field-err" id="shift-cout-tol-err"></span>
+          <span class="field-warn" id="shift-cout-tol-warn"></span>
+        </div>
+      </div>
+      <div id="shift-late-group">
+        <div class="form-row">
+          <div class="form-field">
+            <div class="field-label">Late Tolerance Count</div>
+            <input type="number" class="text-input" id="shift-late" placeholder="1" min="0" max="99"
+              oninput="clearShiftFieldErr('shift-late'); checkLateWarn()" />
+            <div class="field-hint">0–99 (0 = all late arrivals counted)</div>
+            <span class="field-err" id="shift-late-err"></span>
+            <span class="field-warn" id="shift-late-warn"></span>
+          </div>
+          <div class="form-field">
+            <div class="field-label">Late Deduction Rate</div>
+            <div class="f-input" id="shift-late-rate-wrap">
+              <span class="input-prefix">IDR</span>
+              <input type="number" id="shift-late-rate" placeholder="5000" min="0"
+                oninput="clearShiftFieldErr('shift-late-rate')" />
+            </div>
+            <div class="field-hint">IDR per point deducted from salary</div>
+            <span class="field-err" id="shift-late-rate-err"></span>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:8px">Late Point Tiers</div>
+          <div class="form-row">
+            <div class="form-field">
+              <div class="field-label">1–15 min</div>
+              <input type="number" class="text-input" id="shift-late-tier1" placeholder="20" min="0"
+                oninput="clearShiftFieldErr('shift-late-tier1')" />
+              <span class="field-err" id="shift-late-tier1-err"></span>
+            </div>
+            <div class="form-field">
+              <div class="field-label">16–30 min</div>
+              <input type="number" class="text-input" id="shift-late-tier2" placeholder="50" min="0"
+                oninput="clearShiftFieldErr('shift-late-tier2')" />
+              <span class="field-err" id="shift-late-tier2-err"></span>
+            </div>
+            <div class="form-field">
+              <div class="field-label">&gt;30 min</div>
+              <input type="number" class="text-input" id="shift-late-tier3" placeholder="100" min="0"
+                oninput="clearShiftFieldErr('shift-late-tier3')" />
+              <span class="field-err" id="shift-late-tier3-err"></span>
+            </div>
+          </div>
+          <div class="field-hint">Points earned per late check-in, by minutes late. Points × Late Deduction Rate = amount deducted.</div>
+        </div>
+      </div>
+      <label class="toggle-row" for="shift-flexible">
+        <div class="toggle-wrap">
+          <input type="checkbox" id="shift-flexible" onchange="onFlexibleChange()">
+          <span class="toggle-track"></span>
+          <span class="toggle-knob"></span>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:0">Flexible Shift</div>
+          <div class="field-hint" style="margin-top:2px">Employees in this shift won't incur late deductions regardless of arrival time</div>
+        </div>
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeShiftModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveShift()" id="shift-modal-save">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Shift Delete Confirm Modal -->
+<div class="modal-overlay" id="shift-delete-modal" onclick="if(event.target===this)closeShiftDeleteModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Shift</span>
+      <button class="modal-close-btn" onclick="closeShiftDeleteModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-shift-nm"></span>?</div>
+        <div class="sub-desc">This shift will be permanently deleted. This action cannot be undone.</div>
+        <div id="delete-shift-emp-warn" style="display:none;margin-top:8px;font-size:13px;color:#B45309"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeShiftDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteShift()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- User Group Delete Confirm Modal -->
+<div class="modal-overlay" id="group-delete-modal" onclick="if(event.target===this)closeGroupDeleteModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete User Group</span>
+      <button class="modal-close-btn" onclick="closeGroupDeleteModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-group-name"></span>?</div>
+        <div class="sub-desc">This user group will be permanently deleted. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeGroupDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteGroup()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client Create/Edit Modal -->
+<div class="modal-overlay" id="client-modal" onclick="if(event.target===this)closeClientModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title" id="client-modal-title">Create Client</span>
+      <button class="modal-close-btn" onclick="closeClientModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Client Name</div>
+        <input type="text" class="text-input" id="client-name-input" placeholder="e.g. PT Mitra Karya Nusantara" maxlength="80"
+          onkeydown="if(event.key==='Enter')saveClient()" oninput="clearClientErr()" />
+        <span class="field-err" id="client-name-err"></span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeClientModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveClient()" id="client-modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client Delete Confirm Modal -->
+<div class="modal-overlay" id="client-delete-modal" onclick="if(event.target===this)closeDeleteClientModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Client</span>
+      <button class="modal-close-btn" onclick="closeDeleteClientModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-client-name"></span>?</div>
+        <div class="sub-desc">This client will be permanently deleted. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteClientModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteClient()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification Rule Delete Confirm Modal -->
+<div class="modal-overlay" id="notification-rule-delete-modal" onclick="if(event.target===this)closeDeleteNotificationRuleModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Notification Rule</span>
+      <button class="modal-close-btn" onclick="closeDeleteNotificationRuleModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-notification-rule-name"></span>?</div>
+        <div class="sub-desc">This notification rule will be permanently deleted. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteNotificationRuleModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteNotificationRule()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Holiday Create/Edit Modal -->
+<div class="modal-overlay" id="holiday-modal" onclick="if(event.target===this)closeHolidayModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title" id="holiday-modal-title">Create Holiday</span>
+      <button class="modal-close-btn" onclick="closeHolidayModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Holiday Name</div>
+        <input type="text" class="text-input" id="holiday-name-input" placeholder="e.g. Hari Kemerdekaan RI" maxlength="80"
+          onkeydown="if(event.key==='Enter')saveHoliday()" oninput="clearHolidayErrs()" />
+        <span class="field-err" id="holiday-name-err"></span>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="field-label">Start Date</div>
+        <div class="date-select-w" id="holiday-start-date-w"></div>
+        <span class="field-err" id="holiday-start-date-err"></span>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="field-label">End Date</div>
+        <div class="date-select-w" id="holiday-end-date-w"></div>
+        <span class="field-err" id="holiday-end-date-err"></span>
+      </div>
+      <label class="toggle-row" for="holiday-recurring-input" style="margin-top:14px;">
+        <div class="toggle-wrap">
+          <input type="checkbox" id="holiday-recurring-input">
+          <span class="toggle-track"></span>
+          <span class="toggle-knob"></span>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:0">Recurring</div>
+          <div class="field-hint" style="margin-top:2px">Repeats every year on the same date (informational only in this prototype)</div>
+        </div>
+      </label>
+      <label class="toggle-row" for="holiday-deducts-input" style="margin-top:10px;">
+        <div class="toggle-wrap">
+          <input type="checkbox" id="holiday-deducts-input">
+          <span class="toggle-track"></span>
+          <span class="toggle-knob"></span>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:0">Deducts Annual Leave Balance</div>
+          <div class="field-hint" style="margin-top:2px">Off for a normal national holiday. On for a collective/joint leave day ("Cuti Bersama") that still consumes annual leave balance.</div>
+        </div>
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeHolidayModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveHoliday()" id="holiday-modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Holiday Delete Confirm Modal -->
+<div class="modal-overlay" id="holiday-delete-modal" onclick="if(event.target===this)closeDeleteHolidayModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Holiday</span>
+      <button class="modal-close-btn" onclick="closeDeleteHolidayModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-holiday-name"></span>?</div>
+        <div class="sub-desc">This holiday will be permanently deleted. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteHolidayModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteHoliday()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client Detail Modal (View) -->
+<div class="modal-overlay" id="client-detail-modal" onclick="if(event.target===this)closeClientDetailModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Client Detail</span>
+      <button class="modal-close-btn" onclick="closeClientDetailModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Client Name</div>
+        <div style="font-size:15px;font-weight:600;color:#111827;" id="client-detail-name"></div>
+      </div>
+      <div>
+        <div class="field-label">Projects (<span id="client-detail-count">0</span>)</div>
+        <div id="client-detail-project-list"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeClientDetailModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Project Create/Edit Modal -->
+<div class="modal-overlay" id="project-modal" onclick="if(event.target===this)closeProjectModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title" id="project-modal-title">Create Project</span>
+      <button class="modal-close-btn" onclick="closeProjectModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Client</div>
+        <div class="select-w" id="project-client-select"></div>
+        <span class="field-err" id="project-client-err"></span>
+      </div>
+      <div>
+        <div class="field-label">Project Name</div>
+        <input type="text" class="text-input" id="project-name-input" placeholder="e.g. NDS" maxlength="80"
+          onkeydown="if(event.key==='Enter')saveProject()" oninput="clearProjectNameErr()" />
+        <span class="field-err" id="project-name-err"></span>
+      </div>
+      <div>
+        <div class="field-label">Timesheet Template <span class="opt-tag">(Optional)</span></div>
+        <div class="file-upload" id="project-template-upload">
+          <input type="file" class="file-upload-input" accept=".xlsx" />
+          <div class="file-upload-empty">
+            <svg class="file-upload-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 13V3M10 3L6 7M10 3l4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+            <div class="file-upload-hint">XLSX, up to 2MB</div>
+          </div>
+          <div class="file-upload-selected">
+            <svg class="file-upload-file-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l3 3v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#E04A2A" stroke-width="1.3" stroke-linejoin="round"/><path d="M11 2v3h3" stroke="#E04A2A" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            <span class="file-upload-name"></span>
+            <button type="button" class="file-upload-remove" aria-label="Remove file"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+          </div>
+        </div>
+        <div class="field-error" id="project-template-err"></div>
+        <div id="project-template-existing-info" style="display:none;font-size:12px;color:#6B7280;margin-top:6px;">
+          Uploaded <span id="project-template-existing-date"></span> · <a href="#" onclick="downloadExistingProjectTemplate(); return false;" style="color:#E04A2A;">Download</a>
+        </div>
+        <div class="field-hint" id="project-template-empty-hint">No template uploaded — the default template will be used.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeProjectModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProject()" id="project-modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Project Delete Confirm Modal -->
+<div class="modal-overlay" id="project-delete-modal" onclick="if(event.target===this)closeDeleteProjectModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Project</span>
+      <button class="modal-close-btn" onclick="closeDeleteProjectModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="delete-confirm-body">
+      <div class="warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="warn-text">
+        <div class="sub-label">Delete <span id="delete-project-name"></span>?</div>
+        <div class="sub-desc">This project will be permanently deleted. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteProjectModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteProject()">Delete</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="employees-data.js"></script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script src="fileupload.js"></script>
+<script>
+  /* ── Settings nav items ── */
+  var SETTINGS_ITEMS = [
+    { key: 'department',              label: 'Department',                 group: 'Organization' },
+    { key: 'department-managers',     label: 'Department Managers',        group: 'Organization' },
+    { key: 'job-positions',           label: 'Job Positions',              group: 'Organization' },
+    { key: 'job-role',                label: 'Job Role',                   group: 'Organization' },
+    { key: 'category',                label: 'Category',                   group: 'Organization' },
+    { key: 'rank',                    label: 'Rank',                       group: 'Organization' },
+    { key: 'employee-type',           label: 'Employee Type',              group: 'Organization' },
+
+    { key: 'attendance-break-point',  label: 'Attendance Break Point',     group: 'Time & Attendance' },
+    { key: 'employee-shift',          label: 'Shift Configuration',        group: 'Time & Attendance' },
+    { key: 'employee-shift-schedule', label: 'Employee Shift Schedule',    group: 'Time & Attendance' },
+    { key: 'rotating-shift',          label: 'Rotating Shift',             group: 'Time & Attendance' },
+    { key: 'rotating-work-type',      label: 'Rotating Work Type',         group: 'Time & Attendance' },
+    { key: 'holiday',                 label: 'Holiday',                    group: 'Time & Attendance' },
+
+    { key: 'company',                 label: 'Company',                    group: 'Company & General' },
+    { key: 'client',                  label: 'Client',                     group: 'Company & General' },
+    { key: 'project',                 label: 'Project',                    group: 'Company & General' },
+    { key: 'general-regional',        label: 'General / Regional Settings', group: 'Company & General' },
+    { key: 'mail-server',             label: 'Mail Server',                group: 'Company & General' },
+    { key: 'digital-signature',       label: 'Digital Signature',          group: 'Company & General' },
+
+    { key: 'employee-permission',     label: 'Employee Permission',        group: 'People & Access' },
+    { key: 'user-group',              label: 'User Group',                 group: 'People & Access' },
+
+    { key: 'announcement',            label: 'Announcement',               group: 'Operations' },
+    { key: 'notification-management', label: 'Notification Management',    group: 'Operations' },
+    { key: 'reimbursement-category',  label: 'Reimbursement Category',     group: 'Operations' },
+    { key: 'tags',                    label: 'Tags',                       group: 'Operations' },
+    { key: 'ticket-type',             label: 'Ticket Type',                group: 'Operations' },
+    { key: 'work-type',               label: 'Work Type',                  group: 'Operations' }
+  ];
+
+  /* ── Build left nav ── */
+  var navEl = document.getElementById('settings-nav');
+  var lastGroup = null;
+  SETTINGS_ITEMS.forEach(function(item) {
+    if (item.group !== lastGroup) {
+      var groupLabel = document.createElement('div');
+      groupLabel.className = 'settings-nav-group-label';
+      groupLabel.textContent = item.group;
+      navEl.appendChild(groupLabel);
+      lastGroup = item.group;
+    }
+    var btn = document.createElement('button');
+    btn.className = 'settings-nav-item';
+    btn.dataset.key = item.key;
+    btn.textContent = item.label;
+    btn.addEventListener('click', function() { showSection(item.key); });
+    navEl.appendChild(btn);
+  });
+
+  function filterSettingsNav(query) {
+    var q = query.trim().toLowerCase();
+    var groupLabels = navEl.querySelectorAll('.settings-nav-group-label');
+    groupLabels.forEach(function(label) {
+      var hasVisibleItem = false;
+      var node = label.nextElementSibling;
+      while (node && !node.classList.contains('settings-nav-group-label')) {
+        var match = !q || node.textContent.toLowerCase().indexOf(q) !== -1;
+        node.style.display = match ? '' : 'none';
+        if (match) hasVisibleItem = true;
+        node = node.nextElementSibling;
+      }
+      label.style.display = hasVisibleItem ? '' : 'none';
+    });
+  }
+
+  /* ── Section switching ── */
+  var currentSection = '';
+
+  function showSection(key) {
+    document.querySelectorAll('.settings-nav-item').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.key === key);
+    });
+
+    ['department', 'employee-shift', 'user-group', 'client', 'project', 'holiday', 'notification-management', 'general-regional', 'placeholder'].forEach(function(s) {
+      document.getElementById('section-' + s).classList.remove('active');
+    });
+
+    if (key === 'department') {
+      document.getElementById('section-department').classList.add('active');
+    } else if (key === 'employee-shift') {
+      document.getElementById('section-employee-shift').classList.add('active');
+      renderShifts();
+    } else if (key === 'user-group') {
+      document.getElementById('section-user-group').classList.add('active');
+      renderUserGroups();
+    } else if (key === 'client') {
+      document.getElementById('section-client').classList.add('active');
+      renderClients();
+    } else if (key === 'project') {
+      document.getElementById('section-project').classList.add('active');
+      renderProjects();
+    } else if (key === 'holiday') {
+      document.getElementById('section-holiday').classList.add('active');
+      renderHolidays();
+    } else if (key === 'notification-management') {
+      document.getElementById('section-notification-management').classList.add('active');
+      renderNotificationRules();
+    } else if (key === 'general-regional') {
+      document.getElementById('section-general-regional').classList.add('active');
+      renderGeneralSettings();
+    } else {
+      var item = SETTINGS_ITEMS.find(function(i) { return i.key === key; });
+      document.getElementById('placeholder-title').textContent = item ? item.label : key;
+      document.getElementById('section-placeholder').classList.add('active');
+    }
+    currentSection = key;
+  }
+
+  /* ── Department CRUD ── */
+  var LS_KEY   = 'QUADRA_DEPARTMENTS';
+  var LS_VER   = 'QUADRA_DEPARTMENTS_V';
+  var SEED_VER = 2;
+  var SEED_DEPTS = ['IT', 'Human Resource'];
+  var editingId = null;
+  var deletingId = null;
+
+  function loadDepts() {
+    var ver = parseInt(localStorage.getItem(LS_VER), 10);
+    if (ver !== SEED_VER) {
+      /* Version mismatch — reset to current seed data */
+      var seeds = SEED_DEPTS.map(function(name, i) { return { id: i + 1, name: name }; });
+      saveDepts(seeds);
+      localStorage.setItem(LS_VER, String(SEED_VER));
+      return seeds;
+    }
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveDepts(depts) {
+    localStorage.setItem(LS_KEY, JSON.stringify(depts));
+  }
+
+  function nextId(depts) {
+    if (!depts.length) return 1;
+    return Math.max.apply(null, depts.map(function(d) { return d.id; })) + 1;
+  }
+
+  function renderDepts() {
+    var depts = loadDepts();
+    var tbody = document.getElementById('dept-tbody');
+    var empty = document.getElementById('dept-empty');
+
+    if (!depts.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+
+    var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    tbody.innerHTML = depts.map(function(d) {
+      return '<tr>' +
+        '<td>' + escHtml(d.name) + '</td>' +
+        '<td class="col-actions">' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="Edit" onclick="openEditModal(' + d.id + ')">' + editSvg + '</button>' +
+            '<button class="icon-btn" style="color:#EF4444" title="Delete" onclick="openDeleteModal(' + d.id + ')">' + deleteSvg + '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── General / Regional Settings (merged Currency + Date & Time Format) ── */
+  var GR_LS_KEY   = 'QUADRA_GENERAL_SETTINGS';
+  var GR_LS_VER   = 'QUADRA_GENERAL_SETTINGS_V';
+  var GR_SEED_VER = 1;
+  var GR_SEED = { currencySymbol: 'Rp', dateFormat: 'DD/MM/YYYY', timeFormat: '24-hour' };
+  var GR_DATE_FORMATS = ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'DD MMM YYYY', 'D MMMM YYYY', 'MM/DD/YY', 'DD/MM/YY'];
+  var GR_TIME_FORMATS = [{ value: '24-hour', label: '24-hour' }, { value: '12-hour', label: '12-hour (AM/PM)' }];
+  var grInited = false;
+
+  function loadGeneralSettings() {
+    var ver = parseInt(localStorage.getItem(GR_LS_VER), 10);
+    if (ver !== GR_SEED_VER) {
+      saveGeneralSettings(GR_SEED);
+      localStorage.setItem(GR_LS_VER, String(GR_SEED_VER));
+      return Object.assign({}, GR_SEED);
+    }
+    try {
+      var stored = JSON.parse(localStorage.getItem(GR_LS_KEY));
+      return Object.assign({}, GR_SEED, stored || {});
+    } catch(e) { return Object.assign({}, GR_SEED); }
+  }
+
+  function saveGeneralSettings(obj) {
+    localStorage.setItem(GR_LS_KEY, JSON.stringify(obj));
+  }
+
+  function renderGeneralSettings() {
+    var data = loadGeneralSettings();
+    document.getElementById('gr-currency').value = data.currencySymbol;
+
+    if (!grInited) {
+      QuadraDropdown.init(document.getElementById('dd-gr-date-format'), GR_DATE_FORMATS,
+        { placeholder: 'Select date format', value: data.dateFormat });
+      QuadraDropdown.init(document.getElementById('dd-gr-time-format'), GR_TIME_FORMATS,
+        { placeholder: 'Select time format', value: data.timeFormat });
+      grInited = true;
+    } else {
+      QuadraDropdown.setValue(document.getElementById('dd-gr-date-format'), data.dateFormat);
+      QuadraDropdown.setValue(document.getElementById('dd-gr-time-format'), data.timeFormat);
+    }
+  }
+
+  function clearGrFieldErr(field) {
+    if (field !== 'currency') return;
+    document.getElementById('gr-currency').classList.remove('is-error');
+    var err = document.getElementById('gr-currency-err');
+    err.textContent = ''; err.style.display = 'none';
+  }
+
+  function saveGeneralField(field) {
+    var data = loadGeneralSettings();
+    if (field === 'currency') {
+      var val = (document.getElementById('gr-currency').value || '').trim();
+      if (!val) {
+        document.getElementById('gr-currency').classList.add('is-error');
+        var err = document.getElementById('gr-currency-err');
+        err.textContent = 'Currency symbol is required.'; err.style.display = 'block';
+        return;
+      }
+      data.currencySymbol = val;
+    } else if (field === 'dateFormat') {
+      data.dateFormat = QuadraDropdown.getValue(document.getElementById('dd-gr-date-format'));
+    } else if (field === 'timeFormat') {
+      data.timeFormat = QuadraDropdown.getValue(document.getElementById('dd-gr-time-format'));
+    }
+    saveGeneralSettings(data);
+    QuadraToast.show('Saved successfully.', 'success');
+  }
+
+  /* ── User Group: category/entity config + data layer ──
+     Own copy — self-contained page convention, see plan Global Constraints. */
+  var USER_GROUP_CATEGORIES = [
+    { key: 'employee', label: 'Employee', entities: [
+      { key: 'personal-info', label: 'Personal Info' },
+      { key: 'work-info',     label: 'Work Info' },
+      { key: 'contract',      label: 'Contract' },
+      { key: 'allowance',     label: 'Allowance' },
+      { key: 'deduction',     label: 'Deduction' },
+      { key: 'overtime',      label: 'Overtime' },
+      { key: 'payroll',       label: 'Payroll' },
+      { key: 'history',       label: 'History' }
+    ]},
+    { key: 'payroll', label: 'Payroll', entities: [
+      { key: 'level-range',     label: 'Level Range' },
+      { key: 'allowance',       label: 'Allowance' },
+      { key: 'deduction',       label: 'Deduction' },
+      { key: 'payroll-summary', label: 'Payroll Summary' },
+      { key: 'loan',            label: 'Loan / Advance Salary' },
+      { key: 'encashments',     label: 'Encashments & Reimbursements' },
+      { key: 'income-tax',      label: 'Income Tax' }
+    ]},
+    { key: 'settings', label: 'Settings', entities: [
+      { key: 'notification-management', label: 'Notification Management' }
+    ]},
+    { key: 'timesheet', label: 'Timesheet', entities: [
+      { key: 'timesheet-approval', label: 'Timesheet Approval' }
+    ]},
+    { key: 'offboarding', label: 'Offboarding', entities: [
+      { key: 'offboarding-requests',  label: 'Offboarding Requests' },
+      { key: 'offboarding-checklist', label: 'Offboarding Checklist' }
+    ]}
+  ];
+
+  function buildPermissions(fn) {
+    var perms = {};
+    USER_GROUP_CATEGORIES.forEach(function(cat) {
+      perms[cat.key] = {};
+      cat.entities.forEach(function(ent) {
+        perms[cat.key][ent.key] = fn(cat.key, ent.key);
+      });
+    });
+    return perms;
+  }
+
+  var GROUP_KEY  = 'QUADRA_USER_GROUPS_P2';
+  var GROUP_VKEY = 'QUADRA_USER_GROUPS_P2_V';
+  var GROUP_VER  = 3;
+  var GROUP_SEED = [
+    { id: 1, name: 'Super Admin', permissions: buildPermissions(function() {
+        return { create: true, view: true, edit: true, delete: true };
+      }) },
+    { id: 2, name: 'HR Staff', permissions: buildPermissions(function(catKey) {
+        return catKey === 'employee'
+          ? { create: false, view: true, edit: true, delete: false }
+          : { create: false, view: true, edit: false, delete: false };
+      }) }
+  ];
+
+  /* Eligibility-pool groups that the Profile Panel (employee-detail.html /
+     my-profile.html / offboarding-checklist.html) and the assignment
+     dropdowns (employee-work-edit.html, onboarding-step2-work-info.html)
+     read against. Added idempotently — never overwrites/resets an
+     existing group with the same name — so this never clobbers a group
+     the user has already customized. */
+  var SPECIAL_GROUP_NAMES = ['Reporting Manager', 'Attendance Leader', 'Leave Approver'];
+
+  function ensureSpecialGroups(groups) {
+    var changed = false;
+    SPECIAL_GROUP_NAMES.forEach(function(name) {
+      if (!groups.some(function(g) { return g.name === name; })) {
+        groups.push({ id: nextUserGroupId(groups), name: name, permissions: buildPermissions(function() {
+          return { create: false, view: false, edit: false, delete: false };
+        }) });
+        changed = true;
+      }
+    });
+    return changed;
+  }
+
+  function loadUserGroups() {
+    var ver = parseInt(localStorage.getItem(GROUP_VKEY), 10);
+    var groups;
+    if (ver !== GROUP_VER) {
+      saveUserGroups(GROUP_SEED);
+      localStorage.setItem(GROUP_VKEY, String(GROUP_VER));
+      groups = GROUP_SEED.slice();
+    } else {
+      try { groups = JSON.parse(localStorage.getItem(GROUP_KEY)) || []; } catch(e) { groups = []; }
+    }
+    if (ensureSpecialGroups(groups)) saveUserGroups(groups);
+    return groups;
+  }
+
+  function saveUserGroups(groups) {
+    localStorage.setItem(GROUP_KEY, JSON.stringify(groups));
+  }
+
+  function nextUserGroupId(groups) {
+    if (!groups.length) return 1;
+    return Math.max.apply(null, groups.map(function(g) { return g.id; })) + 1;
+  }
+
+  /* ── Employee ↔ Group assignment: flat {badge: groupName} map, NOT a
+     mutated copy of QUADRA_EMPLOYEES — Phase 2 never persists the
+     employee array wholesale, only narrow per-employee keys. ── */
+  var ASSIGN_KEY = 'QUADRA_USER_GROUP_ASSIGN_P2';
+
+  function loadAssignments() {
+    try { return JSON.parse(localStorage.getItem(ASSIGN_KEY)) || {}; } catch(e) { return {}; }
+  }
+
+  function saveAssignments(map) {
+    localStorage.setItem(ASSIGN_KEY, JSON.stringify(map));
+  }
+
+  /* Default demo assignments — applied once, only if the map is empty,
+     so a user's own reassignments are never overwritten. */
+  var DEFAULT_SPECIAL_ASSIGNMENTS = {
+    'Reporting Manager': ['000000003', '000000005'],
+    'Attendance Leader':  ['000000001', '000000002'],
+    'Leave Approver':     ['000000006', '000000009']
+  };
+
+  function ensureDefaultAssignments() {
+    var map = loadAssignments();
+    if (Object.keys(map).length) return;
+    Object.keys(DEFAULT_SPECIAL_ASSIGNMENTS).forEach(function(groupName) {
+      DEFAULT_SPECIAL_ASSIGNMENTS[groupName].forEach(function(badge) {
+        map[badge] = groupName;
+      });
+    });
+    saveAssignments(map);
+  }
+  ensureDefaultAssignments();
+
+  function permissionsSummary(g) {
+    var parts = USER_GROUP_CATEGORIES.map(function(cat) {
+      var onCount = 0;
+      cat.entities.forEach(function(ent) {
+        ['create', 'view', 'edit', 'delete'].forEach(function(a) { if (g.permissions[cat.key][ent.key][a]) onCount++; });
+      });
+      return onCount > 0 ? (escHtml(cat.label) + ' ' + onCount + '/' + (cat.entities.length * 4)) : null;
+    }).filter(function(part) { return part !== null; });
+    return parts.length ? parts.join(' &middot; ') : '<span style="color:#9CA3AF">No permissions</span>';
+  }
+
+  function renderUserGroups() {
+    var groups = loadUserGroups();
+    var tbody = document.getElementById('group-tbody');
+    var empty = document.getElementById('group-empty');
+    if (!groups.length) { tbody.innerHTML = ''; empty.style.display = 'flex'; return; }
+    empty.style.display = 'none';
+
+    var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    tbody.innerHTML = groups.map(function(g) {
+      return '<tr>' +
+        '<td>' + escHtml(g.name) + '</td>' +
+        '<td style="font-size:12px;color:#6B7280">' + permissionsSummary(g) + '</td>' +
+        '<td class="col-actions">' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="Edit" onclick="window.location.href=\'settings-group-detail.html?id=' + g.id + '\'">' + editSvg + '</button>' +
+            '<button class="icon-btn" style="color:#EF4444" title="Delete" onclick="openDeleteGroupModal(' + g.id + ')">' + deleteSvg + '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  var deletingGroupId = null;
+
+  function openDeleteGroupModal(id) {
+    var g = loadUserGroups().find(function(x) { return x.id === id; });
+    if (!g) return;
+    deletingGroupId = id;
+    document.getElementById('delete-group-name').textContent = g.name;
+    document.getElementById('group-delete-modal').classList.add('show');
+  }
+
+  function closeGroupDeleteModal() {
+    document.getElementById('group-delete-modal').classList.remove('show');
+    deletingGroupId = null;
+  }
+
+  function confirmDeleteGroup() {
+    if (deletingGroupId === null) return;
+    var groups = loadUserGroups();
+    var g = groups.find(function(x) { return x.id === deletingGroupId; });
+    saveUserGroups(groups.filter(function(x) { return x.id !== deletingGroupId; }));
+    if (g) {
+      var map = loadAssignments();
+      var changed = false;
+      Object.keys(map).forEach(function(badge) { if (map[badge] === g.name) { delete map[badge]; changed = true; } });
+      if (changed) saveAssignments(map);
+    }
+    closeGroupDeleteModal();
+    renderUserGroups();
+  }
+
+  /* ── Create modal ── */
+  function openCreateModal() {
+    editingId = null;
+    document.getElementById('dept-modal-title').textContent = 'Create Department';
+    document.getElementById('dept-modal-save').textContent = 'Create';
+    document.getElementById('dept-name-input').value = '';
+    clearDeptErr();
+    document.getElementById('dept-modal').classList.add('show');
+    setTimeout(function() { document.getElementById('dept-name-input').focus(); }, 50);
+  }
+
+  function openEditModal(id) {
+    var depts = loadDepts();
+    var dept = depts.find(function(d) { return d.id === id; });
+    if (!dept) return;
+    editingId = id;
+    document.getElementById('dept-modal-title').textContent = 'Edit Department';
+    document.getElementById('dept-modal-save').textContent = 'Save';
+    document.getElementById('dept-name-input').value = dept.name;
+    clearDeptErr();
+    document.getElementById('dept-modal').classList.add('show');
+    setTimeout(function() {
+      var inp = document.getElementById('dept-name-input');
+      inp.focus(); inp.select();
+    }, 50);
+  }
+
+  function closeDeptModal() {
+    document.getElementById('dept-modal').classList.remove('show');
+    editingId = null;
+  }
+
+  function clearDeptErr() {
+    var inp = document.getElementById('dept-name-input');
+    var err = document.getElementById('dept-name-err');
+    inp.classList.remove('is-error');
+    err.textContent = '';
+    err.classList.remove('show');
+  }
+
+  function showDeptErr(msg) {
+    var inp = document.getElementById('dept-name-input');
+    var err = document.getElementById('dept-name-err');
+    inp.classList.add('is-error');
+    err.textContent = msg;
+    err.classList.add('show');
+    inp.focus();
+  }
+
+  function saveDept() {
+    var name = (document.getElementById('dept-name-input').value || '').trim();
+    if (!name) { showDeptErr('Department name is required.'); return; }
+
+    var depts = loadDepts();
+
+    /* Duplicate check (case-insensitive, excluding self when editing) */
+    var nameLower = name.toLowerCase();
+    var dup = depts.find(function(d) {
+      return d.name.toLowerCase() === nameLower && d.id !== editingId;
+    });
+    if (dup) { showDeptErr('A department with this name already exists.'); return; }
+
+    if (editingId !== null) {
+      depts = depts.map(function(d) { return d.id === editingId ? { id: d.id, name: name } : d; });
+      saveDepts(depts);
+      closeDeptModal();
+      renderDepts();
+      QuadraToast.show('Department updated.', 'success');
+    } else {
+      depts.push({ id: nextId(depts), name: name });
+      saveDepts(depts);
+      closeDeptModal();
+      renderDepts();
+      QuadraToast.show('Department "' + name + '" has been created.', 'success');
+    }
+  }
+
+  /* ── Delete modal ── */
+  function openDeleteModal(id) {
+    var depts = loadDepts();
+    var dept = depts.find(function(d) { return d.id === id; });
+    if (!dept) return;
+    deletingId = id;
+    document.getElementById('delete-dept-name').textContent = dept.name;
+    document.getElementById('delete-modal').classList.add('show');
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.remove('show');
+    deletingId = null;
+  }
+
+  function confirmDelete() {
+    if (deletingId === null) return;
+    var depts = loadDepts();
+    var dept = depts.find(function(d) { return d.id === deletingId; });
+    depts = depts.filter(function(d) { return d.id !== deletingId; });
+    saveDepts(depts);
+    closeDeleteModal();
+    renderDepts();
+    if (dept) QuadraToast.show('Department "' + dept.name + '" has been deleted.', 'success');
+  }
+
+  /* ── Client CRUD ── */
+  var CLIENT_KEY   = 'QUADRA_CLIENTS';
+  var CLIENT_VKEY  = 'QUADRA_CLIENTS_V';
+  var CLIENT_VER   = 1;
+  var CLIENT_SEED  = [
+    { id: 1, name: 'PT Mitra Karya Nusantara' },
+    { id: 2, name: 'PT Cipta Solusi Digital' }
+  ];
+  var editingClientId  = null;
+  var deletingClientId = null;
+
+  function loadClients() {
+    var ver = parseInt(localStorage.getItem(CLIENT_VKEY), 10);
+    if (ver !== CLIENT_VER) {
+      saveClients(CLIENT_SEED);
+      localStorage.setItem(CLIENT_VKEY, String(CLIENT_VER));
+      return CLIENT_SEED.slice();
+    }
+    try { return JSON.parse(localStorage.getItem(CLIENT_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveClients(clients) {
+    localStorage.setItem(CLIENT_KEY, JSON.stringify(clients));
+  }
+
+  function nextClientId(clients) {
+    if (!clients.length) return 1;
+    return Math.max.apply(null, clients.map(function(c) { return c.id; })) + 1;
+  }
+
+  function countClientProjects(clientId) {
+    return loadProjects().filter(function(p) { return p.clientId === clientId; }).length;
+  }
+
+  function renderClients() {
+    var clients = loadClients();
+    var tbody = document.getElementById('client-tbody');
+    var empty = document.getElementById('client-empty');
+
+    if (!clients.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+
+    var eyeSvg    = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/></svg>';
+    var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    tbody.innerHTML = clients.map(function(c) {
+      return '<tr>' +
+        '<td>' + escHtml(c.name) + '</td>' +
+        '<td class="col-right">' + (function() {
+          var n = countClientProjects(c.id);
+          return n > 0
+            ? '<span style="font-weight:500;color:#111827;font-variant-numeric:tabular-nums">' + n + '</span>'
+            : '<span style="color:#9CA3AF">—</span>';
+        })() + '</td>' +
+        '<td class="col-actions">' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="View detail" onclick="openClientDetailModal(' + c.id + ')">' + eyeSvg + '</button>' +
+            '<button class="icon-btn" title="Edit" onclick="openEditClientModal(' + c.id + ')">' + editSvg + '</button>' +
+            '<button class="icon-btn" style="color:#EF4444" title="Delete" onclick="openDeleteClientModal(' + c.id + ')">' + deleteSvg + '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* ── Client detail (View) ── */
+  function openClientDetailModal(id) {
+    var clients = loadClients();
+    var client = clients.find(function(c) { return c.id === id; });
+    if (!client) return;
+
+    document.getElementById('client-detail-name').textContent = client.name;
+
+    var projects = loadProjects().filter(function(p) { return p.clientId === id; });
+    document.getElementById('client-detail-count').textContent = projects.length;
+
+    var listEl = document.getElementById('client-detail-project-list');
+    if (!projects.length) {
+      listEl.innerHTML = '<div style="font-size:13px;color:#9CA3AF;padding:8px 0;">No projects assigned to this client yet.</div>';
+    } else {
+      listEl.innerHTML = projects.map(function(p, i) {
+        var borderStyle = i < projects.length - 1 ? 'border-bottom:1px solid #F3F4F6;' : '';
+        return '<div style="padding:8px 0;font-size:13px;color:#374151;' + borderStyle + '">' + escHtml(p.name) + '</div>';
+      }).join('');
+    }
+
+    document.getElementById('client-detail-modal').classList.add('show');
+  }
+
+  function closeClientDetailModal() {
+    document.getElementById('client-detail-modal').classList.remove('show');
+  }
+
+  function openCreateClientModal() {
+    editingClientId = null;
+    document.getElementById('client-modal-title').textContent = 'Create Client';
+    document.getElementById('client-modal-save').textContent = 'Create';
+    document.getElementById('client-name-input').value = '';
+    clearClientErr();
+    document.getElementById('client-modal').classList.add('show');
+    setTimeout(function() { document.getElementById('client-name-input').focus(); }, 50);
+  }
+
+  function openEditClientModal(id) {
+    var clients = loadClients();
+    var client = clients.find(function(c) { return c.id === id; });
+    if (!client) return;
+    editingClientId = id;
+    document.getElementById('client-modal-title').textContent = 'Edit Client';
+    document.getElementById('client-modal-save').textContent = 'Save';
+    document.getElementById('client-name-input').value = client.name;
+    clearClientErr();
+    document.getElementById('client-modal').classList.add('show');
+    setTimeout(function() {
+      var inp = document.getElementById('client-name-input');
+      inp.focus(); inp.select();
+    }, 50);
+  }
+
+  function closeClientModal() {
+    document.getElementById('client-modal').classList.remove('show');
+    editingClientId = null;
+  }
+
+  function clearClientErr() {
+    var inp = document.getElementById('client-name-input');
+    var err = document.getElementById('client-name-err');
+    inp.classList.remove('is-error');
+    err.textContent = '';
+    err.classList.remove('show');
+  }
+
+  function showClientErr(msg) {
+    var inp = document.getElementById('client-name-input');
+    var err = document.getElementById('client-name-err');
+    inp.classList.add('is-error');
+    err.textContent = msg;
+    err.classList.add('show');
+    inp.focus();
+  }
+
+  function saveClient() {
+    var name = (document.getElementById('client-name-input').value || '').trim();
+    if (!name) { showClientErr('Client name is required.'); return; }
+
+    var clients = loadClients();
+
+    var nameLower = name.toLowerCase();
+    var dup = clients.find(function(c) {
+      return c.name.toLowerCase() === nameLower && c.id !== editingClientId;
+    });
+    if (dup) { showClientErr('A client with this name already exists.'); return; }
+
+    if (editingClientId !== null) {
+      clients = clients.map(function(c) { return c.id === editingClientId ? { id: c.id, name: name } : c; });
+      saveClients(clients);
+      closeClientModal();
+      renderClients();
+      QuadraToast.show('Client updated.', 'success');
+    } else {
+      clients.push({ id: nextClientId(clients), name: name });
+      saveClients(clients);
+      closeClientModal();
+      renderClients();
+      QuadraToast.show('Client "' + name + '" has been created.', 'success');
+    }
+  }
+
+  /* ── Client delete ── */
+  function openDeleteClientModal(id) {
+    var clients = loadClients();
+    var client = clients.find(function(c) { return c.id === id; });
+    if (!client) return;
+
+    var count = countClientProjects(id);
+    if (count > 0) {
+      QuadraToast.show('This client has ' + count + ' project' + (count === 1 ? '' : 's') + ' assigned. Reassign or delete them first.', 'error');
+      return;
+    }
+
+    deletingClientId = id;
+    document.getElementById('delete-client-name').textContent = client.name;
+    document.getElementById('client-delete-modal').classList.add('show');
+  }
+
+  function closeDeleteClientModal() {
+    document.getElementById('client-delete-modal').classList.remove('show');
+    deletingClientId = null;
+  }
+
+  function confirmDeleteClient() {
+    if (deletingClientId === null) return;
+    var clients = loadClients();
+    var client = clients.find(function(c) { return c.id === deletingClientId; });
+    clients = clients.filter(function(c) { return c.id !== deletingClientId; });
+    saveClients(clients);
+    closeDeleteClientModal();
+    renderClients();
+    if (client) QuadraToast.show('Client "' + client.name + '" has been deleted.', 'success');
+  }
+
+  /* ── Project CRUD ── */
+  var PROJECT_KEY  = 'QUADRA_PROJECTS';
+  var PROJECT_VKEY = 'QUADRA_PROJECTS_V';
+  var PROJECT_VER  = 1;
+  var PROJECT_SEED = [
+    { id: 1, name: 'NDS', clientId: 1 },
+    { id: 2, name: 'CRM', clientId: 1 },
+    { id: 3, name: 'Ops Console', clientId: 2 }
+  ];
+  var editingProjectId  = null;
+  var deletingProjectId = null;
+
+  /* ── Project Template ── */
+  var TEMPLATE_KEY = 'QUADRA_PROJECT_TEMPLATES';
+
+  function loadProjectTemplates() {
+    try { return JSON.parse(localStorage.getItem(TEMPLATE_KEY)) || {}; } catch(e) { return {}; }
+  }
+
+  function saveProjectTemplates(templates) {
+    localStorage.setItem(TEMPLATE_KEY, JSON.stringify(templates));
+  }
+
+  var projectTemplateCtl              = null;
+  var projectExistingTemplate         = null;
+  var projectExistingTemplateVisible  = false;
+  var projectTemplateRemoved          = false;
+  var projectPendingTemplateData      = null;
+  var projectTemplateUploadInited     = false;
+
+  function setProjectTemplateInfoVisible(visible) {
+    document.getElementById('project-template-existing-info').style.display = visible ? 'block' : 'none';
+  }
+
+  function updateProjectTemplateEmptyHint() {
+    var hasFile = document.getElementById('project-template-upload').classList.contains('has-file');
+    document.getElementById('project-template-empty-hint').style.display = hasFile ? 'none' : 'block';
+  }
+
+  function initProjectTemplateUpload(existingTpl) {
+    var el = document.getElementById('project-template-upload');
+    document.getElementById('project-template-err').textContent = '';
+    el.classList.remove('is-error');
+
+    if (!projectTemplateUploadInited) {
+      projectTemplateCtl = QuadraFileUpload.init(el, { onChange: onProjectTemplateChange });
+      projectTemplateUploadInited = true;
+    }
+    projectTemplateCtl.clear();
+
+    projectExistingTemplate    = existingTpl || null;
+    projectTemplateRemoved     = false;
+    projectPendingTemplateData = null;
+
+    if (existingTpl) {
+      el.classList.add('has-file');
+      el.querySelector('.file-upload-name').textContent = existingTpl.fileName;
+      document.getElementById('project-template-existing-date').textContent =
+        new Date(existingTpl.uploadedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      setProjectTemplateInfoVisible(true);
+      projectExistingTemplateVisible = true;
+    } else {
+      setProjectTemplateInfoVisible(false);
+      projectExistingTemplateVisible = false;
+    }
+    updateProjectTemplateEmptyHint();
+  }
+
+  function onProjectTemplateChange(file) {
+    var el  = document.getElementById('project-template-upload');
+    var err = document.getElementById('project-template-err');
+    if (file) {
+      var isXlsx = file.name.toLowerCase().slice(-5) === '.xlsx';
+      if (!isXlsx) {
+        QuadraToast.show('Please upload a .xlsx file.', 'error');
+        el.classList.add('is-error');
+        err.textContent = 'Please upload a .xlsx file.';
+        projectExistingTemplateVisible = false;
+        setProjectTemplateInfoVisible(false);
+        projectTemplateCtl.clear();
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        QuadraToast.show('Template file is too large (max 2MB).', 'error');
+        el.classList.add('is-error');
+        err.textContent = 'Template file is too large (max 2MB).';
+        projectExistingTemplateVisible = false;
+        setProjectTemplateInfoVisible(false);
+        projectTemplateCtl.clear();
+        return;
+      }
+      el.classList.remove('is-error');
+      err.textContent = '';
+      projectExistingTemplateVisible = false;
+      projectTemplateRemoved = false;
+      setProjectTemplateInfoVisible(false);
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        projectPendingTemplateData = { fileName: file.name, uploadedAt: new Date().toISOString(), dataUrl: reader.result };
+      };
+      reader.readAsDataURL(file);
+    } else if (projectExistingTemplateVisible) {
+      projectTemplateRemoved = true;
+      projectExistingTemplateVisible = false;
+      setProjectTemplateInfoVisible(false);
+      projectPendingTemplateData = null;
+    } else {
+      projectPendingTemplateData = null;
+    }
+    updateProjectTemplateEmptyHint();
+  }
+
+  function downloadExistingProjectTemplate() {
+    if (!projectExistingTemplate) return;
+    var a = document.createElement('a');
+    a.href = projectExistingTemplate.dataUrl;
+    a.download = projectExistingTemplate.fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  function persistProjectTemplateChange(projectId) {
+    var templates = loadProjectTemplates();
+    if (projectPendingTemplateData) {
+      templates[projectId] = projectPendingTemplateData;
+      saveProjectTemplates(templates);
+    } else if (projectTemplateRemoved) {
+      delete templates[projectId];
+      saveProjectTemplates(templates);
+    }
+  }
+
+  function loadProjects() {
+    var ver = parseInt(localStorage.getItem(PROJECT_VKEY), 10);
+    if (ver !== PROJECT_VER) {
+      saveProjects(PROJECT_SEED);
+      localStorage.setItem(PROJECT_VKEY, String(PROJECT_VER));
+      return PROJECT_SEED.slice();
+    }
+    try { return JSON.parse(localStorage.getItem(PROJECT_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveProjects(projects) {
+    localStorage.setItem(PROJECT_KEY, JSON.stringify(projects));
+  }
+
+  function nextProjectId(projects) {
+    if (!projects.length) return 1;
+    return Math.max.apply(null, projects.map(function(p) { return p.id; })) + 1;
+  }
+
+  function renderProjects() {
+    var projects  = loadProjects();
+    var clients   = loadClients();
+    var templates = loadProjectTemplates();
+    var tbody = document.getElementById('project-tbody');
+    var empty = document.getElementById('project-empty');
+
+    if (!projects.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+
+    var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    tbody.innerHTML = projects.map(function(p) {
+      var client = clients.find(function(c) { return c.id === p.clientId; });
+      var tpl = templates[p.id];
+      return '<tr>' +
+        '<td>' + escHtml(p.name) + '</td>' +
+        '<td>' + (client ? escHtml(client.name) : '<span style="color:#9CA3AF">—</span>') + '</td>' +
+        '<td>' + (tpl
+          ? '<span class="tag tag-dot tag-success" title="' + escHtml(tpl.fileName) + '">Uploaded</span>'
+          : '<span class="tag tag-dot tag-neutral">No template</span>') + '</td>' +
+        '<td class="col-actions">' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="Edit" onclick="openEditProjectModal(' + p.id + ')">' + editSvg + '</button>' +
+            '<button class="icon-btn" style="color:#EF4444" title="Delete" onclick="openDeleteProjectModal(' + p.id + ')">' + deleteSvg + '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function initProjectClientDropdown(selectedClientId) {
+    var clients = loadClients();
+    var options = clients.map(function(c) { return { value: c.id, label: c.name }; });
+    QuadraDropdown.init(document.getElementById('project-client-select'), options, {
+      placeholder: 'Select client',
+      value: selectedClientId != null ? selectedClientId : undefined,
+      onChange: function() { clearProjectClientErr(); }
+    });
+  }
+
+  function openCreateProjectModal() {
+    editingProjectId = null;
+    document.getElementById('project-modal-title').textContent = 'Create Project';
+    document.getElementById('project-modal-save').textContent = 'Create';
+    document.getElementById('project-name-input').value = '';
+    clearProjectNameErr();
+    clearProjectClientErr();
+    initProjectClientDropdown(null);
+    initProjectTemplateUpload(null);
+    document.getElementById('project-modal').classList.add('show');
+    setTimeout(function() { document.getElementById('project-name-input').focus(); }, 50);
+  }
+
+  function openEditProjectModal(id) {
+    var projects = loadProjects();
+    var project = projects.find(function(p) { return p.id === id; });
+    if (!project) return;
+    editingProjectId = id;
+    document.getElementById('project-modal-title').textContent = 'Edit Project';
+    document.getElementById('project-modal-save').textContent = 'Save';
+    document.getElementById('project-name-input').value = project.name;
+    clearProjectNameErr();
+    clearProjectClientErr();
+    initProjectClientDropdown(project.clientId);
+    var templates = loadProjectTemplates();
+    initProjectTemplateUpload(templates[project.id] || null);
+    document.getElementById('project-modal').classList.add('show');
+    setTimeout(function() {
+      var inp = document.getElementById('project-name-input');
+      inp.focus(); inp.select();
+    }, 50);
+  }
+
+  function closeProjectModal() {
+    document.getElementById('project-modal').classList.remove('show');
+    editingProjectId = null;
+    projectExistingTemplate = null;
+    projectExistingTemplateVisible = false;
+    projectTemplateRemoved = false;
+    projectPendingTemplateData = null;
+  }
+
+  function clearProjectNameErr() {
+    var inp = document.getElementById('project-name-input');
+    var err = document.getElementById('project-name-err');
+    inp.classList.remove('is-error');
+    err.textContent = '';
+    err.classList.remove('show');
+  }
+
+  function showProjectNameErr(msg) {
+    var inp = document.getElementById('project-name-input');
+    var err = document.getElementById('project-name-err');
+    inp.classList.add('is-error');
+    err.textContent = msg;
+    err.classList.add('show');
+    inp.focus();
+  }
+
+  function clearProjectClientErr() {
+    var sel = document.getElementById('project-client-select');
+    var err = document.getElementById('project-client-err');
+    sel.classList.remove('is-error');
+    err.textContent = '';
+    err.classList.remove('show');
+  }
+
+  function showProjectClientErr(msg) {
+    var sel = document.getElementById('project-client-select');
+    var err = document.getElementById('project-client-err');
+    sel.classList.add('is-error');
+    err.textContent = msg;
+    err.classList.add('show');
+  }
+
+  function saveProject() {
+    var name = (document.getElementById('project-name-input').value || '').trim();
+    if (!name) { showProjectNameErr('Project name is required.'); return; }
+
+    var clientId = QuadraDropdown.getValue(document.getElementById('project-client-select'));
+    if (clientId === null || clientId === undefined || clientId === '') { showProjectClientErr('Client is required.'); return; }
+    clientId = parseInt(clientId, 10);
+
+    var projects = loadProjects();
+
+    var nameLower = name.toLowerCase();
+    var dup = projects.find(function(p) {
+      return p.name.toLowerCase() === nameLower && p.id !== editingProjectId;
+    });
+    if (dup) { showProjectNameErr('A project with this name already exists.'); return; }
+
+    var savedId;
+    if (editingProjectId !== null) {
+      savedId = editingProjectId;
+      projects = projects.map(function(p) { return p.id === editingProjectId ? { id: p.id, name: name, clientId: clientId } : p; });
+      saveProjects(projects);
+      persistProjectTemplateChange(savedId);
+      closeProjectModal();
+      renderProjects();
+      QuadraToast.show('Project updated.', 'success');
+    } else {
+      savedId = nextProjectId(projects);
+      projects.push({ id: savedId, name: name, clientId: clientId });
+      saveProjects(projects);
+      persistProjectTemplateChange(savedId);
+      closeProjectModal();
+      renderProjects();
+      QuadraToast.show('Project "' + name + '" has been created.', 'success');
+    }
+  }
+
+  /* ── Project delete ── */
+  function openDeleteProjectModal(id) {
+    var projects = loadProjects();
+    var project = projects.find(function(p) { return p.id === id; });
+    if (!project) return;
+    deletingProjectId = id;
+    document.getElementById('delete-project-name').textContent = project.name;
+    document.getElementById('project-delete-modal').classList.add('show');
+  }
+
+  function closeDeleteProjectModal() {
+    document.getElementById('project-delete-modal').classList.remove('show');
+    deletingProjectId = null;
+  }
+
+  function confirmDeleteProject() {
+    if (deletingProjectId === null) return;
+    var projects = loadProjects();
+    var project = projects.find(function(p) { return p.id === deletingProjectId; });
+    projects = projects.filter(function(p) { return p.id !== deletingProjectId; });
+    saveProjects(projects);
+    closeDeleteProjectModal();
+    renderProjects();
+    if (project) QuadraToast.show('Project "' + project.name + '" has been deleted.', 'success');
+  }
+
+  /* ── Holiday CRUD ── */
+  var HOLIDAY_KEY  = 'QUADRA_HOLIDAYS';
+  var HOLIDAY_VKEY = 'QUADRA_HOLIDAYS_V';
+  var HOLIDAY_VER  = 1;
+  var HOLIDAY_SEED = [
+    { id: 1, name: 'Hari Kemerdekaan RI', startDate: '2026-08-17', endDate: '2026-08-17', recurring: false, deductsBalance: false },
+    { id: 2, name: 'Cuti Bersama HUT RI', startDate: '2026-08-18', endDate: '2026-08-18', recurring: false, deductsBalance: true }
+  ];
+  var HOLIDAY_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var editingHolidayId  = null;
+  var deletingHolidayId = null;
+
+  function loadHolidays() {
+    var ver = parseInt(localStorage.getItem(HOLIDAY_VKEY), 10);
+    if (ver !== HOLIDAY_VER) {
+      saveHolidays(HOLIDAY_SEED);
+      localStorage.setItem(HOLIDAY_VKEY, String(HOLIDAY_VER));
+      return HOLIDAY_SEED.slice();
+    }
+    try { return JSON.parse(localStorage.getItem(HOLIDAY_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveHolidays(holidays) {
+    localStorage.setItem(HOLIDAY_KEY, JSON.stringify(holidays));
+  }
+
+  function nextHolidayId(holidays) {
+    if (!holidays.length) return 1;
+    return Math.max.apply(null, holidays.map(function(h) { return h.id; })) + 1;
+  }
+
+  /* ── Notification Management (list/delete/toggle — create/edit is a dedicated page) ──
+     ⚠ NOTIF_VER IS DUPLICATED IN notification-rule-edit.html. Both pages
+     read/write QUADRA_NOTIFICATION_RULES and each wipes the store whenever the
+     persisted version tag doesn't match ITS OWN constant — so if the schema
+     ever changes, BUMP BOTH FILES IN THE SAME COMMIT. Bumping only one makes
+     the two pages reset each other's data on every navigation between them,
+     silently destroying all saved rules. */
+  var NOTIF_KEY  = 'QUADRA_NOTIFICATION_RULES';
+  var NOTIF_VKEY = 'QUADRA_NOTIFICATION_RULES_V';
+  var NOTIF_VER  = 1;   // keep in sync with notification-rule-edit.html
+  var deletingNotificationRuleId = null;
+
+  function loadNotificationRules() {
+    var ver = parseInt(localStorage.getItem(NOTIF_VKEY), 10);
+    if (ver !== NOTIF_VER) {
+      saveNotificationRules([]);
+      localStorage.setItem(NOTIF_VKEY, String(NOTIF_VER));
+      return [];
+    }
+    try { return JSON.parse(localStorage.getItem(NOTIF_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveNotificationRules(rules) {
+    localStorage.setItem(NOTIF_KEY, JSON.stringify(rules));
+  }
+
+  function renderNotificationRules() {
+    var rules = loadNotificationRules();
+    var tbody = document.getElementById('notification-rule-tbody');
+    var empty = document.getElementById('notification-rule-empty');
+
+    if (!rules.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'flex';
+      document.getElementById('notif-count-summary').textContent = '';
+      return;
+    }
+    empty.style.display = 'none';
+
+    var activeCount = rules.filter(function(r) { return r.active; }).length;
+    document.getElementById('notif-count-summary').textContent =
+      activeCount + ' active · ' + (rules.length - activeCount) + ' inactive';
+
+    var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var dupSvg    = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="5" y="5" width="7" height="7" rx="0.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A0.5 0.5 0 012.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+
+    tbody.innerHTML = rules.map(function(r) {
+      var scheduleBadges = r.scheduleDays.map(function(d) {
+        return '<span class="tag tag-neutral" style="margin-right:4px">' + d + 'd before</span>';
+      }).join('');
+      return '<tr>' +
+        '<td>' + escHtml(r.name) + '</td>' +
+        '<td>' + r.recipients.length + ' recipient' + (r.recipients.length === 1 ? '' : 's') + '</td>' +
+        '<td>' + scheduleBadges + '</td>' +
+        '<td>' +
+          '<label class="toggle-row" for="notif-toggle-' + r.id + '">' +
+            '<div class="toggle-wrap">' +
+              '<input type="checkbox" id="notif-toggle-' + r.id + '" aria-label="Toggle active status for ' + escHtml(r.name) + '" ' + (r.active ? 'checked' : '') + ' onchange="toggleRuleActive(' + r.id + ')">' +
+              '<span class="toggle-track"></span>' +
+              '<span class="toggle-knob"></span>' +
+            '</div>' +
+          '</label>' +
+        '</td>' +
+        '<td class="col-actions">' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="Edit" aria-label="Edit ' + escHtml(r.name) + '" onclick="location.href=\'notification-rule-edit.html?id=' + r.id + '\'">' + editSvg + '</button>' +
+            '<button class="icon-btn" title="Duplicate" aria-label="Duplicate ' + escHtml(r.name) + '" onclick="location.href=\'notification-rule-edit.html?duplicate=' + r.id + '\'">' + dupSvg + '</button>' +
+            '<button class="icon-btn" style="color:#EF4444" title="Delete" aria-label="Delete ' + escHtml(r.name) + '" onclick="openDeleteNotificationRuleModal(' + r.id + ')">' + deleteSvg + '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function toggleRuleActive(id) {
+    var rules = loadNotificationRules();
+    var r = rules.find(function(x) { return x.id === id; });
+    if (!r) return;
+    r.active = !r.active;
+    saveNotificationRules(rules);
+    renderNotificationRules();
+  }
+
+  function openDeleteNotificationRuleModal(id) {
+    var rules = loadNotificationRules();
+    var r = rules.find(function(x) { return x.id === id; });
+    if (!r) return;
+    deletingNotificationRuleId = id;
+    document.getElementById('delete-notification-rule-name').textContent = r.name;
+    document.getElementById('notification-rule-delete-modal').classList.add('show');
+  }
+
+  function closeDeleteNotificationRuleModal() {
+    deletingNotificationRuleId = null;
+    document.getElementById('notification-rule-delete-modal').classList.remove('show');
+  }
+
+  function confirmDeleteNotificationRule() {
+    var rules = loadNotificationRules();
+    saveNotificationRules(rules.filter(function(x) { return x.id !== deletingNotificationRuleId; }));
+    closeDeleteNotificationRuleModal();
+    renderNotificationRules();
+    QuadraToast.show('Notification rule has been deleted.', 'success');
+  }
+
+  function formatHolidayDate(iso) {
+    var parts = iso.split('-').map(function(n) { return parseInt(n, 10); });
+    return parts[2] + ' ' + HOLIDAY_MONTHS[parts[1] - 1] + ' ' + parts[0];
+  }
+
+  function isoToDMY(iso) {
+    var parts = iso.split('-').map(function(n) { return parseInt(n, 10); });
+    return { y: parts[0], m: parts[1] - 1, d: parts[2] };
+  }
+
+  function renderHolidays() {
+    var holidays = loadHolidays();
+    var tbody = document.getElementById('holiday-tbody');
+    var empty = document.getElementById('holiday-empty');
+
+    if (!holidays.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+
+    var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    tbody.innerHTML = holidays.map(function(h) {
+      var range = (h.startDate === h.endDate)
+        ? formatHolidayDate(h.startDate)
+        : formatHolidayDate(h.startDate) + ' — ' + formatHolidayDate(h.endDate);
+      return '<tr>' +
+        '<td>' + escHtml(h.name) + '</td>' +
+        '<td>' + range + '</td>' +
+        '<td><span class="tag ' + (h.recurring ? 'tag-success' : 'tag-neutral') + '">' + (h.recurring ? 'Yes' : 'No') + '</span></td>' +
+        '<td><span class="tag ' + (h.deductsBalance ? 'tag-success' : 'tag-neutral') + '">' + (h.deductsBalance ? 'Yes' : 'No') + '</span></td>' +
+        '<td class="col-actions">' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="Edit" onclick="openEditHolidayModal(' + h.id + ')">' + editSvg + '</button>' +
+            '<button class="icon-btn" style="color:#EF4444" title="Delete" onclick="openDeleteHolidayModal(' + h.id + ')">' + deleteSvg + '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function openCreateHolidayModal() {
+    editingHolidayId = null;
+    document.getElementById('holiday-modal-title').textContent = 'Create Holiday';
+    document.getElementById('holiday-modal-save').textContent = 'Create';
+    document.getElementById('holiday-name-input').value = '';
+    document.getElementById('holiday-recurring-input').checked = false;
+    document.getElementById('holiday-deducts-input').checked = false;
+    clearHolidayErrs();
+    QuadraDatePicker.init(document.getElementById('holiday-start-date-w'), { placeholder: 'Select date', onChange: function() { clearHolidayErrs(); } });
+    QuadraDatePicker.init(document.getElementById('holiday-end-date-w'), { placeholder: 'Select date', onChange: function() { clearHolidayErrs(); } });
+    document.getElementById('holiday-modal').classList.add('show');
+    setTimeout(function() { document.getElementById('holiday-name-input').focus(); }, 50);
+  }
+
+  function openEditHolidayModal(id) {
+    var holidays = loadHolidays();
+    var holiday = holidays.find(function(h) { return h.id === id; });
+    if (!holiday) return;
+    editingHolidayId = id;
+    document.getElementById('holiday-modal-title').textContent = 'Edit Holiday';
+    document.getElementById('holiday-modal-save').textContent = 'Save';
+    document.getElementById('holiday-name-input').value = holiday.name;
+    document.getElementById('holiday-recurring-input').checked = !!holiday.recurring;
+    document.getElementById('holiday-deducts-input').checked = !!holiday.deductsBalance;
+    clearHolidayErrs();
+    QuadraDatePicker.init(document.getElementById('holiday-start-date-w'), { placeholder: 'Select date', value: isoToDMY(holiday.startDate), onChange: function() { clearHolidayErrs(); } });
+    QuadraDatePicker.init(document.getElementById('holiday-end-date-w'), { placeholder: 'Select date', value: isoToDMY(holiday.endDate), onChange: function() { clearHolidayErrs(); } });
+    document.getElementById('holiday-modal').classList.add('show');
+  }
+
+  function closeHolidayModal() {
+    document.getElementById('holiday-modal').classList.remove('show');
+    editingHolidayId = null;
+  }
+
+  function clearHolidayErrs() {
+    document.getElementById('holiday-name-input').classList.remove('is-error');
+    var nameErr = document.getElementById('holiday-name-err');
+    nameErr.textContent = '';
+    nameErr.classList.remove('show');
+
+    document.getElementById('holiday-start-date-w').classList.remove('is-error');
+    var startErr = document.getElementById('holiday-start-date-err');
+    startErr.textContent = '';
+    startErr.classList.remove('show');
+
+    document.getElementById('holiday-end-date-w').classList.remove('is-error');
+    var endErr = document.getElementById('holiday-end-date-err');
+    endErr.textContent = '';
+    endErr.classList.remove('show');
+  }
+
+  function showHolidayNameErr(msg) {
+    var inp = document.getElementById('holiday-name-input');
+    inp.classList.add('is-error');
+    var err = document.getElementById('holiday-name-err');
+    err.textContent = msg;
+    err.classList.add('show');
+  }
+
+  function showHolidayStartDateErr(msg) {
+    document.getElementById('holiday-start-date-w').classList.add('is-error');
+    var err = document.getElementById('holiday-start-date-err');
+    err.textContent = msg;
+    err.classList.add('show');
+  }
+
+  function showHolidayEndDateErr(msg) {
+    document.getElementById('holiday-end-date-w').classList.add('is-error');
+    var err = document.getElementById('holiday-end-date-err');
+    err.textContent = msg;
+    err.classList.add('show');
+  }
+
+  function saveHoliday() {
+    var name = (document.getElementById('holiday-name-input').value || '').trim();
+    var startIso = QuadraDatePicker.getValue(document.getElementById('holiday-start-date-w'));
+    var endIso   = QuadraDatePicker.getValue(document.getElementById('holiday-end-date-w'));
+    var recurring = document.getElementById('holiday-recurring-input').checked;
+    var deductsBalance = document.getElementById('holiday-deducts-input').checked;
+
+    clearHolidayErrs();
+
+    var hasErr = false;
+    if (!name) { showHolidayNameErr('Holiday name is required.'); hasErr = true; }
+    if (!startIso) { showHolidayStartDateErr('Start Date is required.'); hasErr = true; }
+    if (!endIso) { showHolidayEndDateErr('End Date is required.'); hasErr = true; }
+    if (startIso && endIso && endIso < startIso) {
+      showHolidayEndDateErr('End Date must be on or after Start Date.');
+      hasErr = true;
+    }
+    if (hasErr) return;
+
+    var holidays = loadHolidays();
+    if (editingHolidayId !== null) {
+      holidays = holidays.map(function(h) {
+        return h.id === editingHolidayId
+          ? { id: h.id, name: name, startDate: startIso, endDate: endIso, recurring: recurring, deductsBalance: deductsBalance }
+          : h;
+      });
+      saveHolidays(holidays);
+      closeHolidayModal();
+      renderHolidays();
+      QuadraToast.show('Holiday updated.', 'success');
+    } else {
+      holidays.push({ id: nextHolidayId(holidays), name: name, startDate: startIso, endDate: endIso, recurring: recurring, deductsBalance: deductsBalance });
+      saveHolidays(holidays);
+      closeHolidayModal();
+      renderHolidays();
+      QuadraToast.show('Holiday "' + name + '" has been created.', 'success');
+    }
+  }
+
+  function openDeleteHolidayModal(id) {
+    var holidays = loadHolidays();
+    var holiday = holidays.find(function(h) { return h.id === id; });
+    if (!holiday) return;
+    deletingHolidayId = id;
+    document.getElementById('delete-holiday-name').textContent = holiday.name;
+    document.getElementById('holiday-delete-modal').classList.add('show');
+  }
+
+  function closeDeleteHolidayModal() {
+    document.getElementById('holiday-delete-modal').classList.remove('show');
+    deletingHolidayId = null;
+  }
+
+  function confirmDeleteHoliday() {
+    if (deletingHolidayId === null) return;
+    var holidays = loadHolidays();
+    var holiday = holidays.find(function(h) { return h.id === deletingHolidayId; });
+    holidays = holidays.filter(function(h) { return h.id !== deletingHolidayId; });
+    saveHolidays(holidays);
+    closeDeleteHolidayModal();
+    renderHolidays();
+    if (holiday) QuadraToast.show('Holiday "' + holiday.name + '" has been deleted.', 'success');
+  }
+
+  /* Initial render */
+  renderDepts();
+  loadHolidays();
+
+  /* ── Shift Configuration CRUD ── */
+  var SHIFT_KEY  = 'QUADRA_SHIFTS';
+  var SHIFT_VKEY = 'QUADRA_SHIFTS_V';
+  var SHIFT_VER  = 4;
+  var SHIFT_SEED = [
+    { id: 1, name: 'NDS',         checkIn: '09:00', checkInTol: 15, checkOut: '18:00', checkOutTol: 15, lateTolCount: 1, lateDeductionPerPoint: 5000, lateTier1Points: 20, lateTier2Points: 50, lateTier3Points: 100, isFlexible: false },
+    { id: 2, name: 'Bendi',       checkIn: '08:00', checkInTol: 10, checkOut: '17:00', checkOutTol: 10, lateTolCount: 1, lateDeductionPerPoint: 5000, lateTier1Points: 20, lateTier2Points: 50, lateTier3Points: 100, isFlexible: false },
+    { id: 3, name: 'Ops Console', checkIn: '07:00', checkInTol: 15, checkOut: '16:00', checkOutTol: 15, lateTolCount: 1, lateDeductionPerPoint: 5000, lateTier1Points: 20, lateTier2Points: 50, lateTier3Points: 100, isFlexible: false }
+  ];
+  var editingShiftId  = null;
+  var deletingShiftId = null;
+
+  function loadShifts() {
+    var ver = parseInt(localStorage.getItem(SHIFT_VKEY), 10);
+    if (ver !== SHIFT_VER) {
+      saveShifts(SHIFT_SEED);
+      localStorage.setItem(SHIFT_VKEY, String(SHIFT_VER));
+      return SHIFT_SEED.slice();
+    }
+    try { return JSON.parse(localStorage.getItem(SHIFT_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveShifts(shifts) {
+    localStorage.setItem(SHIFT_KEY, JSON.stringify(shifts));
+  }
+
+  function nextShiftId(shifts) {
+    if (!shifts.length) return 1;
+    return Math.max.apply(null, shifts.map(function(s) { return s.id; })) + 1;
+  }
+
+
+  function renderShifts() {
+    var shifts = loadShifts();
+    var tbody  = document.getElementById('shift-tbody');
+    var empty  = document.getElementById('shift-empty');
+    if (!shifts.length) { tbody.innerHTML = ''; empty.style.display = 'flex'; return; }
+    empty.style.display = 'none';
+
+    var eyeSvg  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/></svg>';
+    var editSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var delSvg  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    tbody.innerHTML = shifts.map(function(s) {
+      var flexBadge = s.isFlexible ? '<span class="tag tag-success" style="margin-left:8px;vertical-align:middle">Flexible</span>' : '';
+      return '<tr style="cursor:pointer" onclick="window.location.href=\'settings-shift-detail.html?id=' + s.id + '\'">' +
+        '<td style="font-weight:500;color:#111827">' + escHtml(s.name) + flexBadge + '</td>' +
+        '<td class="time-cell"><span class="time-val">' + s.checkIn + '</span><span class="time-tol">&#177;' + s.checkInTol + 'm</span></td>' +
+        '<td class="time-cell"><span class="time-val">' + s.checkOut + '</span><span class="time-tol">&#177;' + s.checkOutTol + 'm</span></td>' +
+        '<td class="late-tol-cell">' + s.lateTolCount + 'x</td>' +
+        '<td class="col-actions"><div class="action-btns">' +
+          '<button class="icon-btn" title="View detail" onclick="event.stopPropagation();window.location.href=\'settings-shift-detail.html?id=' + s.id + '\'">' + eyeSvg + '</button>' +
+          '<button class="icon-btn" title="Edit" onclick="event.stopPropagation();openEditShift(' + s.id + ')">' + editSvg + '</button>' +
+          '<button class="icon-btn" style="color:#EF4444" title="Delete" onclick="event.stopPropagation();openDeleteShift(' + s.id + ')">' + delSvg + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* Create / Edit */
+  function openCreateShift() {
+    editingShiftId = null;
+    document.getElementById('shift-modal-title').textContent = 'Create Shift';
+    document.getElementById('shift-modal-save').textContent  = 'Create';
+    document.getElementById('shift-name').value    = '';
+    document.getElementById('shift-cin').value     = '';
+    document.getElementById('shift-cin-tol').value = '15';
+    document.getElementById('shift-cout').value    = '';
+    document.getElementById('shift-cout-tol').value= '15';
+    document.getElementById('shift-late').value         = '1';
+    document.getElementById('shift-late-rate').value    = '5000';
+    document.getElementById('shift-late-tier1').value   = '20';
+    document.getElementById('shift-late-tier2').value   = '50';
+    document.getElementById('shift-late-tier3').value   = '100';
+    document.getElementById('shift-flexible').checked   = false;
+    ['shift-name','shift-cin','shift-cin-tol','shift-cout','shift-cout-tol','shift-late','shift-late-rate','shift-late-tier1','shift-late-tier2','shift-late-tier3'].forEach(clearShiftFieldErr);
+    clearShiftWarns();
+    onFlexibleChange();
+    document.getElementById('shift-modal').classList.add('show');
+    setTimeout(function() { document.getElementById('shift-name').focus(); }, 50);
+  }
+
+  function openEditShift(id) {
+    var s = loadShifts().find(function(x) { return x.id === id; });
+    if (!s) return;
+    editingShiftId = id;
+    document.getElementById('shift-modal-title').textContent = 'Edit Shift';
+    document.getElementById('shift-modal-save').textContent  = 'Save';
+    document.getElementById('shift-name').value    = s.name;
+    document.getElementById('shift-cin').value     = s.checkIn;
+    document.getElementById('shift-cin-tol').value = s.checkInTol;
+    document.getElementById('shift-cout').value    = s.checkOut;
+    document.getElementById('shift-cout-tol').value= s.checkOutTol;
+    document.getElementById('shift-late').value         = s.lateTolCount;
+    document.getElementById('shift-late-rate').value    = s.lateDeductionPerPoint;
+    document.getElementById('shift-late-tier1').value   = s.lateTier1Points || 20;
+    document.getElementById('shift-late-tier2').value   = s.lateTier2Points || 50;
+    document.getElementById('shift-late-tier3').value   = s.lateTier3Points || 100;
+    document.getElementById('shift-flexible').checked   = !!s.isFlexible;
+    ['shift-name','shift-cin','shift-cin-tol','shift-cout','shift-cout-tol','shift-late','shift-late-rate','shift-late-tier1','shift-late-tier2','shift-late-tier3'].forEach(clearShiftFieldErr);
+    clearShiftWarns();
+    onFlexibleChange();
+    checkToleranceWarn();
+    checkLateWarn();
+    document.getElementById('shift-modal').classList.add('show');
+    setTimeout(function() { var n = document.getElementById('shift-name'); n.focus(); n.select(); }, 50);
+  }
+
+  function closeShiftModal() {
+    document.getElementById('shift-modal').classList.remove('show');
+    editingShiftId = null;
+  }
+
+  function clearShiftFieldErr(id) {
+    var inp = document.getElementById(id);
+    var err = document.getElementById(id + '-err');
+    if (inp) {
+      inp.classList.remove('is-error');
+      var w = inp.closest('.f-input,.affix-w');
+      if (w) w.classList.remove('is-error');
+    }
+    if (err) { err.textContent = ''; err.classList.remove('show'); }
+  }
+
+  function showShiftFieldErr(id, msg) {
+    var inp = document.getElementById(id);
+    var err = document.getElementById(id + '-err');
+    if (inp) {
+      inp.classList.add('is-error');
+      var w = inp.closest('.f-input,.affix-w');
+      if (w) w.classList.add('is-error');
+      inp.focus();
+    }
+    if (err) { err.textContent = msg; err.classList.add('show'); }
+  }
+
+  function clearShiftWarns() {
+    ['shift-cin-tol-warn','shift-cout-tol-warn','shift-late-warn'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('show');
+    });
+  }
+
+  function timeToMins(t) {
+    var p = t.split(':');
+    return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+  }
+
+  function checkToleranceWarn() {
+    var ciT  = document.getElementById('shift-cin').value;
+    var coT  = document.getElementById('shift-cout').value;
+    var cinW  = document.getElementById('shift-cin-tol-warn');
+    var coutW = document.getElementById('shift-cout-tol-warn');
+
+    if (!ciT || !coT || coT <= ciT) {
+      cinW.classList.remove('show');
+      coutW.classList.remove('show');
+      return;
+    }
+
+    var dur    = timeToMins(coT) - timeToMins(ciT);
+    var cinTol = parseInt(document.getElementById('shift-cin-tol').value, 10);
+    var coTol  = parseInt(document.getElementById('shift-cout-tol').value, 10);
+
+    if (!isNaN(cinTol) && cinTol > 0 && cinTol >= dur) {
+      cinW.textContent = 'Tolerance (' + cinTol + ' min) meets or exceeds the shift duration (' + dur + ' min).';
+      cinW.classList.add('show');
+    } else {
+      cinW.classList.remove('show');
+    }
+
+    if (!isNaN(coTol) && coTol > 0 && coTol >= dur) {
+      coutW.textContent = 'Tolerance (' + coTol + ' min) meets or exceeds the shift duration (' + dur + ' min).';
+      coutW.classList.add('show');
+    } else {
+      coutW.classList.remove('show');
+    }
+  }
+
+  function checkLateWarn() {
+    var w = document.getElementById('shift-late-warn');
+    if (document.getElementById('shift-late').value === '0') {
+      w.textContent = 'All late arrivals will be recorded — no grace period.';
+      w.classList.add('show');
+    } else {
+      w.classList.remove('show');
+    }
+  }
+
+  function onFlexibleChange() {
+    var isFlexible = document.getElementById('shift-flexible').checked;
+    var group = document.getElementById('shift-late-group');
+    if (group) {
+      group.style.opacity = isFlexible ? '0.4' : '';
+      group.style.pointerEvents = isFlexible ? 'none' : '';
+    }
+  }
+
+  function saveShift() {
+    var name  = (document.getElementById('shift-name').value    || '').trim();
+    var ciT   =  document.getElementById('shift-cin').value;
+    var ciTol =  document.getElementById('shift-cin-tol').value;
+    var coT   =  document.getElementById('shift-cout').value;
+    var coTol =  document.getElementById('shift-cout-tol').value;
+    var lt    =  document.getElementById('shift-late').value;
+    var lateRate = document.getElementById('shift-late-rate').value;
+    var tier1 = document.getElementById('shift-late-tier1').value;
+    var tier2 = document.getElementById('shift-late-tier2').value;
+    var tier3 = document.getElementById('shift-late-tier3').value;
+
+    if (!name)                                                        { showShiftFieldErr('shift-name',    'Shift name is required.'); return; }
+    if (!ciT)                                                         { showShiftFieldErr('shift-cin',     'Check-in time is required.'); return; }
+    if (ciTol === '' || isNaN(+ciTol) || +ciTol < 0)                 { showShiftFieldErr('shift-cin-tol', 'Enter 0 or more minutes.'); return; }
+    if (Math.floor(+ciTol) !== +ciTol || +ciTol > 120)               { showShiftFieldErr('shift-cin-tol', 'Enter a whole number between 0 and 120.'); return; }
+    if (!coT)                                                         { showShiftFieldErr('shift-cout',    'Check-out time is required.'); return; }
+    if (coTol === '' || isNaN(+coTol) || +coTol < 0)                 { showShiftFieldErr('shift-cout-tol','Enter 0 or more minutes.'); return; }
+    if (Math.floor(+coTol) !== +coTol || +coTol > 120)               { showShiftFieldErr('shift-cout-tol','Enter a whole number between 0 and 120.'); return; }
+    if (ciT && coT && coT <= ciT)                                     { showShiftFieldErr('shift-cout',    'Check-out time must be after check-in time.'); return; }
+    if (lt === '' || isNaN(+lt) || +lt < 0)                          { showShiftFieldErr('shift-late',    'Enter 0 or more.'); return; }
+    if (Math.floor(+lt) !== +lt || +lt > 99)                         { showShiftFieldErr('shift-late',    'Enter a whole number between 0 and 99.'); return; }
+    if (lateRate === '' || isNaN(+lateRate) || +lateRate < 0)        { showShiftFieldErr('shift-late-rate','Enter 0 or more.'); return; }
+    if (Math.floor(+lateRate) !== +lateRate)                         { showShiftFieldErr('shift-late-rate','Enter a whole number.'); return; }
+    if (tier1 === '' || isNaN(+tier1) || +tier1 < 0 || Math.floor(+tier1) !== +tier1) { showShiftFieldErr('shift-late-tier1', 'Enter 0 or more (whole number).'); return; }
+    if (tier2 === '' || isNaN(+tier2) || +tier2 < 0 || Math.floor(+tier2) !== +tier2) { showShiftFieldErr('shift-late-tier2', 'Enter 0 or more (whole number).'); return; }
+    if (tier3 === '' || isNaN(+tier3) || +tier3 < 0 || Math.floor(+tier3) !== +tier3) { showShiftFieldErr('shift-late-tier3', 'Enter 0 or more (whole number).'); return; }
+    var shifts = loadShifts();
+    var dup = shifts.find(function(s) { return s.name.toLowerCase() === name.toLowerCase() && s.id !== editingShiftId; });
+    if (dup) { showShiftFieldErr('shift-name', 'A shift with this name already exists.'); return; }
+
+    var isFlexible = document.getElementById('shift-flexible').checked;
+    var rec = { id: editingShiftId !== null ? editingShiftId : nextShiftId(shifts),
+      name: name, checkIn: ciT, checkInTol: +ciTol, checkOut: coT, checkOutTol: +coTol,
+      lateTolCount: +lt, lateDeductionPerPoint: +lateRate,
+      lateTier1Points: +tier1, lateTier2Points: +tier2, lateTier3Points: +tier3,
+      isFlexible: isFlexible };
+
+    if (editingShiftId !== null) {
+      saveShifts(shifts.map(function(s) { return s.id === editingShiftId ? rec : s; }));
+      closeShiftModal(); renderShifts();
+      QuadraToast.show('Shift updated.', 'success');
+    } else {
+      shifts.push(rec); saveShifts(shifts);
+      closeShiftModal(); renderShifts();
+      QuadraToast.show('Shift "' + escHtml(name) + '" has been created.', 'success');
+    }
+  }
+
+  /* Delete */
+  function loadEmpData() {
+    try {
+      var stored = JSON.parse(localStorage.getItem('quadra_employees'));
+      if (stored && stored.length) return stored;
+    } catch(e) {}
+    return typeof QUADRA_EMPLOYEES !== 'undefined' ? QUADRA_EMPLOYEES.slice() : [];
+  }
+
+  function saveEmpData(emps) {
+    localStorage.setItem('quadra_employees', JSON.stringify(emps));
+  }
+
+  function openDeleteShift(id) {
+    var s = loadShifts().find(function(x) { return x.id === id; });
+    if (!s) return;
+    deletingShiftId = id;
+    document.getElementById('delete-shift-nm').textContent = s.name;
+    var count   = loadEmpData().filter(function(e) { return e.shift === s.name; }).length;
+    var warnEl  = document.getElementById('delete-shift-emp-warn');
+    if (count > 0) {
+      warnEl.textContent = 'This shift has ' + count + ' employee' + (count !== 1 ? 's' : '') + ' assigned. They will be unassigned.';
+      warnEl.style.display = 'block';
+    } else {
+      warnEl.style.display = 'none';
+    }
+    document.getElementById('shift-delete-modal').classList.add('show');
+  }
+
+  function closeShiftDeleteModal() {
+    document.getElementById('shift-delete-modal').classList.remove('show');
+    deletingShiftId = null;
+  }
+
+  function confirmDeleteShift() {
+    if (deletingShiftId === null) return;
+    var shifts = loadShifts();
+    var s = shifts.find(function(x) { return x.id === deletingShiftId; });
+    saveShifts(shifts.filter(function(x) { return x.id !== deletingShiftId; }));
+    if (s) {
+      var emps = loadEmpData();
+      var changed = false;
+      emps.forEach(function(e) { if (e.shift === s.name) { e.shift = null; changed = true; } });
+      if (changed) saveEmpData(emps);
+    }
+    closeShiftDeleteModal(); renderShifts();
+    if (s) QuadraToast.show('Shift "' + escHtml(s.name) + '" has been deleted.', 'success');
+  }
+
+  /* Default section — respect ?section= URL param (must run after all vars are assigned) */
+  var _initSec = new URLSearchParams(window.location.search).get('section') || 'department';
+  showSection(_initSec);
+
+  try {
+    var _pt = localStorage.getItem('QUADRA_PENDING_TOAST');
+    if (_pt) {
+      var _toast = JSON.parse(_pt);
+      localStorage.removeItem('QUADRA_PENDING_TOAST');
+      setTimeout(function() { QuadraToast.show(_toast.message, _toast.type); }, 200);
+    }
+  } catch(e) {}
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

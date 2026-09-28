@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Onboarding: Step 5 Deduction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* Widths tuned to this page's specific 3-column deduction row
+       shape (name input / source radio group / delete-icon spacer)
+       — one-off, not reused elsewhere. */
+    .col-label-name { width: 383.22px; flex-shrink: 0; }
+    .col-label-source { width: 194px; flex-shrink: 0; text-align: left; }
+    .col-label-spacer { width: 32px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="onboarding" data-active-sub="employee-onboarding"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Onboarding</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="onboarding-employee-list.html">Employee Onboarding</a>
+    <svg class="bc-sep" id="bc-cl-sep" width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:none;"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="#" id="bc-cl" style="display:none;font-size:13px;color:#6B7280;text-decoration:none;"></a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">New Employee</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Wizard — steps 1–4 done, step 5 active, step 6 inactive -->
+    <div class="wizard">
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Personal Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Work Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Contract</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Allowance</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot active">5</div>
+        <span class="wstep-label active">Deduction</span>
+      </div>
+      <div class="wconn pending"></div>
+      <div class="wstep">
+        <div class="wstep-dot inactive">6</div>
+        <span class="wstep-label inactive">Overtime</span>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+
+      <div class="card-head"><h2>Deduction</h2></div>
+
+      <div class="card-body">
+
+        <!-- Deduction Name section -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+
+          <!-- Column headers -->
+          <div class="deduction-col-header">
+            <div class="col-label col-label-name">Deduction Name</div>
+            <div class="col-label col-label-source">Paid by</div>
+            <div class="col-label col-label-spacer"></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;" id="deduction-rows">
+
+
+          </div>
+          <button class="add-allowance-btn" id="add-deduction-btn">+ Add Deduction</button>
+        </div>
+
+      </div><!-- /card-body -->
+
+    </div><!-- /form-card -->
+
+  </main>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <div class="foot-btns">
+      <button class="btn btn-outline" onclick="window.location.href='onboarding-step4-allowance.html'">Back</button>
+      <button class="btn btn-primary" onclick="window.location.href='onboarding-step6-overtime.html'">Next</button>
+    </div>
+  </div>
+</div><!-- /right-panel -->
+
+<script src="deductions-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  if (localStorage.getItem('quadra_role') === 'hr-umum') { window.location.replace('onboarding-employee-list.html'); }
+
+  var DEDUCTION_OPTIONS = QUADRA_DEDUCTIONS.map(function(d) { return d.name; });
+
+  var rowCounter = 2;
+
+  /* ── Used deductions tracking ───────────────────────────── */
+  var usedDeductions = new Set();
+  document.querySelectorAll('#deduction-rows .select-w').forEach(function(sw) {
+    var txt = (sw.querySelector('span') || {}).textContent || '';
+    txt = txt.trim();
+    if (DEDUCTION_OPTIONS.indexOf(txt) !== -1) {
+      usedDeductions.add(txt);
+      sw.dataset.selectedValue = txt;
+    }
+  });
+
+  /* ── Add Deduction row ──────────────────────────────────── */
+  var addBtn = document.getElementById('add-deduction-btn');
+  var rowsContainer = document.getElementById('deduction-rows');
+
+  addBtn.addEventListener('click', function() {
+    var idx = rowCounter++;
+    var row = document.createElement('div');
+    row.className = 'allowance-row';
+    row.innerHTML =
+      '<div class="select-w" style="flex:1;min-width:0;"></div>' +
+      '<div class="source-radio-group">' +
+        '<label class="radio-opt">' +
+          '<input type="radio" name="ded-' + idx + '" value="personal" checked />' +
+          '<span>Personal</span>' +
+        '</label>' +
+        '<label class="radio-opt">' +
+          '<input type="radio" name="ded-' + idx + '" value="company" />' +
+          '<span>Company</span>' +
+        '</label>' +
+        '<label class="radio-opt">' +
+          '<input type="radio" name="ded-' + idx + '" value="spouse" />' +
+          '<span>Spouse</span>' +
+        '</label>' +
+      '</div>' +
+      '<button class="remove-btn" type="button">&#x2715;</button>';
+    var selectW = row.querySelector('.select-w');
+    QuadraDropdown.init(selectW,
+      DEDUCTION_OPTIONS.filter(function(o) { return !usedDeductions.has(o); }),
+      { placeholder: 'Select deduction', onChange: function(val) {
+        var oldVal = selectW.dataset.selectedValue || '';
+        if (oldVal) usedDeductions.delete(oldVal);
+        usedDeductions.add(val);
+      }});
+    row.querySelector('.remove-btn').addEventListener('click', function() {
+      if (selectW && selectW.dataset.selectedValue) usedDeductions.delete(selectW.dataset.selectedValue);
+      row.remove();
+    });
+    rowsContainer.appendChild(row);
+  });
+
+  /* ── Remove existing rows ───────────────────────────────── */
+  document.querySelectorAll('.remove-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var row = this.closest('.allowance-row');
+      var sw = row && row.querySelector('.select-w');
+      if (sw && sw.dataset.selectedValue) usedDeductions.delete(sw.dataset.selectedValue);
+      if (row) row.remove();
+    });
+  });
+</script>
+<script>
+  function hasFormData() {
+    if (document.querySelectorAll('#deduction-rows .allowance-row').length > 0) return true;
+    var picks = document.querySelectorAll('.select-w');
+    for (var i = 0; i < picks.length; i++) { if (picks[i].dataset.selectedValue) return true; }
+    return false;
+  }
+  function handleCancel() {
+    if (hasFormData()) { document.getElementById('cancel-modal').classList.add('show'); }
+    else { window.location.href = 'onboarding-employee-list.html'; }
+  }
+</script>
+<!-- Cancel Modal -->
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Cancel Onboarding</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Cancel onboarding?</div>
+        <div class="modal-sub-desc">You have unsaved changes. Canceling now will discard all entered data for this employee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="window.location.href='onboarding-employee-list.html'">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+<script>
+  (function() {
+    var name = sessionStorage.getItem('quadra_ob_emp_name');
+    var url  = sessionStorage.getItem('quadra_ob_return_checklist');
+    if (name && url) {
+      var el  = document.getElementById('bc-cl');
+      var sep = document.getElementById('bc-cl-sep');
+      if (el)  { el.textContent = name + ' — HR Checklist'; el.href = url; el.style.display = ''; }
+      if (sep) sep.style.display = '';
+    }
+  })();
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

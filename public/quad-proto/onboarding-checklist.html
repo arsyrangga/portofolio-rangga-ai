@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — HR Onboarding Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    /* .emp-card — RESOLVED in Task 11: now uses the shared
+       .emp-card.spacious variant in layout.css (COMMON PATTERNS
+       GROUP 5). .emp-meta-name/.emp-meta-sub/.emp-meta-badge (used
+       inside it) are also shared — see layout.css.
+       .progress-label — RESOLVED in Task 11: now uses the shared
+       .progress-label.subtitle variant in layout.css. */
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="onboarding" data-active-sub="employee-onboarding"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="onboarding-employee-list.html">Employee Onboarding</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bcEmpName">HR Checklist</span>
+  </div>
+
+  <main class="main-content">
+
+    <a class="back-link" href="onboarding-employee-list.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Employee Onboarding
+    </a>
+
+    <!-- Employee card -->
+    <div class="emp-card spacious">
+      <div class="emp-cell">
+        <div class="emp-avatar" id="empAvatar">--</div>
+        <div class="emp-meta">
+          <div class="emp-meta-name" id="empName">—</div>
+          <div class="emp-meta-sub" id="empSub">—</div>
+        </div>
+      </div>
+      <div class="progress-box">
+        <div class="progress-count"><span id="doneCount">0</span><span class="progress-total"> / 21</span></div>
+        <div class="progress-label subtitle">items completed</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+        <div class="progress-complete" id="progressComplete">
+          <span class="tag tag-success" style="margin-top:8px;display:inline-flex;align-items:center;gap:4px;">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Checklist Complete
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions bar -->
+    <div class="actions-bar">
+      <div class="actions-bar-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="8" cy="8" r="6.5" stroke="#6B7280" stroke-width="1.3"/><path d="M8 7v4M8 5.5v.5" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <div>
+          <div class="actions-bar-note-text">Complete checklist items as you go — you can return to this page anytime.</div>
+          <div class="actions-bar-note-sub" id="actionsBarSub"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="startOnboarding()" style="white-space:nowrap;flex-shrink:0;" id="continueBtn"></button>
+    </div>
+
+    <!-- Checklist card -->
+    <div class="checklist-card">
+      <div class="checklist-head">
+        <div>
+          <div class="checklist-title">HR Onboarding Checklist</div>
+          <div class="checklist-subtitle">Check off each item as it is completed · Progress saves automatically</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline" onclick="openResetModal()">Reset All</button>
+          <button class="btn btn-green" onclick="markAllDone()">Mark All Done</button>
+        </div>
+      </div>
+      <div class="checklist-body" id="checklistBody"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Reset All confirmation modal -->
+<div class="modal-overlay" id="reset-modal">
+  <div class="modal-box" style="width:400px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Reset Checklist</span>
+      <button class="modal-close" onclick="closeResetModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      Reset all 21 checklist items? All completion dates will be cleared and this cannot be undone.
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeResetModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmReset()">Reset All</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="onboarding-data.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+<script src="toast.js"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { section: 'Administrative', items: [
+      'Pengumuman',
+      'Pengembalian Offering Letter',
+      'Rules & Regulation',
+      'Goals, Visi dan Misi',
+      'Kode Etik',
+      'Data KK & Nama Gadis Ibu Kandung',
+      'Data BPJS KS',
+      'Data BPJS TK'
+    ]},
+    { section: 'Documentation & Legal', items: [
+      'Kirim Draft Kontrak/PKWT',
+      'Pengembalian Kontrak/PKWT',
+      'Pembuatan ID Card',
+      'Tanda Tangan NDA'
+    ]},
+    { section: 'Orientation', items: [
+      'Pengenalan karyawan',
+      'Penyerahan ID Card',
+      'Orientasi terkait Quadrang',
+      'Rules & Regulation Klien',
+      'Orientasi Confidential Gaji',
+      'Penyerahan Job Description'
+    ]},
+    { section: 'Technical Readiness', items: [
+      'Mentoring oleh Operation / Project Manager / Team Leader',
+      'Device & System Access (Jira, Bitbucket, Confluence, OCP, DB, Kibana, Gym Master)',
+      'Test Persiapan Onboard Klien'
+    ]}
+  ];
+
+  /* ── URL params ── */
+  var params = new URLSearchParams(location.search);
+  var empId = params.get('id');
+  if (!empId) {
+    window.location.replace('onboarding-employee-list.html');
+    return;
+  }
+  var empName  = params.get('name')  || 'Employee';
+  var empDept  = params.get('dept')  || '';
+  var empPos   = params.get('pos')   || '';
+  var empInit  = params.get('init')  || '--';
+  var empColor = params.get('color') || '#6B7280';
+  var empAdded = params.get('added') || '';
+  var empStep  = parseInt(params.get('step') || '3', 10);
+
+  /* ── Populate employee card ── */
+  var avatarEl = document.getElementById('empAvatar');
+  avatarEl.textContent   = empInit;
+  avatarEl.style.background = empColor;
+
+  var empNameEl = document.getElementById('empName');
+  empNameEl.textContent = empName;
+  empNameEl.title = empName;
+  document.getElementById('bcEmpName').textContent = empName + ' — HR Checklist';
+  document.title = 'QuadraNG — ' + empName + ' Checklist';
+
+  var subParts = [empDept, empPos].filter(Boolean);
+  var empSubEl = document.getElementById('empSub');
+  empSubEl.textContent = subParts.join(' · ');
+  empSubEl.title = empSubEl.textContent;
+
+
+  /* ── Actions bar — dynamic label based on step ── */
+  if (empStep === 1) {
+    document.getElementById('continueBtn').innerHTML =
+      'Create QuadraNG Account' +
+      '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5.5 3L9.5 7L5.5 11" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    document.getElementById('actionsBarSub').textContent =
+      'When ready, proceed to create the employee’s QuadraNG account (Onboarding Step 1–6).';
+  } else {
+    document.getElementById('continueBtn').innerHTML =
+      'Continue Onboarding Data' +
+      '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5.5 3L9.5 7L5.5 11" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    document.getElementById('actionsBarSub').textContent =
+      'When ready, continue filling in the remaining onboarding data (Step 3–6).';
+  }
+
+  /* ── State ── */
+  ensureOnboardingSeed();
+  var STORAGE_KEY = 'quadra_ob_checklist_' + empId;
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) {}
+
+  /* ── Build flat item list ── */
+  var flatItems = [];
+  ITEMS.forEach(function (group) {
+    group.items.forEach(function (label) { flatItems.push(label); });
+  });
+  var TOTAL = flatItems.length;
+
+  /* ── Render checklist ── */
+  var body = document.getElementById('checklistBody');
+  var globalIdx = 0;
+
+  ITEMS.forEach(function (group) {
+    var sec = document.createElement('div');
+    sec.className = 'ci-section';
+    sec.innerHTML = '<div class="ci-section-label">' + group.section + '</div>';
+    body.appendChild(sec);
+
+    group.items.forEach(function (label) {
+      var stateKey = globalIdx;
+      var num = globalIdx + 1;
+      globalIdx++;
+      var s = state[stateKey] || {};
+
+      var row = document.createElement('div');
+      row.className = 'ci' + (s.done ? ' done' : '');
+      row.dataset.id = stateKey;
+
+      row.innerHTML =
+        '<input type="checkbox" class="ci-check"' + (s.done ? ' checked' : '') + ' />' +
+        '<div class="ci-num">' + num + '</div>' +
+        '<div class="ci-text">' + label + '</div>' +
+        '<div class="ci-date">' + (s.done && s.date ? s.date : '') + '</div>';
+
+      var cb = row.querySelector('.ci-check');
+
+      /* clicking anywhere on the row toggles the checkbox */
+      row.addEventListener('click', function (e) {
+        if (e.target !== cb) cb.click();
+      });
+      cb.addEventListener('change', function () { toggle(stateKey, cb.checked, row); });
+
+      body.appendChild(row);
+    });
+  });
+
+  updateProgress();
+
+  /* ── Actions ── */
+  function toggle(stateKey, checked, row) {
+    if (checked) {
+      state[stateKey] = { done: true, date: fmtDate(new Date()) };
+    } else {
+      state[stateKey] = { done: false };
+    }
+    save();
+    row.classList.toggle('done', checked);
+    row.querySelector('.ci-date').textContent = checked ? state[stateKey].date : '';
+    updateProgress();
+  }
+
+  window.startOnboarding = function () {
+    sessionStorage.setItem('quadra_ob_return_checklist', location.href);
+    sessionStorage.setItem('quadra_ob_emp_name', empName);
+    sessionStorage.setItem('quadra_ob_active_id', empId);
+    if (empStep === 1) {
+      sessionStorage.setItem('quadra_ob_prefill', JSON.stringify({
+        name: empName, dept: empDept, pos: empPos
+      }));
+      window.location.href = 'onboarding-step1.html';
+    } else {
+      window.location.href = 'onboarding-step3-contract.html';
+    }
+  };
+
+  window.openResetModal = function() {
+    document.getElementById('reset-modal').classList.add('open');
+  };
+  window.closeResetModal = function() {
+    document.getElementById('reset-modal').classList.remove('open');
+  };
+  window.confirmReset = function() {
+    closeResetModal();
+    resetAll();
+  };
+  document.getElementById('reset-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeResetModal();
+  });
+
+  window.markAllDone = function () {
+    var today = fmtDate(new Date());
+    document.querySelectorAll('.ci').forEach(function (row) {
+      var num = parseInt(row.dataset.id, 10);
+      if (!state[num] || !state[num].done) {
+        state[num] = { done: true, date: today };
+        row.classList.add('done');
+        row.querySelector('.ci-check').checked = true;
+        row.querySelector('.ci-date').textContent = today;
+      }
+    });
+    save();
+    updateProgress();
+    if (window.QuadraToast) QuadraToast.show('All items marked as done', 'success');
+  };
+
+  window.resetAll = function () {
+    state = {};
+    save();
+    document.querySelectorAll('.ci').forEach(function (row) {
+      row.classList.remove('done');
+      row.querySelector('.ci-check').checked = false;
+      row.querySelector('.ci-date').textContent = '';
+    });
+    updateProgress();
+    if (window.QuadraToast) QuadraToast.show('Checklist reset', 'success');
+  };
+
+  /* ── Helpers ── */
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e) {
+      if (window.QuadraToast) QuadraToast.show('Failed to save progress — storage may be full', 'error');
+    }
+  }
+
+  function updateProgress() {
+    var done = Object.keys(state).filter(function (k) { return state[k] && state[k].done; }).length;
+    document.getElementById('doneCount').textContent = done;
+    var pct = (done / TOTAL * 100).toFixed(1);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressComplete').style.display = done === TOTAL ? 'block' : 'none';
+    /* sync completion flag used by employee list status badge */
+    var doneKey = 'quadra_ob_checklist_done_' + empId;
+    if (done >= TOTAL) {
+      try { localStorage.setItem(doneKey, '1'); } catch(e) {}
+    } else {
+      localStorage.removeItem(doneKey);
+    }
+  }
+
+  function fmtDate(d) {
+    var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  }
+})();
+</script>
+
+</body>
+</html>

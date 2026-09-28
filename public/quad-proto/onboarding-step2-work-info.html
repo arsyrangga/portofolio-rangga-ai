@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Onboarding: Step 2 Work Info</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style></style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="onboarding" data-active-sub="employee-onboarding"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Onboarding</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="onboarding-employee-list.html">Employee Onboarding</a>
+    <svg class="bc-sep" id="bc-cl-sep" width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:none;"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="#" id="bc-cl" style="display:none;font-size:13px;color:#6B7280;text-decoration:none;"></a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">New Employee</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Wizard — Step 1 done, Step 2 active, 3–6 inactive -->
+    <div class="wizard">
+      <div class="wstep">
+        <div class="wstep-dot done"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="wstep-label done">Personal Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot active">2</div>
+        <span class="wstep-label active">Work Info</span>
+      </div>
+      <div class="wconn pending wiz-finance"></div>
+      <div class="wstep wiz-finance">
+        <div class="wstep-dot inactive">3</div>
+        <span class="wstep-label inactive">Contract</span>
+      </div>
+      <div class="wconn pending wiz-finance"></div>
+      <div class="wstep wiz-finance">
+        <div class="wstep-dot inactive">4</div>
+        <span class="wstep-label inactive">Allowance</span>
+      </div>
+      <div class="wconn pending wiz-finance"></div>
+      <div class="wstep wiz-finance">
+        <div class="wstep-dot inactive">5</div>
+        <span class="wstep-label inactive">Deduction</span>
+      </div>
+      <div class="wconn pending wiz-finance"></div>
+      <div class="wstep wiz-finance">
+        <div class="wstep-dot inactive">6</div>
+        <span class="wstep-label inactive">Overtime</span>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+
+      <div class="card-head"><h2>Work Information</h2></div>
+
+      <div class="card-body">
+
+        <!-- Work Details -->
+        <div class="form-row">
+          <div class="form-col">
+            <label>Department</label>
+            <div class="select-w" id="dept-sel" data-required="true"></div>
+          </div>
+          <div class="form-col">
+            <label>Position</label>
+            <div class="select-w" id="position-sel" data-required="true"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>Reporting Manager</label>
+            <div class="select-w" id="supervisor-sel" data-required="true"></div>
+          </div>
+          <div class="form-col">
+            <label>Attendance Leader</label>
+            <div class="select-w" id="att-leader-sel" data-required="true"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Leave Approver</label>
+            <div class="select-w" id="leave-approver-sel" data-required="true"></div>
+          </div>
+          <div class="form-col">
+            <label>Shift</label>
+            <div class="select-w" id="shift-sel" data-required="true"></div>
+          </div>
+        </div>
+
+        <!-- Bank Information -->
+        <div class="form-section">
+          <span class="section-title">Bank Information</span>
+
+          <div class="form-row">
+            <div class="form-col">
+              <label>Bank Name</label>
+              <div class="select-w" id="bank-sel" data-required="true"></div>
+            </div>
+            <div class="form-col">
+              <label>Account Number</label>
+              <input type="text" id="account-number" class="text-input" placeholder="Enter account number" data-required="true" inputmode="numeric" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <label>Account Name</label>
+              <input type="text" class="text-input" placeholder="Enter account name" data-required="true" />
+            </div>
+            <div class="form-col empty"></div>
+          </div>
+        </div>
+
+      </div><!-- /card-body -->
+
+    </div><!-- /form-card -->
+
+  </main>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <div class="foot-btns">
+      <button class="btn btn-outline" onclick="window.location.href='onboarding-step1.html'">Back</button>
+      <button class="btn btn-primary" id="step2-primary-btn">Submit</button>
+    </div>
+  </div>
+</div><!-- /right-panel -->
+
+<script>
+  var FIELD_OPTIONS = {
+    'Department':        ['IT Department', 'HR and GA', 'Finance', 'Marketing', 'Operations', 'Product', 'Sales'],
+    'Position':          ['Front End Developer', 'Quality Assurance', 'Back End Developer', 'Technical Writer', 'HR Umum', 'HR Finance'],
+    'Shift':             ['Bendi', 'NDS', 'Ops Console'],
+    'Bank Name':         ['BCA', 'Bank Mandiri', 'BNI', 'BRI', 'CIMB Niaga', 'Danamon', 'BSI']
+  };
+
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function closeAll() {
+    document.querySelectorAll('.calendar-panel.open')
+      .forEach(function(p) { p.classList.remove('open'); });
+    document.querySelectorAll('.date-select-w.open')
+      .forEach(function(el) { el.classList.remove('open'); });
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.date-select-w')) {
+      closeAll();
+    }
+  });
+
+  /* ── Calendar date picker ── */
+  function initDatePicker(dateW, labelEl) {
+    var now = new Date();
+    var state = { month: now.getMonth(), year: now.getFullYear(), selected: null };
+    var panel = document.createElement('div');
+    panel.className = 'calendar-panel';
+    dateW.appendChild(panel);
+
+    function render() {
+      panel.innerHTML = '';
+
+      var nav = document.createElement('div');
+      nav.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;';
+      var prev = document.createElement('button');
+      prev.type = 'button'; prev.className = 'cal-nav-btn'; prev.innerHTML = '&#8249;';
+      prev.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (--state.month < 0) { state.month = 11; state.year--; } render();
+      });
+      var title = document.createElement('span');
+      title.style.cssText = 'font-size:13px;font-weight:600;color:#111827;font-family:Inter,sans-serif;';
+      title.textContent = MONTHS[state.month] + ' ' + state.year;
+      var next = document.createElement('button');
+      next.type = 'button'; next.className = 'cal-nav-btn'; next.innerHTML = '&#8250;';
+      next.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (++state.month > 11) { state.month = 0; state.year++; } render();
+      });
+      nav.appendChild(prev); nav.appendChild(title); nav.appendChild(next);
+      panel.appendChild(nav);
+
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(7,1fr);gap:2px;';
+      ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d) {
+        var h = document.createElement('div');
+        h.style.cssText = 'font-size:11px;font-weight:600;color:#9CA3AF;text-align:center;padding:4px 0;font-family:Inter,sans-serif;';
+        h.textContent = d; grid.appendChild(h);
+      });
+
+      var firstDay = new Date(state.year, state.month, 1).getDay();
+      var totalDays = new Date(state.year, state.month + 1, 0).getDate();
+      for (var i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
+      for (var d = 1; d <= totalDays; d++) {
+        (function(day) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = day;
+          btn.style.cssText = 'width:100%;aspect-ratio:1;border:none;background:none;cursor:pointer;font-size:13px;font-family:Inter,sans-serif;color:#111827;display:flex;align-items:center;justify-content:center;';
+          var isSel = state.selected && state.selected.d === day && state.selected.m === state.month && state.selected.y === state.year;
+          if (isSel) {
+            btn.style.background = '#E04A2A'; btn.style.color = '#fff'; btn.style.borderRadius = '50%';
+          } else {
+            btn.addEventListener('mouseover', function() { this.style.background = '#F9FAFB'; });
+            btn.addEventListener('mouseout',  function() { this.style.background = 'none'; });
+          }
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            state.selected = { d: day, m: state.month, y: state.year };
+            labelEl.textContent = day + ' ' + MONTHS[state.month] + ' ' + state.year;
+            labelEl.style.color = '#111827';
+            closeAll();
+          });
+          grid.appendChild(btn);
+        })(d);
+      }
+      panel.appendChild(grid);
+    }
+
+    dateW.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = panel.classList.contains('open');
+      closeAll();
+      if (!wasOpen) { render(); panel.classList.add('open'); dateW.classList.add('open'); }
+    });
+  }
+
+</script>
+<script>
+  /* ── Validation helpers ── */
+  function setError(field, message) {
+    field.classList.add('error');
+    var col = field.closest('.form-col');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (!msg) {
+      msg = document.createElement('span');
+      msg.className = 'err-msg';
+      field.insertAdjacentElement('afterend', msg);
+    }
+    msg.textContent = message || 'This field is required';
+    msg.classList.add('show');
+  }
+  function clearError(field) {
+    field.classList.remove('error');
+    var col = field.closest('.form-col');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (msg) msg.classList.remove('show');
+  }
+  document.addEventListener('input', function(e) {
+    if (e.target.dataset.required) clearError(e.target);
+  });
+
+  function validateForm() {
+    var errors = [];
+    document.querySelectorAll('[data-required]').forEach(function(field) {
+      var empty = (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA')
+        ? field.value.trim() === ''
+        : !field.dataset.selectedValue;
+      if (empty) { setError(field); errors.push(field); }
+      else clearError(field);
+    });
+    if (errors.length) errors[0].closest('.form-col').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return errors.length === 0;
+  }
+
+
+  (function() {
+    var role = localStorage.getItem('quadra_role') || 'hr-umum';
+    var btn = document.getElementById('step2-primary-btn');
+    if (role === 'hr-finance') {
+      btn.textContent = 'Next';
+      btn.onclick = function() { if (validateForm()) window.location.href = 'onboarding-step3-contract.html'; };
+    } else {
+      btn.textContent = 'Submit';
+      btn.onclick = function() { if (validateForm()) window.location.href = 'onboarding-employee-list.html'; };
+    }
+    if (role === 'hr-umum') {
+      document.querySelectorAll('.wiz-finance').forEach(function(el) { el.style.display = 'none'; });
+    }
+  })();
+
+  function hasFormData() {
+    var ins = document.querySelectorAll('input[type=text]:not([disabled]),input[type=number]:not([disabled]),textarea:not([disabled])');
+    for (var i = 0; i < ins.length; i++) { if ((ins[i].value || '').trim() !== '') return true; }
+    var picks = document.querySelectorAll('.select-w,.date-w');
+    for (var i = 0; i < picks.length; i++) { if (picks[i].dataset.selectedValue) return true; }
+    return false;
+  }
+  function handleCancel() {
+    if (hasFormData()) { document.getElementById('cancel-modal').classList.add('show'); }
+    else { window.location.href = 'onboarding-employee-list.html'; }
+  }
+
+  /* ── Account Number: numeric only ───────────────────────── */
+  (function() {
+    var input = document.getElementById('account-number');
+    if (!input) return;
+
+    input.addEventListener('keydown', function(e) {
+      var allowed = ['Backspace','Delete','Tab','Enter','ArrowLeft','ArrowRight','Home','End'];
+      if (e.ctrlKey || e.metaKey) return;
+      if (allowed.indexOf(e.key) >= 0) return;
+      if (!/^\d$/.test(e.key)) {
+        e.preventDefault();
+        setError(this, 'Account number must contain numbers only.');
+      }
+    });
+
+    input.addEventListener('input', function() {
+      var clean = this.value.replace(/\D/g, '');
+      if (this.value !== clean) {
+        this.value = clean;
+        setError(this, 'Account number must contain numbers only.');
+        return;
+      }
+      if (clean.length > 0) clearError(this);
+    });
+
+    input.addEventListener('focus', function() { clearError(this); });
+  })();
+</script>
+<!-- Cancel Modal -->
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Cancel Onboarding</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Cancel onboarding?</div>
+        <div class="modal-sub-desc">You have unsaved changes. Canceling now will discard all entered data for this employee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="window.location.href='onboarding-employee-list.html'">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+<script src="employees-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  var DEPT_POSITIONS = {
+    'IT Department':  ['Front End Developer', 'Quality Assurance', 'Back End Developer', 'Technical Writer'],
+    'HR and GA':      ['HR Umum', 'HR Finance'],
+    'Finance':        ['Finance Analyst', 'Payroll Staff', 'Tax Staff'],
+    'Marketing':      ['Brand Manager', 'Content Strategist', 'Digital Marketer'],
+    'Operations':     ['Logistics Coordinator', 'Fleet Coordinator', 'Warehouse Supervisor'],
+    'Product':        ['Product Manager', 'Product Designer', 'Business Analyst'],
+    'Sales':          ['Sales Executive', 'Account Manager', 'Sales Admin']
+  };
+
+  /* Department list is always driven by DEPT_POSITIONS keys — not from Settings localStorage,
+     since onboarding uses job-function names that differ from org-unit names in Settings. */
+  var DEPARTMENTS = Object.keys(DEPT_POSITIONS);
+
+  var SHIFTS = (function() {
+    var SEED_VER = 3, SEED = ['NDS', 'Bendi', 'Ops Console'];
+    try {
+      if (parseInt(localStorage.getItem('QUADRA_SHIFTS_V'), 10) === SEED_VER) {
+        var stored = JSON.parse(localStorage.getItem('QUADRA_SHIFTS'));
+        if (stored && stored.length) return stored.map(function(s) { return s.name; });
+      }
+    } catch(e) {}
+    return SEED;
+  })();
+
+  var positionSel = document.getElementById('position-sel');
+
+  /* Initialize position-sel ONCE so its onclick handler is set up correctly.
+     Options are swapped in-place via updatePositionOptions — never re-init. */
+  QuadraDropdown.init(positionSel, [], { placeholder: 'Select department first' });
+  positionSel.classList.add('is-disabled');
+
+  function updatePositionOptions(dept) {
+    var positions = dept ? (DEPT_POSITIONS[dept] || []) : [];
+
+    /* Clear any current selection */
+    delete positionSel.dataset.selectedValue;
+    positionSel.classList.remove('is-error', 'error', 'open');
+
+    /* Reset the trigger label */
+    var valSpan = positionSel.querySelector('.select-val');
+    if (valSpan) {
+      valSpan.textContent = dept ? 'Select position' : 'Select department first';
+      valSpan.className = 'select-val placeholder';
+    }
+
+    /* Rebuild the options panel contents directly */
+    var panel = positionSel.querySelector('.select-options');
+    if (!panel) return;
+    panel.innerHTML = '';
+
+    positions.forEach(function(pos) {
+      var optEl = document.createElement('div');
+      optEl.className = 'select-option';
+      optEl.dataset.value = pos;
+      optEl.textContent = pos;
+      optEl.addEventListener('click', function(e) {
+        e.stopPropagation();
+        panel.querySelectorAll('[data-value]').forEach(function(i) {
+          i.classList.toggle('selected', i.dataset.value === pos);
+        });
+        if (valSpan) {
+          valSpan.textContent = pos;
+          valSpan.className = 'select-val';
+        }
+        positionSel.dataset.selectedValue = pos;
+        positionSel.classList.remove('is-error', 'error');
+        QuadraDropdown.closeAll();
+      });
+      panel.appendChild(optEl);
+    });
+
+    if (positions.length) {
+      positionSel.classList.remove('is-disabled');
+    } else {
+      positionSel.classList.add('is-disabled');
+    }
+  }
+
+  QuadraDropdown.init(document.getElementById('dept-sel'), DEPARTMENTS, {
+    placeholder: 'Select department',
+    onChange: function(val) {
+      updatePositionOptions(val);
+    }
+  });
+  function loadGroupAssignments() {
+    try { return JSON.parse(localStorage.getItem('QUADRA_USER_GROUP_ASSIGN_P2')) || {}; } catch (e) { return {}; }
+  }
+  var DEFAULT_APPROVER_NAMES = ['Budi Santoso','Dewi Rahayu','Ahmad Fauzi','Siti Nurhaliza','Rudi Hartono'];
+  function namesInGroup(groupName) {
+    var map = loadGroupAssignments();
+    var names = QUADRA_EMPLOYEES.filter(function(e) { return map[e.badge] === groupName; }).map(function(e) { return e.name; });
+    return names.length ? names : DEFAULT_APPROVER_NAMES;
+  }
+  QuadraDropdown.init(document.getElementById('supervisor-sel'), namesInGroup('Reporting Manager'), { placeholder: 'Select reporting manager' });
+  QuadraDropdown.init(document.getElementById('att-leader-sel'), namesInGroup('Attendance Leader'), { placeholder: 'Select attendance leader' });
+  QuadraDropdown.init(document.getElementById('leave-approver-sel'), namesInGroup('Leave Approver'), { placeholder: 'Select leave approver' });
+  QuadraDropdown.init(document.getElementById('shift-sel'), SHIFTS, { placeholder: 'Select shift' });
+  QuadraDropdown.init(document.getElementById('bank-sel'), ['BCA','Bank Mandiri','BNI','BRI','CIMB Niaga','Danamon','BSI'], { placeholder: 'Select bank', searchable: true, searchPlaceholder: 'Search bank…' });
+
+  /* ── Pre-fill Department + Position from "Add New Employee" modal ── */
+  (function() {
+    var raw = sessionStorage.getItem('quadra_ob_prefill');
+    if (!raw) return;
+    var data;
+    try { data = JSON.parse(raw); } catch(e) { return; }
+    var deptEl = document.getElementById('dept-sel');
+    var posEl  = document.getElementById('position-sel');
+    if (data.dept && DEPT_POSITIONS[data.dept]) {
+      QuadraDropdown.setValue(deptEl, data.dept);
+      updatePositionOptions(data.dept);
+      if (data.pos) QuadraDropdown.setValue(posEl, data.pos);
+    }
+    sessionStorage.removeItem('quadra_ob_prefill');
+  })();
+</script>
+<script>
+  (function() {
+    var name = sessionStorage.getItem('quadra_ob_emp_name');
+    var url  = sessionStorage.getItem('quadra_ob_return_checklist');
+    if (name && url) {
+      var el  = document.getElementById('bc-cl');
+      var sep = document.getElementById('bc-cl-sep');
+      if (el)  { el.textContent = name + ' — HR Checklist'; el.href = url; el.style.display = ''; }
+      if (sep) sep.style.display = '';
+    }
+  })();
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

@@ -1,0 +1,581 @@
+/* ============================================================
+   base.css — QuadraNG shared base components
+   Include on EVERY page (before page-specific styles).
+
+   Do NOT put page-specific styles here.
+   Do NOT duplicate: fields.css (inputs), tags.css (badges),
+                     sidebar.js CSS (injected by script).
+
+   Contents:
+     0. Design Tokens
+     1. Reset
+     2. Buttons
+     3. Icon Buttons
+     4. Avatar (emp-avatar, emp-avatar-lg, company-avatar)
+     5. Employee Cell
+     6. Back Link
+     7. Breadcrumb
+     8. Navbar (includes user-avatar)
+     9. Checkbox
+    10. Sidebar
+   ============================================================ */
+
+
+/* ——————————————————————————————————————————
+   0. DESIGN TOKENS
+   Source of truth: design-core.md §2 (Color), §3 (Typography),
+   §4 (Spacing — mandatory 4pt grid). A value only gets a
+   token here if it's named in design-core.md OR appears 3+ times
+   across base.css/fields.css/tags.css/layout.css.
+   —————————————————————————————————————————— */
+:root {
+  /* Primary accent */
+  --primary: #E04A2A;
+  --primary-hover: #c93d21;
+  --primary-bg: rgba(224,74,42,0.15);
+  --primary-light: #FFF5F3;
+
+  /* Surfaces */
+  --sidebar: #1E2228;
+  --page-bg: #F9FAFB;
+  --surf: #FFFFFF;
+
+  /* Borders */
+  --bd: #E5E7EB;
+  --bd-input: #D1D5DB;
+  --bd-focus: #E04A2A;
+
+  /* Text */
+  --t1: #111827;
+  --t2: #374151;
+  --t3: #6B7280;
+  --t4: #9CA3AF;
+
+  /* Semantic status */
+  --danger: #EF4444;
+  --success: #22C55E;
+  --info-bg: #EFF6FF;
+  --info-border: #BFDBFE;
+  --info-text: #1E40AF;
+  --scheduled: #3B82F6;
+  --scheduled-hover: #2563EB;
+  --amber-bg: #FFFBEB;
+  --amber-text: #92400E;
+
+  /* Font sizes (px steps actually present in the shared files) */
+  --fs-10: 10px;
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+
+  /* Font weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Spacing — 4pt grid (design-core.md §4, mandatory) */
+  --sp-4: 4px;
+  --sp-6: 6px;
+  --sp-8: 8px;
+  --sp-10: 10px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-20: 20px;
+  --sp-24: 24px;
+  --sp-28: 28px;
+  --sp-32: 32px;
+}
+
+
+/* ——————————————————————————————————————————
+   1. RESET
+   —————————————————————————————————————————— */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* height (not min-height) + overflow:hidden confines the page to the
+   viewport, so .right-panel's own overflow:hidden + .main-content's
+   overflow-y:auto become the real scrolling mechanism — .navbar and
+   .fixed-footer, both outside that scroll boundary, stay visually
+   fixed without needing position:sticky. Previously body only had
+   min-height:100vh, so tall pages scrolled at the document level and
+   the navbar/footer scrolled away with everything else. */
+body { font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+svg { display: block; }
+
+
+/* ——————————————————————————————————————————
+   2. BUTTONS
+   height 36px · border-radius 0 · font 13px/500
+   Never add border-radius. Primary accent #E04A2A for CTA only.
+
+   Variants: btn-primary, btn-outline, btn-danger,
+             btn-danger-outline, btn-green, btn-ghost, btn-scheduled
+   Sizes:    default (36px), btn-sm (28px),
+             btn-sq-36 (36×36 square), btn-sq-28 (28×28 square)
+
+   PATTERN: always btn-outline for Cancel/Back,
+            btn-primary for confirm/save,
+            btn-danger for destructive actions only.
+            btn-ghost for icon-adjacent text actions (no border, no bg).
+            btn-scheduled modifies btn-primary to blue — use when the
+            action will take effect in the future (matches the blue
+            scheduled-change banner). Toggle it in JS alongside the
+            button label ("Save Changes" ↔ "Schedule Change").
+   —————————————————————————————————————————— */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  height: 36px;
+  padding: 0 var(--sp-16);
+  font-family: 'Inter', sans-serif;
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.btn-primary           { background: var(--primary); color: #fff; }
+.btn-primary:hover     { background: var(--primary-hover); }
+
+.btn-outline           { background: #fff; border: 1px solid var(--bd-input); color: var(--t2); }
+.btn-outline:hover     { background: var(--page-bg); }
+
+.btn-danger            { background: var(--danger); color: #fff; }
+.btn-danger:hover      { background: #DC2626; }
+
+.btn-danger-outline    { background: #fff; border: 1px solid var(--danger); color: var(--danger); }
+.btn-danger-outline:hover { background: #FEF2F2; }
+
+.btn-green             { background: #059669; color: #fff; }
+.btn-green:hover       { background: #047857; }
+
+/* Scheduled — modifier on btn-primary, used when saving will schedule
+   a future change instead of applying immediately. */
+.btn-primary.btn-scheduled              { background: var(--scheduled); }
+.btn-primary.btn-scheduled:not(:disabled):hover { background: var(--scheduled-hover); }
+
+.btn:disabled,
+.btn.disabled          { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+/* btn-primary disabled: use gray fill instead of opacity (more obvious) */
+.btn-primary:disabled  { background: var(--bd-input); cursor: not-allowed; }
+
+/* Ghost — transparent, no border. For icon-adjacent or secondary text actions. */
+.btn-ghost             { background: transparent; border: none; color: var(--t2); cursor: pointer; font-family: 'Inter', sans-serif; font-size: var(--fs-13); font-weight: var(--fw-medium); display: inline-flex; align-items: center; gap: var(--sp-6); }
+.btn-ghost:hover       { color: var(--t1); }
+
+/* Size variants */
+.btn-sm   { height: 28px; padding: 0 var(--sp-10); font-size: var(--fs-12); }
+.btn-sq-36 { width: 36px; padding: 0; justify-content: center; }
+.btn-sq-28 { height: 28px; width: 28px; padding: 0; justify-content: center; }
+
+
+/* ——————————————————————————————————————————
+   3. ICON BUTTONS
+   icon-btn: 28×28px, transparent bg — action columns, toolbars.
+   hero-icon-btn: 32px height with label — hero card action buttons.
+
+   PATTERN: icon-btn for table action column (view/edit/delete).
+            icon-btn.danger for delete only — never use on non-destructive.
+            hero-icon-btn for Edit/Delete in hero cards (has text label).
+   —————————————————————————————————————————— */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  color: var(--t4);
+  flex-shrink: 0;
+}
+.icon-btn:hover        { background: #F3F4F6; color: var(--t2); }
+.icon-btn.danger       { color: var(--danger); }
+.icon-btn.danger:hover { background: #FEF2F2; color: #DC2626; }
+
+.hero-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  height: 32px;
+  padding: 0 var(--sp-12);
+  border: 1px solid var(--bd-input);
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  color: var(--t2);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.hero-icon-btn:hover { background: var(--page-bg); }
+.hero-icon-btn.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.hero-icon-btn.danger:hover { background: #FEF2F2; }
+
+/* Action buttons row — wraps multiple icon-btn in a table cell */
+.action-btns { display: flex; gap: var(--sp-4); align-items: center; }
+
+
+/* ——————————————————————————————————————————
+   3B. TAB EDIT BUTTON
+   Small outline "Edit"-style link button — 30px, accent-color hover.
+   Promoted from employee-detail.html (.tab-edit-btn, used next to a
+   tab section heading to jump to its full edit page). */
+.tab-edit-btn {
+  height: 30px;
+  padding: 0 var(--sp-12);
+  background: #fff;
+  border: 1px solid var(--bd-input);
+  cursor: pointer;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  color: var(--t2);
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.tab-edit-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+
+/* ——————————————————————————————————————————
+   4. AVATAR
+   border-radius 50% for employee circles (exception to radius-0 rule).
+   border-radius 6px for company square (sidebar logo).
+   Color assigned dynamically — never hardcode in HTML (use style="background:…").
+
+   emp-avatar: 32px circle — table rows, lists
+   emp-avatar-lg: 56px circle — hero cards, detail pages
+   company-avatar: 32px square — sidebar company logo (border-radius 6px)
+   user-avatar: 28px circle — defined in §8 Navbar (not here)
+
+   PATTERN: initials always 2 chars uppercase, font-weight 600.
+            Background color from AVATAR_COLORS array in JS.
+            DONE (Task 9 / Batch 3): payroll-allowance-detail.html and
+            payroll-deduction-detail.html's .allowance-avatar-lg /
+            .deduction-avatar-lg were migrated to use this class
+            directly (background set inline via style= where it
+            differs from this class's own default of var(--primary)).
+   —————————————————————————————————————————— */
+.emp-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-semibold);
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+.emp-avatar-lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-18);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+.company-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+
+/* ——————————————————————————————————————————
+   5. EMPLOYEE CELL
+   Used in table rows — avatar + name + badge ID stacked.
+
+   PATTERN: emp-id always uses tabular-nums + color #9CA3AF.
+            emp-name is font-weight 500, color #111827.
+   —————————————————————————————————————————— */
+.emp-cell { display: flex; align-items: center; gap: var(--sp-10); }
+.emp-name  { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.emp-id    { font-size: var(--fs-12); color: var(--t4); font-variant-numeric: tabular-nums; }
+
+
+/* ——————————————————————————————————————————
+   6. BACK LINK
+   Sits at the top of main-content, ABOVE the breadcrumb.
+   href is always static (no JS needed unless contextual).
+   No font-weight — default 400 is intentional.
+
+   PATTERN: always use <a class="back-link"> (not button).
+            16×16 chevron SVG left arrow: M10 12L6 8l4-4
+            Color #6B7280, hover #374151. Never #E04A2A.
+   —————————————————————————————————————————— */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  font-size: var(--fs-13);
+  color: var(--t3);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+}
+.back-link:hover { color: var(--t2); }
+
+/* Document link — clickable filename referencing an uploaded document
+   (resignation letter, handover doc, etc). Promoted here once it hit its
+   3rd usage (my-resignation.html, offboarding-requests.html,
+   offboarding-checklist.html), per this project's rule-of-three convention
+   for shared CSS. Reuses .breadcrumb a's own hover convention (t2 -> t1)
+   rather than the primary accent, which CLAUDE.md reserves for CTAs/
+   active-nav only. */
+.doc-link { color: var(--t2); text-decoration: underline; }
+.doc-link:hover { color: var(--t1); }
+
+
+/* ——————————————————————————————————————————
+   7. BREADCRUMB
+   Always below back-link (if present), always above page content.
+   Separator: 14×14 chevron SVG, path M5 3l4 4-4 4, stroke #9CA3AF 1.5px.
+
+   PATTERN: 2-level for list pages, 3-level for detail pages,
+            4-level for step pages navigated from checklist.
+            Never more than 4 levels.
+            bc-current is always <span>, never <a>.
+   —————————————————————————————————————————— */
+.breadcrumb {
+  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--bd);
+  padding: var(--sp-8) var(--sp-28);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+.breadcrumb a        { font-size: var(--fs-13); color: var(--t3); text-decoration: none; }
+.breadcrumb a:hover  { color: var(--t1); }
+.bc-sep              { color: var(--t4); flex-shrink: 0; }
+.bc-current          { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t1); }
+
+
+/* ——————————————————————————————————————————
+   8. NAVBAR
+   height 48px, always at top of main-content shell.
+   Injected via HTML copy per page — CSS here keeps it consistent.
+
+   PATTERN: hamburger toggles sidebar on mobile (sidebar.js handles).
+            Clock widget (timer-box) only shown when clockwidget.js loaded.
+            Bell badge uses absolute positioning inside bell-wrap.
+   —————————————————————————————————————————— */
+.navbar {
+  height: 48px;
+  background: #fff;
+  border-bottom: 1px solid var(--bd);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-20);
+  flex-shrink: 0;
+}
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--t3);
+  border-radius: 1px;
+}
+.navbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.nav-divider  { width: 1px; height: 100%; background: var(--bd); flex-shrink: 0; }
+.nav-action   { display: flex; align-items: center; justify-content: center; padding: 0 var(--sp-16); height: 100%; cursor: pointer; }
+.timer-box    { border: 1.5px solid var(--success); height: 36px; padding: 0 14px; display: inline-flex; align-items: center; gap: var(--sp-6); }
+.timer-box span { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--success); white-space: nowrap; }
+.bell-wrap    { position: relative; display: flex; }
+.bell-badge {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  background: var(--danger);
+  border-radius: 8px;
+  border: 1.5px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-10);
+  font-weight: var(--fw-semibold);
+  color: #fff;
+}
+.nav-user     { display: flex; align-items: center; gap: var(--sp-8); padding: 0 var(--sp-16); height: 100%; cursor: pointer; }
+.user-avatar  {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-11);
+  font-weight: var(--fw-semibold);
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.user-name    { font-size: var(--fs-13); font-weight: var(--fw-medium); color: var(--t1); white-space: nowrap; }
+
+
+/* ——————————————————————————————————————————
+   9. CHECKBOX
+   16×16px box. Three states: unchecked, checked, indeterminate.
+   Used for bulk table select and form checkboxes.
+
+   PATTERN: indeterminate (—) for header "select all" when partial.
+            checked (✓) for individual selected rows.
+            Wrap with <label class="checkbox-w"> to make entire
+            label area clickable.
+   —————————————————————————————————————————— */
+.checkbox-w {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  cursor: pointer;
+  font-size: var(--fs-13);
+  color: var(--t2);
+  user-select: none;
+}
+.checkbox-box {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--bd-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #fff;
+}
+.checkbox-box.checked       { background: var(--primary); border-color: var(--primary); }
+.checkbox-box.indeterminate { background: var(--primary); border-color: var(--primary); }
+
+
+/* ——————————————————————————————————————————
+   10. SIDEBAR
+   Width 184px · bg #1E2228 · injected by sidebar.js.
+   Active state driven by data-active-menu + data-active-sub on <body>.
+   sidebar.js reads those attrs and sets .active on the correct items.
+
+   PATTERN: company-selector at top, sidebar-nav fills remaining height.
+            nav-item for top-level, nav-sub-item for sub-level.
+            nav-sub hidden by default, .open to expand.
+            nav-chevron rotates 180deg when parent .nav-item is .open.
+            right-panel is the flex sibling that fills remaining width.
+   —————————————————————————————————————————— */
+.sidebar {
+  width: 184px;
+  flex-shrink: 0;
+  background: var(--sidebar);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.company-selector {
+  padding: var(--sp-12) var(--sp-16);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.company-info  { flex: 1; min-width: 0; }
+.company-name  { font-size: var(--fs-13); font-weight: var(--fw-semibold); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.company-sub   { font-size: var(--fs-11); color: var(--t3); }
+.sidebar-nav   { display: flex; flex-direction: column; padding: var(--sp-8) 0; flex: 1; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-16);
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 40px;
+}
+.nav-label { font-size: var(--fs-13); color: var(--t4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-item.active                { background: var(--primary-bg); }
+.nav-item.active .nav-label     { color: var(--primary); font-weight: var(--fw-semibold); }
+.nav-sub                        { background: rgba(0,0,0,0.15); display: none; flex-direction: column; }
+.nav-sub.open                   { display: flex; }
+.nav-item .nav-chevron          { margin-left: auto; flex-shrink: 0; transition: transform 0.2s; }
+.nav-item.open .nav-chevron     { transform: rotate(180deg); }
+.nav-sub-item {
+  padding: var(--sp-12) var(--sp-16) var(--sp-12) 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav-sub-item span              { font-size: var(--fs-13); color: var(--t3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-sub-item.active            { background: rgba(255,255,255,0.06); }
+.nav-sub-item.active span       { color: #fff; font-weight: var(--fw-semibold); }
+.nav-sub-item:hover span        { color: var(--bd-input); }
+.nav-group-label {
+  font-size: var(--fs-10);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--t3);
+  padding: var(--sp-12) var(--sp-16) var(--sp-8);
+}
+.nav-item-gap { margin-top: var(--sp-8); }
+.right-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }

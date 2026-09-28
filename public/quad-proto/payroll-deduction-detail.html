@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Deduction Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <!-- This page's former inline hero rules (.deduction-hero,
+       .deduction-avatar-lg, .deduction-hero-info, .deduction-hero-name,
+       .deduction-hero-sub + its .dot/span:not(.tag) children,
+       .deduction-hero-actions) matched the shared layout.css .emp-hero
+       family exactly (.deduction-hero-info/-name/-sub/-actions), and
+       .deduction-avatar-lg was 56×56/700/-1px letter-spacing like
+       .emp-avatar-lg — base.css flagged this exact migration for
+       "Batch 3" (this Payroll audit). Two small deltas were absorbed
+       into the shared component rather than kept as page overrides:
+       background (#D97706 amber, now set inline via style= — the
+       established "never hardcode in HTML" pattern .emp-avatar-lg
+       already uses for allowance-type colors) and font-size (was 16px,
+       now the shared component's default 18px — a ~2px difference in
+       a 56px circle's initials, judged immaterial). Body markup below
+       updated to use the shared classes; no page-level <style> block
+       needed any more. -->
+
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="deduction"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="payroll-deduction.html">Deduction</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="bc-current" class="bc-current">Deduction</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Back Link -->
+    <a href="payroll-deduction.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Deduction
+    </a>
+
+    <!-- Deduction Hero Card -->
+    <div id="deduction-hero-wrap"></div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="search-input" type="text" placeholder="Search employee…" oninput="renderTable(this.value)">
+          </div>
+          <div class="toolbar-count" id="toolbar-count"></div>
+        </div>
+        <button class="btn btn-outline" onclick="exportEnrolled()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 9V2M4 5l3-3 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10v1.5A1.5 1.5 0 003.5 13h7A1.5 1.5 0 0012 11.5V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Export
+        </button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th style="width:150px">Paid by</th>
+            <th class="col-actions" style="width:72px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="emp-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ EDIT DEDUCTION MODAL ═══ -->
+<div class="modal-overlay" id="edit-overlay">
+  <div class="modal-box" style="width:480px">
+
+    <div class="modal-head">
+      <span class="modal-head-title">Edit Deduction</span>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Deduction Name</label>
+        <input id="edit-input-name" class="text-input" type="text" placeholder="e.g. Health Insurance"
+          onfocus="this.classList.remove('is-error');document.getElementById('edit-name-err').style.display='none'"
+          onkeydown="if(event.key==='Enter')saveEditDeduction()">
+        <div id="edit-name-err" style="display:none;font-size:11px;color:#EF4444;margin-top:4px"></div>
+      </div>
+
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Percentage</label>
+        <div class="f-input" id="edit-pct-wrap" style="width:160px">
+          <input id="edit-input-pct" type="number" min="0.01" max="100" step="0.01" placeholder="0"
+            onfocus="document.getElementById('edit-pct-wrap').classList.remove('is-error');document.getElementById('edit-pct-err').style.display='none'"
+            onkeydown="if(event.key==='Enter')saveEditDeduction()">
+          <div class="input-suffix">%</div>
+        </div>
+        <div id="edit-pct-err" style="display:none;font-size:11px;color:#EF4444;margin-top:4px"></div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditDeduction()">Update Deduction</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ DELETE DEDUCTION MODAL ═══ -->
+<div class="modal-overlay" id="delete-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Deduction</span>
+      <button class="modal-close" onclick="closeDelete()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Delete <span id="delete-deduction-title">this deduction</span>?</div>
+        <div class="modal-sub-desc">Employees enrolled in this deduction will no longer have it applied. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDelete()">Cancel</button>
+      <button class="btn btn-danger" onclick="executeDelete()">Delete Deduction</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REMOVE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="remove-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Remove Employee</span>
+      <button class="modal-close" onclick="closeRemove()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Remove <span id="remove-emp-name">this employee</span> from <span id="remove-ded-name">this deduction</span>?</div>
+        <div class="modal-sub-desc">This employee will no longer have this deduction applied. You can re-add them at any time.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRemove()">Cancel</button>
+      <button class="btn btn-danger" onclick="closeRemove()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="deductions-data.js"></script>
+<script>
+  /* ── localStorage sync ── */
+  function getStoredDeductions() {
+    try { var d = JSON.parse(localStorage.getItem('quadra_deductions')); return (d && d.length) ? d : QUADRA_DEDUCTIONS.slice(); }
+    catch(e) { return QUADRA_DEDUCTIONS.slice(); }
+  }
+  function saveDeductions() { localStorage.setItem('quadra_deductions', JSON.stringify(QUADRA_DEDUCTIONS)); }
+  QUADRA_DEDUCTIONS = getStoredDeductions();
+
+  /* ── Init ── */
+  var params    = new URLSearchParams(window.location.search);
+  var dedId     = params.get('id') || 'bpjs-kes';
+  var deduction = null;
+  for (var i = 0; i < QUADRA_DEDUCTIONS.length; i++) {
+    if (QUADRA_DEDUCTIONS[i].id === dedId) { deduction = QUADRA_DEDUCTIONS[i]; break; }
+  }
+  if (!deduction) { window.location.replace('payroll-deduction.html'); deduction = QUADRA_DEDUCTIONS[0] || {}; }
+
+  var enrolled = QUADRA_EMPLOYEES.filter(function(e) { return e.deductions.some(function(x) { return x.id === deduction.id; }); });
+
+  /* ── Hero render ── */
+  function renderHero() {
+    var initials = deduction.name.split(' ').map(function(w){ return w[0]; }).slice(0,2).join('').toUpperCase();
+    document.getElementById('deduction-hero-wrap').innerHTML =
+      '<div class="emp-hero">' +
+        '<div class="emp-avatar-lg" style="background:#D97706">' + initials + '</div>' +
+        '<div class="emp-hero-info">' +
+          '<div class="emp-hero-name">' + deduction.name + '</div>' +
+          '<div class="emp-hero-sub">' +
+            '<span class="tag tag-warning" style="font-variant-numeric:tabular-nums">' + deduction.pct + '%</span>' +
+            '<div class="dot"></div>' +
+            '<span>' + enrolled.length + ' employee' + (enrolled.length !== 1 ? 's' : '') + ' enrolled</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="emp-hero-actions">' +
+          '<button class="btn btn-outline" onclick="openEditModal()">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Edit Deduction' +
+          '</button>' +
+          '<button class="btn btn-danger-outline" onclick="confirmDelete()">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Delete Deduction' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+  }
+  renderHero();
+
+  document.getElementById('bc-current').textContent = deduction.name;
+  document.title = 'QuadraNG — Deduction: ' + deduction.name;
+
+  /* ── Table render ── */
+  var SVG_VIEW = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+  var SVG_DEL = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var tbody = document.getElementById('emp-tbody');
+  var PAID_BY_LABEL = { personal: 'Personal', company: 'Company', spouse: 'Spouse' };
+  var PAID_BY_CLASS = { personal: 'tag tag-neutral', company: 'tag tag-info', spouse: 'tag' };
+  var PAID_BY_STYLE = { personal: '', company: '', spouse: 'background:#F3E8FF;color:#6B21A8' };
+
+  function renderTable(query) {
+    var q = (query || '').toLowerCase().trim();
+    var filtered = q ? enrolled.filter(function(emp) {
+      return emp.name.toLowerCase().indexOf(q) >= 0 ||
+             emp.badge.toLowerCase().indexOf(q) >= 0 ||
+             (emp.project || '').toLowerCase().indexOf(q) >= 0 ||
+             (emp.pos || '').toLowerCase().indexOf(q) >= 0;
+    }) : enrolled;
+
+    var countEl = document.getElementById('toolbar-count');
+    if (countEl) {
+      if (!q) {
+        countEl.innerHTML = '';
+      } else {
+        countEl.innerHTML = filtered.length !== enrolled.length
+          ? '<span>' + filtered.length + '</span> of <span>' + enrolled.length + '</span> employees'
+          : '<span>' + enrolled.length + '</span> employee' + (enrolled.length !== 1 ? 's' : '');
+      }
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3"><div style="padding:32px;text-align:center;color:#9CA3AF;font-size:13px">' +
+        (q ? 'No employees match &ldquo;' + query + '&rdquo;' : 'No employees enrolled in this deduction') +
+        '</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = filtered.map(function(emp) {
+      var dedEntry = emp.deductions.find(function(x) { return x.id === deduction.id; });
+      var pb = (dedEntry && dedEntry.paidBy) ? dedEntry.paidBy : 'personal';
+      return '<tr data-badge="' + emp.badge + '">' +
+        '<td><div class="emp-cell">' +
+          '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>' +
+          '<div><div class="emp-name">' + emp.name + '</div><div class="emp-id">' + emp.badge + '</div></div>' +
+        '</div></td>' +
+        '<td><span class="' + PAID_BY_CLASS[pb] + '" style="' + PAID_BY_STYLE[pb] + '">' + PAID_BY_LABEL[pb] + '</span></td>' +
+        '<td><div class="action-btns">' +
+          '<button class="icon-btn" title="View" data-badge="' + emp.badge + '">' + SVG_VIEW + '</button>' +
+          '<button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove(\'' + emp.name.replace(/'/g,"\\'") + '\')">' + SVG_DEL + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+  renderTable('');
+
+  function goToEmployee(badge) {
+    var ref     = 'deduction-' + deduction.id;
+    var refname = encodeURIComponent(deduction.name);
+    try {
+      sessionStorage.setItem('quadra_nav_back', JSON.stringify({
+        href: 'payroll-deduction-detail.html?id=' + deduction.id,
+        text: 'Back to ' + deduction.name + ' Deduction'
+      }));
+    } catch(e) {}
+    window.location.href = 'employee-detail.html?badge=' + badge + '&ref=' + ref + '&refname=' + refname + '#deduction';
+  }
+
+  tbody.addEventListener('click', function(e) {
+    if (e.target.closest('[title="Remove"]')) return;
+    var viewBtn = e.target.closest('[data-badge]');
+    if (viewBtn) { goToEmployee(viewBtn.dataset.badge); return; }
+    var row = e.target.closest('tr[data-badge]');
+    if (row) goToEmployee(row.dataset.badge);
+  });
+
+  /* ── Edit modal ── */
+  function openEditModal() {
+    document.getElementById('edit-input-name').value = deduction.name;
+    document.getElementById('edit-input-name').classList.remove('is-error');
+    document.getElementById('edit-name-err').style.display = 'none';
+    document.getElementById('edit-pct-wrap').classList.remove('is-error');
+    document.getElementById('edit-pct-err').style.display = 'none';
+    document.getElementById('edit-input-pct').value = deduction.pct;
+    document.getElementById('edit-overlay').classList.add('open');
+    setTimeout(function() { document.getElementById('edit-input-name').focus(); }, 50);
+  }
+  function closeEditModal() {
+    document.getElementById('edit-overlay').classList.remove('open');
+  }
+  function saveEditDeduction() {
+    var nameInput = document.getElementById('edit-input-name');
+    var pctInput  = document.getElementById('edit-input-pct');
+    var nameErr   = document.getElementById('edit-name-err');
+    var pctErr    = document.getElementById('edit-pct-err');
+    var pctWrap   = document.getElementById('edit-pct-wrap');
+    var name = nameInput.value.trim();
+    var pct  = parseFloat(pctInput.value);
+    var valid = true;
+
+    if (!name) {
+      nameInput.classList.add('is-error');
+      nameErr.textContent = 'Deduction name is required.'; nameErr.style.display = 'block';
+      valid = false;
+    } else {
+      var nameLower = name.toLowerCase();
+      var duplicate = QUADRA_DEDUCTIONS.some(function(x) { return x.name.toLowerCase() === nameLower && x.id !== deduction.id; });
+      if (duplicate) {
+        nameInput.classList.add('is-error');
+        nameErr.textContent = 'A deduction with this name already exists.'; nameErr.style.display = 'block';
+        valid = false;
+      } else {
+        nameInput.classList.remove('is-error');
+        nameErr.style.display = 'none';
+      }
+    }
+    if (isNaN(pct) || pct <= 0 || pct > 100) {
+      pctWrap.classList.add('is-error');
+      pctErr.textContent = 'Enter a valid percentage between 0.01 and 100.'; pctErr.style.display = 'block';
+      valid = false;
+    } else {
+      pctWrap.classList.remove('is-error');
+      pctErr.style.display = 'none';
+    }
+    if (!valid) return;
+
+    deduction.name = name;
+    deduction.pct  = pct;
+    saveDeductions();
+    closeEditModal();
+    document.getElementById('bc-current').textContent = deduction.name;
+    document.title = 'QuadraNG — Deduction: ' + deduction.name;
+    renderHero();
+    QuadraToast.show('Deduction Updated', '"' + name + '" has been updated successfully.');
+  }
+
+  /* ── Delete modal ── */
+  function confirmDelete() {
+    document.getElementById('delete-deduction-title').textContent = deduction.name;
+    document.getElementById('delete-overlay').classList.add('open');
+  }
+  function closeDelete() {
+    document.getElementById('delete-overlay').classList.remove('open');
+  }
+  function executeDelete() {
+    var idx = QUADRA_DEDUCTIONS.findIndex(function(x) { return x.id === deduction.id; });
+    if (idx >= 0) QUADRA_DEDUCTIONS.splice(idx, 1);
+    saveDeductions();
+    closeDelete();
+    QuadraToast.show('Deduction Deleted', '"' + deduction.name + '" has been deleted.');
+    setTimeout(function() { window.location.href = 'payroll-deduction.html'; }, 1500);
+  }
+
+  /* ── Remove employee modal ── */
+  function confirmRemove(name) {
+    document.getElementById('remove-emp-name').textContent = name;
+    document.getElementById('remove-ded-name').textContent = deduction.name;
+    document.getElementById('remove-overlay').classList.add('open');
+  }
+  function closeRemove() { document.getElementById('remove-overlay').classList.remove('open'); }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeRemove(); closeDelete(); closeEditModal(); }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+  function exportEnrolled() {
+    if (typeof XLSX === 'undefined') { QuadraToast.show('Export Error', 'Excel library not loaded.'); return; }
+    if (!enrolled.length) { QuadraToast.show('Export', 'No employees to export.'); return; }
+    var PAID_BY_LABEL = { personal: 'Personal', company: 'Company', spouse: 'Spouse' };
+    var hdr = ['No', 'Employee Name', 'Badge ID', 'Department', 'Position', 'Paid By', 'Percentage'];
+    var rows = [hdr].concat(enrolled.map(function(e, i) {
+      var entry = (e.deductions || []).find(function(x) { return x.id === deduction.id; }) || {};
+      return [i + 1, e.name, e.badge, e.project, e.pos, PAID_BY_LABEL[entry.paidBy] || entry.paidBy || 'Personal', deduction.pct + '%'];
+    }));
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), deduction.name);
+    XLSX.writeFile(wb, 'Deduction - ' + deduction.name + '.xlsx');
+  }
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

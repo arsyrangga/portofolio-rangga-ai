@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Timesheet Approval — Employee Timesheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    .ts-weekend-row td { color: #9CA3AF; background: #F9FAFB; }
+    #view-tbody td { vertical-align: top; }
+    .table-wrap thead th { position: sticky; top: 0; z-index: 2; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="my-timesheet" data-active-sub="my-timesheet-approval"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="timesheet-approval.html">Timesheet Approval</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="#" id="bc-period-link">—</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bc-emp-name">—</span>
+  </div>
+
+  <main class="main-content">
+
+    <a class="back-link" id="backLink" href="timesheet-approval.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="backLinkText">Back to Timesheet Approval</span>
+    </a>
+
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="emp-cell">
+          <div class="emp-avatar" id="emp-avatar" style="width:40px;height:40px;font-size:15px;"></div>
+          <div>
+            <div class="page-title" id="page-title-name" style="font-size:18px;">—</div>
+            <div style="font-size:12px;color:#6B7280;" id="emp-sub">—</div>
+          </div>
+        </div>
+        <span class="tag" id="ts-status-tag"></span>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-outline" onclick="openExportTypeModal()">Export</button>
+      </div>
+    </div>
+
+    <div class="section-err muted" id="rejectionReasonNote" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 1.5L1.5 13.5h13L8 1.5z" stroke="#991B1B" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v3.5" stroke="#991B1B" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="11" r="0.7" fill="#991B1B"/></svg>
+      <div>
+        <div style="font-weight:600;">Rejected</div>
+        <div id="rejectionReasonText" style="margin-top:2px;"></div>
+      </div>
+    </div>
+
+    <div class="stat-row flex">
+      <div class="stat-card">
+        <div class="stat-label">Total Work Hours</div>
+        <div class="stat-value" id="statTotalWork">0h 00m</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Days Worked</div>
+        <div class="stat-value" id="statHariKerja">0</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">Days Absent</div>
+        <div class="stat-value" id="statAbsent">0</div>
+        <div class="stat-sub" id="statAbsentSub">—</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Total Hours</th>
+            <th>Project</th>
+            <th>Activity</th>
+          </tr>
+        </thead>
+        <tbody id="view-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- Export modals — identical flow to my-timesheet.html's self-service Export
+     (Timesheet/Report x xlsx/PDF), reading the viewed employee's data instead
+     of the logged-in user's own. Keep both copies in sync if this flow changes. -->
+<div class="modal-overlay" id="export-type-format-modal" onclick="if(event.target===this)closeExportTypeModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Export</span>
+      <button class="modal-close-btn" onclick="closeExportTypeModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Type</div>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="export-type" value="timesheet" checked><div class="radio-dot"></div><span>Timesheet</span></label>
+          <label class="radio-option"><input type="radio" name="export-type" value="report"><div class="radio-dot"></div><span>Report</span></label>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="field-label">Format</div>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="export-format" value="xlsx" checked><div class="radio-dot"></div><span>xlsx</span></label>
+          <label class="radio-option"><input type="radio" name="export-format" value="pdf"><div class="radio-dot"></div><span>PDF</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeExportTypeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmExportTypeFormat()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="export-report-signoff-modal" onclick="if(event.target===this)closeExportReportSignOffModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Export Report</span>
+      <button class="modal-close-btn" onclick="closeExportReportSignOffModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Reviewed By</div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" class="text-input" id="export-report-jabatan-pemeriksa" placeholder="Position" style="flex:1;" />
+          <input type="text" class="text-input" id="export-report-nama-pemeriksa" placeholder="Name" style="flex:1;" />
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="field-label">Approved By</div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" class="text-input" id="export-report-jabatan-disetujui" placeholder="Position" style="flex:1;" />
+          <input type="text" class="text-input" id="export-report-nama-menyetujui" placeholder="Name" style="flex:1;" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeExportReportSignOffModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmExportReportSignOff()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="export-report-modal" onclick="if(event.target===this)closeExportReportModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Export Report</span>
+      <button class="modal-close-btn" onclick="closeExportReportModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="field-label">Project</div>
+        <div class="select-w" id="export-report-project-select"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeExportReportModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmExportReportProject()">Export</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="timesheet-seed.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  var DEFAULT_TIMESHEET_TEMPLATE_B64 = 'UEsDBBQAAAAAAAAAAACkAYS4tQIAALUCAAAaAAAAeGwvX3JlbHMvd29ya2Jvb2sueG1sLnJlbHM8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCIgc3RhbmRhbG9uZT0ieWVzIj8+DQo8UmVsYXRpb25zaGlwcyB4bWxucz0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL3BhY2thZ2UvMjAwNi9yZWxhdGlvbnNoaXBzIj48UmVsYXRpb25zaGlwIElkPSJySWQxIiBUeXBlPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9yZWxhdGlvbnNoaXBzL3dvcmtzaGVldCIgVGFyZ2V0PSJ3b3Jrc2hlZXRzL3NoZWV0MS54bWwiLz48UmVsYXRpb25zaGlwIElkPSJySWQyIiBUeXBlPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9yZWxhdGlvbnNoaXBzL3RoZW1lIiBUYXJnZXQ9InRoZW1lL3RoZW1lMS54bWwiLz48UmVsYXRpb25zaGlwIElkPSJySWQzIiBUeXBlPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9yZWxhdGlvbnNoaXBzL3N0eWxlcyIgVGFyZ2V0PSJzdHlsZXMueG1sIi8+PFJlbGF0aW9uc2hpcCBJZD0icklkNCIgVHlwZT0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL29mZmljZURvY3VtZW50LzIwMDYvcmVsYXRpb25zaGlwcy9zaGVldE1ldGFkYXRhIiBUYXJnZXQ9Im1ldGFkYXRhLnhtbCIvPjwvUmVsYXRpb25zaGlwcz5QSwMEFAAAAAAAAAAAADAPiGveHQAA3h0AABMAAAB4bC90aGVtZS90aGVtZTEueG1sPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPGE6dGhlbWUgeG1sbnM6YT0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL2RyYXdpbmdtbC8yMDA2L21haW4iIG5hbWU9Ik9mZmljZSBUaGVtZSI+PGE6dGhlbWVFbGVtZW50cz48YTpjbHJTY2hlbWUgbmFtZT0iT2ZmaWNlIj48YTpkazE+PGE6c3lzQ2xyIHZhbD0id2luZG93VGV4dCIgbGFzdENscj0iMDAwMDAwIi8+PC9hOmRrMT48YTpsdDE+PGE6c3lzQ2xyIHZhbD0id2luZG93IiBsYXN0Q2xyPSJGRkZGRkYiLz48L2E6bHQxPjxhOmRrMj48YTpzcmdiQ2xyIHZhbD0iMUY0OTdEIi8+PC9hOmRrMj48YTpsdDI+PGE6c3JnYkNsciB2YWw9IkVFRUNFMSIvPjwvYTpsdDI+PGE6YWNjZW50MT48YTpzcmdiQ2xyIHZhbD0iNEY4MUJEIi8+PC9hOmFjY2VudDE+PGE6YWNjZW50Mj48YTpzcmdiQ2xyIHZhbD0iQzA1MDREIi8+PC9hOmFjY2VudDI+PGE6YWNjZW50Mz48YTpzcmdiQ2xyIHZhbD0iOUJCQjU5Ii8+PC9hOmFjY2VudDM+PGE6YWNjZW50ND48YTpzcmdiQ2xyIHZhbD0iODA2NEEyIi8+PC9hOmFjY2VudDQ+PGE6YWNjZW50NT48YTpzcmdiQ2xyIHZhbD0iNEJBQ0M2Ii8+PC9hOmFjY2VudDU+PGE6YWNjZW50Nj48YTpzcmdiQ2xyIHZhbD0iRjc5NjQ2Ii8+PC9hOmFjY2VudDY+PGE6aGxpbms+PGE6c3JnYkNsciB2YWw9IjAwMDBGRiIvPjwvYTpobGluaz48YTpmb2xIbGluaz48YTpzcmdiQ2xyIHZhbD0iODAwMDgwIi8+PC9hOmZvbEhsaW5rPjwvYTpjbHJTY2hlbWU+PGE6Zm9udFNjaGVtZSBuYW1lPSJPZmZpY2UiPjxhOm1ham9yRm9udD48YTpsYXRpbiB0eXBlZmFjZT0iQ2FtYnJpYSIvPjxhOmVhIHR5cGVmYWNlPSIiLz48YTpjcyB0eXBlZmFjZT0iIi8+PGE6Zm9udCBzY3JpcHQ9IkpwYW4iIHR5cGVmYWNlPSLvvK3vvLMg77yw44K044K344OD44KvIi8+PGE6Zm9udCBzY3JpcHQ9IkhhbmciIHR5cGVmYWNlPSLrp5HsnYAg6rOg65SVIi8+PGE6Zm9udCBzY3JpcHQ9IkhhbnMiIHR5cGVmYWNlPSLlrovkvZMiLz48YTpmb250IHNjcmlwdD0iSGFudCIgdHlwZWZhY2U9IuaWsOe0sOaYjumrlCIvPjxhOmZvbnQgc2NyaXB0PSJBcmFiIiB0eXBlZmFjZT0iVGltZXMgTmV3IFJvbWFuIi8+PGE6Zm9udCBzY3JpcHQ9IkhlYnIiIHR5cGVmYWNlPSJUaW1lcyBOZXcgUm9tYW4iLz48YTpmb250IHNjcmlwdD0iVGhhaSIgdHlwZWZhY2U9IlRhaG9tYSIvPjxhOmZvbnQgc2NyaXB0PSJFdGhpIiB0eXBlZmFjZT0iTnlhbGEiLz48YTpmb250IHNjcmlwdD0iQmVuZyIgdHlwZWZhY2U9IlZyaW5kYSIvPjxhOmZvbnQgc2NyaXB0PSJHdWpyIiB0eXBlZmFjZT0iU2hydXRpIi8+PGE6Zm9udCBzY3JpcHQ9IktobXIiIHR5cGVmYWNlPSJNb29sQm9yYW4iLz48YTpmb250IHNjcmlwdD0iS25kYSIgdHlwZWZhY2U9IlR1bmdhIi8+PGE6Zm9udCBzY3JpcHQ9Ikd1cnUiIHR5cGVmYWNlPSJSYWF2aSIvPjxhOmZvbnQgc2NyaXB0PSJDYW5zIiB0eXBlZmFjZT0iRXVwaGVtaWEiLz48YTpmb250IHNjcmlwdD0iQ2hlciIgdHlwZWZhY2U9IlBsYW50YWdlbmV0IENoZXJva2VlIi8+PGE6Zm9udCBzY3JpcHQ9IllpaWkiIHR5cGVmYWNlPSJNaWNyb3NvZnQgWWkgQmFpdGkiLz48YTpmb250IHNjcmlwdD0iVGlidCIgdHlwZWZhY2U9Ik1pY3Jvc29mdCBIaW1hbGF5YSIvPjxhOmZvbnQgc2NyaXB0PSJUaGFhIiB0eXBlZmFjZT0iTVYgQm9saSIvPjxhOmZvbnQgc2NyaXB0PSJEZXZhIiB0eXBlZmFjZT0iTWFuZ2FsIi8+PGE6Zm9udCBzY3JpcHQ9IlRlbHUiIHR5cGVmYWNlPSJHYXV0YW1pIi8+PGE6Zm9udCBzY3JpcHQ9IlRhbWwiIHR5cGVmYWNlPSJMYXRoYSIvPjxhOmZvbnQgc2NyaXB0PSJTeXJjIiB0eXBlZmFjZT0iRXN0cmFuZ2VsbyBFZGVzc2EiLz48YTpmb250IHNjcmlwdD0iT3J5YSIgdHlwZWZhY2U9IkthbGluZ2EiLz48YTpmb250IHNjcmlwdD0iTWx5bSIgdHlwZWZhY2U9IkthcnRpa2EiLz48YTpmb250IHNjcmlwdD0iTGFvbyIgdHlwZWZhY2U9IkRva0NoYW1wYSIvPjxhOmZvbnQgc2NyaXB0PSJTaW5oIiB0eXBlZmFjZT0iSXNrb29sYSBQb3RhIi8+PGE6Zm9udCBzY3JpcHQ9Ik1vbmciIHR5cGVmYWNlPSJNb25nb2xpYW4gQmFpdGkiLz48YTpmb250IHNjcmlwdD0iVmlldCIgdHlwZWZhY2U9IlRpbWVzIE5ldyBSb21hbiIvPjxhOmZvbnQgc2NyaXB0PSJVaWdoIiB0eXBlZmFjZT0iTWljcm9zb2Z0IFVpZ2h1ciIvPjxhOmZvbnQgc2NyaXB0PSJHZW9yIiB0eXBlZmFjZT0iU3lsZmFlbiIvPjwvYTptYWpvckZvbnQ+PGE6bWlub3JGb250PjxhOmxhdGluIHR5cGVmYWNlPSJDYWxpYnJpIi8+PGE6ZWEgdHlwZWZhY2U9IiIvPjxhOmNzIHR5cGVmYWNlPSIiLz48YTpmb250IHNjcmlwdD0iSnBhbiIgdHlwZWZhY2U9Iu+8re+8syDvvLDjgrTjgrfjg4Pjgq8iLz48YTpmb250IHNjcmlwdD0iSGFuZyIgdHlwZWZhY2U9IuunkeydgCDqs6DrlJUiLz48YTpmb250IHNjcmlwdD0iSGFucyIgdHlwZWZhY2U9IuWui+S9kyIvPjxhOmZvbnQgc2NyaXB0PSJIYW50IiB0eXBlZmFjZT0i5paw57Sw5piO6auUIi8+PGE6Zm9udCBzY3JpcHQ9IkFyYWIiIHR5cGVmYWNlPSJBcmlhbCIvPjxhOmZvbnQgc2NyaXB0PSJIZWJyIiB0eXBlZmFjZT0iQXJpYWwiLz48YTpmb250IHNjcmlwdD0iVGhhaSIgdHlwZWZhY2U9IlRhaG9tYSIvPjxhOmZvbnQgc2NyaXB0PSJFdGhpIiB0eXBlZmFjZT0iTnlhbGEiLz48YTpmb250IHNjcmlwdD0iQmVuZyIgdHlwZWZhY2U9IlZyaW5kYSIvPjxhOmZvbnQgc2NyaXB0PSJHdWpyIiB0eXBlZmFjZT0iU2hydXRpIi8+PGE6Zm9udCBzY3JpcHQ9IktobXIiIHR5cGVmYWNlPSJEYXVuUGVuaCIvPjxhOmZvbnQgc2NyaXB0PSJLbmRhIiB0eXBlZmFjZT0iVHVuZ2EiLz48YTpmb250IHNjcmlwdD0iR3VydSIgdHlwZWZhY2U9IlJhYXZpIi8+PGE6Zm9udCBzY3JpcHQ9IkNhbnMiIHR5cGVmYWNlPSJFdXBoZW1pYSIvPjxhOmZvbnQgc2NyaXB0PSJDaGVyIiB0eXBlZmFjZT0iUGxhbnRhZ2VuZXQgQ2hlcm9rZWUiLz48YTpmb250IHNjcmlwdD0iWWlpaSIgdHlwZWZhY2U9Ik1pY3Jvc29mdCBZaSBCYWl0aSIvPjxhOmZvbnQgc2NyaXB0PSJUaWJ0IiB0eXBlZmFjZT0iTWljcm9zb2Z0IEhpbWFsYXlhIi8+PGE6Zm9udCBzY3JpcHQ9IlRoYWEiIHR5cGVmYWNlPSJNViBCb2xpIi8+PGE6Zm9udCBzY3JpcHQ9IkRldmEiIHR5cGVmYWNlPSJNYW5nYWwiLz48YTpmb250IHNjcmlwdD0iVGVsdSIgdHlwZWZhY2U9IkdhdXRhbWkiLz48YTpmb250IHNjcmlwdD0iVGFtbCIgdHlwZWZhY2U9IkxhdGhhIi8+PGE6Zm9udCBzY3JpcHQ9IlN5cmMiIHR5cGVmYWNlPSJFc3RyYW5nZWxvIEVkZXNzYSIvPjxhOmZvbnQgc2NyaXB0PSJPcnlhIiB0eXBlZmFjZT0iS2FsaW5nYSIvPjxhOmZvbnQgc2NyaXB0PSJNbHltIiB0eXBlZmFjZT0iS2FydGlrYSIvPjxhOmZvbnQgc2NyaXB0PSJMYW9vIiB0eXBlZmFjZT0iRG9rQ2hhbXBhIi8+PGE6Zm9udCBzY3JpcHQ9IlNpbmgiIHR5cGVmYWNlPSJJc2tvb2xhIFBvdGEiLz48YTpmb250IHNjcmlwdD0iTW9uZyIgdHlwZWZhY2U9Ik1vbmdvbGlhbiBCYWl0aSIvPjxhOmZvbnQgc2NyaXB0PSJWaWV0IiB0eXBlZmFjZT0iQXJpYWwiLz48YTpmb250IHNjcmlwdD0iVWlnaCIgdHlwZWZhY2U9Ik1pY3Jvc29mdCBVaWdodXIiLz48YTpmb250IHNjcmlwdD0iR2VvciIgdHlwZWZhY2U9IlN5bGZhZW4iLz48L2E6bWlub3JGb250PjwvYTpmb250U2NoZW1lPjxhOmZtdFNjaGVtZSBuYW1lPSJPZmZpY2UiPjxhOmZpbGxTdHlsZUxzdD48YTpzb2xpZEZpbGw+PGE6c2NoZW1lQ2xyIHZhbD0icGhDbHIiLz48L2E6c29saWRGaWxsPjxhOmdyYWRGaWxsIHJvdFdpdGhTaGFwZT0iMSI+PGE6Z3NMc3Q+PGE6Z3MgcG9zPSIwIj48YTpzY2hlbWVDbHIgdmFsPSJwaENsciI+PGE6dGludCB2YWw9IjUwMDAwIi8+PGE6c2F0TW9kIHZhbD0iMzAwMDAwIi8+PC9hOnNjaGVtZUNscj48L2E6Z3M+PGE6Z3MgcG9zPSIzNTAwMCI+PGE6c2NoZW1lQ2xyIHZhbD0icGhDbHIiPjxhOnRpbnQgdmFsPSIzNzAwMCIvPjxhOnNhdE1vZCB2YWw9IjMwMDAwMCIvPjwvYTpzY2hlbWVDbHI+PC9hOmdzPjxhOmdzIHBvcz0iMTAwMDAwIj48YTpzY2hlbWVDbHIgdmFsPSJwaENsciI+PGE6dGludCB2YWw9IjE1MDAwIi8+PGE6c2F0TW9kIHZhbD0iMzUwMDAwIi8+PC9hOnNjaGVtZUNscj48L2E6Z3M+PC9hOmdzTHN0PjxhOmxpbiBhbmc9IjE2MjAwMDAwIiBzY2FsZWQ9IjEiLz48L2E6Z3JhZEZpbGw+PGE6Z3JhZEZpbGwgcm90V2l0aFNoYXBlPSIxIj48YTpnc0xzdD48YTpncyBwb3M9IjAiPjxhOnNjaGVtZUNsciB2YWw9InBoQ2xyIj48YTp0aW50IHZhbD0iMTAwMDAwIi8+PGE6c2hhZGUgdmFsPSIxMDAwMDAiLz48YTpzYXRNb2QgdmFsPSIxMzAwMDAiLz48L2E6c2NoZW1lQ2xyPjwvYTpncz48YTpncyBwb3M9IjEwMDAwMCI+PGE6c2NoZW1lQ2xyIHZhbD0icGhDbHIiPjxhOnRpbnQgdmFsPSI1MDAwMCIvPjxhOnNoYWRlIHZhbD0iMTAwMDAwIi8+PGE6c2F0TW9kIHZhbD0iMzUwMDAwIi8+PC9hOnNjaGVtZUNscj48L2E6Z3M+PC9hOmdzTHN0PjxhOmxpbiBhbmc9IjE2MjAwMDAwIiBzY2FsZWQ9IjAiLz48L2E6Z3JhZEZpbGw+PC9hOmZpbGxTdHlsZUxzdD48YTpsblN0eWxlTHN0PjxhOmxuIHc9Ijk1MjUiIGNhcD0iZmxhdCIgY21wZD0ic25nIiBhbGduPSJjdHIiPjxhOnNvbGlkRmlsbD48YTpzY2hlbWVDbHIgdmFsPSJwaENsciI+PGE6c2hhZGUgdmFsPSI5NTAwMCIvPjxhOnNhdE1vZCB2YWw9IjEwNTAwMCIvPjwvYTpzY2hlbWVDbHI+PC9hOnNvbGlkRmlsbD48YTpwcnN0RGFzaCB2YWw9InNvbGlkIi8+PC9hOmxuPjxhOmxuIHc9IjI1NDAwIiBjYXA9ImZsYXQiIGNtcGQ9InNuZyIgYWxnbj0iY3RyIj48YTpzb2xpZEZpbGw+PGE6c2NoZW1lQ2xyIHZhbD0icGhDbHIiLz48L2E6c29saWRGaWxsPjxhOnByc3REYXNoIHZhbD0ic29saWQiLz48L2E6bG4+PGE6bG4gdz0iMzgxMDAiIGNhcD0iZmxhdCIgY21wZD0ic25nIiBhbGduPSJjdHIiPjxhOnNvbGlkRmlsbD48YTpzY2hlbWVDbHIgdmFsPSJwaENsciIvPjwvYTpzb2xpZEZpbGw+PGE6cHJzdERhc2ggdmFsPSJzb2xpZCIvPjwvYTpsbj48L2E6bG5TdHlsZUxzdD48YTplZmZlY3RTdHlsZUxzdD48YTplZmZlY3RTdHlsZT48YTplZmZlY3RMc3Q+PGE6b3V0ZXJTaGR3IGJsdXJSYWQ9IjQwMDAwIiBkaXN0PSIyMDAwMCIgZGlyPSI1NDAwMDAwIiByb3RXaXRoU2hhcGU9IjAiPjxhOnNyZ2JDbHIgdmFsPSIwMDAwMDAiPjxhOmFscGhhIHZhbD0iMzgwMDAiLz48L2E6c3JnYkNscj48L2E6b3V0ZXJTaGR3PjwvYTplZmZlY3RMc3Q+PC9hOmVmZmVjdFN0eWxlPjxhOmVmZmVjdFN0eWxlPjxhOmVmZmVjdExzdD48YTpvdXRlclNoZHcgYmx1clJhZD0iNDAwMDAiIGRpc3Q9IjIzMDAwIiBkaXI9IjU0MDAwMDAiIHJvdFdpdGhTaGFwZT0iMCI+PGE6c3JnYkNsciB2YWw9IjAwMDAwMCI+PGE6YWxwaGEgdmFsPSIzNTAwMCIvPjwvYTpzcmdiQ2xyPjwvYTpvdXRlclNoZHc+PC9hOmVmZmVjdExzdD48L2E6ZWZmZWN0U3R5bGU+PGE6ZWZmZWN0U3R5bGU+PGE6ZWZmZWN0THN0PjxhOm91dGVyU2hkdyBibHVyUmFkPSI0MDAwMCIgZGlzdD0iMjMwMDAiIGRpcj0iNTQwMDAwMCIgcm90V2l0aFNoYXBlPSIwIj48YTpzcmdiQ2xyIHZhbD0iMDAwMDAwIj48YTphbHBoYSB2YWw9IjM1MDAwIi8+PC9hOnNyZ2JDbHI+PC9hOm91dGVyU2hkdz48L2E6ZWZmZWN0THN0PjxhOnNjZW5lM2Q+PGE6Y2FtZXJhIHByc3Q9Im9ydGhvZ3JhcGhpY0Zyb250Ij48YTpyb3QgbGF0PSIwIiBsb249IjAiIHJldj0iMCIvPjwvYTpjYW1lcmE+PGE6bGlnaHRSaWcgcmlnPSJ0aHJlZVB0IiBkaXI9InQiPjxhOnJvdCBsYXQ9IjAiIGxvbj0iMCIgcmV2PSIxMjAwMDAwIi8+PC9hOmxpZ2h0UmlnPjwvYTpzY2VuZTNkPjxhOnNwM2Q+PGE6YmV2ZWxUIHc9IjYzNTAwIiBoPSIyNTQwMCIvPjwvYTpzcDNkPjwvYTplZmZlY3RTdHlsZT48L2E6ZWZmZWN0U3R5bGVMc3Q+PGE6YmdGaWxsU3R5bGVMc3Q+PGE6c29saWRGaWxsPjxhOnNjaGVtZUNsciB2YWw9InBoQ2xyIi8+PC9hOnNvbGlkRmlsbD48YTpncmFkRmlsbCByb3RXaXRoU2hhcGU9IjEiPjxhOmdzTHN0PjxhOmdzIHBvcz0iMCI+PGE6c2NoZW1lQ2xyIHZhbD0icGhDbHIiPjxhOnRpbnQgdmFsPSI0MDAwMCIvPjxhOnNhdE1vZCB2YWw9IjM1MDAwMCIvPjwvYTpzY2hlbWVDbHI+PC9hOmdzPjxhOmdzIHBvcz0iNDAwMDAiPjxhOnNjaGVtZUNsciB2YWw9InBoQ2xyIj48YTp0aW50IHZhbD0iNDUwMDAiLz48YTpzaGFkZSB2YWw9Ijk5MDAwIi8+PGE6c2F0TW9kIHZhbD0iMzUwMDAwIi8+PC9hOnNjaGVtZUNscj48L2E6Z3M+PGE6Z3MgcG9zPSIxMDAwMDAiPjxhOnNjaGVtZUNsciB2YWw9InBoQ2xyIj48YTpzaGFkZSB2YWw9IjIwMDAwIi8+PGE6c2F0TW9kIHZhbD0iMjU1MDAwIi8+PC9hOnNjaGVtZUNscj48L2E6Z3M+PC9hOmdzTHN0PjxhOnBhdGggcGF0aD0iY2lyY2xlIj48YTpmaWxsVG9SZWN0IGw9IjUwMDAwIiB0PSItODAwMDAiIHI9IjUwMDAwIiBiPSIxODAwMDAiLz48L2E6cGF0aD48L2E6Z3JhZEZpbGw+PGE6Z3JhZEZpbGwgcm90V2l0aFNoYXBlPSIxIj48YTpnc0xzdD48YTpncyBwb3M9IjAiPjxhOnNjaGVtZUNsciB2YWw9InBoQ2xyIj48YTp0aW50IHZhbD0iODAwMDAiLz48YTpzYXRNb2QgdmFsPSIzMDAwMDAiLz48L2E6c2NoZW1lQ2xyPjwvYTpncz48YTpncyBwb3M9IjEwMDAwMCI+PGE6c2NoZW1lQ2xyIHZhbD0icGhDbHIiPjxhOnNoYWRlIHZhbD0iMzAwMDAiLz48YTpzYXRNb2QgdmFsPSIyMDAwMDAiLz48L2E6c2NoZW1lQ2xyPjwvYTpncz48L2E6Z3NMc3Q+PGE6cGF0aCBwYXRoPSJjaXJjbGUiPjxhOmZpbGxUb1JlY3QgbD0iNTAwMDAiIHQ9IjUwMDAwIiByPSI1MDAwMCIgYj0iNTAwMDAiLz48L2E6cGF0aD48L2E6Z3JhZEZpbGw+PC9hOmJnRmlsbFN0eWxlTHN0PjwvYTpmbXRTY2hlbWU+PC9hOnRoZW1lRWxlbWVudHM+PGE6b2JqZWN0RGVmYXVsdHM+PGE6c3BEZWY+PGE6c3BQci8+PGE6Ym9keVByLz48YTpsc3RTdHlsZS8+PGE6c3R5bGU+PGE6bG5SZWYgaWR4PSIxIj48YTpzY2hlbWVDbHIgdmFsPSJhY2NlbnQxIi8+PC9hOmxuUmVmPjxhOmZpbGxSZWYgaWR4PSIzIj48YTpzY2hlbWVDbHIgdmFsPSJhY2NlbnQxIi8+PC9hOmZpbGxSZWY+PGE6ZWZmZWN0UmVmIGlkeD0iMiI+PGE6c2NoZW1lQ2xyIHZhbD0iYWNjZW50MSIvPjwvYTplZmZlY3RSZWY+PGE6Zm9udFJlZiBpZHg9Im1pbm9yIj48YTpzY2hlbWVDbHIgdmFsPSJsdDEiLz48L2E6Zm9udFJlZj48L2E6c3R5bGU+PC9hOnNwRGVmPjxhOmxuRGVmPjxhOnNwUHIvPjxhOmJvZHlQci8+PGE6bHN0U3R5bGUvPjxhOnN0eWxlPjxhOmxuUmVmIGlkeD0iMiI+PGE6c2NoZW1lQ2xyIHZhbD0iYWNjZW50MSIvPjwvYTpsblJlZj48YTpmaWxsUmVmIGlkeD0iMCI+PGE6c2NoZW1lQ2xyIHZhbD0iYWNjZW50MSIvPjwvYTpmaWxsUmVmPjxhOmVmZmVjdFJlZiBpZHg9IjEiPjxhOnNjaGVtZUNsciB2YWw9ImFjY2VudDEiLz48L2E6ZWZmZWN0UmVmPjxhOmZvbnRSZWYgaWR4PSJtaW5vciI+PGE6c2NoZW1lQ2xyIHZhbD0idHgxIi8+PC9hOmZvbnRSZWY+PC9hOnN0eWxlPjwvYTpsbkRlZj48L2E6b2JqZWN0RGVmYXVsdHM+PGE6ZXh0cmFDbHJTY2hlbWVMc3QvPjwvYTp0aGVtZT5QSwMEFAAAAAAAAAAAAFX0BJRaBAAAWgQAAA0AAAB4bC9zdHlsZXMueG1sPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPHN0eWxlU2hlZXQgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9zcHJlYWRzaGVldG1sLzIwMDYvbWFpbiIgeG1sbnM6dnQ9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9vZmZpY2VEb2N1bWVudC8yMDA2L2RvY1Byb3BzVlR5cGVzIj48bnVtRm10cyBjb3VudD0iMSI+PG51bUZtdCBudW1GbXRJZD0iNTYiIGZvcm1hdENvZGU9IiZxdW90O+S4iuWNiC/kuIvljYggJnF1b3Q7aGgmcXVvdDvmmYImcXVvdDttbSZxdW90O+WIhiZxdW90O3NzJnF1b3Q756eSICZxdW90OyIvPjwvbnVtRm10cz48Zm9udHMgY291bnQ9IjEiPjxmb250PjxzeiB2YWw9IjEyIi8+PGNvbG9yIHRoZW1lPSIxIi8+PG5hbWUgdmFsPSJDYWxpYnJpIi8+PGZhbWlseSB2YWw9IjIiLz48c2NoZW1lIHZhbD0ibWlub3IiLz48L2ZvbnQ+PC9mb250cz48ZmlsbHMgY291bnQ9IjIiPjxmaWxsPjxwYXR0ZXJuRmlsbCBwYXR0ZXJuVHlwZT0ibm9uZSIvPjwvZmlsbD48ZmlsbD48cGF0dGVybkZpbGwgcGF0dGVyblR5cGU9ImdyYXkxMjUiLz48L2ZpbGw+PC9maWxscz48Ym9yZGVycyBjb3VudD0iMSI+PGJvcmRlcj48bGVmdC8+PHJpZ2h0Lz48dG9wLz48Ym90dG9tLz48ZGlhZ29uYWwvPjwvYm9yZGVyPjwvYm9yZGVycz48Y2VsbFN0eWxlWGZzIGNvdW50PSIxIj48eGYgbnVtRm10SWQ9IjAiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIvPjwvY2VsbFN0eWxlWGZzPjxjZWxsWGZzIGNvdW50PSIxIj48eGYgbnVtRm10SWQ9IjAiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiLz48L2NlbGxYZnM+PGNlbGxTdHlsZXMgY291bnQ9IjEiPjxjZWxsU3R5bGUgbmFtZT0iTm9ybWFsIiB4ZklkPSIwIiBidWlsdGluSWQ9IjAiLz48L2NlbGxTdHlsZXM+PGR4ZnMgY291bnQ9IjAiLz48dGFibGVTdHlsZXMgY291bnQ9IjAiIGRlZmF1bHRUYWJsZVN0eWxlPSJUYWJsZVN0eWxlTWVkaXVtOSIgZGVmYXVsdFBpdm90U3R5bGU9IlBpdm90U3R5bGVNZWRpdW00Ii8+PC9zdHlsZVNoZWV0PlBLAwQUAAAAAAAAAAAA9Lkjltg/AADYPwAAGAAAAHhsL3dvcmtzaGVldHMvc2hlZXQxLnhtbDw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4NCjx3b3Jrc2hlZXQgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9zcHJlYWRzaGVldG1sLzIwMDYvbWFpbiIgeG1sbnM6cj0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL29mZmljZURvY3VtZW50LzIwMDYvcmVsYXRpb25zaGlwcyI+PGRpbWVuc2lvbiByZWY9IkExOks0OSIvPjxzaGVldFZpZXdzPjxzaGVldFZpZXcgd29ya2Jvb2tWaWV3SWQ9IjAiLz48L3NoZWV0Vmlld3M+PHNoZWV0RGF0YT48cm93IHI9IjEiPjxjIHI9IkExIiB0PSJzdHIiPjx2PlRJTUVTSEVFVDwvdj48L2M+PC9yb3c+PHJvdyByPSIzIj48YyByPSJBMyIgdD0ic3RyIj48dj5OYW1lPC92PjwvYz48YyByPSJCMyIgdD0ic3RyIj48dj5bTmFtYUxlbmdrYXBdPC92PjwvYz48L3Jvdz48cm93IHI9IjQiPjxjIHI9IkE0IiB0PSJzdHIiPjx2Pk5JUDwvdj48L2M+PGMgcj0iQjQiIHQ9InN0ciI+PHY+W05JUF08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iNSI+PGMgcj0iQTUiIHQ9InN0ciI+PHY+UHJvamVjdDwvdj48L2M+PGMgcj0iQjUiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PC9yb3c+PHJvdyByPSI2Ij48YyByPSJBNiIgdD0ic3RyIj48dj5DbGllbnQ8L3Y+PC9jPjxjIHI9IkI2IiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PC9yb3c+PHJvdyByPSI3Ij48YyByPSJBNyIgdD0ic3RyIj48dj5QZXJpb2Q8L3Y+PC9jPjxjIHI9IkI3IiB0PSJzdHIiPjx2PltQZXJpb2RlTXVsYWldIC0gW1BlcmlvZGVBa2hpcl08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iOSI+PGMgcj0iQTkiIHQ9InN0ciI+PHY+Tm88L3Y+PC9jPjxjIHI9IkI5IiB0PSJzdHIiPjx2PkRhdGU8L3Y+PC9jPjxjIHI9IkM5IiB0PSJzdHIiPjx2PlN0YXJ0IEF0PC92PjwvYz48YyByPSJEOSIgdD0ic3RyIj48dj5FbmQgQXQ8L3Y+PC9jPjxjIHI9IkU5IiB0PSJzdHIiPjx2PkNsaWVudDwvdj48L2M+PGMgcj0iRjkiIHQ9InN0ciI+PHY+UHJvamVjdDwvdj48L2M+PGMgcj0iRzkiIHQ9InN0ciI+PHY+VHlwZTwvdj48L2M+PGMgcj0iSDkiIHQ9InN0ciI+PHY+TG9jYXRpb248L3Y+PC9jPjxjIHI9Ikk5IiB0PSJzdHIiPjx2PlNraWxsczwvdj48L2M+PGMgcj0iSjkiIHQ9InN0ciI+PHY+RHVyYXRpb248L3Y+PC9jPjxjIHI9Iks5IiB0PSJzdHIiPjx2PkRlc2NyaXB0aW9uPC92PjwvYz48L3Jvdz48cm93IHI9IjEwIj48YyByPSJBMTAiPjx2PjE8L3Y+PC9jPjxjIHI9IkIxMCIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxMCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxMCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTAiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTAiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzEwIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDEwIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxMCIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjEwIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxMCIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjExIj48YyByPSJBMTEiPjx2PjI8L3Y+PC9jPjxjIHI9IkIxMSIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxMSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxMSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTEiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTEiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzExIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDExIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxMSIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjExIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxMSIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjEyIj48YyByPSJBMTIiPjx2PjM8L3Y+PC9jPjxjIHI9IkIxMiIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxMiIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxMiIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTIiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTIiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzEyIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDEyIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxMiIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjEyIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxMiIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjEzIj48YyByPSJBMTMiPjx2PjQ8L3Y+PC9jPjxjIHI9IkIxMyIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxMyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxMyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTMiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTMiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzEzIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDEzIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxMyIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjEzIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxMyIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjE0Ij48YyByPSJBMTQiPjx2PjU8L3Y+PC9jPjxjIHI9IkIxNCIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxNCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxNCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTQiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTQiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzE0IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDE0IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxNCIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjE0IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxNCIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjE1Ij48YyByPSJBMTUiPjx2PjY8L3Y+PC9jPjxjIHI9IkIxNSIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxNSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxNSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTUiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTUiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzE1IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDE1IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxNSIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjE1IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxNSIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjE2Ij48YyByPSJBMTYiPjx2Pjc8L3Y+PC9jPjxjIHI9IkIxNiIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxNiIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxNiIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTYiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTYiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzE2IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDE2IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxNiIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjE2IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxNiIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjE3Ij48YyByPSJBMTciPjx2Pjg8L3Y+PC9jPjxjIHI9IkIxNyIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxNyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxNyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTciIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTciIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzE3IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDE3IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxNyIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjE3IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxNyIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjE4Ij48YyByPSJBMTgiPjx2Pjk8L3Y+PC9jPjxjIHI9IkIxOCIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMxOCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQxOCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMTgiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMTgiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzE4IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDE4IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkxOCIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjE4IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksxOCIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjE5Ij48YyByPSJBMTkiPjx2PjEwPC92PjwvYz48YyByPSJCMTkiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMTkiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMTkiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTE5IiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjE5IiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkcxOSIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgxOSIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMTkiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkoxOSIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMTkiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIyMCI+PGMgcj0iQTIwIj48dj4xMTwvdj48L2M+PGMgcj0iQjIwIiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzIwIiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDIwIiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUyMCIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYyMCIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMjAiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMjAiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTIwIiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMjAiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzIwIiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMjEiPjxjIHI9IkEyMSI+PHY+MTI8L3Y+PC9jPjxjIHI9IkIyMSIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMyMSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQyMSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMjEiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMjEiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzIxIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDIxIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkyMSIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjIxIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksyMSIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjIyIj48YyByPSJBMjIiPjx2PjEzPC92PjwvYz48YyByPSJCMjIiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMjIiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMjIiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTIyIiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjIyIiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkcyMiIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgyMiIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMjIiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkoyMiIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMjIiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIyMyI+PGMgcj0iQTIzIj48dj4xNDwvdj48L2M+PGMgcj0iQjIzIiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzIzIiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDIzIiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUyMyIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYyMyIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMjMiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMjMiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTIzIiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMjMiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzIzIiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMjQiPjxjIHI9IkEyNCI+PHY+MTU8L3Y+PC9jPjxjIHI9IkIyNCIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMyNCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQyNCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMjQiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMjQiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzI0IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDI0IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkyNCIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjI0IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksyNCIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjI1Ij48YyByPSJBMjUiPjx2PjE2PC92PjwvYz48YyByPSJCMjUiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMjUiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMjUiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTI1IiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjI1IiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkcyNSIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgyNSIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMjUiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkoyNSIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMjUiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIyNiI+PGMgcj0iQTI2Ij48dj4xNzwvdj48L2M+PGMgcj0iQjI2IiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzI2IiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDI2IiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUyNiIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYyNiIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMjYiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMjYiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTI2IiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMjYiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzI2IiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMjciPjxjIHI9IkEyNyI+PHY+MTg8L3Y+PC9jPjxjIHI9IkIyNyIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMyNyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQyNyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMjciIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMjciIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzI3IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDI3IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkyNyIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjI3IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IksyNyIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjI4Ij48YyByPSJBMjgiPjx2PjE5PC92PjwvYz48YyByPSJCMjgiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMjgiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMjgiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTI4IiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjI4IiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkcyOCIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgyOCIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMjgiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkoyOCIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMjgiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIyOSI+PGMgcj0iQTI5Ij48dj4yMDwvdj48L2M+PGMgcj0iQjI5IiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzI5IiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDI5IiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUyOSIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYyOSIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMjkiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMjkiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTI5IiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMjkiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzI5IiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMzAiPjxjIHI9IkEzMCI+PHY+MjE8L3Y+PC9jPjxjIHI9IkIzMCIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMzMCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQzMCIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMzAiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMzAiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzMwIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDMwIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkzMCIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjMwIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IkszMCIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjMxIj48YyByPSJBMzEiPjx2PjIyPC92PjwvYz48YyByPSJCMzEiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMzEiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMzEiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTMxIiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjMxIiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkczMSIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgzMSIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMzEiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkozMSIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMzEiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIzMiI+PGMgcj0iQTMyIj48dj4yMzwvdj48L2M+PGMgcj0iQjMyIiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzMyIiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDMyIiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUzMiIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYzMiIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMzIiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMzIiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTMyIiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMzIiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzMyIiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMzMiPjxjIHI9IkEzMyI+PHY+MjQ8L3Y+PC9jPjxjIHI9IkIzMyIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMzMyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQzMyIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMzMiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMzMiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzMzIiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDMzIiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkzMyIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjMzIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IkszMyIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjM0Ij48YyByPSJBMzQiPjx2PjI1PC92PjwvYz48YyByPSJCMzQiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMzQiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMzQiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTM0IiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjM0IiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkczNCIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgzNCIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMzQiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkozNCIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMzQiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIzNSI+PGMgcj0iQTM1Ij48dj4yNjwvdj48L2M+PGMgcj0iQjM1IiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzM1IiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDM1IiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUzNSIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYzNSIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMzUiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMzUiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTM1IiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMzUiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzM1IiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMzYiPjxjIHI9IkEzNiI+PHY+Mjc8L3Y+PC9jPjxjIHI9IkIzNiIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMzNiIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQzNiIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMzYiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMzYiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzM2IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDM2IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkzNiIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjM2IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IkszNiIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjM3Ij48YyByPSJBMzciPjx2PjI4PC92PjwvYz48YyByPSJCMzciIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDMzciIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJEMzciIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTM3IiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjM3IiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9IkczNyIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9IkgzNyIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJMzciIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9IkozNyIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLMzciIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSIzOCI+PGMgcj0iQTM4Ij48dj4yOTwvdj48L2M+PGMgcj0iQjM4IiB0PSJzdHIiPjx2PltEYXRlXTwvdj48L2M+PGMgcj0iQzM4IiB0PSJzdHIiPjx2PltXb3JraW5nSG91clN0YXJ0XTwvdj48L2M+PGMgcj0iRDM4IiB0PSJzdHIiPjx2PltXb3JraW5nSG91ckVuZF08L3Y+PC9jPjxjIHI9IkUzOCIgdD0ic3RyIj48dj5bQ2xpZW50TmFtZV08L3Y+PC9jPjxjIHI9IkYzOCIgdD0ic3RyIj48dj5bUHJvamVjdE5hbWVdPC92PjwvYz48YyByPSJHMzgiIHQ9InN0ciI+PHY+W1R5cGVdPC92PjwvYz48YyByPSJIMzgiIHQ9InN0ciI+PHY+W0xvY2F0aW9uXTwvdj48L2M+PGMgcj0iSTM4IiB0PSJzdHIiPjx2PltTa2lsbHNdPC92PjwvYz48YyByPSJKMzgiIHQ9InN0ciI+PHY+W1RvdGFsSG91cnBlcmJhcmlzXTwvdj48L2M+PGMgcj0iSzM4IiB0PSJzdHIiPjx2PltBY3Rpdml0eV08L3Y+PC9jPjwvcm93Pjxyb3cgcj0iMzkiPjxjIHI9IkEzOSI+PHY+MzA8L3Y+PC9jPjxjIHI9IkIzOSIgdD0ic3RyIj48dj5bRGF0ZV08L3Y+PC9jPjxjIHI9IkMzOSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJTdGFydF08L3Y+PC9jPjxjIHI9IkQzOSIgdD0ic3RyIj48dj5bV29ya2luZ0hvdXJFbmRdPC92PjwvYz48YyByPSJFMzkiIHQ9InN0ciI+PHY+W0NsaWVudE5hbWVdPC92PjwvYz48YyByPSJGMzkiIHQ9InN0ciI+PHY+W1Byb2plY3ROYW1lXTwvdj48L2M+PGMgcj0iRzM5IiB0PSJzdHIiPjx2PltUeXBlXTwvdj48L2M+PGMgcj0iSDM5IiB0PSJzdHIiPjx2PltMb2NhdGlvbl08L3Y+PC9jPjxjIHI9IkkzOSIgdD0ic3RyIj48dj5bU2tpbGxzXTwvdj48L2M+PGMgcj0iSjM5IiB0PSJzdHIiPjx2PltUb3RhbEhvdXJwZXJiYXJpc108L3Y+PC9jPjxjIHI9IkszOSIgdD0ic3RyIj48dj5bQWN0aXZpdHldPC92PjwvYz48L3Jvdz48cm93IHI9IjQwIj48YyByPSJBNDAiPjx2PjMxPC92PjwvYz48YyByPSJCNDAiIHQ9InN0ciI+PHY+W0RhdGVdPC92PjwvYz48YyByPSJDNDAiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyU3RhcnRdPC92PjwvYz48YyByPSJENDAiIHQ9InN0ciI+PHY+W1dvcmtpbmdIb3VyRW5kXTwvdj48L2M+PGMgcj0iRTQwIiB0PSJzdHIiPjx2PltDbGllbnROYW1lXTwvdj48L2M+PGMgcj0iRjQwIiB0PSJzdHIiPjx2PltQcm9qZWN0TmFtZV08L3Y+PC9jPjxjIHI9Ikc0MCIgdD0ic3RyIj48dj5bVHlwZV08L3Y+PC9jPjxjIHI9Ikg0MCIgdD0ic3RyIj48dj5bTG9jYXRpb25dPC92PjwvYz48YyByPSJJNDAiIHQ9InN0ciI+PHY+W1NraWxsc108L3Y+PC9jPjxjIHI9Iko0MCIgdD0ic3RyIj48dj5bVG90YWxIb3VycGVyYmFyaXNdPC92PjwvYz48YyByPSJLNDAiIHQ9InN0ciI+PHY+W0FjdGl2aXR5XTwvdj48L2M+PC9yb3c+PHJvdyByPSI0MiI+PGMgcj0iQTQyIiB0PSJzdHIiPjx2PlRvdGFsIFdvcmtpbmcgRGF5czwvdj48L2M+PGMgcj0iQjQyIiB0PSJzdHIiPjx2PltKdW1sYWhIYXJpS2VyamFdPC92PjwvYz48YyByPSJDNDIiIHQ9InN0ciI+PHY+VG90YWwgV29ya2luZyBIb3Vyczwvdj48L2M+PGMgcj0iRDQyIiB0PSJzdHIiPjx2PltUb3RhbEhvdXJdPC92PjwvYz48L3Jvdz48cm93IHI9IjQ0Ij48YyByPSJBNDQiIHQ9InN0ciI+PHY+Tm90ZXMgLyBEZXNjcmlwdGlvbjo8L3Y+PC9jPjwvcm93Pjxyb3cgcj0iNDUiPjxjIHI9IkE0NSIgdD0ic3RyIj48dj5bRGVza3JpcHNpXTwvdj48L2M+PC9yb3c+PHJvdyByPSI0NyI+PGMgcj0iQTQ3IiB0PSJzdHIiPjx2PlJldmlld2VkIGJ5Ojwvdj48L2M+PGMgcj0iQjQ3IiB0PSJzdHIiPjx2Pjwvdj48L2M+PGMgcj0iQzQ3IiB0PSJzdHIiPjx2PkFwcHJvdmVkIGJ5Ojwvdj48L2M+PC9yb3c+PHJvdyByPSI0OCI+PGMgcj0iQTQ4IiB0PSJzdHIiPjx2PltKYWJhdGFuUGVtZXJpa3NhXTwvdj48L2M+PGMgcj0iQjQ4IiB0PSJzdHIiPjx2Pjwvdj48L2M+PGMgcj0iQzQ4IiB0PSJzdHIiPjx2PltKYWJhdGFuRGlzZXR1anVpXTwvdj48L2M+PC9yb3c+PHJvdyByPSI0OSI+PGMgcj0iQTQ5IiB0PSJzdHIiPjx2PltOYW1hUGVtZXJpa3NhXTwvdj48L2M+PGMgcj0iQjQ5IiB0PSJzdHIiPjx2Pjwvdj48L2M+PGMgcj0iQzQ5IiB0PSJzdHIiPjx2PltOYW1hTWVueWV0dWp1aV08L3Y+PC9jPjwvcm93Pjwvc2hlZXREYXRhPjxpZ25vcmVkRXJyb3JzPjxpZ25vcmVkRXJyb3IgbnVtYmVyU3RvcmVkQXNUZXh0PSIxIiBzcXJlZj0iQTE6SzQ5Ii8+PC9pZ25vcmVkRXJyb3JzPjwvd29ya3NoZWV0PlBLAwQUAAAAAAAAAAAAYIAAgYgDAACIAwAADwAAAHhsL21ldGFkYXRhLnhtbDw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4NCjxtZXRhZGF0YSB4bWxucz0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL3NwcmVhZHNoZWV0bWwvMjAwNi9tYWluIiB4bWxuczp4bHJkPSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL29mZmljZS9zcHJlYWRzaGVldG1sLzIwMTcvcmljaGRhdGEiIHhtbG5zOnhkYT0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9vZmZpY2Uvc3ByZWFkc2hlZXRtbC8yMDE3L2R5bmFtaWNhcnJheSI+CiAgPG1ldGFkYXRhVHlwZXMgY291bnQ9IjEiPgogICAgPG1ldGFkYXRhVHlwZSBuYW1lPSJYTERBUFIiIG1pblN1cHBvcnRlZFZlcnNpb249IjEyMDAwMCIgY29weT0iMSIgcGFzdGVBbGw9IjEiIHBhc3RlVmFsdWVzPSIxIiBtZXJnZT0iMSIgc3BsaXRGaXJzdD0iMSIgcm93Q29sU2hpZnQ9IjEiIGNsZWFyRm9ybWF0cz0iMSIgY2xlYXJDb21tZW50cz0iMSIgYXNzaWduPSIxIiBjb2VyY2U9IjEiIGNlbGxNZXRhPSIxIi8+CiAgPC9tZXRhZGF0YVR5cGVzPgogIDxmdXR1cmVNZXRhZGF0YSBuYW1lPSJYTERBUFIiIGNvdW50PSIxIj4KICAgIDxiaz4KICAgICAgPGV4dExzdD4KICAgICAgICA8ZXh0IHVyaT0ie2JkYmI4Y2RjLWZhMWUtNDk2ZS1hODU3LTNjM2YzMGMwMjljM30iPgogICAgICAgICAgPHhkYTpkeW5hbWljQXJyYXlQcm9wZXJ0aWVzIGZEeW5hbWljPSIxIiBmQ29sbGFwc2VkPSIwIi8+CiAgICAgICAgPC9leHQ+CiAgICAgIDwvZXh0THN0PgogICAgPC9iaz4KICA8L2Z1dHVyZU1ldGFkYXRhPgogIDxjZWxsTWV0YWRhdGEgY291bnQ9IjEiPgogICAgPGJrPgogICAgICA8cmMgdD0iMSIgdj0iMCIvPgogICAgPC9iaz4KICA8L2NlbGxNZXRhZGF0YT4KPC9tZXRhZGF0YT5QSwMEFAAAAAAAAAAAAPgmGvBFAQAARQEAAA8AAAB4bC93b3JrYm9vay54bWw8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCIgc3RhbmRhbG9uZT0ieWVzIj8+DQo8d29ya2Jvb2sgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9zcHJlYWRzaGVldG1sLzIwMDYvbWFpbiIgeG1sbnM6cj0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL29mZmljZURvY3VtZW50LzIwMDYvcmVsYXRpb25zaGlwcyI+PHdvcmtib29rUHIgY29kZU5hbWU9IlRoaXNXb3JrYm9vayIvPjxzaGVldHM+PHNoZWV0IG5hbWU9IlRpbWVzaGVldCIgc2hlZXRJZD0iMSIgcjppZD0icklkMSIvPjwvc2hlZXRzPjwvd29ya2Jvb2s+UEsDBBQAAAAAAAAAAABKahH5TAIAAEwCAAALAAAAX3JlbHMvLnJlbHM8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCIgc3RhbmRhbG9uZT0ieWVzIj8+DQo8UmVsYXRpb25zaGlwcyB4bWxucz0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL3BhY2thZ2UvMjAwNi9yZWxhdGlvbnNoaXBzIj48UmVsYXRpb25zaGlwIElkPSJySWQyIiBUeXBlPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvcGFja2FnZS8yMDA2L3JlbGF0aW9uc2hpcHMvbWV0YWRhdGEvY29yZS1wcm9wZXJ0aWVzIiBUYXJnZXQ9ImRvY1Byb3BzL2NvcmUueG1sIi8+PFJlbGF0aW9uc2hpcCBJZD0icklkMyIgVHlwZT0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL29mZmljZURvY3VtZW50LzIwMDYvcmVsYXRpb25zaGlwcy9leHRlbmRlZC1wcm9wZXJ0aWVzIiBUYXJnZXQ9ImRvY1Byb3BzL2FwcC54bWwiLz48UmVsYXRpb25zaGlwIElkPSJySWQxIiBUeXBlPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9yZWxhdGlvbnNoaXBzL29mZmljZURvY3VtZW50IiBUYXJnZXQ9InhsL3dvcmtib29rLnhtbCIvPjwvUmVsYXRpb25zaGlwcz5QSwMEFAAAAAAAAAAAAAkYEeQ1AgAANQIAABAAAABkb2NQcm9wcy9hcHAueG1sPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPFByb3BlcnRpZXMgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9vZmZpY2VEb2N1bWVudC8yMDA2L2V4dGVuZGVkLXByb3BlcnRpZXMiIHhtbG5zOnZ0PSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9kb2NQcm9wc1ZUeXBlcyI+PEFwcGxpY2F0aW9uPlNoZWV0SlM8L0FwcGxpY2F0aW9uPjxIZWFkaW5nUGFpcnM+PHZ0OnZlY3RvciBzaXplPSIyIiBiYXNlVHlwZT0idmFyaWFudCI+PHZ0OnZhcmlhbnQ+PHZ0Omxwc3RyPldvcmtzaGVldHM8L3Z0Omxwc3RyPjwvdnQ6dmFyaWFudD48dnQ6dmFyaWFudD48dnQ6aTQ+MTwvdnQ6aTQ+PC92dDp2YXJpYW50PjwvdnQ6dmVjdG9yPjwvSGVhZGluZ1BhaXJzPjxUaXRsZXNPZlBhcnRzPjx2dDp2ZWN0b3Igc2l6ZT0iMSIgYmFzZVR5cGU9Imxwc3RyIj48dnQ6bHBzdHI+VGltZXNoZWV0PC92dDpscHN0cj48L3Z0OnZlY3Rvcj48L1RpdGxlc09mUGFydHM+PC9Qcm9wZXJ0aWVzPlBLAwQUAAAAAAAAAAAA1pJ8EVoBAABaAQAAEQAAAGRvY1Byb3BzL2NvcmUueG1sPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPGNwOmNvcmVQcm9wZXJ0aWVzIHhtbG5zOmNwPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvcGFja2FnZS8yMDA2L21ldGFkYXRhL2NvcmUtcHJvcGVydGllcyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpkY3Rlcm1zPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIvPlBLAwQUAAAAAAAAAAAAqNdqgBUIAAAVCAAAEwAAAFtDb250ZW50X1R5cGVzXS54bWw8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCIgc3RhbmRhbG9uZT0ieWVzIj8+DQo8VHlwZXMgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9wYWNrYWdlLzIwMDYvY29udGVudC10eXBlcyIgeG1sbnM6eHNkPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+PERlZmF1bHQgRXh0ZW5zaW9uPSJ4bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi94bWwiLz48RGVmYXVsdCBFeHRlbnNpb249ImJpbiIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5tcy1leGNlbC5zaGVldC5iaW5hcnkubWFjcm9FbmFibGVkLm1haW4iLz48RGVmYXVsdCBFeHRlbnNpb249InZtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC52bWxEcmF3aW5nIi8+PERlZmF1bHQgRXh0ZW5zaW9uPSJkYXRhIiBDb250ZW50VHlwZT0iYXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50Lm1vZGVsK2RhdGEiLz48RGVmYXVsdCBFeHRlbnNpb249ImJtcCIgQ29udGVudFR5cGU9ImltYWdlL2JtcCIvPjxEZWZhdWx0IEV4dGVuc2lvbj0icG5nIiBDb250ZW50VHlwZT0iaW1hZ2UvcG5nIi8+PERlZmF1bHQgRXh0ZW5zaW9uPSJnaWYiIENvbnRlbnRUeXBlPSJpbWFnZS9naWYiLz48RGVmYXVsdCBFeHRlbnNpb249ImVtZiIgQ29udGVudFR5cGU9ImltYWdlL3gtZW1mIi8+PERlZmF1bHQgRXh0ZW5zaW9uPSJ3bWYiIENvbnRlbnRUeXBlPSJpbWFnZS94LXdtZiIvPjxEZWZhdWx0IEV4dGVuc2lvbj0ianBnIiBDb250ZW50VHlwZT0iaW1hZ2UvanBlZyIvPjxEZWZhdWx0IEV4dGVuc2lvbj0ianBlZyIgQ29udGVudFR5cGU9ImltYWdlL2pwZWciLz48RGVmYXVsdCBFeHRlbnNpb249InRpZiIgQ29udGVudFR5cGU9ImltYWdlL3RpZmYiLz48RGVmYXVsdCBFeHRlbnNpb249InRpZmYiIENvbnRlbnRUeXBlPSJpbWFnZS90aWZmIi8+PERlZmF1bHQgRXh0ZW5zaW9uPSJwZGYiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi9wZGYiLz48RGVmYXVsdCBFeHRlbnNpb249InJlbHMiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi92bmQub3BlbnhtbGZvcm1hdHMtcGFja2FnZS5yZWxhdGlvbnNoaXBzK3htbCIvPjxPdmVycmlkZSBQYXJ0TmFtZT0iL3hsL3dvcmtib29rLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC5zcHJlYWRzaGVldG1sLnNoZWV0Lm1haW4reG1sIi8+PE92ZXJyaWRlIFBhcnROYW1lPSIveGwvd29ya3NoZWV0cy9zaGVldDEueG1sIiBDb250ZW50VHlwZT0iYXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LnNwcmVhZHNoZWV0bWwud29ya3NoZWV0K3htbCIvPjxPdmVycmlkZSBQYXJ0TmFtZT0iL3hsL3RoZW1lL3RoZW1lMS54bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi92bmQub3BlbnhtbGZvcm1hdHMtb2ZmaWNlZG9jdW1lbnQudGhlbWUreG1sIi8+PE92ZXJyaWRlIFBhcnROYW1lPSIveGwvc3R5bGVzLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC5zcHJlYWRzaGVldG1sLnN0eWxlcyt4bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii9kb2NQcm9wcy9jb3JlLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1wYWNrYWdlLmNvcmUtcHJvcGVydGllcyt4bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii9kb2NQcm9wcy9hcHAueG1sIiBDb250ZW50VHlwZT0iYXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LmV4dGVuZGVkLXByb3BlcnRpZXMreG1sIi8+PE92ZXJyaWRlIFBhcnROYW1lPSIveGwvbWV0YWRhdGEueG1sIiBDb250ZW50VHlwZT0iYXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LnNwcmVhZHNoZWV0bWwuc2hlZXRNZXRhZGF0YSt4bWwiLz48L1R5cGVzPlBLAQIAABQAAAAAAAAAAACkAYS4tQIAALUCAAAaAAAAAAAAAAAAAAAAAAAAAAB4bC9fcmVscy93b3JrYm9vay54bWwucmVsc1BLAQIAABQAAAAAAAAAAAAwD4hr3h0AAN4dAAATAAAAAAAAAAAAAAAAAO0CAAB4bC90aGVtZS90aGVtZTEueG1sUEsBAgAAFAAAAAAAAAAAAFX0BJRaBAAAWgQAAA0AAAAAAAAAAAAAAAAA/CAAAHhsL3N0eWxlcy54bWxQSwECAAAUAAAAAAAAAAAA9Lkjltg/AADYPwAAGAAAAAAAAAAAAAAAAACBJQAAeGwvd29ya3NoZWV0cy9zaGVldDEueG1sUEsBAgAAFAAAAAAAAAAAAGCAAIGIAwAAiAMAAA8AAAAAAAAAAAAAAAAAj2UAAHhsL21ldGFkYXRhLnhtbFBLAQIAABQAAAAAAAAAAAD4JhrwRQEAAEUBAAAPAAAAAAAAAAAAAAAAAERpAAB4bC93b3JrYm9vay54bWxQSwECAAAUAAAAAAAAAAAASmoR+UwCAABMAgAACwAAAAAAAAAAAAAAAAC2agAAX3JlbHMvLnJlbHNQSwECAAAUAAAAAAAAAAAACRgR5DUCAAA1AgAAEAAAAAAAAAAAAAAAAAArbQAAZG9jUHJvcHMvYXBwLnhtbFBLAQIAABQAAAAAAAAAAADWknwRWgEAAFoBAAARAAAAAAAAAAAAAAAAAI5vAABkb2NQcm9wcy9jb3JlLnhtbFBLAQIAABQAAAAAAAAAAACo12qAFQgAABUIAAATAAAAAAAAAAAAAAAAABdxAABbQ29udGVudF9UeXBlc10ueG1sUEsFBgAAAAAKAAoAewIAAF15AAAAAA==';
+
+  var MONTHS_LIST = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // dayStatus is stored/compared internally using these exact tokens (matching
+  // the external dictionary field names used by Export Report's templates,
+  // e.g. JumlahHariPegawaiIjin) — only the user-facing LABEL is English.
+  var STATUS_LABELS = { Kerja: 'Work', Ijin: 'Permission', Sakit: 'Sick', Cuti: 'Leave', Alfa: 'Absent' };
+
+  function pad2(n) { return n < 10 ? '0' + n : String(n); }
+  function periodKey(year, month) { return year + '-' + pad2(month + 1); }
+  function periodLabel(pk) {
+    var parts = pk.split('-');
+    return MONTHS_LIST[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+  }
+  function daysInMonth(year, month) { return new Date(year, month + 1, 0).getDate(); }
+  function isoDate(year, month, day) { return year + '-' + pad2(month + 1) + '-' + pad2(day); }
+  function formatDateDisplay(iso) {
+    var parts = iso.split('-').map(function(n) { return parseInt(n, 10); });
+    var d = new Date(parts[0], parts[1] - 1, parts[2]);
+    var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    return DOW[d.getDay()] + ', ' + parts[2] + ' ' + MONTHS_LIST[parts[1] - 1].slice(0, 3);
+  }
+
+  function timeDiffMinutes(fromVal, toVal) {
+    if (!fromVal || !toVal) return 0;
+    var fp = fromVal.split(':'), tp = toVal.split(':');
+    var fromMins = parseInt(fp[0], 10) * 60 + parseInt(fp[1], 10);
+    var toMins   = parseInt(tp[0], 10) * 60 + parseInt(tp[1], 10);
+    var diff = toMins - fromMins;
+    if (diff < 0) diff += 24 * 60;
+    return diff;
+  }
+  function formatHM(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60;
+    return h + 'h ' + pad2(m) + 'm';
+  }
+  function computeStats(days) {
+    var totalWorkMins = 0, hariKerja = 0;
+    var counts = { Ijin: 0, Sakit: 0, Cuti: 0, Alfa: 0 };
+    days.forEach(function(d) {
+      if (d.dayStatus === 'Kerja') {
+        hariKerja++;
+        totalWorkMins += timeDiffMinutes(d.workStart, d.workEnd);
+      } else if (counts.hasOwnProperty(d.dayStatus)) {
+        counts[d.dayStatus]++;
+      }
+    });
+    var absentTotal = counts.Ijin + counts.Sakit + counts.Cuti + counts.Alfa;
+    var breakdown = ['Ijin', 'Sakit', 'Cuti', 'Alfa'].filter(function(k) { return counts[k] > 0; })
+      .map(function(k) { return counts[k] + ' ' + STATUS_LABELS[k]; }).join(' · ');
+    if (!breakdown) breakdown = '—';
+    return { totalWorkMins: totalWorkMins, hariKerja: hariKerja, absentTotal: absentTotal, breakdown: breakdown, counts: counts };
+  }
+
+  // settings.html owns QUADRA_PROJECTS/QUADRA_PROJECTS_V — this page is only a
+  // consumer, same read-only-with-fallback-seed convention as my-timesheet.html.
+  var PROJECT_SEED_FALLBACK = [
+    { id: 1, name: 'NDS', clientId: 1 },
+    { id: 2, name: 'CRM', clientId: 1 },
+    { id: 3, name: 'Ops Console', clientId: 2 }
+  ];
+  function loadProjectsForTimesheet() {
+    if (localStorage.getItem('QUADRA_PROJECTS') === null) {
+      localStorage.setItem('QUADRA_PROJECTS', JSON.stringify(PROJECT_SEED_FALLBACK));
+      return PROJECT_SEED_FALLBACK.slice();
+    }
+    try { return JSON.parse(localStorage.getItem('QUADRA_PROJECTS')) || []; } catch (e) { return []; }
+  }
+  function loadClientsForTimesheet() {
+    try { return JSON.parse(localStorage.getItem('QUADRA_CLIENTS')) || []; } catch (e) { return []; }
+  }
+
+  function getEmp(badge) {
+    return QUADRA_EMPLOYEES.find(function(e) { return e.badge === badge; }) || null;
+  }
+
+  function getQueryParam(name) {
+    var m = new RegExp('[?&]' + name + '=([^&]+)').exec(window.location.search);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+
+  var currentBadge = getQueryParam('badge');
+  var PERIOD = (function() {
+    var raw = getQueryParam('period');
+    return (raw && /^\d{4}-(0[1-9]|1[0-2])$/.test(raw)) ? raw : null;
+  })();
+  var currentYear, currentMonth;
+  if (PERIOD) {
+    var pParts = PERIOD.split('-');
+    currentYear = parseInt(pParts[0], 10);
+    currentMonth = parseInt(pParts[1], 10) - 1;
+  }
+
+  function timesheetKey(badge, period) { return 'quadra_timesheet_' + badge + '_' + period; }
+
+  // Read-only lookup — unlike my-timesheet.html's loadTimesheet(), this never
+  // seeds a fresh Draft when nothing is found, since a View action only ever
+  // links here from a period/badge combo that's already known (from
+  // timesheet-approval-detail.html's getAllEntries()) to have a real record.
+  function loadTimesheetFor(badge, period) {
+    try {
+      var raw = localStorage.getItem(timesheetKey(badge, period));
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (data.days) data.days = data.days.map(timesheetNormalizeDay);
+      return data;
+    } catch (e) { return null; }
+  }
+
+  var STATUS_TAG   = { Submitted: 'tag tag-warning', Approved: 'tag tag-success', Rejected: 'tag tag-danger' };
+  var STATUS_LABEL = { Submitted: 'Submitted', Approved: 'Approved', Rejected: 'Rejected' };
+
+  var currentData = null;
+
+  function buildViewRows(d) {
+    if (d.dayStatus === 'Weekend') {
+      return '<tr class="ts-weekend-row"><td>' + formatDateDisplay(d.date) + '</td><td colspan="6">Weekend</td></tr>';
+    }
+    if (d.dayStatus === 'Holiday') {
+      return '<tr class="ts-weekend-row"><td>' + formatDateDisplay(d.date) + '</td><td colspan="6">Holiday' + (d.holidayName ? ' — ' + timesheetEscHtml(d.holidayName) : '') + '</td></tr>';
+    }
+    if (d.dayStatus !== 'Kerja') {
+      return '<tr><td>' + formatDateDisplay(d.date) + '</td><td>' + (STATUS_LABELS[d.dayStatus] || d.dayStatus) + '</td><td colspan="5">—</td></tr>';
+    }
+
+    var projects = loadProjectsForTimesheet();
+    var workDiff = timeDiffMinutes(d.workStart, d.workEnd);
+    var totalLabel = workDiff > 0 ? formatHM(workDiff) : '—';
+    var entries = d.entries && d.entries.length ? d.entries : [null];
+    var rowspan = entries.length;
+
+    return entries.map(function(entry, idx) {
+      var proj = entry && entry.projectId != null ? projects.find(function(p) { return p.id === entry.projectId; }) : null;
+      var row = '<tr>';
+      if (idx === 0) {
+        row += '<td rowspan="' + rowspan + '">' + formatDateDisplay(d.date) + '</td>'
+          + '<td rowspan="' + rowspan + '">Work</td>'
+          + '<td rowspan="' + rowspan + '">' + (d.workStart || '—') + '</td>'
+          + '<td rowspan="' + rowspan + '">' + (d.workEnd || '—') + '</td>'
+          + '<td rowspan="' + rowspan + '">' + totalLabel + '</td>';
+      }
+      row += '<td>' + (proj ? timesheetEscHtml(proj.name) : '—') + '</td>'
+        + '<td>' + (entry && entry.activity ? timesheetEscHtml(entry.activity) : '—') + '</td>';
+      row += '</tr>';
+      return row;
+    }).join('');
+  }
+
+  function render() {
+    var emp = getEmp(currentBadge);
+    var periodTxt = PERIOD ? periodLabel(PERIOD) : 'Unknown period';
+
+    document.getElementById('bc-period-link').textContent = periodTxt;
+    document.getElementById('bc-period-link').href = 'timesheet-approval-detail.html?period=' + encodeURIComponent(PERIOD || '');
+    document.getElementById('backLinkText').textContent = 'Back to Timesheet Approval — ' + periodTxt;
+    document.getElementById('backLink').href = 'timesheet-approval-detail.html?period=' + encodeURIComponent(PERIOD || '');
+
+    if (!emp || !PERIOD) {
+      document.getElementById('bc-emp-name').textContent = 'Unknown employee';
+      document.querySelector('.main-content').innerHTML =
+        '<div class="empty-state">'
+        + '<div class="empty-title">Timesheet not found</div>'
+        + '<div class="empty-desc">This employee/period combination has no record.</div>'
+        + '</div>';
+      return;
+    }
+
+    document.getElementById('bc-emp-name').textContent = emp.name;
+    document.getElementById('page-title-name').textContent = emp.name;
+    document.getElementById('emp-sub').textContent = emp.pos + ' · ' + emp.badge;
+    var avatar = document.getElementById('emp-avatar');
+    avatar.style.background = emp.color;
+    avatar.textContent = emp.initials;
+
+    currentData = loadTimesheetFor(currentBadge, PERIOD);
+    if (!currentData) {
+      document.querySelector('.main-content').innerHTML =
+        '<div class="empty-state">'
+        + '<div class="empty-title">Timesheet not found</div>'
+        + '<div class="empty-desc">This employee/period combination has no record.</div>'
+        + '</div>';
+      return;
+    }
+
+    var tag = document.getElementById('ts-status-tag');
+    tag.className = STATUS_TAG[currentData.status] || 'tag tag-neutral';
+    tag.textContent = STATUS_LABEL[currentData.status] || currentData.status;
+
+    var reasonNote = document.getElementById('rejectionReasonNote');
+    if (currentData.status === 'Rejected' && currentData.rejectionReason) {
+      document.getElementById('rejectionReasonText').textContent = currentData.rejectionReason;
+      reasonNote.style.display = 'flex';
+    } else {
+      reasonNote.style.display = 'none';
+    }
+
+    var stats = computeStats(currentData.days);
+    document.getElementById('statTotalWork').textContent = formatHM(stats.totalWorkMins);
+    document.getElementById('statHariKerja').textContent = stats.hariKerja;
+    document.getElementById('statAbsent').textContent = stats.absentTotal;
+    document.getElementById('statAbsentSub').textContent = stats.breakdown;
+
+    document.getElementById('view-tbody').innerHTML = currentData.days.map(buildViewRows).join('');
+  }
+
+  /* ── Export — identical logic/output to my-timesheet.html's self-service
+     Export, reading currentData/currentBadge/currentYear/currentMonth for the
+     VIEWED employee instead of the logged-in user. Keep both files' export
+     code in sync if this flow ever changes. ── */
+  function buildTimesheetRows() {
+    var rows = [['Date', 'Status', 'Start Time', 'End Time', 'Total Hours', 'Project', 'Activity']];
+    var projects = loadProjectsForTimesheet();
+
+    currentData.days.forEach(function(d) {
+      var statusLabel = STATUS_LABELS[d.dayStatus] || d.dayStatus;
+      if (d.dayStatus !== 'Kerja') {
+        rows.push([formatDateDisplay(d.date), statusLabel, '', '', '', '', '']);
+        return;
+      }
+      var diff = timeDiffMinutes(d.workStart, d.workEnd);
+      var totalLabel = diff > 0 ? formatHM(diff) : '';
+      if (!d.entries.length) {
+        rows.push([formatDateDisplay(d.date), statusLabel, d.workStart, d.workEnd, totalLabel, '', '']);
+      } else {
+        d.entries.forEach(function(entry) {
+          var proj = projects.find(function(p) { return p.id === entry.projectId; });
+          rows.push([formatDateDisplay(d.date), statusLabel, d.workStart, d.workEnd, totalLabel, proj ? proj.name : '', entry.activity]);
+        });
+      }
+    });
+
+    return rows;
+  }
+
+  function exportTimesheet() {
+    var rows = buildTimesheetRows();
+    var ws = XLSX.utils.aoa_to_sheet(rows);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Timesheet');
+    XLSX.writeFile(wb, 'Timesheet_' + (getEmp(currentBadge) || {}).name + '_' + periodLabel(periodKey(currentYear, currentMonth)) + '.xlsx');
+  }
+
+  function exportTimesheetPdf() {
+    var rows = buildTimesheetRows();
+    var doc = new jspdf.jsPDF();
+    var y = 15;
+    var xPositions = [14, 45, 65, 85, 108, 130, 155];
+
+    doc.setFontSize(14);
+    doc.text('Timesheet', 14, y);
+    y += 8;
+
+    doc.setFontSize(9);
+    rows[0].forEach(function(h, i) { doc.text(h, xPositions[i], y); });
+    y += 5;
+    doc.line(14, y, 196, y);
+    y += 5;
+
+    for (var i = 1; i < rows.length; i++) {
+      if (y > 270) { doc.addPage(); y = 15; }
+      rows[i].forEach(function(cell, idx) {
+        var text = String(cell || '');
+        if (idx === 6) {
+          var fitted = doc.splitTextToSize(text, 45);
+          text = fitted[0] + (fitted.length > 1 ? '...' : '');
+        }
+        doc.text(text, xPositions[idx], y);
+      });
+      y += 6;
+    }
+
+    doc.save('Timesheet_' + (getEmp(currentBadge) || {}).name + '_' + periodLabel(periodKey(currentYear, currentMonth)) + '.pdf');
+  }
+
+  function getDistinctProjectIdsInPeriod() {
+    var ids = [];
+    currentData.days.forEach(function(d) {
+      if (d.dayStatus !== 'Kerja') return;
+      d.entries.forEach(function(entry) {
+        if (entry.projectId != null && ids.indexOf(entry.projectId) === -1) ids.push(entry.projectId);
+      });
+    });
+    return ids;
+  }
+
+  var exportReportProjectIds = null;
+  var pendingSignOffData = null;
+  var pendingExportFormat = null;
+
+  function openExportTypeModal() {
+    document.querySelector('input[name="export-type"][value="timesheet"]').checked = true;
+    document.querySelector('input[name="export-format"][value="xlsx"]').checked = true;
+    document.getElementById('export-type-format-modal').classList.add('show');
+  }
+  function closeExportTypeModal() {
+    document.getElementById('export-type-format-modal').classList.remove('show');
+  }
+  function confirmExportTypeFormat() {
+    var type = document.querySelector('input[name="export-type"]:checked').value;
+    var format = document.querySelector('input[name="export-format"]:checked').value;
+    closeExportTypeModal();
+    pendingExportFormat = format;
+
+    if (type === 'timesheet') {
+      if (format === 'pdf') { exportTimesheetPdf(); } else { exportTimesheet(); }
+    } else {
+      exportReport();
+    }
+  }
+
+  function exportReport() {
+    var projectIds = getDistinctProjectIdsInPeriod();
+    if (!projectIds.length) {
+      QuadraToast.show('No project data to export.', 'error');
+      return;
+    }
+    exportReportProjectIds = projectIds;
+    document.getElementById('export-report-jabatan-pemeriksa').value = '';
+    document.getElementById('export-report-nama-pemeriksa').value = '';
+    document.getElementById('export-report-jabatan-disetujui').value = '';
+    document.getElementById('export-report-nama-menyetujui').value = '';
+    document.getElementById('export-report-signoff-modal').classList.add('show');
+  }
+  function closeExportReportSignOffModal() {
+    document.getElementById('export-report-signoff-modal').classList.remove('show');
+  }
+  function confirmExportReportSignOff() {
+    var signOffData = {
+      jabatanPemeriksa: document.getElementById('export-report-jabatan-pemeriksa').value || '',
+      namaPemeriksa: document.getElementById('export-report-nama-pemeriksa').value || '',
+      jabatanDisetujui: document.getElementById('export-report-jabatan-disetujui').value || '',
+      namaMenyetujui: document.getElementById('export-report-nama-menyetujui').value || ''
+    };
+    closeExportReportSignOffModal();
+
+    if (exportReportProjectIds.length === 1) {
+      runExportReport(exportReportProjectIds[0], signOffData);
+    } else {
+      openExportReportProjectModal(exportReportProjectIds, signOffData);
+    }
+  }
+  function openExportReportProjectModal(projectIds, signOffData) {
+    pendingSignOffData = signOffData;
+    var allProjects = loadProjectsForTimesheet();
+    var options = projectIds.map(function(id) {
+      var p = allProjects.find(function(pr) { return pr.id === id; });
+      return { value: id, label: p ? p.name : ('Project ' + id) };
+    });
+    QuadraDropdown.init(document.getElementById('export-report-project-select'), options, {
+      value: options[0].value
+    });
+    document.getElementById('export-report-modal').classList.add('show');
+  }
+  function closeExportReportModal() {
+    document.getElementById('export-report-modal').classList.remove('show');
+  }
+  function confirmExportReportProject() {
+    var projectId = QuadraDropdown.getValue(document.getElementById('export-report-project-select'));
+    closeExportReportModal();
+    runExportReport(parseInt(projectId, 10), pendingSignOffData);
+    pendingSignOffData = null;
+  }
+
+  var PER_DAY_FIELDS = ['Date', 'WorkingHourStart', 'WorkingHourEnd', 'TotalHourperbaris', 'Activity', 'Type', 'Location', 'Skills'];
+
+  function substitutePlaceholders(text, dayData, singleValues, isDaySlotRow) {
+    return text.replace(/\[([A-Za-z0-9_+]+)\]/g, function(match, fieldName) {
+      if (isDaySlotRow && !dayData) return '';
+      if (PER_DAY_FIELDS.indexOf(fieldName) !== -1) {
+        if (!dayData) return '';
+        if (fieldName === 'Date') return dayData.date;
+        if (fieldName === 'WorkingHourStart') return dayData.workStart || '';
+        if (fieldName === 'WorkingHourEnd') return dayData.workEnd || '';
+        if (fieldName === 'TotalHourperbaris') return dayData.totalLabel || '';
+        if (fieldName === 'Activity') return dayData.activity || '';
+        if (fieldName === 'Type') return dayData.type || '';
+        if (fieldName === 'Location') return dayData.location || '';
+        if (fieldName === 'Skills') return dayData.skills || '';
+      }
+      if (singleValues.hasOwnProperty(fieldName)) return singleValues[fieldName];
+      return '';
+    });
+  }
+
+  function runExportReport(projectId, signOffData) {
+    signOffData = signOffData || {};
+    var templates = {};
+    try { templates = JSON.parse(localStorage.getItem('QUADRA_PROJECT_TEMPLATES')) || {}; } catch (e) {}
+    var tpl = templates[projectId];
+    var base64 = tpl ? tpl.dataUrl.split(',')[1] : DEFAULT_TIMESHEET_TEMPLATE_B64;
+    var wb = XLSX.read(base64, { type: 'base64' });
+    var sheetName = wb.SheetNames[0];
+    var ws = wb.Sheets[sheetName];
+    var range = XLSX.utils.decode_range(ws['!ref']);
+
+    var includedDays = [];
+    currentData.days.forEach(function(d) {
+      if (d.dayStatus !== 'Kerja') return;
+      var matches = d.entries.filter(function(e) { return e.projectId === projectId; });
+      if (!matches.length) return;
+      var activity = matches.map(function(e) { return e.activity; }).filter(function(a) { return a; }).join(', ');
+      var diff = timeDiffMinutes(d.workStart, d.workEnd);
+      includedDays.push({
+        date: formatDateDisplay(d.date),
+        workStart: d.workStart,
+        workEnd: d.workEnd,
+        totalLabel: diff > 0 ? formatHM(diff) : '',
+        activity: activity,
+        type: STATUS_LABELS[d.dayStatus] || d.dayStatus,
+        location: '',
+        skills: ''
+      });
+    });
+
+    var stats = computeStats(currentData.days);
+    var emp = getEmp(currentBadge);
+    var totalNonWeekend = currentData.days.filter(function(d) { return d.dayStatus !== 'Weekend' && d.dayStatus !== 'Holiday'; }).length;
+    var attendancePct = totalNonWeekend > 0 ? Math.round((stats.hariKerja / totalNonWeekend) * 100) + '%' : '';
+
+    var project = loadProjectsForTimesheet().find(function(p) { return p.id === projectId; });
+    var client = project ? loadClientsForTimesheet().find(function(c) { return c.id === project.clientId; }) : null;
+
+    var singleValues = {
+      NamaLengkap: emp ? emp.name : '',
+      NIP: currentBadge || '',
+      PeriodeMulai: formatDateDisplay(isoDate(currentYear, currentMonth, 1)),
+      PeriodeAkhir: formatDateDisplay(isoDate(currentYear, currentMonth, daysInMonth(currentYear, currentMonth))),
+      TotalHour: formatHM(stats.totalWorkMins),
+      JumlahHariKerja: String(stats.hariKerja),
+      JumlahHariPegawaiIjin: String(stats.counts.Ijin),
+      JumlahHariPegawaiSakit: String(stats.counts.Sakit),
+      JumlahHariPegawaiCuti: String(stats.counts.Cuti),
+      JumlahHariPegawaiAlfa: String(stats.counts.Alfa),
+      PersentaseKehadiranKaryawan: attendancePct,
+      JobPosition: emp ? emp.pos : '',
+      DateDOWNLOADTIMESHEET: formatDateDisplay(new Date().toISOString().slice(0, 10)),
+      'TandaTanganPegawai+NamaPegawai': emp ? emp.name : '',
+      ProjectName: project ? project.name : '',
+      ClientName: client ? client.name : '',
+      JabatanPemeriksa: signOffData.jabatanPemeriksa || '',
+      NamaPemeriksa: signOffData.namaPemeriksa || '',
+      JabatanDisetujui: signOffData.jabatanDisetujui || '',
+      NamaMenyetujui: signOffData.namaMenyetujui || '',
+      Deskripsi: ''
+    };
+
+    var daySlotRows = [];
+    for (var R = range.s.r; R <= range.e.r; R++) {
+      var isDaySlotRow = false;
+      for (var C = range.s.c; C <= range.e.c; C++) {
+        var cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+        var cell = ws[cellRef];
+        if (cell && typeof cell.v === 'string' && cell.v.indexOf('[Date]') !== -1) {
+          isDaySlotRow = true;
+          break;
+        }
+      }
+      if (isDaySlotRow) daySlotRows.push(R);
+    }
+
+    var rowToDayData = {};
+    daySlotRows.forEach(function(rowIdx, slotIdx) {
+      rowToDayData[rowIdx] = includedDays[slotIdx] || null;
+    });
+
+    for (var R2 = range.s.r; R2 <= range.e.r; R2++) {
+      var isDaySlotRow2 = rowToDayData.hasOwnProperty(R2);
+      var dayData = isDaySlotRow2 ? rowToDayData[R2] : null;
+      for (var C2 = range.s.c; C2 <= range.e.c; C2++) {
+        var ref = XLSX.utils.encode_cell({ r: R2, c: C2 });
+        var cell2 = ws[ref];
+        if (cell2 && typeof cell2.v === 'string' && cell2.v.indexOf('[') !== -1) {
+          var newVal = substitutePlaceholders(cell2.v, dayData, singleValues, isDaySlotRow2);
+          cell2.v = newVal;
+          cell2.w = newVal;
+          cell2.t = 's';
+        }
+      }
+    }
+
+    var baseFileName = 'Report_' + (project ? project.name : 'Project') + '_' + periodLabel(periodKey(currentYear, currentMonth));
+    if (pendingExportFormat === 'pdf') {
+      generateReportPdf(includedDays, singleValues, baseFileName + '.pdf');
+    } else {
+      XLSX.writeFile(wb, baseFileName + '.xlsx');
+    }
+    pendingExportFormat = null;
+  }
+
+  // Layout modeled on the reference "Timesheet Penyelesaian Pekerjaan Bulanan"
+  // template — identical to my-timesheet.html's generateReportPdf(). Keep
+  // both copies in sync if this layout ever changes.
+  function generateReportPdf(includedDays, singleValues, fileName) {
+    var doc = new jspdf.jsPDF({ orientation: 'landscape' });
+    var y = 12;
+
+    doc.setFontSize(13);
+    doc.setFont(undefined, 'bold');
+    doc.text('MONTHLY TIMESHEET REPORT', 14, y);
+    doc.setFont(undefined, 'normal');
+    y += 6;
+
+    doc.autoTable({
+      startY: y,
+      theme: 'grid',
+      styles: { fontSize: 9, cellPadding: 2 },
+      body: [
+        [
+          { content: 'Name / Function', styles: { fontStyle: 'bold' } },
+          singleValues.NamaLengkap + ' / ' + singleValues.JobPosition,
+          { content: 'PT. Steradian Data Optima', rowSpan: 2, styles: { fontStyle: 'bold', halign: 'center', valign: 'middle' } }
+        ],
+        [
+          { content: 'Placement', styles: { fontStyle: 'bold' } },
+          singleValues.ClientName
+        ]
+      ],
+      columnStyles: { 0: { cellWidth: 35 }, 1: { cellWidth: 140 }, 2: { cellWidth: 90 } }
+    });
+    y = doc.lastAutoTable.finalY + 6;
+
+    doc.autoTable({
+      startY: y,
+      theme: 'grid',
+      styles: { fontSize: 7, cellPadding: 1.5, valign: 'middle', halign: 'center' },
+      headStyles: { fillColor: [240, 240, 240], textColor: 0, fontStyle: 'bold' },
+      head: [
+        [
+          { content: 'No.', rowSpan: 2 },
+          { content: 'Date', rowSpan: 2 },
+          { content: 'Name of Project', rowSpan: 2 },
+          { content: 'Location', rowSpan: 2 },
+          { content: 'Working Hour', colSpan: 2 },
+          { content: 'Total Hour', rowSpan: 2 },
+          { content: 'Over Time', colSpan: 2 },
+          { content: 'Total OT', rowSpan: 2 },
+          { content: 'Detail Activity', rowSpan: 2 }
+        ],
+        ['Start', 'End', 'Start', 'End']
+      ],
+      body: includedDays.map(function(d, idx) {
+        return [
+          String(idx + 1),
+          d.date,
+          singleValues.ProjectName || '',
+          '',
+          d.workStart || '',
+          d.workEnd || '',
+          d.totalLabel || '',
+          '',
+          '',
+          '',
+          { content: d.activity || '', styles: { halign: 'left' } }
+        ];
+      }),
+      columnStyles: {
+        0: { cellWidth: 8 }, 1: { cellWidth: 18 }, 2: { cellWidth: 38 }, 3: { cellWidth: 22 },
+        4: { cellWidth: 15 }, 5: { cellWidth: 15 }, 6: { cellWidth: 16 },
+        7: { cellWidth: 15 }, 8: { cellWidth: 15 }, 9: { cellWidth: 14 },
+        10: { cellWidth: 'auto' }
+      }
+    });
+    y = doc.lastAutoTable.finalY + 6;
+
+    if (y > 175) { doc.addPage(); y = 12; }
+
+    doc.autoTable({
+      startY: y,
+      theme: 'grid',
+      styles: { fontSize: 8, cellPadding: 1.5 },
+      body: [
+        ['A', 'Permission (days)', singleValues.JumlahHariPegawaiIjin || ''],
+        ['B', 'Sick (days)', singleValues.JumlahHariPegawaiSakit || ''],
+        ['C', 'Leave (days)', singleValues.JumlahHariPegawaiCuti || ''],
+        ['D', 'Total Mandays', singleValues.JumlahHariKerja || ''],
+        ['E', 'Total Normal Work Hours', singleValues.TotalHour || ''],
+        ['F', 'Total Overtime Hours', '']
+      ],
+      columnStyles: { 0: { cellWidth: 8, halign: 'center' }, 1: { cellWidth: 60 }, 2: { cellWidth: 30 } },
+      tableWidth: 98,
+      margin: { left: 14 }
+    });
+    var summaryEndY = doc.lastAutoTable.finalY;
+
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'italic');
+    var declaration = doc.splitTextToSize(
+      'Declaration: I confirm this time report has been prepared truthfully and accurately, in accordance with the company’s ethical values and professional standards at my placement of ' + (singleValues.ClientName || '-') + '.',
+      160
+    );
+    doc.text(declaration, 120, y + 4);
+    doc.setFont(undefined, 'normal');
+
+    y = Math.max(summaryEndY, y + 4 + declaration.length * 4) + 8;
+    if (y > 180) { doc.addPage(); y = 12; }
+
+    doc.autoTable({
+      startY: y,
+      theme: 'grid',
+      styles: { fontSize: 8, cellPadding: 3, halign: 'center', minCellHeight: 20 },
+      headStyles: { fillColor: [240, 240, 240], textColor: 0, fontStyle: 'bold' },
+      head: [['Approved By (Team Leader)', 'Reviewed By', 'Employee Signature']],
+      body: [[
+        (singleValues.NamaMenyetujui || '') + (singleValues.JabatanDisetujui ? '\n(' + singleValues.JabatanDisetujui + ')' : '') + '\n\nDate: __________',
+        (singleValues.NamaPemeriksa || '') + (singleValues.JabatanPemeriksa ? '\n(' + singleValues.JabatanPemeriksa + ')' : '') + '\n\nDate: __________',
+        (singleValues.NamaLengkap || '') + '\n\n\nDate: __________'
+      ]]
+    });
+
+    doc.save(fileName);
+  }
+
+  (function init() {
+    seedAllTimesheetsIfNeeded();
+    render();
+  })();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .stat-row — RESOLVED in Task 11: now uses the shared
+       .stat-row.grid-4 variant in layout.css (COMMON PATTERNS GROUP 3).
+       See markup below. */
+
+    /* .stat-card.green/.amber/.red, .today-card (+ its header/title/date/
+       info-row/info-cell/label/value/sub), .toolbar, .time-val/
+       .time-empty, .work-hrs, and .att-tag(+4 status variants) were all
+       promoted or replaced — see layout.css GROUP 6's batch note. The
+       .att-tag* status pills were replaced by the existing tags.css
+       `tag tag-success/tag-warning/tag-danger/tag-info` classes rather
+       than promoted as a duplicate color system. */
+
+    /* NAMING COLLISION (found in this audit, not previously documented):
+       layout.css's shared .filter-select is a position:relative DIV
+       wrapper around the custom filter-dropdown widget (employees-
+       list.html, onboarding-employee-list.html, payroll-loan.html). This
+       page reused the same class name on a native <select> element
+       instead — an unrelated element chosen for an unrelated reason,
+       not a deliberate divergent variant like .stat-row above. No visible
+       bug today (the shared rule only sets position:relative, harmless
+       on a <select>), but a landmine for future edits to either side.
+       Renamed to .native-filter-select here to remove the collision.
+       Kept page-scoped/inline rather than promoted: the established
+       convention (see layout.css section 1's PATTERN note) is that
+       toolbar filters use .filter-pill or the .filter-select dropdown
+       widget, not a bare native <select> — so this is a one-off
+       exception, not a pattern to spread to other pages. */
+    .native-filter-select:focus { border-color: #E04A2A; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="attendances" data-active-sub="attendance-approval-request"></aside>
+
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action" style="padding:0 12px;">
+        <div class="timer-box" id="clockWidget"></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">3</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    <span class="bc-current">Attendance</span>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">Attendance</div>
+        <div class="page-subtitle">Daily attendance overview — <span id="todayDateLabel"></span></div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-outline">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1" stroke="#6B7280" stroke-width="1.3"/><path d="M1 5h12" stroke="#6B7280" stroke-width="1.3"/><path d="M4 1v2M10 1v2" stroke="#6B7280" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Export
+        </button>
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Manual Entry
+        </button>
+      </div>
+    </div>
+
+    <!-- TODAY'S ATTENDANCE CARD -->
+    <div class="today-card">
+      <div class="today-card-header">
+        <span class="today-card-title">My Attendance Today</span>
+        <span class="today-card-date" id="todayCardDate"></span>
+      </div>
+      <div class="today-info-row">
+        <div class="today-info-cell">
+          <div class="today-info-label">Status</div>
+          <div class="today-info-value muted" id="todayStatus">—</div>
+        </div>
+        <div class="today-info-cell">
+          <div class="today-info-label">Clock In</div>
+          <div class="today-info-value muted" id="todayClockIn">—</div>
+          <div class="today-info-sub" id="todayClockInSub"></div>
+        </div>
+        <div class="today-info-cell">
+          <div class="today-info-label">Clock Out</div>
+          <div class="today-info-value muted" id="todayClockOut">—</div>
+          <div class="today-info-sub" id="todayClockOutSub"></div>
+        </div>
+        <div class="today-info-cell">
+          <div class="today-info-label">Work Hours</div>
+          <div class="today-info-value muted" id="todayWorkHours">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-row grid-4">
+      <div class="stat-card">
+        <div class="stat-label">Total Employees</div>
+        <div class="stat-value">10</div>
+        <div class="stat-sub">Active employees today</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Present</div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub">4 on time · 2 early</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">Late</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub">&gt; 15 min from shift start</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">Absent / Leave</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub">1 absent · 1 on leave</div>
+      </div>
+    </div>
+
+    <!-- EMPLOYEE ATTENDANCE TABLE -->
+    <div>
+      <div class="toolbar">
+        <div class="search-w">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input type="text" placeholder="Search employee…" oninput="filterTable(this.value)" />
+        </div>
+        <select class="native-filter-select" onchange="filterByShift(this.value)">
+          <option value="">All Shifts</option>
+          <option value="Bendi">Bendi</option>
+          <option value="NDS">NDS</option>
+          <option value="Ops Console">Ops Console</option>
+        </select>
+        <select class="native-filter-select" onchange="filterByStatus(this.value)">
+          <option value="">All Status</option>
+          <option value="Present">Present</option>
+          <option value="Late">Late</option>
+          <option value="Absent">Absent</option>
+          <option value="Leave">On Leave</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Shift</th>
+              <th>Scheduled</th>
+              <th>Clock In</th>
+              <th>Clock Out</th>
+              <th>Work Hours</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="attTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="sidebar.js"></script>
+<script src="toast.js"></script>
+<script src="clockwidget.js"></script>
+<script>
+  /* ── Date display ── */
+  (function () {
+    var d = new Date();
+    var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('todayDateLabel').textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    document.getElementById('todayCardDate').textContent  = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  })();
+
+  /* ── Today card helpers ── */
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function fmtTime(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+
+  function setClockInCard(time) {
+    document.getElementById('todayStatus').textContent = 'Present';
+    document.getElementById('todayStatus').classList.remove('muted');
+    document.getElementById('todayClockIn').textContent = fmtTime(time);
+    document.getElementById('todayClockIn').classList.remove('muted');
+    document.getElementById('todayClockInSub').textContent = 'Clocked in';
+  }
+
+  function setClockOutCard(time, durationMs) {
+    var h = Math.floor(durationMs / 3600000);
+    var m = Math.floor((durationMs % 3600000) / 60000);
+    document.getElementById('todayClockOut').textContent = fmtTime(time);
+    document.getElementById('todayClockOut').classList.remove('muted');
+    document.getElementById('todayClockOutSub').textContent = 'Clocked out';
+    document.getElementById('todayWorkHours').textContent = h + 'h ' + m + 'm';
+    document.getElementById('todayWorkHours').classList.remove('muted');
+  }
+
+  /* Restore state on page load (if already clocked in from another page) */
+  (function () {
+    if (sessionStorage.getItem('QUADRA_CLOCKED_IN') === 'true') {
+      var ts = sessionStorage.getItem('QUADRA_CLOCK_IN_TIME');
+      if (ts) setClockInCard(new Date(ts));
+    }
+  })();
+
+  /* Listen for clock events from clockwidget.js */
+  window.addEventListener('quadra-clockin',  function (e) { setClockInCard(e.detail.time); });
+  window.addEventListener('quadra-clockout', function (e) { setClockOutCard(e.detail.time, e.detail.duration); });
+
+  /* ══ ATTENDANCE TABLE ══ */
+  var ATT_DATA = [
+    { name:'Rina Kusuma',     badge:'001228',    shift:'Bendi',       scheduled:'07:30', clockIn:'07:28', clockOut:'16:45', status:'present' },
+    { name:'Budi Santoso',    badge:'000000001', shift:'Bendi',       scheduled:'07:30', clockIn:'07:31', clockOut:null,    status:'present' },
+    { name:'Dewi Rahayu',     badge:'000000002', shift:'Bendi',       scheduled:'07:30', clockIn:'07:45', clockOut:null,    status:'late'    },
+    { name:'Ahmad Fauzi',     badge:'000000003', shift:'Bendi',       scheduled:'07:30', clockIn:'09:02', clockOut:null,    status:'late'    },
+    { name:'Siti Nurhaliza',  badge:'000000004', shift:'NDS',         scheduled:'16:00', clockIn:null,    clockOut:null,    status:'present' },
+    { name:'Rudi Hartono',    badge:'000000005', shift:'Bendi',       scheduled:'07:30', clockIn:'07:29', clockOut:'16:31', status:'present' },
+    { name:'Putri Anggraini', badge:'000000006', shift:'Ops Console', scheduled:'08:00', clockIn:'07:55', clockOut:null,    status:'present' },
+    { name:'Dimas Pratama',   badge:'000000007', shift:'NDS',         scheduled:'16:00', clockIn:null,    clockOut:null,    status:'leave'   },
+    { name:'Rina Kusuma',     badge:'000000008', shift:'Ops Console', scheduled:'08:00', clockIn:null,    clockOut:null,    status:'absent'  },
+    { name:'Maya Sari',       badge:'000000010', shift:'Bendi',       scheduled:'07:30', clockIn:'07:27', clockOut:'16:00', status:'present' },
+  ];
+
+  var STATUS_CFG = {
+    present: { label: 'Present',  cls: 'tag tag-success' },
+    late:    { label: 'Late',     cls: 'tag tag-warning' },
+    absent:  { label: 'Absent',   cls: 'tag tag-danger'  },
+    leave:   { label: 'On Leave', cls: 'tag tag-info'    },
+  };
+
+  var F_SEARCH = '', F_SHIFT = '', F_STATUS = '';
+
+  function calcWorkHrs(ci, co) {
+    if (!ci || !co) return '—';
+    var i = ci.split(':').map(Number), o = co.split(':').map(Number);
+    var mins = (o[0] * 60 + o[1]) - (i[0] * 60 + i[1]);
+    if (mins <= 0) return '—';
+    return Math.floor(mins / 60) + 'h ' + pad(mins % 60) + 'm';
+  }
+
+  function renderTable() {
+    var rows = ATT_DATA.filter(function (r) {
+      if (F_SEARCH && r.name.toLowerCase().indexOf(F_SEARCH) === -1) return false;
+      if (F_SHIFT  && r.shift !== F_SHIFT) return false;
+      if (F_STATUS) {
+        var lbl = (STATUS_CFG[r.status] || {}).label || '';
+        if (lbl.toLowerCase().indexOf(F_STATUS.toLowerCase()) === -1) return false;
+      }
+      return true;
+    });
+
+    var body = document.getElementById('attTableBody');
+    if (!rows.length) {
+      body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9CA3AF;padding:32px;">No records match the current filters</td></tr>';
+      return;
+    }
+
+    body.innerHTML = rows.map(function (r) {
+      var cfg    = STATUS_CFG[r.status] || { label: r.status, cls: 'tag tag-success' };
+      var inEl   = r.clockIn  ? '<span class="time-val">' + r.clockIn  + '</span>' : '<span class="time-val time-empty">—</span>';
+      var outEl  = r.clockOut ? '<span class="time-val">' + r.clockOut + '</span>' : '<span class="time-val time-empty">—</span>';
+      var hrs    = calcWorkHrs(r.clockIn, r.clockOut);
+      var hrsEl  = hrs !== '—' ? '<span class="work-hrs">' + hrs + '</span>' : '<span class="time-val time-empty">—</span>';
+      var note   = (r.shift === 'NDS' && !r.clockIn) ? '<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">Shift starts 16:00</div>' : '';
+      return '<tr>' +
+        '<td><div class="emp-name">' + r.name + '</div><div class="emp-badge">' + r.badge + '</div></td>' +
+        '<td>' + r.shift + '</td>' +
+        '<td><span class="time-val">' + r.scheduled + '</span></td>' +
+        '<td>' + inEl + '</td>' +
+        '<td>' + outEl + '</td>' +
+        '<td>' + hrsEl + '</td>' +
+        '<td><span class="' + cfg.cls + '">' + cfg.label + '</span>' + note + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTable(v)   { F_SEARCH = v.toLowerCase(); renderTable(); }
+  function filterByShift(v) { F_SHIFT  = v; renderTable(); }
+  function filterByStatus(v){ F_STATUS = v; renderTable(); }
+
+  renderTable();
+</script>
+</body>
+</html>

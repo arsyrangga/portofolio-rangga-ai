@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Edit Personal Info</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .label-row is now the shared component (layout.css, merged with
+       Task 7's Form Layout section) — byte-identical, so removed here.
+       .same-check (+ input/span) is likewise the shared component
+       (fields.css Inline Checkbox section) — the extra font-weight/
+       text-transform/letter-spacing resets here were no-ops (nothing
+       in this page's ancestry sets those properties), so also removed. */
+
+    /* Fallback error borders are already covered by the shared
+       .text-input.error / input.error,textarea.error (fields.css). */
+    /* .date-w / .date-w.error / .date-w:hover / .date-w.open /
+       .date-w span — RESOLVED in Task 11: now uses the shared
+       .date-w.solid variant in layout.css (COMMON PATTERNS GROUP 4).
+       This page's own legacy inline calendar widget (.cal-hdr/
+       .cal-day.selected below) stays bundled with it rather than the
+       shared datepicker.js/.calendar-panel system.
+       .section-err — RESOLVED in Task 11: now uses the shared
+       .section-err.muted variant in layout.css (COMMON PATTERNS
+       GROUP 4). */
+    .cal-hdr { font-size: 11px; color: #9CA3AF; padding: 4px 0 6px; font-family: 'Inter', sans-serif; }
+    .cal-day.selected { background: #E04A2A; color: #fff; border-radius: 50%; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="employees" data-active-sub="list-employee"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><div class="bell-wrap"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg><div class="bell-badge">9</div></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user"><div class="user-avatar">SE</div><span class="user-name">Steradian</span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="employees-list.html">Employee Directory</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="employee-detail.html#personal">Budi Santoso</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Edit Personal Info</span>
+  </div>
+
+  <div class="detail-layout">
+  <main class="main-content">
+
+    <div style="width:100%;">
+      <button onclick="handleCancel()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#6B7280;text-decoration:none;background:none;border:none;cursor:pointer;padding:0;font-family:'Inter',sans-serif;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Budi Santoso
+      </button>
+    </div>
+
+    <!-- Basic Information -->
+    <div class="section-card">
+      <div class="section-head"><h3>Basic Information</h3></div>
+      <div class="section-body">
+        <!-- Section error banner -->
+        <div class="section-err muted" id="section-err">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M8 1.5L1.5 13.5h13L8 1.5z" stroke="#991B1B" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v3.5" stroke="#991B1B" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="11" r="0.7" fill="#991B1B"/></svg>
+          <span>Please fix the errors below before saving.</span>
+        </div>
+
+        <div class="form-row">
+          <div class="f-field">
+            <label>Full Name</label>
+            <input type="text" class="text-input" id="inp-fullname" value="Budi Santoso" />
+            <span class="err-msg" id="err-fullname"></span>
+          </div>
+          <div class="f-field">
+            <label>Badge ID</label>
+            <div class="f-readonly">000000001</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Work Email</label>
+            <div class="f-readonly">budi.s@steradian.id</div>
+          </div>
+          <div class="f-field">
+            <label>Phone Number</label>
+            <input type="text" class="text-input" id="inp-phone" value="+62 812 3456 7890" />
+            <span class="err-msg" id="err-phone"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>NIK (National ID)</label>
+            <input type="text" class="text-input" id="inp-nik" value="3174012345678901" />
+            <span class="err-msg" id="err-nik"></span>
+          </div>
+          <div class="f-field">
+            <label>NPWP (Tax ID)</label>
+            <input type="text" class="text-input" id="inp-npwp" value="12.345.678.9-012.000" />
+            <span class="err-msg" id="err-npwp"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Details -->
+    <div class="section-card">
+      <div class="section-head"><h3>Personal Details</h3></div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Date of Birth</label>
+            <div class="date-w solid" id="dob-w">
+              <span id="dob-display">15 March 1990</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14" stroke="#9CA3AF" stroke-width="1.4"/><path d="M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <span class="err-msg" id="err-dob"></span>
+          </div>
+          <div class="f-field">
+            <label>Place of Birth</label>
+            <input type="text" class="text-input" id="inp-placeofbirth" value="Jakarta" />
+            <span class="err-msg" id="err-placeofbirth"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Gender</label>
+            <div class="select-w" id="sel-gender"></div>
+            <span class="err-msg" id="err-gender"></span>
+          </div>
+          <div class="f-field">
+            <label>Religion</label>
+            <div class="select-w" id="sel-religion"></div>
+            <span class="err-msg" id="err-religion"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Blood Type</label>
+            <div class="select-w" id="sel-blood"></div>
+          </div>
+          <div class="f-field"></div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Marital Status</label>
+            <div class="select-w" id="sel-marital"></div>
+            <span class="err-msg" id="err-marital"></span>
+          </div>
+          <div class="f-field">
+            <label>Number of Children</label>
+            <div class="select-w" id="sel-children"></div>
+            <span class="field-warn" id="children-warn">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1Z" stroke="#D97706" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 5.5v3" stroke="#D97706" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="10" r="0.7" fill="#D97706"/></svg>
+              Single status with dependents recorded — please verify PTKP with HR.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="section-card">
+      <div class="section-head"><h3>Emergency Contact</h3></div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="f-field">
+            <label>Contact Name</label>
+            <input type="text" class="text-input" id="inp-contactname" value="Dewi Santoso" />
+            <span class="err-msg" id="err-contactname"></span>
+          </div>
+          <div class="f-field">
+            <label>Relationship</label>
+            <div class="select-w" id="sel-relation"></div>
+            <span class="err-msg" id="err-relation"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Contact Phone</label>
+            <input type="text" class="text-input" id="inp-contactphone" value="+62 813 9876 5432" />
+            <span class="err-msg" id="err-contactphone"></span>
+          </div>
+          <div class="f-field"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="section-card">
+      <div class="section-head"><h3>Address</h3></div>
+      <div class="section-body">
+        <div class="f-field">
+          <label>KTP Address (as per ID card)</label>
+          <textarea class="textarea" id="inp-ktp-addr">Jl. Sudirman No. 45, RT 003/RW 007, Tanah Abang, Jakarta Pusat, DKI Jakarta 10250</textarea>
+          <span class="err-msg" id="err-ktp-addr"></span>
+        </div>
+        <div class="f-field">
+          <div class="label-row">
+            <label>Current / Residential Address</label>
+            <label class="same-check">
+              <input type="checkbox" id="same-as-ktp" />
+              <span>Same as KTP address</span>
+            </label>
+          </div>
+          <textarea class="textarea" id="inp-curr-addr">Jl. Sudirman No. 45, RT 003/RW 007, Tanah Abang, Jakarta Pusat, DKI Jakarta 10250</textarea>
+          <span class="err-msg" id="err-curr-addr"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note + Audit -->
+    <div class="section-card">
+      <div class="section-head"><h3>Change Details</h3></div>
+      <div class="section-body">
+        <div class="f-field">
+          <label>Note (Optional)</label>
+          <input type="text" class="text-input" placeholder="e.g. Address update, name correction after marriage" />
+        </div>
+        <div class="audit-note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <p>All changes are saved to the employee's audit history with a timestamp and the user who made the change.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="emp-profile-panel">
+    <div class="epp-avatar" id="epp-avatar" style="background:#E04A2A">BS</div>
+    <div class="epp-identity">
+      <div class="epp-name" id="epp-name">Budi Santoso</div>
+      <div class="epp-position" id="epp-position">Senior Staff</div>
+      <div class="epp-status-row"><span class="tag tag-dot tag-success" id="epp-status">Active</span></div>
+    </div>
+    <div class="epp-email-row">
+      <span id="epp-email">budi.s@steradian.id</span>
+      <button class="epp-copy-btn" type="button" onclick="copyEppEmail()" aria-label="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 10V3a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-info-row"><span class="epp-label">Badge ID</span><span class="epp-value" id="epp-badge">000000001</span></div>
+      <div class="epp-info-row"><span class="epp-label">Department</span><span class="epp-value" id="epp-department">Engineering</span></div>
+    </div>
+  </aside>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <button class="btn btn-primary" id="save-btn" disabled>Save Changes</button>
+  </div>
+  </div><!-- /detail-layout -->
+
+</div>
+
+<!-- Cancel modal -->
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Discard Changes</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="modal-sub-label">Discard unsaved changes?</div>
+          <div class="modal-sub-desc">You have unsaved changes. Leaving now will discard all edits made to this employee's personal information.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="__goToDetail('#personal')">Discard Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  /* EXPERIMENTAL — real per-employee wiring (was: hardcoded to Budi Santoso
+     regardless of ?badge=), matching the same treatment employee-work-edit.html
+     got. See employee-personal-edit.html.before-badge-wiring.bak to roll back.
+     Persists edits to localStorage (quadra_personal_override_<badge>), read
+     back by this page and by employee-detail.html's Personal Info tab. */
+  function findEmpByBadge(badge) {
+    for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) if (QUADRA_EMPLOYEES[i].badge === badge) return QUADRA_EMPLOYEES[i];
+    return null;
+  }
+  function getPersonalOverride(badge) {
+    try { return JSON.parse(localStorage.getItem('quadra_personal_override_' + badge)) || null; } catch (e) { return null; }
+  }
+  /* employees-data.js stores religion in Indonesian (matching this app's other
+     Indonesian-language master data); this form's dropdown is English-labeled.
+     Map both directions rather than changing either source. */
+  var RELIGION_TO_FORM = { 'Islam': 'Islam', 'Kristen Protestan': 'Protestant', 'Kristen Katolik': 'Catholic', 'Buddha': 'Buddhist', 'Hindu': 'Hindu' };
+  var RELIGION_TO_DATA = { 'Islam': 'Islam', 'Protestant': 'Kristen Protestan', 'Catholic': 'Kristen Katolik', 'Buddhist': 'Buddha', 'Hindu': 'Hindu', 'Confucian': 'Confucian' };
+
+  var __badge = new URLSearchParams(window.location.search).get('badge');
+  var __emp = __badge ? findEmpByBadge(__badge) : null;
+  window.__BADGE = __badge || null;
+  var __po = __badge ? getPersonalOverride(__badge) : null;
+
+  var PDATA;
+  if (__emp) {
+    PDATA = {
+      fullname:     (__po && __po.fullname)     || __emp.name,
+      phone:        (__po && __po.phone)        || __emp.phone,
+      nik:          (__po && __po.nik)          || __emp.nik,
+      npwp:         (__po && __po.npwp)         || __emp.npwp,
+      dob:          (__po && __po.dob)          || __emp.dob,
+      placeOfBirth: (__po && __po.placeOfBirth) || __emp.birthPlace,
+      gender:       (__po && __po.gender)       || __emp.gender,
+      religion:     RELIGION_TO_FORM[(__po && __po.religion) || __emp.religion] || 'Islam',
+      bloodType:    (__po && __po.bloodType)    || __emp.bloodType,
+      maritalStatus:(__po && __po.maritalStatus)|| __emp.maritalStatus,
+      children:     (__po && __po.children !== undefined) ? __po.children : __emp.children,
+      contactName:  (__po && __po.contactName)  || __emp.emergencyName,
+      relation:     (__po && __po.relation)     || __emp.emergencyRelation,
+      contactPhone: (__po && __po.contactPhone) || __emp.emergencyPhone,
+      ktpAddr:      (__po && __po.ktpAddr)      || __emp.ktpAddress,
+      currAddr:     (__po && __po.currAddr)     || __emp.currentAddress
+    };
+  } else {
+    /* No ?badge= — standalone demo mode, same defaults as before */
+    PDATA = {
+      fullname: 'Budi Santoso', phone: '+62 812 3456 7890', nik: '3174012345678901', npwp: '12.345.678.9-012.000',
+      dob: '15 March 1990', placeOfBirth: 'Jakarta', gender: 'Male', religion: 'Islam', bloodType: 'O',
+      maritalStatus: 'Married', children: 1, contactName: 'Dewi Santoso', relation: 'Spouse', contactPhone: '+62 813 9876 5432',
+      ktpAddr: 'Jl. Sudirman No. 45, RT 003/RW 007, Tanah Abang, Jakarta Pusat, DKI Jakarta 10250',
+      currAddr: 'Jl. Sudirman No. 45, RT 003/RW 007, Tanah Abang, Jakarta Pusat, DKI Jakarta 10250'
+    };
+  }
+
+  /* Populate the plain text/textarea fields (dropdowns + DOB are handled at
+     their own init sites below, since those need PDATA before they exist). */
+  document.getElementById('inp-fullname').value = PDATA.fullname;
+  document.getElementById('inp-phone').value = PDATA.phone;
+  document.getElementById('inp-nik').value = PDATA.nik;
+  document.getElementById('inp-npwp').value = PDATA.npwp;
+  document.getElementById('inp-placeofbirth').value = PDATA.placeOfBirth;
+  document.getElementById('inp-contactname').value = PDATA.contactName;
+  document.getElementById('inp-contactphone').value = PDATA.contactPhone;
+  document.getElementById('inp-ktp-addr').value = PDATA.ktpAddr;
+  document.getElementById('inp-curr-addr').value = PDATA.currAddr;
+  document.querySelectorAll('.f-readonly').forEach(function (el, i) {
+    if (i === 0) el.textContent = (__emp && __emp.badge) || '000000001';
+    if (i === 1) el.textContent = (__emp && __emp.email) || 'budi.s@steradian.id';
+  });
+
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dirty = false;
+  function updateSave() { document.getElementById('save-btn').disabled = !dirty; }
+
+  /* ── Dirty tracking for text inputs / textareas ── */
+  document.querySelectorAll('input.text-input, textarea.textarea').forEach(function(el) {
+    el.addEventListener('input', function() { dirty = true; updateSave(); });
+  });
+
+  /* ── Error helpers ── */
+  function setError(field, message) {
+    field.classList.add('error');
+    var col = field.closest('.f-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (!msg) {
+      msg = document.createElement('span');
+      msg.className = 'err-msg';
+      field.insertAdjacentElement('afterend', msg);
+    }
+    msg.textContent = message || 'This field is required';
+    msg.classList.add('show');
+  }
+  function clearError(field) {
+    if (!field) return;
+    field.classList.remove('error');
+    var col = field.closest('.f-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (msg) msg.classList.remove('show');
+  }
+  function setSelectError(sel) {
+    sel.classList.add('error');
+    var col = sel.closest('.f-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (msg) { msg.textContent = 'This field is required'; msg.classList.add('show'); }
+  }
+  function clearSelectError(sel) {
+    sel.classList.remove('error');
+    var col = sel.closest('.f-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (msg) msg.classList.remove('show');
+  }
+
+  /* ── Required field validation on Save ── */
+  var REQUIRED_INPUTS = ['inp-fullname', 'inp-phone', 'inp-nik', 'inp-npwp', 'inp-placeofbirth', 'inp-contactname', 'inp-contactphone'];
+  var REQUIRED_TEXTAREAS = ['inp-ktp-addr', 'inp-curr-addr'];
+  var REQUIRED_SELECTS = ['sel-gender', 'sel-religion', 'sel-marital', 'sel-relation'];
+
+  function validateForm() {
+    var errors = [];
+    var banner = document.getElementById('section-err');
+
+    REQUIRED_INPUTS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.value.trim() === '') { setError(el, 'This field is required'); errors.push(el); }
+      else clearError(el);
+    });
+
+    REQUIRED_TEXTAREAS.forEach(function(id) {
+      if (id === 'inp-curr-addr') {
+        var chk = document.getElementById('same-as-ktp');
+        if (chk && chk.checked) return;
+      }
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.value.trim() === '') { setError(el, 'This field is required'); errors.push(el); }
+      else clearError(el);
+    });
+
+    REQUIRED_SELECTS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (!el.dataset.selectedValue) { setSelectError(el); errors.push(el); }
+      else clearSelectError(el);
+    });
+
+    /* DOB required */
+    var dobW = document.getElementById('dob-w');
+    if (dobW && !dobW.dataset.selectedValue) {
+      dobW.classList.add('error');
+      var dobMsg = document.getElementById('err-dob');
+      if (dobMsg) { dobMsg.textContent = 'This field is required'; dobMsg.classList.add('show'); }
+      errors.push(dobW);
+    } else if (dobW) {
+      dobW.classList.remove('error');
+      var dobMsg2 = document.getElementById('err-dob');
+      if (dobMsg2) dobMsg2.classList.remove('show');
+    }
+
+    /* NIK length (if filled) */
+    var nikEl = document.getElementById('inp-nik');
+    if (nikEl && nikEl.value.length > 0 && nikEl.value.length < 16) {
+      setError(nikEl, 'NIK must be exactly 16 digits');
+      if (errors.indexOf(nikEl) === -1) errors.push(nikEl);
+    }
+
+    /* Phone min-length at submit time */
+    function checkPhoneSubmit(inputId, errId) {
+      var MIN_DIGITS = 8, MAX_DIGITS = 13;
+      var input = document.getElementById(inputId);
+      var errEl = document.getElementById(errId);
+      if (!input) return;
+      var digits = (input.value.match(/\d/g) || []).length;
+      if (digits > 0 && digits < MIN_DIGITS) {
+        input.classList.add('error');
+        if (errEl) { errEl.textContent = 'Phone number is too short — enter at least ' + MIN_DIGITS + ' digits.'; errEl.classList.add('show'); }
+        if (errors.indexOf(input) === -1) errors.push(input);
+      } else if (digits > MAX_DIGITS) {
+        input.classList.add('error');
+        if (errEl) { errEl.textContent = 'Phone number is too long (max ' + MAX_DIGITS + ' digits).'; errEl.classList.add('show'); }
+        if (errors.indexOf(input) === -1) errors.push(input);
+      }
+    }
+    checkPhoneSubmit('inp-phone', 'err-phone');
+    checkPhoneSubmit('inp-contactphone', 'err-contactphone');
+
+    if (errors.length) {
+      banner.classList.add('show');
+      var firstEl = errors[0];
+      var target = firstEl.closest('.f-field') || firstEl;
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      banner.classList.remove('show');
+    }
+    return errors.length === 0;
+  }
+
+  /* ── NIK: numeric only, exactly 16 digits ── */
+  (function() {
+    var input = document.getElementById('inp-nik');
+    if (!input) return;
+    input.inputMode = 'numeric';
+    input.maxLength = 16;
+    input.addEventListener('keydown', function(e) {
+      var allowed = ['Backspace','Delete','Tab','Enter','ArrowLeft','ArrowRight','Home','End'];
+      if (e.ctrlKey || e.metaKey) return;
+      if (allowed.indexOf(e.key) >= 0) return;
+      if (!/^\d$/.test(e.key)) e.preventDefault();
+    });
+    input.addEventListener('input', function() {
+      dirty = true; updateSave();
+      var clean = this.value.replace(/\D/g, '');
+      if (this.value !== clean) {
+        this.value = clean;
+        setError(this, 'NIK must contain numbers only');
+        return;
+      }
+      if (clean.length > 0 && clean.length < 16) setError(this, 'NIK must be exactly 16 digits');
+      else if (clean.length === 16) clearError(this);
+    });
+    input.addEventListener('blur', function() {
+      if (this.value.length > 0 && this.value.length < 16) setError(this, 'NIK must be exactly 16 digits');
+    });
+  })();
+
+  /* ── Phone: letters blocked, min 8 / max 13 digits ── */
+  (function() {
+    var MIN_DIGITS = 8, MAX_DIGITS = 13;
+
+    function initPhone(inputId, errId) {
+      var input = document.getElementById(inputId);
+      var errEl = document.getElementById(errId);
+      if (!input) return;
+
+      function showErr(msg) {
+        input.classList.add('error');
+        if (errEl) { errEl.textContent = msg; errEl.classList.add('show'); }
+      }
+      function clearPhoneErr() {
+        input.classList.remove('error');
+        if (errEl) errEl.classList.remove('show');
+      }
+      function countDigits(v) { return (v.match(/\d/g) || []).length; }
+      function sanitize(v) { return v.replace(/[^\d\s\+\-\(\)]/g, ''); }
+
+      input.addEventListener('input', function() {
+        dirty = true; updateSave();
+        var raw = this.value;
+        var clean = sanitize(raw);
+        if (clean !== raw) {
+          this.value = clean;
+          showErr('Phone number cannot contain letters or special characters.');
+          return;
+        }
+        var digits = countDigits(clean);
+        if (digits === 0) { clearPhoneErr(); return; }
+        if (digits > MAX_DIGITS) showErr('Phone number is too long (max ' + MAX_DIGITS + ' digits).');
+        else clearPhoneErr();
+      });
+
+      input.addEventListener('keydown', function(e) {
+        if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+          e.preventDefault();
+          showErr('Phone number cannot contain letters.');
+        }
+      });
+
+      input.addEventListener('blur', function() {
+        var clean = sanitize(this.value);
+        var digits = countDigits(clean);
+        if (digits === 0) return;
+        if (digits < MIN_DIGITS) showErr('Phone number is too short — enter at least ' + MIN_DIGITS + ' digits.');
+        else if (digits > MAX_DIGITS) showErr('Phone number is too long (max ' + MAX_DIGITS + ' digits).');
+        else clearPhoneErr();
+      });
+
+      input.addEventListener('focus', clearPhoneErr);
+    }
+
+    initPhone('inp-phone', 'err-phone');
+    initPhone('inp-contactphone', 'err-contactphone');
+  })();
+
+  /* ── Marital × Children cross-field warning ── */
+  function validateChildrenMarital() {
+    var maritalEl = document.getElementById('sel-marital');
+    var childrenEl = document.getElementById('sel-children');
+    var warn = document.getElementById('children-warn');
+    if (!warn) return;
+    var mVal = (maritalEl && maritalEl.dataset.selectedValue) || '';
+    var cVal = (childrenEl && childrenEl.dataset.selectedValue) || '';
+    warn.classList.toggle('show', mVal === 'Single' && cVal !== '' && cVal !== '0');
+  }
+
+  /* ── DOB inline datepicker with 18+ enforcement ── */
+  (function() {
+    var dobW = document.getElementById('dob-w');
+    if (!dobW) return;
+    var now = new Date();
+    var maxDate = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
+    /* Parse PDATA.dob ("15 March 1990") instead of the old hardcoded 15/Mar/1990 */
+    var dobParts = PDATA.dob.split(' ');
+    var initD = parseInt(dobParts[0], 10);
+    var initM = MONTHS.indexOf(dobParts[1]);
+    var initY = parseInt(dobParts[2], 10);
+    if (initM < 0) initM = 2; /* fallback if a saved override ever has an unparseable string */
+    var state = {
+      view: 'days', month: initM, year: initY,
+      yearRangeStart: Math.floor(initY / 12) * 12,
+      selected: { d: initD, m: initM, y: initY }
+    };
+    /* Pre-fill the DOB value so it passes required validation without re-selecting */
+    dobW.dataset.selectedValue = initD + '/' + (initM + 1) + '/' + initY;
+    document.getElementById('dob-display').textContent = initD + ' ' + MONTHS[initM] + ' ' + initY;
+
+    var panel = document.createElement('div');
+    panel.className = 'calendar-panel';
+    dobW.appendChild(panel);
+
+    function isDateDisabled(y, m, d) {
+      return new Date(y, m, d) > maxDate;
+    }
+
+    function makeNav(prevFn, titleEl, nextFn, prevDis, nextDis) {
+      var nav = document.createElement('div');
+      nav.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;';
+      var prev = document.createElement('button');
+      prev.type = 'button'; prev.className = 'cal-nav-btn'; prev.innerHTML = '&#8249;';
+      if (prevDis) { prev.disabled = true; prev.style.opacity = '0.25'; }
+      else prev.addEventListener('click', function(e) { e.stopPropagation(); prevFn(); render(); });
+      var next = document.createElement('button');
+      next.type = 'button'; next.className = 'cal-nav-btn'; next.innerHTML = '&#8250;';
+      if (nextDis) { next.disabled = true; next.style.opacity = '0.25'; }
+      else next.addEventListener('click', function(e) { e.stopPropagation(); nextFn(); render(); });
+      nav.appendChild(prev); nav.appendChild(titleEl); nav.appendChild(next);
+      return nav;
+    }
+
+    function clickableLabel(text, onClick) {
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.style.cssText = 'background:none;border:none;font-size:13px;font-weight:600;color:#111827;font-family:Inter,sans-serif;cursor:pointer;padding:0 2px;border-bottom:1px dotted #9CA3AF;';
+      el.textContent = text;
+      el.addEventListener('click', function(e) { e.stopPropagation(); onClick(); render(); });
+      return el;
+    }
+
+    function gridBtn(label, selected, onClick, disabled) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      if (disabled) {
+        btn.disabled = true;
+        btn.style.cssText = 'padding:7px 0;font-size:12px;font-family:Inter,sans-serif;border:none;border-radius:2px;width:100%;background:none;color:#D1D5DB;cursor:default;';
+      } else {
+        btn.style.cssText = 'padding:7px 0;font-size:12px;font-family:Inter,sans-serif;border:none;cursor:pointer;border-radius:2px;width:100%;background:' + (selected ? '#E04A2A' : 'none') + ';color:' + (selected ? '#fff' : '#111827') + ';';
+        btn.addEventListener('click', function(e) { e.stopPropagation(); onClick(); render(); });
+      }
+      btn.textContent = label;
+      return btn;
+    }
+
+    function ageNote() {
+      var n = document.createElement('div');
+      n.style.cssText = 'font-size:11px;color:#9CA3AF;text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #F3F4F6;';
+      n.textContent = 'Minimum working age: 18 years old';
+      return n;
+    }
+
+    function render() {
+      panel.innerHTML = '';
+      if (state.view === 'months') renderMonths();
+      else if (state.view === 'years') renderYears();
+      else renderDays();
+      panel.appendChild(ageNote());
+    }
+
+    function renderDays() {
+      var titleWrap = document.createElement('div');
+      titleWrap.style.cssText = 'display:flex;align-items:center;gap:4px;';
+      titleWrap.appendChild(clickableLabel(MONTHS[state.month], function() { state.view = 'months'; }));
+      titleWrap.appendChild(clickableLabel(String(state.year), function() { state.view = 'years'; }));
+      var nextM = state.month === 11 ? 0 : state.month + 1;
+      var nextY = state.month === 11 ? state.year + 1 : state.year;
+      panel.appendChild(makeNav(
+        function() { if (--state.month < 0) { state.month = 11; state.year--; } },
+        titleWrap,
+        function() { if (++state.month > 11) { state.month = 0; state.year++; } },
+        false, isDateDisabled(nextY, nextM, 1)
+      ));
+      var hRow = document.createElement('div'); hRow.className = 'cal-row';
+      ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d) {
+        var c = document.createElement('div'); c.className = 'cal-cell cal-hdr'; c.textContent = d; hRow.appendChild(c);
+      });
+      panel.appendChild(hRow);
+      var firstDay = new Date(state.year, state.month, 1).getDay();
+      var total = new Date(state.year, state.month + 1, 0).getDate();
+      var row = document.createElement('div'); row.className = 'cal-row'; var col = 0;
+      for (var b = 0; b < firstDay; b++) {
+        row.appendChild(Object.assign(document.createElement('div'), {className:'cal-cell'})); col++;
+      }
+      for (var d = 1; d <= total; d++) {
+        if (col > 0 && col % 7 === 0) { panel.appendChild(row); row = document.createElement('div'); row.className = 'cal-row'; }
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'cal-cell'; btn.textContent = d;
+        var dayDis = isDateDisabled(state.year, state.month, d);
+        if (dayDis) {
+          btn.disabled = true;
+          btn.style.cssText = 'color:#D1D5DB;cursor:default;';
+          btn.title = 'Employee must be at least 18 years old';
+        } else {
+          btn.className += ' cal-day';
+          if (state.selected && state.selected.d === d && state.selected.m === state.month && state.selected.y === state.year) {
+            btn.classList.add('selected');
+          }
+          (function(day) {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              state.selected = { d: day, m: state.month, y: state.year };
+              dobW.dataset.selectedValue = day + '/' + (state.month + 1) + '/' + state.year;
+              var span = document.getElementById('dob-display');
+              span.textContent = day + ' ' + MONTHS[state.month] + ' ' + state.year;
+              span.style.color = '#111827';
+              dobW.classList.remove('error');
+              var errDob = document.getElementById('err-dob');
+              if (errDob) errDob.classList.remove('show');
+              dirty = true; updateSave();
+              closeAllCals();
+            });
+          })(d);
+        }
+        row.appendChild(btn); col++;
+      }
+      panel.appendChild(row);
+    }
+
+    function renderMonths() {
+      var maxY = maxDate.getFullYear();
+      panel.appendChild(makeNav(
+        function() { state.year--; },
+        clickableLabel(String(state.year), function() { state.view = 'years'; }),
+        function() { state.year++; },
+        false, state.year >= maxY
+      ));
+      var grid = document.createElement('div'); grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;';
+      MONTHS.forEach(function(m, i) {
+        var mDis = state.year > maxY || (state.year === maxY && i > maxDate.getMonth());
+        var w = document.createElement('div'); w.style.cssText = 'width:calc(33.33% - 3px);';
+        w.appendChild(gridBtn(m.slice(0,3), i === state.month, (function(idx) {
+          return function() { state.month = idx; state.view = 'days'; };
+        })(i), mDis));
+        grid.appendChild(w);
+      });
+      panel.appendChild(grid);
+    }
+
+    function renderYears() {
+      var rangeEnd = state.yearRangeStart + 11;
+      var maxY = maxDate.getFullYear();
+      var titleEl = document.createElement('span');
+      titleEl.style.cssText = 'font-size:13px;font-weight:600;color:#111827;font-family:Inter,sans-serif;';
+      titleEl.textContent = state.yearRangeStart + ' – ' + rangeEnd;
+      panel.appendChild(makeNav(
+        function() { state.yearRangeStart -= 12; },
+        titleEl,
+        function() { state.yearRangeStart += 12; },
+        false, state.yearRangeStart + 12 > maxY
+      ));
+      var grid = document.createElement('div'); grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;';
+      for (var y = state.yearRangeStart; y <= rangeEnd; y++) {
+        var w = document.createElement('div'); w.style.cssText = 'width:calc(33.33% - 3px);';
+        w.appendChild(gridBtn(String(y), y === state.year, (function(yr) {
+          return function() { state.year = yr; state.view = 'months'; };
+        })(y), y > maxY));
+        grid.appendChild(w);
+      }
+      panel.appendChild(grid);
+    }
+
+    function closeAllCals() {
+      document.querySelectorAll('.calendar-panel.open').forEach(function(p) { p.classList.remove('open'); });
+      document.querySelectorAll('.date-w.open').forEach(function(el) { el.classList.remove('open'); });
+    }
+
+    dobW.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = panel.classList.contains('open');
+      closeAllCals();
+      if (!wasOpen) { render(); panel.classList.add('open'); dobW.classList.add('open'); }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.date-w')) closeAllCals();
+    });
+  })();
+
+  /* ── Same as KTP address ── */
+  (function() {
+    var checkbox = document.getElementById('same-as-ktp');
+    if (!checkbox) return;
+    var ktp = document.getElementById('inp-ktp-addr');
+    var curr = document.getElementById('inp-curr-addr');
+    if (!ktp || !curr) return;
+    function sync() { if (checkbox.checked) curr.value = ktp.value; }
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        curr.value = ktp.value;
+        curr.disabled = true;
+      } else {
+        curr.disabled = false;
+      }
+      clearError(curr);
+      dirty = true; updateSave();
+    });
+    ktp.addEventListener('input', sync);
+  })();
+
+  function copyEppEmail() {
+    var email = document.getElementById('epp-email').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(email);
+    if (window.QuadraToast) QuadraToast.show('Email copied', email);
+  }
+
+  /* ── Cancel / Back guard ── */
+  function handleCancel() {
+    if (dirty) {
+      document.getElementById('cancel-modal').classList.add('show');
+    } else {
+      __goToDetail('#personal');
+    }
+  }
+
+  /* ── Save ── */
+  document.getElementById('save-btn').addEventListener('click', function() {
+    if (!validateForm()) return;
+    if (window.__BADGE) {
+      var dobDisplay = document.getElementById('dob-display').textContent;
+      localStorage.setItem('quadra_personal_override_' + window.__BADGE, JSON.stringify({
+        fullname:      document.getElementById('inp-fullname').value,
+        phone:         document.getElementById('inp-phone').value,
+        nik:           document.getElementById('inp-nik').value,
+        npwp:          document.getElementById('inp-npwp').value,
+        dob:           dobDisplay,
+        placeOfBirth:  document.getElementById('inp-placeofbirth').value,
+        gender:        document.getElementById('sel-gender').dataset.selectedValue,
+        religion:      RELIGION_TO_DATA[document.getElementById('sel-religion').dataset.selectedValue] || document.getElementById('sel-religion').dataset.selectedValue,
+        bloodType:     document.getElementById('sel-blood').dataset.selectedValue,
+        maritalStatus: document.getElementById('sel-marital').dataset.selectedValue,
+        children:      parseInt(document.getElementById('sel-children').dataset.selectedValue, 10) || 0,
+        contactName:   document.getElementById('inp-contactname').value,
+        relation:      document.getElementById('sel-relation').dataset.selectedValue,
+        contactPhone:  document.getElementById('inp-contactphone').value,
+        ktpAddr:       document.getElementById('inp-ktp-addr').value,
+        currAddr:      document.getElementById('inp-curr-addr').value
+      }));
+    }
+    localStorage.setItem('quadra_personal_saved', '1');
+    __goToDetail('#personal');
+  });
+
+  /* ── Dropdown inits (with dirty tracking + marital×children callbacks) ── */
+  QuadraDropdown.init(document.getElementById('sel-gender'), ['Male', 'Female'], {
+    value: PDATA.gender,
+    onChange: function() { dirty = true; updateSave(); validateChildrenMarital(); clearSelectError(document.getElementById('sel-gender')); }
+  });
+  QuadraDropdown.init(document.getElementById('sel-religion'), ['Islam', 'Protestant', 'Catholic', 'Hindu', 'Buddhist', 'Confucian'], {
+    value: PDATA.religion,
+    onChange: function() { dirty = true; updateSave(); clearSelectError(document.getElementById('sel-religion')); }
+  });
+  QuadraDropdown.init(document.getElementById('sel-blood'), ['A', 'B', 'AB', 'O'], {
+    value: PDATA.bloodType,
+    onChange: function() { dirty = true; updateSave(); }
+  });
+  QuadraDropdown.init(document.getElementById('sel-marital'), ['Single', 'Married', 'Divorced', 'Widowed'], {
+    value: PDATA.maritalStatus,
+    onChange: function() { dirty = true; updateSave(); validateChildrenMarital(); clearSelectError(document.getElementById('sel-marital')); }
+  });
+  QuadraDropdown.init(document.getElementById('sel-children'), ['0','1','2','3','4','5','6','7','8+'], {
+    value: String(PDATA.children),
+    onChange: function() { dirty = true; updateSave(); validateChildrenMarital(); }
+  });
+  QuadraDropdown.init(document.getElementById('sel-relation'), ['Spouse', 'Parent', 'Sibling', 'Child'], {
+    value: PDATA.relation,
+    onChange: function() { dirty = true; updateSave(); clearSelectError(document.getElementById('sel-relation')); }
+  });
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script>
+function __goToDetail(hash) {
+  var b = window.__BADGE;
+  var url = 'employee-detail.html';
+  if (b) url += '?badge=' + b;
+  if (hash) url += hash;
+  window.location.href = url;
+}
+(function() {
+  var badge = new URLSearchParams(window.location.search).get('badge');
+  if (!badge) return;
+  var emp = null;
+  for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) {
+    if (QUADRA_EMPLOYEES[i].badge === badge) { emp = QUADRA_EMPLOYEES[i]; break; }
+  }
+  if (!emp) return;
+  window.__BADGE = badge;
+  var fnInp = document.getElementById('inp-fullname');
+  if (fnInp) fnInp.value = emp.name;
+  document.querySelectorAll('.f-readonly').forEach(function(el, i) {
+    if (i === 0) el.textContent = emp.badge;
+    if (i === 1) el.textContent = emp.email;
+  });
+  var STATUS_TAG_CLASS = { 'Active': 'tag-success', 'Probation': 'tag-warning', 'On Leave': 'tag-info', 'Inactive': 'tag-neutral' };
+  var eppAvatar = document.getElementById('epp-avatar');
+  if (eppAvatar) { eppAvatar.textContent = emp.initials; eppAvatar.style.background = emp.color; }
+  document.getElementById('epp-name').textContent = emp.name;
+  document.getElementById('epp-position').textContent = emp.pos;
+  var eppStatusEl = document.getElementById('epp-status');
+  eppStatusEl.textContent = emp.status;
+  eppStatusEl.className = 'tag tag-dot ' + (STATUS_TAG_CLASS[emp.status] || 'tag-neutral');
+  document.getElementById('epp-email').textContent = emp.email || '—';
+  document.getElementById('epp-badge').textContent = emp.badge;
+  document.getElementById('epp-department').textContent = emp.department || '—';
+  document.querySelectorAll('a[href*="employee-detail.html"]').forEach(function(a) {
+    var h = a.getAttribute('href');
+    if (h.indexOf('badge=') < 0) {
+      var hi = h.indexOf('#');
+      a.setAttribute('href', hi >= 0 ? h.slice(0,hi) + '?badge=' + badge + h.slice(hi) : h + '?badge=' + badge);
+    }
+    a.innerHTML = a.innerHTML.replace(/Budi Santoso/g, emp.name).replace(/Ahmad Fauzi/g, emp.name);
+  });
+  document.querySelectorAll('button').forEach(function(btn) {
+    if (/Back to (Budi Santoso|Ahmad Fauzi)/.test(btn.innerHTML)) {
+      btn.innerHTML = btn.innerHTML.replace(/Budi Santoso|Ahmad Fauzi/g, emp.name);
+    }
+  });
+})();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

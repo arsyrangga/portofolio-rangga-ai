@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Level Range</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .text-input[type="number"] spin-button removal deleted — functionally
+       identical (same selector, just written as .text-input[type="number"]
+       instead of input[type="number"].text-input) to the rule already
+       shared in layout.css. Scanner didn't flag it (exact-string match
+       only) but it was a real duplicate; verified real usage (the Level
+       Number field in the edit/add modal) before deleting. */
+
+    .level-cell { display: flex; align-items: center; gap: 10px; }
+    .level-num { font-size: 13px; font-weight: 600; color: #111827; }
+    .level-name { font-size: 12px; color: #6B7280; }
+    .wage-val { font-size: 13px; font-weight: 500; color: #111827; font-variant-numeric: tabular-nums; }
+    .wage-unlimited { font-size: 13px; color: #9CA3AF; }
+    /* Table footnote strip — icon + text below the level table. Single
+       use so far; candidate for promotion if the same pattern turns up
+       in the Settings batch (Task 10). */
+    .table-note {
+      padding: 10px 16px; background: #F9FAFB; border-top: 1px solid #E5E7EB;
+      font-size: 12px; color: #6B7280; display: flex; align-items: center; gap: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="level-range"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Level Range</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">Level Range</div>
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Add Level
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:220px">Level</th>
+            <th style="width:200px">Minimum Wage</th>
+            <th style="width:200px">Maximum Wage</th>
+            <th>Overtime Rate / Hour</th>
+            <th style="width:130px;text-align:right">Employees</th>
+            <th class="col-actions" style="width:116px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="level-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ ADD LEVEL MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" style="width:480px">
+
+    <div class="modal-head">
+      <span class="modal-head-title" id="modal-title">Add Level</span>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="m-field">
+          <label>Level Number <span style="color:#EF4444">*</span></label>
+          <input type="number" id="modal-level-num" min="1" placeholder="e.g. 6" class="text-input">
+          <div class="m-err" id="err-level-num"></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="m-field">
+          <label>Minimum Wage <span style="color:#EF4444">*</span></label>
+          <div class="f-input">
+            <span class="input-prefix">IDR</span>
+            <input type="text" id="modal-min-wage" placeholder="e.g. 25.000.000" class="text-input">
+          </div>
+          <div class="m-err" id="err-min-wage"></div>
+        </div>
+        <div class="m-field">
+          <label style="display:flex;align-items:center;gap:5px;">Maximum Wage
+            <span class="m-tooltip-w" data-tip='Leave empty for "No upper limit"'>
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#9CA3AF" stroke-width="1.3"/><path d="M7 6v4" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4.5" r="0.6" fill="#9CA3AF"/></svg>
+            </span>
+          </label>
+          <div class="f-input">
+            <span class="input-prefix">IDR</span>
+            <input type="text" id="modal-max-wage" placeholder="e.g. 10.000.000" class="text-input">
+          </div>
+          <div class="m-err" id="err-max-wage"></div>
+        </div>
+      </div>
+
+      <div class="m-field">
+        <label>Overtime Rate <span style="color:#EF4444">*</span></label>
+        <div class="f-input">
+          <span class="input-prefix">IDR</span>
+          <input type="text" id="modal-ot-rate" placeholder="e.g. 50.000" class="text-input">
+          <span class="input-suffix">/ hour</span>
+        </div>
+        <div class="m-err" id="err-ot-rate"></div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLevel()">Save Level</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="delete-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Level</span>
+      <button class="modal-close" onclick="closeDelete()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Delete <span id="delete-level-name">this level</span>?</div>
+        <div class="modal-sub-desc">Employees currently assigned to this level will lose their salary band reference. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDelete()">Cancel</button>
+      <button class="btn btn-danger" onclick="executeDelete()">Delete Level</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script>
+  /* ── Master data ─────────────────────────────────────── */
+  var DEFAULT_LEVELS = [
+    { level: 1, minWage: 0,        maxWage: 4999999,   otRate: 25000  },
+    { level: 2, minWage: 5000000,  maxWage: 7999999,   otRate: 40000  },
+    { level: 3, minWage: 8000000,  maxWage: 11999999,  otRate: 55000  },
+    { level: 4, minWage: 12000000, maxWage: 19999999,  otRate: 85000  },
+    { level: 5, minWage: 20000000, maxWage: null,       otRate: 130000 }
+  ];
+
+  var LEVEL_COLORS = [
+    { badge: '#6B7280', otBg: '#F3F4F6', otBorder: '#E5E7EB', otText: '#374151', otIcon: '#6B7280' },
+    { badge: '#22C55E', otBg: '#ECFDF5', otBorder: '#6EE7B7', otText: '#059669', otIcon: '#059669' },
+    { badge: '#3B82F6', otBg: '#EFF6FF', otBorder: '#BFDBFE', otText: '#2563EB', otIcon: '#2563EB' },
+    { badge: '#E04A2A', otBg: '#FFF7ED', otBorder: '#FED7AA', otText: '#EA580C', otIcon: '#EA580C' },
+    { badge: '#7C3AED', otBg: '#FAF5FF', otBorder: '#E9D5FF', otText: '#7C3AED', otIcon: '#7C3AED' }
+  ];
+
+  function getLevels() {
+    try { var d = JSON.parse(localStorage.getItem('quadra_level_ranges')); return (d && d.length) ? d : DEFAULT_LEVELS.slice(); }
+    catch(e) { return DEFAULT_LEVELS.slice(); }
+  }
+  function saveLevels(levels) { localStorage.setItem('quadra_level_ranges', JSON.stringify(levels)); }
+
+  function fmtNum(n) { return 'IDR ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function getColor(idx) { return LEVEL_COLORS[idx % LEVEL_COLORS.length]; }
+  function countEmployees(l) {
+    return QUADRA_EMPLOYEES.filter(function(e) {
+      if (e.salary < l.minWage) return false;
+      if (l.maxWage !== null && e.salary > l.maxWage) return false;
+      return true;
+    }).length;
+  }
+
+  /* ── Render table ────────────────────────────────────── */
+  function renderTable() {
+    var levels = getLevels().sort(function(a, b) { return a.level - b.level; });
+    var tbody = document.getElementById('level-tbody');
+    tbody.innerHTML = '';
+    levels.forEach(function(l, idx) {
+      var c = getColor(idx);
+      var clockSvg  = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 4v2.5l1.5 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var editSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var deleteSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var viewSvg   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+      var maxCell = l.maxWage === null
+        ? '<div class="wage-unlimited">— (No upper limit)</div>'
+        : '<div class="wage-val">' + fmtNum(l.maxWage) + '</div>';
+      var tr = document.createElement('tr');
+      tr.dataset.level = l.level;
+      var empCount = countEmployees(l);
+      var empCell = empCount > 0
+        ? '<td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:500;color:#111827">' + empCount + '</td>'
+        : '<td style="text-align:right;color:#9CA3AF">—</td>';
+      tr.innerHTML =
+        '<td><div class="level-cell"><div class="level-badge" style="background:' + c.badge + '">' + l.level + '</div><div class="level-num">Level ' + l.level + '</div></div></td>' +
+        '<td><div class="wage-val">' + fmtNum(l.minWage) + '</div></td>' +
+        '<td>' + maxCell + '</td>' +
+        '<td><span class="tag tag-neutral">' + clockSvg + fmtNum(l.otRate) + ' / hr</span></td>' +
+        empCell +
+        '<td><div class="action-btns">' +
+          '<button class="icon-btn" title="View Detail" data-detail="' + l.level + '">' + viewSvg + '</button>' +
+          '<button class="icon-btn" title="Edit" data-edit="' + l.level + '">' + editSvg + '</button>' +
+          '<button class="icon-btn" title="Delete" style="color:#EF4444" data-delete="' + l.level + '">' + deleteSvg + '</button>' +
+        '</div></td>';
+      tbody.appendChild(tr);
+    });
+    /* delegate events */
+    tbody.onclick = function(e) {
+      var editBtn   = e.target.closest('[data-edit]');
+      var delBtn    = e.target.closest('[data-delete]');
+      var detailBtn = e.target.closest('[data-detail]');
+      if (editBtn)   { openEditModal(parseInt(editBtn.dataset.edit)); return; }
+      if (delBtn)    { confirmDelete(parseInt(delBtn.dataset.delete), 'Level ' + delBtn.dataset.delete); return; }
+      if (detailBtn) { openDetail(parseInt(detailBtn.dataset.detail)); return; }
+      var row = e.target.closest('tr[data-level]');
+      if (row) openDetail(parseInt(row.dataset.level));
+    };
+  }
+
+  /* ── Modal ───────────────────────────────────────────── */
+  var editingLevel = null;
+
+  function clearFieldError(inputId, errId) {
+    var input = document.getElementById(inputId);
+    var err   = document.getElementById(errId);
+    if (input) input.classList.remove('is-error');
+    if (err)   { err.textContent = ''; err.classList.remove('show'); }
+  }
+  function clearLevelNumError() { clearFieldError('modal-level-num', 'err-level-num'); }
+  function clearMinWageError()  { clearFieldError('modal-min-wage',  'err-min-wage');  }
+  function clearMaxWageError()  { clearFieldError('modal-max-wage',  'err-max-wage');  }
+  function clearOtRateError()   { clearFieldError('modal-ot-rate',   'err-ot-rate');   }
+
+  function openAddModal() {
+    editingLevel = null;
+    document.getElementById('modal-title').textContent = 'Add Level';
+    document.getElementById('modal-level-num').value = '';
+    document.getElementById('modal-level-num').disabled = false;
+    clearLevelNumError();
+    clearMinWageError();
+    clearMaxWageError();
+    clearOtRateError();
+    document.getElementById('modal-min-wage').value = '';
+    document.getElementById('modal-max-wage').value = '';
+    document.getElementById('modal-ot-rate').value  = '';
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function openEditModal(levelNum) {
+    var l = getLevels().find(function(x) { return x.level === levelNum; });
+    if (!l) return;
+    editingLevel = levelNum;
+    document.getElementById('modal-title').textContent = 'Edit Level ' + levelNum;
+    document.getElementById('modal-level-num').value = l.level;
+    document.getElementById('modal-level-num').disabled = true;
+    document.getElementById('modal-min-wage').value = String(l.minWage).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    document.getElementById('modal-max-wage').value = l.maxWage !== null ? String(l.maxWage).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+    document.getElementById('modal-ot-rate').value  = String(l.otRate).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    clearMinWageError();
+    clearMaxWageError();
+    clearOtRateError();
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+  function saveLevel() {
+    var levelNum = parseInt(document.getElementById('modal-level-num').value);
+    var minRaw   = document.getElementById('modal-min-wage').value.replace(/\./g, '');
+    var maxRaw   = document.getElementById('modal-max-wage').value.replace(/\./g, '');
+    var otRaw    = document.getElementById('modal-ot-rate').value.replace(/\./g, '');
+
+    function showFieldError(inputId, errId, msg) {
+      var inp = document.getElementById(inputId);
+      var err = document.getElementById(errId);
+      inp.classList.add('is-error');
+      err.textContent = msg;
+      err.classList.add('show');
+      inp.focus();
+    }
+
+    function fmtIDR(n) { return 'IDR ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+    function levelRangeLabel(l) {
+      if (l.maxWage === null) return '≥ ' + fmtIDR(l.minWage);
+      if (l.minWage === 0)    return '< ' + fmtIDR(l.maxWage + 1);
+      return fmtIDR(l.minWage) + ' – ' + fmtIDR(l.maxWage);
+    }
+
+    /* Required fields */
+    if (!levelNum || levelNum < 1) {
+      showFieldError('modal-level-num', 'err-level-num', 'Level number is required.');
+      return;
+    }
+    if (!minRaw) {
+      showFieldError('modal-min-wage', 'err-min-wage', 'Minimum wage is required.');
+      return;
+    }
+    if (!otRaw) {
+      showFieldError('modal-ot-rate', 'err-ot-rate', 'Overtime rate is required.');
+      return;
+    }
+
+    var minWage = parseInt(minRaw), maxWage = maxRaw ? parseInt(maxRaw) : null, otRate = parseInt(otRaw);
+    var levels = getLevels();
+
+    /* Min must be less than max */
+    if (maxWage !== null && minWage >= maxWage) {
+      showFieldError('modal-min-wage', 'err-min-wage', 'Minimum wage must be less than maximum wage.');
+      return;
+    }
+
+    /* Level number duplicate (add mode only) */
+    if (editingLevel === null) {
+      if (levels.some(function(l) { return l.level === levelNum; })) {
+        showFieldError('modal-level-num', 'err-level-num', 'Level ' + levelNum + ' already exists.');
+        return;
+      }
+    }
+
+    /* Range overlap check (both modes) */
+    var newMaxVal = maxWage === null ? Infinity : maxWage;
+    var overlap = null;
+    for (var i = 0; i < levels.length; i++) {
+      var lv = levels[i];
+      if (editingLevel !== null && lv.level === editingLevel) continue;
+      var lvMax = lv.maxWage === null ? Infinity : lv.maxWage;
+      if (minWage <= lvMax && lv.minWage <= newMaxVal) { overlap = lv; break; }
+    }
+    if (overlap) {
+      showFieldError('modal-min-wage', 'err-min-wage',
+        'Range overlaps with Level ' + overlap.level + ' (' + levelRangeLabel(overlap) + ').');
+      return;
+    }
+
+    if (editingLevel === null) {
+      levels.push({ level: levelNum, minWage: minWage, maxWage: maxWage, otRate: otRate });
+    } else {
+      var idx = levels.findIndex(function(l) { return l.level === editingLevel; });
+      if (idx >= 0) levels[idx] = { level: editingLevel, minWage: minWage, maxWage: maxWage, otRate: otRate };
+    }
+    saveLevels(levels);
+    renderTable();
+    closeModal();
+    QuadraToast.show('Level ' + (editingLevel || levelNum) + ' has been ' + (editingLevel ? 'updated' : 'added') + '.', 'success');
+  }
+
+  /* ── Delete ──────────────────────────────────────────── */
+  var deleteTargetLevel = null;
+
+  function confirmDelete(num, name) {
+    deleteTargetLevel = num;
+    document.getElementById('delete-level-name').textContent = name;
+    document.getElementById('delete-overlay').classList.add('open');
+  }
+  function closeDelete() { document.getElementById('delete-overlay').classList.remove('open'); deleteTargetLevel = null; }
+
+  function executeDelete() {
+    if (deleteTargetLevel === null) return;
+    var num = deleteTargetLevel;
+    saveLevels(getLevels().filter(function(l) { return l.level !== num; }));
+    renderTable();
+    closeDelete();
+    QuadraToast.show('Level ' + num + ' has been removed.', 'success');
+  }
+
+  /* ── Dot format ──────────────────────────────────────── */
+  function initDotFormat(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      var pos = this.selectionStart, oldLen = this.value.length;
+      var raw = this.value.replace(/\./g, '').replace(/\D/g, '');
+      this.value = raw === '' ? '' : raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      var diff = this.value.length - oldLen;
+      this.setSelectionRange(pos + diff, pos + diff);
+    });
+  }
+  initDotFormat('modal-min-wage');
+  initDotFormat('modal-max-wage');
+  initDotFormat('modal-ot-rate');
+  document.getElementById('modal-level-num').addEventListener('input', clearLevelNumError);
+  document.getElementById('modal-min-wage').addEventListener('input', clearMinWageError);
+  document.getElementById('modal-max-wage').addEventListener('input', clearMaxWageError);
+  document.getElementById('modal-ot-rate').addEventListener('input', clearOtRateError);
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeModal(); closeDelete(); } });
+
+  /* ── Detail page navigation ─────────────────────────── */
+  function openDetail(levelNum) {
+    window.location.href = 'payroll-level-range-detail.html?level=' + levelNum;
+  }
+
+  /* ── Init ────────────────────────────────────────────── */
+  if (!localStorage.getItem('quadra_level_ranges')) saveLevels(DEFAULT_LEVELS);
+  renderTable();
+  var initParams = new URLSearchParams(window.location.search);
+  var editParam = parseInt(initParams.get('edit'));
+  if (editParam) openEditModal(editParam);
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+
+<script src="clockwidget.js"></script>
+</body>
+</html>

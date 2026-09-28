@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Timesheet Approval Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="my-timesheet" data-active-sub="my-timesheet-approval"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="timesheet-approval.html">Timesheet Approval</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current" id="bc-period">—</span>
+  </div>
+
+  <main class="main-content">
+
+    <a class="back-link" id="backLink" href="timesheet-approval.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="backLinkText">Back to Timesheet Approval</span>
+    </a>
+
+    <div class="page-header">
+      <div>
+        <div class="page-title" id="page-title-period">Timesheet Approval</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="search-w">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9CA3AF" stroke-width="1.4"/><path d="M9.5 9.5l3 3" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <input id="search-input" type="text" placeholder="Search name or NIK…" />
+      </div>
+      <div class="filter-select" id="role-select">
+        <div class="filter-btn" id="role-btn">
+          <span id="role-label">All Roles</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="filter-dropdown" id="role-dropdown">
+          <div class="filter-option active" data-val="">All Roles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="selection-bar" id="selection-bar">
+      <span class="selection-count" id="selection-count">0 selected</span>
+      <span class="selection-clear" id="selection-clear" onclick="clearSelection()">Clear selection</span>
+      <div class="selection-bar-right">
+        <button class="btn btn-green" onclick="openBulkApproveModal()">Approve Selected</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" id="check-all" onchange="toggleCheckAll(this)" /></th>
+            <th>Employee</th>
+            <th style="width:130px">Role</th>
+            <th style="width:110px">Status</th>
+            <th style="width:90px">Total Days</th>
+            <th style="width:90px">Absences</th>
+            <th style="width:110px">Total Hours</th>
+            <th style="width:160px">Submitted At</th>
+            <th class="col-actions" style="width:180px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="approval-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- Reject confirmation modal -->
+<div class="modal-overlay" id="reject-modal">
+  <div class="modal-box" style="width:420px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Reject Timesheet</span>
+      <button class="modal-close" onclick="closeRejectModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Reject this timesheet?</div>
+        <div class="modal-sub-desc">The employee will be able to edit and resubmit it.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Reason <span class="req">*</span></label>
+        <textarea class="textarea" id="reject-reason" placeholder="Explain why this timesheet is being rejected..."></textarea>
+      </div>
+      <div class="field-error" id="reject-reason-error" style="display:none">Please provide a reason.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRejectModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmReject()">Reject</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk approve confirmation modal -->
+<div class="modal-overlay" id="bulk-approve-modal">
+  <div class="modal-box" style="width:420px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Approve Timesheets</span>
+      <button class="modal-close" onclick="closeBulkApproveModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon icon-success">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="#059669" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Approve <span id="bulk-approve-count">0</span> timesheets?</div>
+        <div class="modal-sub-desc">This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeBulkApproveModal()">Cancel</button>
+      <button class="btn btn-green" onclick="confirmBulkApprove()">Approve</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="timesheet-seed.js"></script>
+<script>
+(function () {
+  seedAllTimesheetsIfNeeded();
+
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function periodLabel(pk) {
+    var parts = pk.split('-');
+    return MONTHS[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+  }
+
+  function getPeriodFromQuery() {
+    var m = /[?&]period=([^&]+)/.exec(window.location.search);
+    var raw = m ? decodeURIComponent(m[1]) : null;
+    if (raw && !/^\d{4}-(0[1-9]|1[0-2])$/.test(raw)) return null;
+    return raw;
+  }
+
+  var PERIOD = getPeriodFromQuery();
+
+  if (/[?&]from=payroll(&|$)/.test(window.location.search)) {
+    var backLink = document.getElementById('backLink');
+    backLink.href = 'payroll-summary.html';
+    document.getElementById('backLinkText').textContent = 'Back to Payroll Summary';
+  }
+
+  function timesheetKey(badge, period) {
+    return 'quadra_timesheet_' + badge + '_' + period;
+  }
+
+  function loadTimesheetFor(badge) {
+    if (!PERIOD) return null;
+    try {
+      var raw = localStorage.getItem(timesheetKey(badge, PERIOD));
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (data.days) data.days = data.days.map(timesheetNormalizeDay);
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function saveTimesheetFor(badge, data) {
+    localStorage.setItem(timesheetKey(badge, PERIOD), JSON.stringify(data));
+  }
+
+  function pad2(n) { return n < 10 ? '0' + n : String(n); }
+
+  function timeDiffMinutes(fromVal, toVal) {
+    if (!fromVal || !toVal) return 0;
+    var fp = fromVal.split(':'), tp = toVal.split(':');
+    var fromMins = parseInt(fp[0], 10) * 60 + parseInt(fp[1], 10);
+    var toMins   = parseInt(tp[0], 10) * 60 + parseInt(tp[1], 10);
+    var diff = toMins - fromMins;
+    if (diff < 0) diff += 24 * 60;
+    return diff;
+  }
+
+  function formatHM(mins) {
+    var h = Math.floor(mins / 60);
+    var m = mins % 60;
+    return h + 'h ' + pad2(m) + 'm';
+  }
+
+  function totalWorkMinutes(days) {
+    var total = 0;
+    (days || []).forEach(function (d) {
+      if (d.dayStatus !== 'Kerja') return;
+      total += timeDiffMinutes(d.workStart, d.workEnd);
+    });
+    return total;
+  }
+
+  function totalKerjaDays(days) {
+    var count = 0;
+    (days || []).forEach(function (d) { if (d.dayStatus === 'Kerja') count++; });
+    return count;
+  }
+
+  var ABSENCE_STATUSES = { Ijin: true, Sakit: true, Cuti: true, Alfa: true };
+
+  function totalAbsenceDays(days) {
+    var count = 0;
+    (days || []).forEach(function (d) { if (ABSENCE_STATUSES[d.dayStatus]) count++; });
+    return count;
+  }
+
+  var STATUS_TAG   = { Submitted: 'tag tag-warning', Approved: 'tag tag-success', Rejected: 'tag tag-danger' };
+  var STATUS_LABEL = { Submitted: 'Submitted', Approved: 'Approved', Rejected: 'Rejected' };
+
+  window.viewTimesheet = function (badge) {
+    window.location.href = 'timesheet-approval-employee.html?badge=' + encodeURIComponent(badge) + '&period=' + encodeURIComponent(PERIOD || '');
+  };
+
+  var HR_BADGE = localStorage.getItem('quadra_active_badge') || '';
+  var pendingActionBadge = null;
+  var selectedBadges = new Set();
+  var filters = { search: '', role: '' };
+
+  function getAllEntries() {
+    return QUADRA_EMPLOYEES
+      .map(function (emp) { return { emp: emp, ts: loadTimesheetFor(emp.badge) }; })
+      .filter(function (r) { return r.ts && r.ts.status !== 'Draft'; });
+  }
+
+  function fmtRow(emp, ts) {
+    // rejectionReason is free-text HR input, escaped via timesheetEscHtml — emp.name/pos/badge
+    // are trusted structured seed data (employees-data.js), interpolated raw like everywhere else
+    // in this codebase; this isn't an inconsistency, it's this file's existing escaping rule.
+    var statusHtml = ts.status === 'Rejected' && ts.rejectionReason
+      ? '<span class="' + STATUS_TAG[ts.status] + '" title="' + timesheetEscHtml(ts.rejectionReason) + '" style="cursor:help">' + STATUS_LABEL[ts.status] + '</span>'
+      : '<span class="' + STATUS_TAG[ts.status] + '">' + STATUS_LABEL[ts.status] + '</span>';
+    var totalDaysHtml = String(totalKerjaDays(ts.days));
+    var absencesHtml = String(totalAbsenceDays(ts.days));
+    var totalHtml = formatHM(totalWorkMinutes(ts.days));
+    var submittedHtml = ts.submittedAt ? new Date(ts.submittedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+    var checkHtml = ts.status === 'Submitted'
+      ? '<td class="col-check"><input type="checkbox" data-badge="' + emp.badge + '"' + (selectedBadges.has(emp.badge) ? ' checked' : '') + ' onclick="event.stopPropagation();toggleRow(this)" /></td>'
+      : '<td class="col-check"></td>';
+    var actions = ts.status === 'Submitted'
+      ? '<div class="action-btns">'
+        + '<button class="btn btn-green" onclick="event.stopPropagation();approveTimesheet(\'' + emp.badge + '\')">Approve</button>'
+        + '<button class="btn btn-danger-outline" onclick="event.stopPropagation();openRejectModal(\'' + emp.badge + '\')">Reject</button>'
+        + '</div>'
+      : '—';
+    return '<tr style="cursor:pointer" onclick="viewTimesheet(\'' + emp.badge + '\')">'
+      + checkHtml
+      + '<td><div class="emp-cell">'
+      + '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>'
+      + '<div><div class="emp-name">' + emp.name + '</div><div class="emp-email">' + emp.badge + '</div></div>'
+      + '</div></td>'
+      + '<td>' + emp.pos + '</td>'
+      + '<td>' + statusHtml + '</td>'
+      + '<td>' + totalDaysHtml + '</td>'
+      + '<td>' + absencesHtml + '</td>'
+      + '<td>' + totalHtml + '</td>'
+      + '<td>' + submittedHtml + '</td>'
+      + '<td>' + actions + '</td>'
+      + '</tr>';
+  }
+
+  function render() {
+    document.getElementById('bc-period').textContent = PERIOD ? periodLabel(PERIOD) : 'Unknown period';
+    document.getElementById('page-title-period').textContent = 'Timesheet Approval — ' + (PERIOD ? periodLabel(PERIOD) : 'Unknown period');
+
+    var allEntries = getAllEntries();
+
+    var submittedBadgesNow = {};
+    allEntries.forEach(function (r) { if (r.ts.status === 'Submitted') submittedBadgesNow[r.emp.badge] = true; });
+    var toDrop = [];
+    selectedBadges.forEach(function (badge) { if (!submittedBadgesNow[badge]) toDrop.push(badge); });
+    toDrop.forEach(function (badge) { selectedBadges.delete(badge); });
+
+    var q = filters.search.trim().toLowerCase();
+    var entries = allEntries.filter(function (r) {
+      if (filters.role && r.emp.pos !== filters.role) return false;
+      if (q && r.emp.name.toLowerCase().indexOf(q) < 0 && r.emp.nik.toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+
+    var rows = entries.map(function (r) { return fmtRow(r.emp, r.ts); }).join('');
+
+    var emptyMsg = allEntries.length === 0 ? 'No timesheets for this period.' : 'No results match your search or filter.';
+    document.getElementById('approval-tbody').innerHTML = rows
+      || '<tr><td colspan="9" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">' + emptyMsg + '</td></tr>';
+
+    updateSelectionBar();
+    updateCheckAllState();
+  }
+
+  function updateSelectionBar() {
+    var bar = document.getElementById('selection-bar');
+    var count = document.getElementById('selection-count');
+    var n = selectedBadges.size;
+    if (n > 0) {
+      bar.classList.add('show');
+      count.textContent = n + ' timesheet' + (n !== 1 ? 's' : '') + ' selected';
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  function updateCheckAllState() {
+    var checkAll = document.getElementById('check-all');
+    var submittedCbs = document.querySelectorAll('#approval-tbody input[type=checkbox][data-badge]');
+    var total = submittedCbs.length;
+    var checkedCount = 0;
+    submittedCbs.forEach(function (cb) { if (cb.checked) checkedCount++; });
+    checkAll.checked = total > 0 && checkedCount === total;
+  }
+
+  window.toggleRow = function (cb) {
+    if (cb.checked) selectedBadges.add(cb.dataset.badge);
+    else selectedBadges.delete(cb.dataset.badge);
+    updateSelectionBar();
+    updateCheckAllState();
+  };
+
+  window.toggleCheckAll = function (cb) {
+    var checked = cb.checked;
+    document.querySelectorAll('#approval-tbody input[type=checkbox][data-badge]').forEach(function (rowCb) {
+      rowCb.checked = checked;
+      if (checked) selectedBadges.add(rowCb.dataset.badge);
+      else selectedBadges.delete(rowCb.dataset.badge);
+    });
+    updateSelectionBar();
+    updateCheckAllState();
+  };
+
+  window.clearSelection = function () {
+    selectedBadges.clear();
+    render();
+  };
+
+  window.openBulkApproveModal = function () {
+    if (selectedBadges.size === 0) return;
+    document.getElementById('bulk-approve-count').textContent = selectedBadges.size;
+    document.getElementById('bulk-approve-modal').classList.add('open');
+  };
+
+  window.closeBulkApproveModal = function () {
+    document.getElementById('bulk-approve-modal').classList.remove('open');
+  };
+
+  window.confirmBulkApprove = function () {
+    var badges = Array.from(selectedBadges);
+    var count = 0;
+    var skipped = 0;
+    badges.forEach(function (badge) {
+      var ts = loadTimesheetFor(badge);
+      if (!ts || ts.status !== 'Submitted') { skipped++; return; }
+      ts.status = 'Approved';
+      ts.approvedAt = new Date().toISOString();
+      ts.approvedBy = HR_BADGE;
+      saveTimesheetFor(badge, ts);
+      count++;
+    });
+    selectedBadges.clear();
+    closeBulkApproveModal();
+    render();
+    if (count > 0) {
+      var msg = count + ' timesheet' + (count !== 1 ? 's' : '') + ' approved.';
+      if (skipped > 0) {
+        msg += ' ' + skipped + ' ' + (skipped !== 1 ? 'were' : 'was') + ' already processed and skipped.';
+      }
+      QuadraToast.show(msg, 'success');
+    } else {
+      QuadraToast.show(badges.length !== 1 ? 'These timesheets have already been processed.' : 'This timesheet has already been processed.', 'error');
+    }
+  };
+
+  document.getElementById('bulk-approve-modal').addEventListener('click', function (e) { if (e.target === this) closeBulkApproveModal(); });
+
+  window.approveTimesheet = function (badge) {
+    var ts = loadTimesheetFor(badge);
+    if (!ts) return;
+    if (ts.status !== 'Submitted') {
+      QuadraToast.show('This timesheet has already been processed.', 'error');
+      render();
+      return;
+    }
+    ts.status = 'Approved';
+    ts.approvedAt = new Date().toISOString();
+    ts.approvedBy = HR_BADGE;
+    saveTimesheetFor(badge, ts);
+    render();
+    QuadraToast.show('Timesheet approved.', 'success');
+  };
+
+  window.openRejectModal = function (badge) {
+    pendingActionBadge = badge;
+    document.getElementById('reject-reason').value = '';
+    document.getElementById('reject-reason-error').style.display = 'none';
+    document.getElementById('reject-modal').classList.add('open');
+  };
+  window.closeRejectModal = function () {
+    document.getElementById('reject-modal').classList.remove('open');
+  };
+  window.confirmReject = function () {
+    var reasonInput = document.getElementById('reject-reason');
+    if (!reasonInput.value.trim()) {
+      document.getElementById('reject-reason-error').style.display = 'block';
+      return;
+    }
+    var ts = loadTimesheetFor(pendingActionBadge);
+    if (!ts) { closeRejectModal(); return; }
+    if (ts.status !== 'Submitted') {
+      QuadraToast.show('This timesheet has already been processed.', 'error');
+      closeRejectModal();
+      render();
+      return;
+    }
+    ts.status = 'Rejected';
+    ts.rejectedAt = new Date().toISOString();
+    ts.rejectedBy = HR_BADGE;
+    ts.rejectionReason = reasonInput.value.trim();
+    saveTimesheetFor(pendingActionBadge, ts);
+    closeRejectModal();
+    render();
+    QuadraToast.show('Timesheet rejected.', 'success');
+  };
+
+  document.getElementById('reject-modal').addEventListener('click', function (e) { if (e.target === this) closeRejectModal(); });
+
+  function initRoleFilterOptions() {
+    var roles = [];
+    getAllEntries().forEach(function (r) {
+      if (roles.indexOf(r.emp.pos) === -1) roles.push(r.emp.pos);
+    });
+    roles.sort();
+    var dropdown = document.getElementById('role-dropdown');
+    roles.forEach(function (role) {
+      var opt = document.createElement('div');
+      opt.className = 'filter-option';
+      opt.dataset.val = role;
+      opt.textContent = role;
+      dropdown.appendChild(opt);
+    });
+  }
+
+  function initRoleFilter() {
+    var dropdown = document.getElementById('role-dropdown');
+    var btn = document.getElementById('role-btn');
+    var label = document.getElementById('role-label');
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasOpen = dropdown.classList.contains('open');
+      dropdown.classList.remove('open');
+      if (!wasOpen) dropdown.classList.add('open');
+    });
+
+    dropdown.querySelectorAll('.filter-option').forEach(function (opt) {
+      opt.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dropdown.querySelectorAll('.filter-option').forEach(function (o) { o.classList.remove('active'); });
+        opt.classList.add('active');
+        var val = opt.dataset.val;
+        filters.role = val;
+        label.textContent = val || 'All Roles';
+        btn.classList.toggle('has-value', !!val);
+        dropdown.classList.remove('open');
+        render();
+      });
+    });
+  }
+
+  document.addEventListener('click', function () {
+    document.getElementById('role-dropdown').classList.remove('open');
+  });
+
+  document.getElementById('search-input').addEventListener('input', function () {
+    filters.search = this.value;
+    render();
+  });
+
+  initRoleFilterOptions();
+  initRoleFilter();
+  render();
+})();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

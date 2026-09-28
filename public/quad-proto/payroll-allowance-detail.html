@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Allowance Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <!-- All 8 of this page's former inline hero rules (.allowance-hero,
+       .allowance-avatar-lg, .allowance-hero-info, .allowance-hero-name,
+       .allowance-hero-sub + its .dot/span:not(.tag) children,
+       .allowance-hero-actions) were exact-value duplicates of the shared
+       layout.css/base.css .emp-hero family and .emp-avatar-lg (including
+       background:#E04A2A, which is .emp-avatar-lg's own default —
+       base.css even carried a note flagging this exact migration for
+       "Batch 3", i.e. this Payroll audit). Eliminated entirely in favor
+       of reusing the shared classes directly (body markup updated
+       below) — no page-level <style> block needed any more. -->
+
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="allowance"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="payroll-allowance.html">Allowance</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="bc-current" class="bc-current">Allowance</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Back Link -->
+    <a href="payroll-allowance.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Allowance
+    </a>
+
+    <!-- Allowance Hero Card -->
+    <div id="allowance-hero-wrap"></div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="search-input" type="text" placeholder="Search employee…" oninput="renderTable(this.value)">
+          </div>
+          <div class="toolbar-count" id="toolbar-count"></div>
+        </div>
+        <button class="btn btn-outline" onclick="exportEnrolled()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 9V2M4 5l3-3 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10v1.5A1.5 1.5 0 003.5 13h7A1.5 1.5 0 0012 11.5V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Export
+        </button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th style="width:180px">Department</th>
+            <th style="width:200px">Position</th>
+            <th style="width:160px;text-align:right">Amount</th>
+            <th class="col-actions" style="width:72px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="emp-tbody">
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#E04A2A">AW</div>
+                <div>
+                  <div class="emp-name">Andi Wijaya</div>
+                  <div class="emp-id">000000012</div>
+                </div>
+              </div>
+            </td>
+            <td>Engineering</td>
+            <td>Frontend Developer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Andi Wijaya')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#7C3AED">DS</div>
+                <div>
+                  <div class="emp-name">Dewi Santoso</div>
+                  <div class="emp-id">000000019</div>
+                </div>
+              </div>
+            </td>
+            <td>Engineering</td>
+            <td>Backend Developer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Dewi Santoso')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#059669">BP</div>
+                <div>
+                  <div class="emp-name">Budi Prakoso</div>
+                  <div class="emp-id">000000024</div>
+                </div>
+              </div>
+            </td>
+            <td>Product</td>
+            <td>Product Manager</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Budi Prakoso')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#2563EB">RL</div>
+                <div>
+                  <div class="emp-name">Rina Lestari</div>
+                  <div class="emp-id">000000031</div>
+                </div>
+              </div>
+            </td>
+            <td>Design</td>
+            <td>UI/UX Designer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Rina Lestari')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#EA580C">FH</div>
+                <div>
+                  <div class="emp-name">Fajar Hidayat</div>
+                  <div class="emp-id">000000038</div>
+                </div>
+              </div>
+            </td>
+            <td>Engineering</td>
+            <td>DevOps Engineer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Fajar Hidayat')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#6B7280">SN</div>
+                <div>
+                  <div class="emp-name">Siti Nurhaliza</div>
+                  <div class="emp-id">000000041</div>
+                </div>
+              </div>
+            </td>
+            <td>Marketing</td>
+            <td>Marketing Specialist</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Siti Nurhaliza')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#E04A2A">RP</div>
+                <div>
+                  <div class="emp-name">Rudi Permana</div>
+                  <div class="emp-id">000000047</div>
+                </div>
+              </div>
+            </td>
+            <td>Finance</td>
+            <td>Financial Analyst</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Rudi Permana')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#7C3AED">YA</div>
+                <div>
+                  <div class="emp-name">Yuni Astuti</div>
+                  <div class="emp-id">000000053</div>
+                </div>
+              </div>
+            </td>
+            <td>Engineering</td>
+            <td>QA Engineer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Yuni Astuti')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#059669">MR</div>
+                <div>
+                  <div class="emp-name">Muhammad Rizki</div>
+                  <div class="emp-id">000000058</div>
+                </div>
+              </div>
+            </td>
+            <td>Engineering</td>
+            <td>Mobile Developer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Muhammad Rizki')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#2563EB">LS</div>
+                <div>
+                  <div class="emp-name">Lisa Setiawan</div>
+                  <div class="emp-id">000000062</div>
+                </div>
+              </div>
+            </td>
+            <td>HR</td>
+            <td>HR Specialist</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Lisa Setiawan')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#EA580C">DK</div>
+                <div>
+                  <div class="emp-name">Dimas Kurniawan</div>
+                  <div class="emp-id">000000067</div>
+                </div>
+              </div>
+            </td>
+            <td>Engineering</td>
+            <td>Data Engineer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Dimas Kurniawan')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar" style="background:#6B7280">NA</div>
+                <div>
+                  <div class="emp-name">Novita Anggraeni</div>
+                  <div class="emp-id">000000071</div>
+                </div>
+              </div>
+            </td>
+            <td>Product</td>
+            <td>Product Designer</td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove('Novita Anggraeni')">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ ADD EMPLOYEE MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" style="width:480px">
+
+    <div class="modal-head">
+      <span class="modal-head-title" id="add-emp-modal-title">Add Employee to Laptop</span>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Search Employee <span style="color:#EF4444">*</span></label>
+        <input type="text" placeholder="Type name or employee ID…" style="width:100%;height:36px;padding:0 10px;border:1px solid #D1D5DB;font-size:13px;font-family:'Inter',sans-serif;color:#111827;outline:none" onfocus="this.style.borderColor='#E04A2A'" onblur="this.style.borderColor='#D1D5DB'">
+        <div style="font-size:11px;color:#9CA3AF;margin-top:4px">Only employees not yet enrolled in this allowance will appear</div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal()">Add Employee</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ EDIT ALLOWANCE MODAL ═══ -->
+<div class="modal-overlay" id="edit-overlay">
+  <div class="modal-box" style="width:480px">
+
+    <div class="modal-head">
+      <span class="modal-head-title">Edit Allowance</span>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Allowance Name</label>
+        <input id="edit-input-name" class="text-input" type="text" placeholder="e.g. Housing Allowance"
+          onfocus="this.classList.remove('is-error');document.getElementById('edit-name-err').style.display='none'"
+          onkeydown="if(event.key==='Enter')saveEditAllowance()">
+        <div id="edit-name-err" style="display:none;font-size:11px;color:#EF4444;margin-top:4px"></div>
+      </div>
+
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Calculation Basis</label>
+        <div style="display:flex;border:1px solid #D1D5DB;">
+          <label style="flex:1;display:flex;align-items:flex-start;gap:8px;padding:10px 14px;cursor:pointer;border-right:1px solid #D1D5DB;">
+            <input type="radio" name="edit-type" id="edit-type-monthly" value="monthly" checked style="margin-top:2px;accent-color:#E04A2A;flex-shrink:0">
+            <div>
+              <div style="font-size:13px;font-weight:500;color:#111827">Monthly</div>
+              <div style="font-size:11px;color:#9CA3AF;margin-top:1px">Fixed amount per month, pro-rated on first month</div>
+            </div>
+          </label>
+          <label style="flex:1;display:flex;align-items:flex-start;gap:8px;padding:10px 14px;cursor:pointer;">
+            <input type="radio" name="edit-type" id="edit-type-daily" value="daily" style="margin-top:2px;accent-color:#E04A2A;flex-shrink:0">
+            <div>
+              <div style="font-size:13px;font-weight:500;color:#111827">Daily</div>
+              <div style="font-size:11px;color:#9CA3AF;margin-top:1px">Rate per attendance day, inherently pro-rated</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditAllowance()">Update Allowance</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ DELETE ALLOWANCE MODAL ═══ -->
+<div class="modal-overlay" id="delete-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Allowance</span>
+      <button class="modal-close" onclick="closeDelete()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Delete <span id="delete-allowance-title">this allowance</span>?</div>
+        <div class="modal-sub-desc">Employees enrolled in this allowance will no longer receive it. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDelete()">Cancel</button>
+      <button class="btn btn-danger" onclick="executeDelete()">Delete Allowance</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REMOVE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="remove-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Remove Employee</span>
+      <button class="modal-close" onclick="closeRemove()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Remove <span id="remove-emp-name">this employee</span> from Laptop?</div>
+        <div class="modal-sub-desc">This employee will no longer receive the Laptop allowance. You can re-add them at any time.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRemove()">Cancel</button>
+      <button class="btn btn-danger" onclick="closeRemove()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="allowances-data.js"></script>
+<script>
+  /* ── localStorage sync (same key as payroll-allowance.html) ── */
+  function getStoredAllowances() {
+    try { var d = JSON.parse(localStorage.getItem('quadra_allowances')); return (d && d.length) ? d : QUADRA_ALLOWANCES.slice(); }
+    catch(e) { return QUADRA_ALLOWANCES.slice(); }
+  }
+  function saveAllowances() { localStorage.setItem('quadra_allowances', JSON.stringify(QUADRA_ALLOWANCES)); }
+  QUADRA_ALLOWANCES = getStoredAllowances();
+
+  /* ── Init ── */
+  var params    = new URLSearchParams(window.location.search);
+  var allowId   = params.get('id') || 'laptop';
+  var allowance = null;
+  for (var i = 0; i < QUADRA_ALLOWANCES.length; i++) {
+    if (QUADRA_ALLOWANCES[i].id === allowId) { allowance = QUADRA_ALLOWANCES[i]; break; }
+  }
+  if (!allowance) allowance = QUADRA_ALLOWANCES[0];
+
+  var enrolled = QUADRA_EMPLOYEES.filter(function(e) { return e.allowances.some(function(x) { return x.id === allowance.id; }); });
+
+  /* ── Hero render (extracted so it can be called after edit) ── */
+  function renderHero() {
+    var initials = allowance.name.split(' ').map(function(w){ return w[0]; }).slice(0,2).join('').toUpperCase();
+    var typeTag  = allowance.type === 'daily'
+      ? '<span class="tag tag-info">Daily</span>'
+      : '<span class="tag tag-neutral">Monthly</span>';
+    document.getElementById('allowance-hero-wrap').innerHTML =
+      '<div class="emp-hero">' +
+        '<div class="emp-avatar-lg">' + initials + '</div>' +
+        '<div class="emp-hero-info">' +
+          '<div class="emp-hero-name">' + allowance.name + '</div>' +
+          '<div class="emp-hero-sub">' + typeTag + '<div class="dot"></div><span>' + enrolled.length + ' employee' + (enrolled.length !== 1 ? 's' : '') + ' enrolled</span></div>' +
+        '</div>' +
+        '<div class="emp-hero-actions">' +
+          '<button class="btn btn-outline" onclick="openEditModal()">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Edit Allowance' +
+          '</button>' +
+          '<button class="btn btn-danger-outline" onclick="confirmDelete()">' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Delete Allowance' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+  }
+  renderHero();
+
+  /* Update breadcrumb + page title */
+  document.getElementById('bc-current').textContent = allowance.name;
+  document.title = 'QuadraNG — Allowance: ' + allowance.name;
+
+  /* Render employee rows */
+  var SVG_VIEW = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+  var SVG_DEL  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var tbody = document.getElementById('emp-tbody');
+
+  function renderTable(query) {
+    var q = (query || '').toLowerCase().trim();
+    var filtered = q ? enrolled.filter(function(emp) {
+      return emp.name.toLowerCase().indexOf(q) >= 0 ||
+             emp.badge.toLowerCase().indexOf(q) >= 0 ||
+             (emp.project || '').toLowerCase().indexOf(q) >= 0 ||
+             (emp.pos || '').toLowerCase().indexOf(q) >= 0;
+    }) : enrolled;
+
+    var countEl = document.getElementById('toolbar-count');
+    if (countEl) {
+      if (!q) {
+        countEl.innerHTML = '';
+      } else {
+        countEl.innerHTML = filtered.length !== enrolled.length
+          ? '<span>' + filtered.length + '</span> of <span>' + enrolled.length + '</span> employees'
+          : '<span>' + enrolled.length + '</span> employee' + (enrolled.length !== 1 ? 's' : '');
+      }
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5"><div style="padding:32px;text-align:center;color:#9CA3AF;font-size:13px">' +
+        (q ? 'No employees match &ldquo;' + query + '&rdquo;' : 'No employees enrolled in this allowance') +
+        '</div></td></tr>';
+      return;
+    }
+    var isDaily = (allowance.type === 'daily');
+    tbody.innerHTML = filtered.map(function(emp) {
+      var empAllowance = emp.allowances.find(function(x) { return x.id === allowance.id; });
+      var amt = empAllowance ? empAllowance.amount : 0;
+      var fmtAmt = 'IDR ' + String(amt).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      var amtSuffix = isDaily ? '<span style="font-size:11px;color:#9CA3AF;font-weight:400"> / day</span>' : '';
+      return '<tr data-badge="' + emp.badge + '">' +
+        '<td><div class="emp-cell">' +
+          '<div class="emp-avatar" style="background:' + emp.color + '">' + emp.initials + '</div>' +
+          '<div><div class="emp-name">' + emp.name + '</div><div class="emp-id">' + emp.badge + '</div></div>' +
+        '</div></td>' +
+        '<td>' + emp.project + '</td>' +
+        '<td>' + emp.pos + '</td>' +
+        '<td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:500;color:#111827">' + fmtAmt + amtSuffix + '</td>' +
+        '<td><div class="action-btns">' +
+          '<button class="icon-btn" title="View" data-badge="' + emp.badge + '">' + SVG_VIEW + '</button>' +
+          '<button class="icon-btn" title="Remove" style="color:#EF4444" onclick="confirmRemove(\'' + emp.name.replace(/'/g,"\\'") + '\')">' + SVG_DEL + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+  renderTable('');
+
+  function goToEmployee(badge) {
+    var ref     = 'allowance-' + allowance.id;
+    var refname = encodeURIComponent(allowance.name);
+    window.location.href = 'employee-detail.html?badge=' + badge + '&ref=' + ref + '&refname=' + refname + '#allowance';
+  }
+
+  tbody.addEventListener('click', function(e) {
+    if (e.target.closest('[title="Remove"]')) return;
+    var viewBtn = e.target.closest('[data-badge]');
+    if (viewBtn) { goToEmployee(viewBtn.dataset.badge); return; }
+    var row = e.target.closest('tr[data-badge]');
+    if (row) goToEmployee(row.dataset.badge);
+  });
+
+  /* Update "Add Employee" modal title */
+  var modalTitle = document.getElementById('add-emp-modal-title');
+  if (modalTitle) modalTitle.textContent = 'Add Employee to ' + allowance.name;
+
+  /* ── Edit modal ── */
+  function openEditModal() {
+    document.getElementById('edit-input-name').value = allowance.name;
+    document.getElementById('edit-input-name').classList.remove('is-error');
+    document.getElementById('edit-name-err').style.display = 'none';
+    var typeEl = document.getElementById('edit-type-' + (allowance.type || 'monthly'));
+    if (typeEl) typeEl.checked = true;
+    document.getElementById('edit-overlay').classList.add('open');
+    setTimeout(function() { document.getElementById('edit-input-name').focus(); }, 50);
+  }
+  function closeEditModal() {
+    document.getElementById('edit-overlay').classList.remove('open');
+  }
+  function saveEditAllowance() {
+    var nameInput = document.getElementById('edit-input-name');
+    var name = nameInput.value.trim();
+    var errEl = document.getElementById('edit-name-err');
+    if (!name) {
+      nameInput.classList.add('is-error');
+      nameInput.focus();
+      errEl.textContent = 'Allowance name is required.'; errEl.style.display = 'block';
+      return;
+    }
+    nameInput.classList.remove('is-error');
+    var nameLower = name.toLowerCase();
+    var duplicate = QUADRA_ALLOWANCES.some(function(x) {
+      return x.name.toLowerCase() === nameLower && x.id !== allowance.id;
+    });
+    if (duplicate) {
+      nameInput.classList.add('is-error');
+      nameInput.focus();
+      errEl.textContent = 'An allowance with this name already exists.'; errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+    var type = document.querySelector('input[name="edit-type"]:checked').value;
+    allowance.name = name;
+    allowance.type = type;
+    saveAllowances();
+    closeEditModal();
+    document.getElementById('bc-current').textContent = allowance.name;
+    document.title = 'QuadraNG — Allowance: ' + allowance.name;
+    renderHero();
+    QuadraToast.show('Allowance Updated', '"' + name + '" has been updated successfully.');
+  }
+
+  function openAddModal() {
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+  function confirmRemove(name) {
+    document.getElementById('remove-emp-name').textContent = name;
+    document.getElementById('remove-overlay').classList.add('open');
+  }
+  function closeRemove() {
+    document.getElementById('remove-overlay').classList.remove('open');
+  }
+  function confirmDelete() {
+    document.getElementById('delete-allowance-title').textContent = allowance.name;
+    document.getElementById('delete-overlay').classList.add('open');
+  }
+  function closeDelete() {
+    document.getElementById('delete-overlay').classList.remove('open');
+  }
+  function executeDelete() {
+    var idx = QUADRA_ALLOWANCES.findIndex(function(x) { return x.id === allowance.id; });
+    if (idx >= 0) QUADRA_ALLOWANCES.splice(idx, 1);
+    saveAllowances();
+    closeDelete();
+    QuadraToast.show('Allowance Deleted', '"' + allowance.name + '" has been deleted.');
+    setTimeout(function() { window.location.href = 'payroll-allowance.html'; }, 1500);
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeModal(); closeRemove(); closeDelete(); closeEditModal(); }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+  function exportEnrolled() {
+    if (typeof XLSX === 'undefined') { QuadraToast.show('Export Error', 'Excel library not loaded.'); return; }
+    if (!enrolled.length) { QuadraToast.show('Export', 'No employees to export.'); return; }
+    var fmtDelivery = function(d) { return d === 'last' ? 'Last Day' : 'Day ' + d; };
+    var fmtAmt = function(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); };
+    var hdr = ['No', 'Employee Name', 'Badge ID', 'Department', 'Position', 'Amount', 'Delivery'];
+    var rows = [hdr].concat(enrolled.map(function(e, i) {
+      var entry = (e.allowances || []).find(function(x) { return x.id === allowance.id; }) || {};
+      return [i + 1, e.name, e.badge, e.project, e.pos, entry.amount || 0, fmtDelivery(entry.delivery || '1')];
+    }));
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), allowance.name);
+    XLSX.writeFile(wb, 'Allowance - ' + allowance.name + '.xlsx');
+  }
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+
+<script src="clockwidget.js"></script>
+</body>
+</html>

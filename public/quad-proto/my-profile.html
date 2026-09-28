@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — My Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <!-- .detail-layout / .emp-profile-panel / .epp-* are now shared in layout.css
+       (promoted from this page's former page-scoped EXPERIMENTAL styles). -->
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="my-profile"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <span class="bc-current">My Profile</span>
+  </nav>
+
+  <div class="detail-layout">
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">My Profile</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-primary" id="resign-btn">Request Resignation</button>
+      </div>
+    </div>
+
+    <div class="tab-container">
+      <div class="tab-bar sm">
+        <button class="tab-btn active" data-tab="personal">Personal Info</button>
+        <button class="tab-btn" data-tab="work">Work Info</button>
+        <button class="tab-btn" data-tab="contract">Contract</button>
+        <button class="tab-btn" data-tab="allowance">Allowance</button>
+        <button class="tab-btn" data-tab="deduction">Deduction</button>
+        <button class="tab-btn" data-tab="overtime">Overtime</button>
+        <button class="tab-btn" data-tab="payroll">Payroll</button>
+        <button class="tab-btn" data-tab="leave">Leave</button>
+        <button class="tab-btn" data-tab="onboarding">Onboarding</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-personal">
+        <div class="detail-section">
+          <div class="section-label">Basic Information</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Full Name</div>
+              <div class="info-value" id="p-name">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Badge ID</div>
+              <div class="info-value" id="p-badge">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Email</div>
+              <div class="info-value" id="p-email">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Phone Number</div>
+              <div class="info-value" id="p-phone">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">NIK (National ID)</div>
+              <div class="info-value" id="p-nik">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">NPWP (Tax ID)</div>
+              <div class="info-value" id="p-npwp">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-label">Personal Details</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Date of Birth</div>
+              <div class="info-value" id="p-dob">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Place of Birth</div>
+              <div class="info-value" id="p-birthplace">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Gender</div>
+              <div class="info-value" id="p-gender">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Religion</div>
+              <div class="info-value" id="p-religion">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Blood Type</div>
+              <div class="info-value" id="p-bloodtype">—</div>
+            </div>
+            <div class="info-group"></div>
+            <div class="info-group">
+              <div class="info-label">Marital Status</div>
+              <div class="info-value" id="p-marital">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Children</div>
+              <div class="info-value" id="p-children">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-label">Emergency Contact</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Contact Name</div>
+              <div class="info-value" id="p-emergency-name">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Relationship</div>
+              <div class="info-value" id="p-emergency-relation">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Contact Phone</div>
+              <div class="info-value" id="p-emergency-phone">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-label">Address</div>
+          <div class="info-grid-1">
+            <div class="info-group">
+              <div class="info-label">KTP Address (as per ID card)</div>
+              <div class="info-value" id="p-ktp-address">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Current / Residential Address</div>
+              <div class="info-value" id="p-current-address">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-work">
+        <div class="detail-section">
+          <div class="section-label">Work Details</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Department</div>
+              <div class="info-value" id="w-department">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Position</div>
+              <div class="info-value" id="w-position">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Reporting Manager</div>
+              <div class="info-value" id="w-supervisor">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Attendance Leader</div>
+              <div class="info-value" id="w-att-leader">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Leave Approver</div>
+              <div class="info-value" id="w-leave-approver">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Shift</div>
+              <div class="info-value" id="w-shift">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-label">Bank Information</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Bank Name</div>
+              <div class="info-value">BCA</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Account Number</div>
+              <div class="info-value">1234567890</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Account Name</div>
+              <div class="info-value" id="w-bank-account-name">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-contract">
+        <div class="detail-section">
+          <div class="section-label">Contract Details</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Work Type</div>
+              <div class="info-value" id="c-work-type">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Contract Duration</div>
+              <div class="info-value" id="c-duration">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Base Salary</div>
+              <div class="info-value" id="c-salary">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Salary Level</div>
+              <div class="info-value" id="c-salary-level">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Filling Status (PTKP)</div>
+              <div class="info-value" id="c-ptkp">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Joining Date</div>
+              <div class="info-value" id="c-join">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-allowance">
+        <div class="detail-section">
+          <div class="section-label">Allowance</div>
+          <div class="detail-table-wrap">
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>Allowance Name</th>
+                  <th class="col-right">Amount</th>
+                  <th>Delivery Day</th>
+                </tr>
+              </thead>
+              <tbody id="allowance-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-deduction">
+        <div class="detail-section">
+          <div class="section-label">Deduction</div>
+          <div class="detail-table-wrap">
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>Deduction Name</th>
+                  <th>Paid By</th>
+                  <th class="col-right">Percentage</th>
+                  <th class="col-right">Calculated Amount</th>
+                </tr>
+              </thead>
+              <tbody id="deduction-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-overtime">
+        <div class="detail-section">
+          <div class="section-label">Overtime Settings</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Overtime Type</div>
+              <div class="info-value" id="o-ot-type">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Overtime Rate</div>
+              <div class="info-value" id="o-ot-rate">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-payroll">
+        <div class="detail-section">
+          <div class="section-label">Salary Summary</div>
+          <div class="info-grid">
+            <div class="info-group">
+              <div class="info-label">Base Salary</div>
+              <div class="info-value" id="pay-base">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Total Allowance</div>
+              <div class="info-value" id="pay-allow" style="color:#16A34A">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Total Deduction</div>
+              <div class="info-value" id="pay-deduct" style="color:#EF4444">—</div>
+            </div>
+            <div class="info-group">
+              <div class="info-label">Net Salary</div>
+              <div class="info-value" id="pay-net" style="font-weight:600;font-size:16px">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="section-label">Payroll History</div>
+          <div class="detail-table-wrap">
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th class="col-right">Base Salary</th>
+                  <th class="col-right">Allowances</th>
+                  <th class="col-right">Overtime</th>
+                  <th class="col-right">Loan Ded.</th>
+                  <th class="col-right">Late Ded.</th>
+                  <th class="col-right">Deductions</th>
+                  <th class="col-right">Net Salary</th>
+                </tr>
+              </thead>
+              <tbody id="payroll-history-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-leave">
+        <div class="detail-section">
+          <div class="section-label">Leave Balances</div>
+          <div class="info-grid" id="leave-balance-row"></div>
+        </div>
+        <div class="detail-section">
+          <div class="section-label">Leave Request History</div>
+          <div class="detail-table-wrap">
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>Leave Type</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th class="col-right">Requested Days</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="leave-history-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-onboarding">
+        <div class="detail-section">
+          <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Employee Preparation Checklist</span>
+            <span id="ob-prep-count">0 / 12</span>
+          </div>
+          <div class="detail-table-wrap">
+            <table class="detail-table">
+              <thead><tr><th>Item</th><th>Status</th><th>Date Completed</th></tr></thead>
+              <tbody id="ob-prep-tbody"></tbody>
+            </table>
+          </div>
+          <div class="info-group" style="margin-top:16px;">
+            <div class="field-label-row">
+              <label class="field-label" for="ob-prep-comment">Comments</label>
+              <span class="save-indicator" id="ob-prep-save-indicator">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Saved
+              </span>
+            </div>
+            <textarea class="textarea" id="ob-prep-comment" placeholder="Add a comment…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Persistent profile panel — .emp-profile-panel is shared in layout.css -->
+  <aside class="emp-profile-panel">
+    <div class="epp-avatar" id="epp-avatar">—</div>
+    <div class="epp-identity">
+      <div class="epp-name" id="epp-name">—</div>
+      <div class="epp-position" id="epp-position">—</div>
+      <div class="epp-status-row"><span class="tag tag-dot" id="epp-status">—</span></div>
+    </div>
+    <div class="epp-email-row">
+      <span id="epp-email">—</span>
+      <button class="epp-copy-btn" type="button" onclick="copyEppEmail()" aria-label="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 10V3a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-info-row"><span class="epp-label">Badge ID</span><span class="epp-value" id="epp-badge">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Join Date</span><span class="epp-value" id="epp-join">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Department</span><span class="epp-value" id="epp-department">—</span></div>
+      <div class="epp-info-row"><span class="epp-label">Work Type</span><span class="epp-value" id="epp-worktype">—</span></div>
+      <div class="epp-info-row" id="epp-endcontract-row" style="display:none">
+        <span class="epp-label">Contract End</span>
+        <span class="epp-value" id="epp-endcontract">—</span>
+      </div>
+      <div class="epp-info-row"><span class="epp-label">Shift</span><span class="epp-value" id="epp-shift">—</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Reporting Manager</div>
+      <div class="epp-supervisor-row" id="epp-supervisor-row">
+        <div class="epp-supervisor-avatar" id="epp-supervisor-avatar">—</div>
+        <div class="epp-supervisor-info">
+          <div class="epp-supervisor-name" id="epp-supervisor-name">—</div>
+          <div class="epp-supervisor-position" id="epp-supervisor-position">—</div>
+        </div>
+      </div>
+      <div class="epp-info-row" id="epp-no-supervisor-row" style="display:none"><span class="epp-label">—</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Attendance Leader</div>
+      <div class="epp-supervisor-row" id="epp-att-leader-row">
+        <div class="epp-supervisor-avatar" id="epp-att-leader-avatar">—</div>
+        <div class="epp-supervisor-info">
+          <div class="epp-supervisor-name" id="epp-att-leader-name">—</div>
+          <div class="epp-supervisor-position" id="epp-att-leader-position">—</div>
+        </div>
+      </div>
+      <div class="epp-info-row" id="epp-no-att-leader-row" style="display:none"><span class="epp-label">—</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Leave Approver</div>
+      <div class="epp-supervisor-row" id="epp-leave-approver-row">
+        <div class="epp-supervisor-avatar" id="epp-leave-approver-avatar">—</div>
+        <div class="epp-supervisor-info">
+          <div class="epp-supervisor-name" id="epp-leave-approver-name">—</div>
+          <div class="epp-supervisor-position" id="epp-leave-approver-position">—</div>
+        </div>
+      </div>
+      <div class="epp-info-row" id="epp-no-leave-approver-row" style="display:none"><span class="epp-label">—</span></div>
+    </div>
+  </aside>
+  </div><!-- /detail-layout -->
+</div>
+
+<!-- Submit Resignation modal -->
+<div class="modal-overlay" id="submit-resign-modal">
+  <div class="modal-box" style="width:420px;">
+    <div class="modal-head">
+      <span class="modal-head-title">Submit Resignation Request</span>
+      <button class="modal-close" onclick="closeSubmitResignModal()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="field-label">Resignation Letter (PDF) <span class="req">*</span></label>
+        <div class="file-upload" id="letter-file-upload">
+          <input type="file" class="file-upload-input" id="letter-file" accept=".pdf" />
+          <div class="file-upload-empty">
+            <svg class="file-upload-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 13V3M10 3L6 7M10 3l4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+            <div class="file-upload-hint">PDF, up to 10MB</div>
+          </div>
+          <div class="file-upload-selected">
+            <svg class="file-upload-file-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l3 3v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#E04A2A" stroke-width="1.3" stroke-linejoin="round"/><path d="M11 2v3h3" stroke="#E04A2A" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            <span class="file-upload-name"></span>
+            <button type="button" class="file-upload-remove" aria-label="Remove file"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#6B7280" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="field-error" id="letter-error" style="display:none">Please choose a PDF file.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeSubmitResignModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitResignation()">Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="leave-data.js"></script>
+<script src="onboarding-data.js"></script>
+<script src="fileupload.js"></script>
+<script src="offboarding-data.js"></script>
+<script src="loans-data.js"></script>
+<script>
+  function fmt(n) {
+    return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+  }
+
+  function computeLevelLabel(salary) {
+    try {
+      var stored = JSON.parse(localStorage.getItem('quadra_level_ranges'));
+      if (!stored || !stored.length) return '—';
+      var sorted = stored.slice().sort(function(a, b) { return a.level - b.level; });
+      for (var i = 0; i < sorted.length; i++) {
+        var l = sorted[i];
+        var max = l.maxWage === null ? Infinity : l.maxWage;
+        if (salary >= l.minWage && salary <= max) return 'Level ' + l.level;
+      }
+    } catch(e) {}
+    return '—';
+  }
+
+  /* Contract end date (experimental side panel, ported from employee-detail.html)
+     — parses "DD Mon YYYY" + "N months" and adds N months. Returns null when
+     duration is null/0 (permanent contract), matching the panel's hide-if-permanent rule. */
+  var EPP_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function computeContractEnd(joinStr, durationStr) {
+    var months = durationStr ? parseInt(durationStr, 10) : 0;
+    if (!months) return null;
+    var parts = joinStr.split(' ');
+    var monthIdx = EPP_MONTHS.indexOf(parts[1].slice(0, 3));
+    if (monthIdx < 0) return null;
+    var d = new Date(parseInt(parts[2], 10), monthIdx, parseInt(parts[0], 10));
+    d.setMonth(d.getMonth() + months);
+    return d.getDate() + ' ' + EPP_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  /* Profile panel — copy email (experimental, ported from employee-detail.html) */
+  function copyEppEmail() {
+    var email = document.getElementById('epp-email').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(email);
+    if (window.QuadraToast) QuadraToast.show('Email copied', email);
+  }
+
+  /* ── Payroll computation — copied from my-payslip.html / payroll-summary-detail.html
+     (this codebase duplicates computation logic per-page rather than factoring
+     a shared module; see design-payroll.md §27) ── */
+  var MONTHS_LIST = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SEED_VERSION = 5;
+
+  var ALLOWANCE_LABEL = { 'laptop':'Laptop', 'on-site':'On-site', 'internet':'Internet', 'skills':'Skills Development', 'leader':'Leadership' };
+
+  var SEED_OT_HOURS = {
+    '000000001': 10, '000000003': 6, '000000005': 8,
+    '000000008': 4,  '000000009': 5
+  };
+  var SEED_LATE = {
+    '000000002': 50000, '000000004': 75000,
+    '000000007': 100000, '000000010': 25000
+  };
+  var SHIFT_VER_PAYROLL = 3;
+  var SHIFT_SEED_PAYROLL = [
+    { id: 1, name: 'NDS',         lateDeductionPerPoint: 5000, isFlexible: false },
+    { id: 2, name: 'Bendi',       lateDeductionPerPoint: 5000, isFlexible: false },
+    { id: 3, name: 'Ops Console', lateDeductionPerPoint: 5000, isFlexible: false }
+  ];
+  function loadShiftsForPayroll() {
+    var ver = parseInt(localStorage.getItem('QUADRA_SHIFTS_V'), 10);
+    if (ver !== SHIFT_VER_PAYROLL) return SHIFT_SEED_PAYROLL.slice();
+    try { return JSON.parse(localStorage.getItem('QUADRA_SHIFTS')) || []; } catch(e) { return []; }
+  }
+  var QUADRA_SHIFTS_DATA = loadShiftsForPayroll();
+  function getShift(name) {
+    if (!name) return null;
+    return QUADRA_SHIFTS_DATA.find(function(s) { return s.name === name; }) || null;
+  }
+
+  function calcOvertime(emp) {
+    if (emp.overtimeType === 'No Overtime') return 0;
+    var hours = SEED_OT_HOURS[emp.badge] || 0;
+    if (!hours) return 0;
+    if (emp.overtimeType === 'Specific Amount' && emp.otRate) return emp.otRate * hours;
+    return Math.round((emp.salary / 173) * hours);
+  }
+
+  function calcDeductionLines(emp) {
+    var lines = [];
+    (emp.deductions || []).forEach(function (d) {
+      if (d.paidBy !== 'personal') return;
+      var base = Math.min(emp.salary, 12000000);
+      if (d.id === 'bpjs-kes') lines.push({ label: 'BPJS Kesehatan', pct: '1%', amount: Math.round(base * 0.01) });
+      if (d.id === 'bpjs-tk')  lines.push({ label: 'BPJS Ketenagakerjaan', pct: '2%', amount: Math.round(base * 0.02) });
+      if (d.id === 'pph21')    lines.push({ label: 'PPh 21', pct: '5%', amount: Math.round(Math.max(0, emp.salary - 5400000) * 0.05) });
+    });
+    return lines;
+  }
+
+  function parsePeriod(period) {
+    var parts = period.split(' ');
+    return { month: MONTHS_LIST.indexOf(parts[0]), year: parseInt(parts[1]) };
+  }
+
+  function monthlyDed(loan) {
+    return loan.tenor > 0 ? Math.ceil(loan.total / loan.tenor) : 0;
+  }
+
+  function getOverdueCount(loan, pMonth, pYear) {
+    var start = new Date(loan.startDate);
+    var monthsBeforeP = (pYear - start.getFullYear()) * 12 + (pMonth - start.getMonth());
+    var installmentsDueBeforeP = Math.min(loan.tenor, monthsBeforeP);
+    var ded = monthlyDed(loan);
+    var paidCount = ded > 0 ? Math.floor(loan.paid / ded) : 0;
+    return Math.max(0, installmentsDueBeforeP - paidCount);
+  }
+
+  function calcBatchLoanAmount(loan, period) {
+    var p = parsePeriod(period);
+    var overdueCount = getOverdueCount(loan, p.month, p.year);
+    var suggested = monthlyDed(loan) * (overdueCount + 1);
+    return Math.min(suggested, loan.total - loan.paid);
+  }
+
+  function getLoanDecision(pp, loanId) {
+    if (!pp.loanDecisions || !pp.loanDecisions.length) return null;
+    return pp.loanDecisions.find(function (d) { return d.loanId === loanId; }) || null;
+  }
+
+  function liveLoanAmt(pp, loan) {
+    var dec = getLoanDecision(pp, loan.id);
+    var locked = pp.status === 'paid' || pp.status === 'payslip_sent';
+    if (dec && dec.action === 'confirm' && locked) return dec.amount || 0;
+    return calcBatchLoanAmount(loan, pp.period);
+  }
+
+  function getActiveLoansForPeriod(pp) {
+    var parts  = (pp.period || '').split(' ');
+    var pMonth = MONTHS_LIST.indexOf(parts[0]);
+    var pYear  = parseInt(parts[1]);
+    var pDate  = new Date(pYear, pMonth, 1);
+    var empIds = pp.employeeIds || null;
+    return (typeof QUADRA_LOANS !== 'undefined' ? QUADRA_LOANS : []).filter(function (loan) {
+      if (loan.status !== 'active' && loan.status !== 'overdue') return false;
+      if (empIds && empIds.indexOf(loan.empBadge) === -1) return false;
+      var start     = new Date(loan.startDate);
+      var startDate = new Date(start.getFullYear(), start.getMonth(), 1);
+      var endIdx    = start.getMonth() + loan.tenor - 1;
+      var endDate   = new Date(start.getFullYear() + Math.floor(endIdx / 12), endIdx % 12, 1);
+      return pDate >= startDate && pDate <= endDate;
+    });
+  }
+
+  function getEmpLoanLines(pp, badge) {
+    return getActiveLoansForPeriod(pp)
+      .filter(function (loan) { return loan.empBadge === badge; })
+      .map(function (loan) {
+        var dec = getLoanDecision(pp, loan.id);
+        if (dec && dec.action === 'defer') return null;
+        if (!dec && loan.deferred) return null;
+        return { label: 'Loan Deduction', amount: liveLoanAmt(pp, loan) };
+      })
+      .filter(function (l) { return l !== null; });
+  }
+
+  function computePayslip(pp, emp) {
+    var base   = emp.salary;
+    var ot     = calcOvertime(emp);
+    var allowLines = (emp.allowances || []).map(function (a) {
+      return { label: ALLOWANCE_LABEL[a.id] || a.id, amount: a.amount };
+    });
+    var dedLines  = calcDeductionLines(emp);
+    var loanLines = getEmpLoanLines(pp, emp.badge);
+    var shift      = getShift(emp.shift);
+    var isFlexible = shift ? !!shift.isFlexible : false;
+    var lateAmount = isFlexible ? 0 : (SEED_LATE[emp.badge] || 0);
+    var allowTotal = allowLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var dedTotal   = dedLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var loanTotal  = loanLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var net = base + ot + allowTotal - lateAmount - dedTotal - loanTotal;
+    return {
+      base: base, ot: ot, allowLines: allowLines, dedLines: dedLines,
+      loanLines: loanLines, lateAmount: lateAmount, net: net
+    };
+  }
+
+  var DEMO_PERIODS = (function() {
+    var stats = (function() {
+      try {
+        var active = QUADRA_EMPLOYEES.filter(function(e) { return e.status === 'Active'; });
+        var net = active.reduce(function(s, e) {
+          return s + e.salary + (e.allowances || []).reduce(function(a, x) { return a + x.amount; }, 0);
+        }, 0);
+        return { employees: active.length, totalNet: net, ids: active.map(function(e) { return e.badge; }) };
+      } catch(e) { return { employees: 0, totalNet: 0, ids: [] }; }
+    })();
+    return [
+      { id: 'PR1000', period: 'May 2026',   createdDate: '1 Jun 2026',  employees: stats.employees, totalNet: stats.totalNet, status: 'paid',         createdBy: 'Admin', payslipDate: null,         employeeIds: stats.ids },
+      { id: 'PR1001', period: 'April 2026', createdDate: '1 May 2026',  employees: stats.employees, totalNet: stats.totalNet, status: 'payslip_sent',  createdBy: 'Admin', payslipDate: '2 May 2026', employeeIds: stats.ids },
+    ];
+  })();
+
+  function savePeriods(periods) {
+    try {
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS', JSON.stringify(periods));
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS_V', SEED_VERSION);
+    } catch(e) {}
+  }
+
+  function getStoredPeriods() {
+    try {
+      var storedV = parseInt(localStorage.getItem('QUADRA_PAYROLL_PERIODS_V') || '0');
+      if (storedV !== SEED_VERSION) throw new Error('stale');
+      var raw = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      if (raw) {
+        var stored = JSON.parse(raw);
+        if (stored.length) return stored;
+      }
+    } catch (e) {
+      localStorage.removeItem('QUADRA_PAYROLL_PERIODS');
+      localStorage.removeItem('QUADRA_PAYROLL_PERIODS_V');
+    }
+    var seeded = DEMO_PERIODS.map(function(p) { return Object.assign({}, p); });
+    savePeriods(seeded);
+    return seeded;
+  }
+
+  var ALL_PERIODS = getStoredPeriods();
+
+  function activateTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-tab') === name);
+    });
+    document.querySelectorAll('.tab-pane').forEach(function(p) {
+      p.classList.toggle('active', p.id === 'tab-' + name);
+    });
+  }
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { activateTab(btn.getAttribute('data-tab')); });
+  });
+
+  (function render() {
+    var badge = localStorage.getItem('quadra_active_badge');
+    var emp = QUADRA_EMPLOYEES.find(function(e) { return e.badge === badge; });
+    if (!emp) {
+      document.querySelector('main.main-content').innerHTML =
+        '<div class="empty-state">'
+        + '<div class="empty-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>'
+        + '<div class="empty-title">No employee record found</div>'
+        + '<div class="empty-desc">Your account isn\'t linked to an employee record. Please contact HR.</div>'
+        + '</div>';
+      return;
+    }
+
+    function updateResignButton() {
+      var resignReq = (typeof getResignRequest === 'function') ? getResignRequest(emp.badge) : null;
+      var resignBtn = document.getElementById('resign-btn');
+      if (!resignBtn) return;
+      if (resignReq) {
+        resignBtn.textContent = 'View Resignation Status';
+        resignBtn.onclick = function () { window.location.href = 'my-resignation.html'; };
+      } else {
+        resignBtn.textContent = 'Request Resignation';
+        resignBtn.onclick = function () { openSubmitResignModal(); };
+      }
+    }
+    updateResignButton();
+
+    function fmtResignToday() {
+      var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var d = new Date();
+      return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    var letterUpload = QuadraFileUpload.init(document.getElementById('letter-file-upload'));
+
+    window.openSubmitResignModal = function () {
+      letterUpload.clear();
+      document.getElementById('letter-error').style.display = 'none';
+      document.getElementById('submit-resign-modal').classList.add('open');
+    };
+    window.closeSubmitResignModal = function () {
+      document.getElementById('submit-resign-modal').classList.remove('open');
+    };
+    window.submitResignation = function () {
+      var file = letterUpload.getFile();
+      if (!file) {
+        letterUpload.setError(true);
+        document.getElementById('letter-error').style.display = 'block';
+        return;
+      }
+      saveResignRequest(emp.badge, {
+        status: 'pending',
+        submittedDate: fmtResignToday(),
+        letterFileName: file.name,
+        handoverFileName: null,
+        handoverDate: null
+      });
+      closeSubmitResignModal();
+      updateResignButton();
+      if (typeof QuadraToast !== 'undefined') {
+        QuadraToast.show('Resignation request submitted.', 'success');
+      }
+    };
+    document.getElementById('submit-resign-modal').addEventListener('click', function (e) {
+      if (e.target === this) closeSubmitResignModal();
+    });
+
+    var STATUS_TAG_CLASS = {
+      'Active':    'tag tag-dot tag-success',
+      'Probation': 'tag tag-dot tag-warning',
+      'On Leave':  'tag tag-dot tag-info',
+      'Inactive':  'tag tag-dot tag-neutral'
+    };
+
+    /* Profile side panel (ported from employee-detail.html) */
+    document.getElementById('epp-avatar').textContent = emp.initials || '?';
+    document.getElementById('epp-avatar').style.background = emp.color || '#9CA3AF';
+    document.getElementById('epp-name').textContent = emp.name;
+    document.getElementById('epp-position').textContent = emp.pos;
+    document.getElementById('epp-email').textContent = emp.email || '—';
+    var eppStatusEl = document.getElementById('epp-status');
+    eppStatusEl.textContent = emp.status;
+    eppStatusEl.className = STATUS_TAG_CLASS[emp.status] || 'tag tag-dot tag-neutral';
+
+    document.getElementById('epp-badge').textContent = emp.badge;
+    document.getElementById('epp-join').textContent = emp.join;
+    document.getElementById('epp-department').textContent = emp.department || '—';
+    document.getElementById('epp-worktype').textContent = emp.contract;
+    document.getElementById('epp-shift').textContent = emp.shift || '—';
+
+    var eppEndRow = document.getElementById('epp-endcontract-row');
+    var eppEndDate = computeContractEnd(emp.join, emp.contractDuration);
+    if (eppEndDate) {
+      document.getElementById('epp-endcontract').textContent = eppEndDate + ' (' + emp.contractDuration + ')';
+      eppEndRow.style.display = 'flex';
+    } else {
+      eppEndRow.style.display = 'none';
+    }
+
+    var eppSupervisor = emp.supervisorBadge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === emp.supervisorBadge; }) : null;
+    var eppSupRow = document.getElementById('epp-supervisor-row');
+    var eppNoSupRow = document.getElementById('epp-no-supervisor-row');
+    if (eppSupervisor) {
+      document.getElementById('epp-supervisor-avatar').style.background = eppSupervisor.color;
+      document.getElementById('epp-supervisor-avatar').textContent = eppSupervisor.initials;
+      document.getElementById('epp-supervisor-name').textContent = eppSupervisor.name;
+      document.getElementById('epp-supervisor-position').textContent = eppSupervisor.pos;
+      eppSupRow.style.display = 'flex';
+      eppNoSupRow.style.display = 'none';
+    } else {
+      eppSupRow.style.display = 'none';
+      eppNoSupRow.style.display = 'flex';
+    }
+
+    function renderEppApprover(badge, rowId, noRowId, avatarId, nameId, posId) {
+      var person = badge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === badge; }) : null;
+      var row = document.getElementById(rowId);
+      var noRow = document.getElementById(noRowId);
+      if (person) {
+        document.getElementById(avatarId).style.background = person.color;
+        document.getElementById(avatarId).textContent = person.initials;
+        document.getElementById(nameId).textContent = person.name;
+        document.getElementById(posId).textContent = person.pos;
+        row.style.display = 'flex';
+        noRow.style.display = 'none';
+      } else {
+        row.style.display = 'none';
+        noRow.style.display = 'flex';
+      }
+    }
+    renderEppApprover(emp.attendanceLeaderBadge, 'epp-att-leader-row', 'epp-no-att-leader-row', 'epp-att-leader-avatar', 'epp-att-leader-name', 'epp-att-leader-position');
+    renderEppApprover(emp.leaveApproverBadge, 'epp-leave-approver-row', 'epp-no-leave-approver-row', 'epp-leave-approver-avatar', 'epp-leave-approver-name', 'epp-leave-approver-position');
+
+    document.getElementById('p-name').textContent   = emp.name;
+    document.getElementById('p-badge').textContent  = emp.badge;
+    document.getElementById('p-email').textContent  = emp.email;
+    document.getElementById('p-phone').textContent  = emp.phone || '—';
+    document.getElementById('p-nik').textContent    = emp.nik || '—';
+    document.getElementById('p-npwp').textContent   = emp.npwp || '—';
+    document.getElementById('p-dob').textContent        = emp.dob || '—';
+    document.getElementById('p-birthplace').textContent = emp.birthPlace || '—';
+    document.getElementById('p-gender').textContent     = emp.gender || '—';
+    document.getElementById('p-religion').textContent   = emp.religion || '—';
+    document.getElementById('p-bloodtype').textContent  = emp.bloodType || '—';
+    document.getElementById('p-marital').textContent    = emp.maritalStatus || '—';
+    document.getElementById('p-children').textContent   = (emp.children !== undefined) ? emp.children : '—';
+    document.getElementById('p-emergency-name').textContent     = emp.emergencyName || '—';
+    document.getElementById('p-emergency-relation').textContent = emp.emergencyRelation || '—';
+    document.getElementById('p-emergency-phone').textContent    = emp.emergencyPhone || '—';
+    document.getElementById('p-ktp-address').textContent     = emp.ktpAddress || '—';
+    document.getElementById('p-current-address').textContent = emp.currentAddress || '—';
+
+    document.getElementById('w-department').textContent = emp.department || '—';
+    document.getElementById('w-position').textContent   = emp.pos;
+    document.getElementById('w-shift').textContent      = emp.shift || '—';
+    document.getElementById('w-bank-account-name').textContent = emp.name;
+    var supervisor = emp.supervisorBadge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === emp.supervisorBadge; }) : null;
+    document.getElementById('w-supervisor').textContent = supervisor ? supervisor.name : '—';
+    var wAttLeader = emp.attendanceLeaderBadge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === emp.attendanceLeaderBadge; }) : null;
+    var wLeaveApprover = emp.leaveApproverBadge ? QUADRA_EMPLOYEES.find(function (e) { return e.badge === emp.leaveApproverBadge; }) : null;
+    document.getElementById('w-att-leader').textContent = wAttLeader ? wAttLeader.name : '—';
+    document.getElementById('w-leave-approver').textContent = wLeaveApprover ? wLeaveApprover.name : '—';
+
+    document.getElementById('c-work-type').textContent = emp.contract;
+    document.getElementById('c-duration').textContent  = emp.contractDuration || '— (Permanent)';
+    document.getElementById('c-ptkp').textContent      = emp.fillingStatus || '—';
+    document.getElementById('c-salary').textContent    = fmt(emp.salary);
+    document.getElementById('c-salary-level').textContent = computeLevelLabel(emp.salary);
+    document.getElementById('c-join').textContent      = emp.join;
+
+    var OVERTIME_TAGS = {
+      'Specific Amount': { cls: 'specific', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#2563EB" stroke-width="1.3"/><path d="M7 4.5V7l2 1.5" stroke="#2563EB" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+      'Based on Level':  { cls: 'level', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="9" width="3" height="4" rx="0.5" fill="#7C3AED"/><rect x="5.5" y="5.5" width="3" height="7.5" rx="0.5" fill="#7C3AED"/><rect x="10" y="2" width="3" height="11" rx="0.5" fill="#7C3AED"/></svg>' },
+      'No Overtime':     { cls: 'none', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#6B7280" stroke-width="1.3"/><path d="M4.5 4.5l5 5M9.5 4.5l-5 5" stroke="#6B7280" stroke-width="1.3" stroke-linecap="round"/></svg>' }
+    };
+    var otTag = OVERTIME_TAGS[emp.overtimeType] || OVERTIME_TAGS['No Overtime'];
+    document.getElementById('o-ot-type').innerHTML =
+      '<span class="type-tag ' + otTag.cls + '">' + otTag.icon + (emp.overtimeType || 'No Overtime') + '</span>';
+    document.getElementById('o-ot-rate').innerHTML = emp.otRate
+      ? '<div class="rate-box">' + fmt(emp.otRate) + ' <small>/ hour</small></div>'
+      : '—';
+
+    var allowanceTbody = document.getElementById('allowance-tbody');
+    var allowLines = (emp.allowances || []).map(function (a) {
+      return { label: ALLOWANCE_LABEL[a.id] || a.id, amount: a.amount, delivery: a.delivery };
+    });
+    allowanceTbody.innerHTML = allowLines.length
+      ? allowLines.map(function (l) {
+          return '<tr><td>' + l.label + '</td><td class="col-right">' + fmt(l.amount) + '</td><td>' + (l.delivery ? 'Day ' + l.delivery : '—') + '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="3" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">No allowances on record.</td></tr>';
+
+    var dedLines = calcDeductionLines(emp);
+    var dedLabelToPaidBy = {};
+    (emp.deductions || []).forEach(function (d) {
+      var label = d.id === 'bpjs-kes' ? 'BPJS Kesehatan' : d.id === 'bpjs-tk' ? 'BPJS Ketenagakerjaan' : d.id === 'pph21' ? 'PPh 21' : d.id;
+      dedLabelToPaidBy[label] = d.paidBy === 'company' ? 'Company' : 'Personal';
+    });
+    var deductionTbody = document.getElementById('deduction-tbody');
+    deductionTbody.innerHTML = dedLines.length
+      ? dedLines.map(function (l) {
+          return '<tr><td>' + l.label + '</td><td>' + (dedLabelToPaidBy[l.label] || 'Personal') + '</td><td class="col-right">' + l.pct + '</td><td class="col-right">' + fmt(l.amount) + '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="4" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">No personal-paid deductions on record.</td></tr>';
+
+    var allowTotal = allowLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var dedTotal   = dedLines.reduce(function (s, l) { return s + l.amount; }, 0);
+    document.getElementById('pay-base').textContent   = fmt(emp.salary);
+    document.getElementById('pay-allow').textContent  = '+' + fmt(allowTotal);
+    document.getElementById('pay-deduct').textContent = '−' + fmt(dedTotal);
+    document.getElementById('pay-net').textContent    = fmt(emp.salary + allowTotal - dedTotal);
+
+    var myPeriods = ALL_PERIODS.filter(function (p) {
+      return p.employeeIds && p.employeeIds.indexOf(badge) !== -1;
+    });
+    var historyTbody = document.getElementById('payroll-history-tbody');
+    historyTbody.innerHTML = myPeriods.length
+      ? myPeriods.map(function (pp) {
+          var c = computePayslip(pp, emp);
+          return '<tr><td>' + pp.period + '</td>'
+            + '<td class="col-right">' + fmt(c.base) + '</td>'
+            + '<td class="col-right">' + fmt(c.allowLines.reduce(function(s,l){return s+l.amount;},0)) + '</td>'
+            + '<td class="col-right">' + (c.ot > 0 ? fmt(c.ot) : '—') + '</td>'
+            + '<td class="col-right">' + (c.loanLines.length ? fmt(c.loanLines.reduce(function(s,l){return s+l.amount;},0)) : '—') + '</td>'
+            + '<td class="col-right">' + (c.lateAmount > 0 ? fmt(c.lateAmount) : '—') + '</td>'
+            + '<td class="col-right">' + fmt(c.dedLines.reduce(function(s,l){return s+l.amount;},0)) + '</td>'
+            + '<td class="col-right" style="font-weight:600">' + fmt(c.net) + '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="8" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">No payroll history yet.</td></tr>';
+
+    var LEAVE_STATUS_TAG = {
+      requested: 'tag tag-warning',
+      approved:  'tag tag-success',
+      cancelled: 'tag tag-neutral',
+      rejected:  'tag tag-danger'
+    };
+    var LEAVE_STATUS_LABEL = {
+      requested: 'Requested',
+      approved:  'Approved',
+      cancelled: 'Cancelled',
+      rejected:  'Rejected'
+    };
+    function fmtLeaveDate(iso) {
+      var d = new Date(iso + 'T00:00:00');
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    var leaveBalances = QUADRA_LEAVE_BALANCES[badge] || [];
+    document.getElementById('leave-balance-row').innerHTML = leaveBalances.map(function(b) {
+      var t = getLeaveType(b.typeId);
+      return '<div class="info-group">'
+        + '<div class="info-label">' + t.name + '</div>'
+        + '<div class="info-value">' + b.total.toFixed(1) + ' days</div>'
+        + '</div>';
+    }).join('');
+
+    var myLeaveRequests = getStoredLeaveRequests()
+      .filter(function(r) { return r.empBadge === badge; })
+      .sort(function(a, b) { return b.startDate.localeCompare(a.startDate); });
+    var leaveTbody = document.getElementById('leave-history-tbody');
+    leaveTbody.innerHTML = myLeaveRequests.length
+      ? myLeaveRequests.map(function(r) {
+          var t = getLeaveType(r.typeId);
+          return '<tr><td>' + t.name + '</td>'
+            + '<td>' + fmtLeaveDate(r.startDate) + '</td>'
+            + '<td>' + fmtLeaveDate(r.endDate) + '</td>'
+            + '<td class="col-right">' + r.requestedDays.toFixed(1) + '</td>'
+            + '<td><span class="' + LEAVE_STATUS_TAG[r.status] + '">' + LEAVE_STATUS_LABEL[r.status] + '</span></td></tr>';
+        }).join('')
+      : '<tr><td colspan="5" style="text-align:center;padding:32px 0;color:#9CA3AF;font-size:13px">No leave requests yet.</td></tr>';
+
+    function fmtObToday() {
+      var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var d = new Date();
+      return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    var obPrepState = (typeof getPrepChecklistState === 'function') ? getPrepChecklistState(emp.badge) : {};
+
+    function paintObPrepCount() {
+      var done = Object.keys(obPrepState).filter(function (k) { return obPrepState[k] && obPrepState[k].done; }).length;
+      document.getElementById('ob-prep-count').textContent = done + ' / ' + PREP_CHECKLIST_ITEMS.length;
+      return done;
+    }
+
+    document.getElementById('ob-prep-tbody').innerHTML = PREP_CHECKLIST_ITEMS.map(function (label, idx) {
+      var s = obPrepState[idx] || {};
+      return '<tr><td>' + label + '</td>'
+        + '<td><input type="checkbox" class="ob-prep-toggle" data-idx="' + idx + '"' + (s.done ? ' checked' : '') + ' /></td>'
+        + '<td class="ob-prep-date">' + (s.done && s.date ? s.date : '—') + '</td></tr>';
+    }).join('');
+
+    var obPrepDone = paintObPrepCount();
+
+    document.querySelectorAll('#ob-prep-tbody .ob-prep-toggle').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        var idx = cb.dataset.idx;
+        obPrepState[idx] = cb.checked ? { done: true, date: fmtObToday() } : { done: false };
+        if (typeof savePrepChecklistState === 'function') savePrepChecklistState(emp.badge, obPrepState);
+        cb.closest('tr').querySelector('.ob-prep-date').textContent = obPrepState[idx].done ? obPrepState[idx].date : '—';
+        paintObPrepCount();
+      });
+      cb.closest('tr').addEventListener('click', function (e) { if (e.target !== cb) cb.click(); });
+    });
+
+    var obCommentEl = document.getElementById('ob-prep-comment');
+    obCommentEl.value = (typeof getPrepComment === 'function') ? getPrepComment(emp.badge) : '';
+    obCommentEl.addEventListener('blur', function () {
+      if (typeof savePrepComment === 'function') savePrepComment(emp.badge, obCommentEl.value);
+      var ind = document.getElementById('ob-prep-save-indicator');
+      ind.classList.add('visible');
+      clearTimeout(ind._hideTimer);
+      ind._hideTimer = setTimeout(function () { ind.classList.remove('visible'); }, 2000);
+    });
+
+    /* Onboarding tab leads (before Personal Info) until the prep checklist is
+       fully done, then settles at the end (its default position) for good. */
+    var obTabBtn = document.querySelector('.tab-btn[data-tab="onboarding"]');
+    var personalTabBtn = document.querySelector('.tab-btn[data-tab="personal"]');
+    if (obTabBtn && personalTabBtn && obPrepDone < PREP_CHECKLIST_ITEMS.length) {
+      personalTabBtn.insertAdjacentElement('beforebegin', obTabBtn);
+      activateTab('onboarding');
+    }
+
+  })();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Onboarding: Step 6 Overtime</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .dur-date-w — RESOLVED in Task 11: the 172×40 size now uses the
+       shared .dur-date-w.lg variant in layout.css (COMMON PATTERNS
+       GROUP 4). Span typography stays page-specific. */
+    .dur-date-w {
+      flex-shrink: 0; padding: 0 12px;
+      border: 1px solid #D1D5DB; background: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none; position: relative;
+    }
+    .dur-date-w span { font-size: 13px; color: #9CA3AF; white-space: nowrap; }
+
+    /* .btn-spinner + its @keyframes: left inline together — the
+       keyframes must travel with the class for the spin animation to
+       still work, and this audit's brief says to leave the
+       @keyframes block untouched. */
+    .btn-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; margin-right: 6px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="onboarding" data-active-sub="employee-onboarding"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Onboarding</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="onboarding-employee-list.html">Employee Onboarding</a>
+    <svg class="bc-sep" id="bc-cl-sep" width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:none;"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="#" id="bc-cl" style="display:none;font-size:13px;color:#6B7280;text-decoration:none;"></a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">New Employee</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Wizard — steps 1–5 done, step 6 active -->
+    <div class="wizard">
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Personal Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Work Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Contract</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Allowance</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="wstep-label done">Deduction</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot active">6</div>
+        <span class="wstep-label active">Overtime</span>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+
+      <div class="card-head"><h2>Overtime</h2></div>
+
+      <div class="card-body">
+
+        <!-- Overtime Type selector -->
+        <div class="form-row">
+          <div class="form-col half">
+            <label>Overtime Type</label>
+            <div class="select-w" id="overtime-type-select"></div>
+            <div class="err-msg" id="err-overtime-type">Overtime type is required.</div>
+          </div>
+        </div>
+
+        <!-- ── Panel: Based on Grade/Level Range ── -->
+        <div id="panel-grade" class="overtime-panel">
+          <div class="info-box info-box-blue">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px">
+              <circle cx="8" cy="8" r="6.5" stroke="#3B82F6" stroke-width="1.4"/>
+              <path d="M8 7v4" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="8" cy="5" r="0.75" fill="#3B82F6"/>
+            </svg>
+            <p>Overtime rate will be automatically calculated based on the employee's grade/level range and hours submitted. To configure grade-based overtime rates, go to <strong>Payroll → Level Range</strong>.</p>
+          </div>
+        </div>
+
+        <!-- ── Panel: Specific Amount ── -->
+        <div id="panel-specific" class="overtime-panel">
+          <div class="form-row">
+            <div class="form-col half">
+              <label>Overtime Rate</label>
+              <div class="rate-input-w">
+                <span class="rate-prefix">IDR</span>
+                <input type="text" id="overtime-rate-input" placeholder="0" />
+                <span class="rate-suffix">/hr</span>
+              </div>
+              <div class="err-msg" id="err-overtime-rate">Overtime rate is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Panel: No Overtime ── -->
+        <div id="panel-none" class="overtime-panel">
+
+          <!-- Warning note -->
+          <div class="info-box info-box-amber">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px">
+              <path d="M8 2L14.5 13H1.5L8 2z" stroke="#D97706" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M8 7v3" stroke="#D97706" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="8" cy="11.5" r="0.75" fill="#D97706"/>
+            </svg>
+            <p>This employee will not receive overtime pay even if overtime is submitted.</p>
+          </div>
+
+          <!-- Override section -->
+          <div class="override-section">
+            <div class="override-head">
+              <h3>Overtime Override</h3>
+              <p>Enable this if a policy change grants temporary overtime eligibility to this employee.</p>
+            </div>
+
+            <label class="toggle-row">
+              <input type="checkbox" id="override-toggle" />
+              <span>Enable overtime override for this employee</span>
+            </label>
+
+            <div class="override-fields hidden" id="override-fields">
+
+              <!-- Override rate -->
+              <div class="form-col" style="gap:8px;width:calc(50% - 10px);">
+                <label style="font-size:13px;font-weight:500;color:#374151;">Override Rate</label>
+                <div class="rate-input-w" id="override-rate-w">
+                  <span class="rate-prefix">IDR</span>
+                  <input type="text" id="override-rate-input" placeholder="0" />
+                  <span class="rate-suffix">/hr</span>
+                </div>
+                <div class="err-msg" id="err-override-rate">Override rate is required.</div>
+              </div>
+
+              <!-- Override period + Overtime hours in one row -->
+              <div class="form-row" style="align-items:flex-start;">
+
+                <!-- Override period -->
+                <div class="form-col" style="gap:6px;flex:0 0 calc(50% - 10px);min-width:0;">
+                  <label style="font-size:13px;font-weight:500;color:#374151;">Override Period</label>
+                  <div class="dur-row">
+                    <div class="dur-date-w lg" id="override-start" style="flex:1;width:auto;">
+                      <span>Start date</span>
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14" stroke="#9CA3AF" stroke-width="1.4"/><path d="M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    </div>
+                    <span class="dur-sep">—</span>
+                    <div class="dur-date-w lg" id="override-end" style="flex:1;width:auto;">
+                      <span>End date</span>
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14" stroke="#9CA3AF" stroke-width="1.4"/><path d="M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    </div>
+                  </div>
+                  <div class="err-msg" id="err-override-period">Override period dates are required.</div>
+                </div>
+
+                <!-- Overtime hours -->
+                <div class="form-col" style="gap:6px;flex:0 0 calc(50% - 10px);min-width:0;">
+                  <label style="font-size:13px;font-weight:500;color:#374151;">Overtime Hours</label>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="time-input-w" style="flex:1;width:auto;">
+                      <input type="time" id="overtime-from" />
+                    </div>
+                    <span class="dur-sep">—</span>
+                    <div class="time-input-w" style="flex:1;width:auto;">
+                      <input type="time" id="overtime-to" />
+                    </div>
+                    <span class="time-calc-badge" id="overtime-calc">— hrs/day</span>
+                  </div>
+                  <div class="err-msg" id="err-overtime-hours">Overtime hours are required.</div>
+                </div>
+
+              </div>
+
+            </div><!-- /override-fields -->
+          </div><!-- /override-section -->
+
+        </div><!-- /panel-none -->
+
+      </div><!-- /card-body -->
+
+    </div><!-- /form-card -->
+
+  </main>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <div class="foot-btns">
+      <button class="btn btn-outline" onclick="window.location.href='onboarding-step5-deduction.html'">Back</button>
+      <button class="btn btn-primary" id="submit-btn" onclick="validateStep6()">Submit</button>
+    </div>
+  </div>
+</div><!-- /right-panel -->
+
+<script>
+  if (localStorage.getItem('quadra_role') === 'hr-umum') { window.location.replace('onboarding-employee-list.html'); }
+
+  var MONTHS = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+
+  /* ── Close all panels ───────────────────────────────────── */
+  function closeAll() {
+    document.querySelectorAll('.calendar-panel.open')
+      .forEach(function(p) { p.classList.remove('open'); });
+    document.querySelectorAll('.dur-date-w.open')
+      .forEach(function(el) { el.classList.remove('open'); });
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dur-date-w')) {
+      closeAll();
+    }
+  });
+
+  var typeSelect = document.getElementById('overtime-type-select');
+
+  function showPanel(activeId) {
+    ['panel-grade', 'panel-specific', 'panel-none'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.toggle('visible', id === activeId);
+    });
+  }
+
+  /* ── Override toggle ────────────────────────────────────── */
+  var overrideToggle = document.getElementById('override-toggle');
+  var overrideFields = document.getElementById('override-fields');
+
+  overrideToggle.addEventListener('change', function() {
+    overrideFields.classList.toggle('hidden', !this.checked);
+    if (this.checked) {
+      initDurDatePicker(document.getElementById('override-start'));
+      initDurDatePicker(document.getElementById('override-end'));
+    }
+  });
+
+  /* ── Duration date picker ───────────────────────────────── */
+  function initDurDatePicker(durDateW) {
+    if (durDateW.dataset.dpInit) return;
+    durDateW.dataset.dpInit = '1';
+    var now = new Date();
+    var initY = now.getFullYear();
+    var state = {
+      view: 'days', month: now.getMonth(), year: initY,
+      yearRangeStart: Math.floor(initY / 12) * 12, selected: null
+    };
+    var calPanel = document.createElement('div');
+    calPanel.className = 'calendar-panel';
+    durDateW.appendChild(calPanel);
+
+    function makeNav(prevFn, titleEl, nextFn) {
+      var nav = document.createElement('div');
+      nav.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;';
+      var prev = document.createElement('button');
+      prev.type = 'button'; prev.className = 'cal-nav-btn'; prev.innerHTML = '&#8249;';
+      prev.addEventListener('click', function(e) { e.stopPropagation(); prevFn(); render(); });
+      var next = document.createElement('button');
+      next.type = 'button'; next.className = 'cal-nav-btn'; next.innerHTML = '&#8250;';
+      next.addEventListener('click', function(e) { e.stopPropagation(); nextFn(); render(); });
+      nav.appendChild(prev); nav.appendChild(titleEl); nav.appendChild(next);
+      return nav;
+    }
+
+    function titleBtn(text, onClick) {
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'cal-title-btn'; btn.textContent = text;
+      btn.addEventListener('click', function(e) { e.stopPropagation(); onClick(); render(); });
+      return btn;
+    }
+
+    function gridBtn(label, selected, onClick) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-grid-btn' + (selected ? ' cal-grid-sel' : '');
+      btn.textContent = label;
+      btn.addEventListener('click', function(e) { e.stopPropagation(); onClick(); render(); });
+      return btn;
+    }
+
+    function renderDays() {
+      var titleWrap = document.createElement('div');
+      titleWrap.style.cssText = 'display:flex;align-items:center;gap:4px;';
+      titleWrap.appendChild(titleBtn(MONTHS[state.month], function() { state.view = 'months'; }));
+      titleWrap.appendChild(titleBtn(String(state.year), function() { state.view = 'years'; }));
+      calPanel.appendChild(makeNav(
+        function() { if (--state.month < 0) { state.month = 11; state.year--; } },
+        titleWrap,
+        function() { if (++state.month > 11) { state.month = 0; state.year++; } }
+      ));
+      var hRow = document.createElement('div'); hRow.className = 'cal-row';
+      ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d) {
+        var c = document.createElement('div'); c.className = 'cal-cell cal-header'; c.textContent = d;
+        hRow.appendChild(c);
+      });
+      calPanel.appendChild(hRow);
+      var firstDay = new Date(state.year, state.month, 1).getDay();
+      var total = new Date(state.year, state.month + 1, 0).getDate();
+      var today = new Date();
+      var row = document.createElement('div'); row.className = 'cal-row'; var col = 0;
+      for (var b = 0; b < firstDay; b++) {
+        row.appendChild(Object.assign(document.createElement('div'), {className: 'cal-cell'})); col++;
+      }
+      for (var d = 1; d <= total; d++) {
+        if (col > 0 && col % 7 === 0) { calPanel.appendChild(row); row = document.createElement('div'); row.className = 'cal-row'; }
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'cal-cell cal-day'; btn.textContent = d;
+        var isSel = state.selected && state.selected.d === d && state.selected.m === state.month && state.selected.y === state.year;
+        var isTdy = d === today.getDate() && state.month === today.getMonth() && state.year === today.getFullYear();
+        if (isSel) btn.classList.add('cal-selected');
+        else if (isTdy) btn.classList.add('cal-today');
+        (function(day) {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            state.selected = { d: day, m: state.month, y: state.year };
+            var span = durDateW.querySelector('span');
+            span.textContent = day + ' ' + MONTHS[state.month] + ' ' + state.year;
+            span.style.color = '#111827';
+            durDateW.dataset.selectedValue = day + ' ' + MONTHS[state.month] + ' ' + state.year;
+            durDateW.classList.remove('error');
+            closeAll();
+          });
+        })(d);
+        row.appendChild(btn); col++;
+      }
+      calPanel.appendChild(row);
+    }
+
+    function renderMonths() {
+      calPanel.appendChild(makeNav(
+        function() { state.year--; },
+        titleBtn(String(state.year), function() { state.view = 'years'; }),
+        function() { state.year++; }
+      ));
+      var grid = document.createElement('div'); grid.className = 'cal-grid';
+      MONTHS.forEach(function(m, i) {
+        var cell = document.createElement('div'); cell.className = 'cal-grid-cell';
+        cell.appendChild(gridBtn(m.slice(0, 3), i === state.month, function(idx) {
+          return function() { state.month = idx; state.view = 'days'; };
+        }(i)));
+        grid.appendChild(cell);
+      });
+      calPanel.appendChild(grid);
+    }
+
+    function renderYears() {
+      var rangeEnd = state.yearRangeStart + 11;
+      var rangeLabel = document.createElement('span');
+      rangeLabel.style.cssText = 'font-size:13px;font-weight:600;color:#111827;font-family:Inter,sans-serif;';
+      rangeLabel.textContent = state.yearRangeStart + ' – ' + rangeEnd;
+      calPanel.appendChild(makeNav(
+        function() { state.yearRangeStart -= 12; },
+        rangeLabel,
+        function() { state.yearRangeStart += 12; }
+      ));
+      var grid = document.createElement('div'); grid.className = 'cal-grid';
+      for (var y = state.yearRangeStart; y <= rangeEnd; y++) {
+        var cell = document.createElement('div'); cell.className = 'cal-grid-cell';
+        cell.appendChild(gridBtn(String(y), y === state.year, function(yr) {
+          return function() { state.year = yr; state.view = 'months'; };
+        }(y)));
+        grid.appendChild(cell);
+      }
+      calPanel.appendChild(grid);
+    }
+
+    function render() {
+      calPanel.innerHTML = '';
+      if (state.view === 'months') { renderMonths(); return; }
+      if (state.view === 'years')  { renderYears();  return; }
+      renderDays();
+    }
+
+    durDateW.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = calPanel.classList.contains('open');
+      closeAll();
+      if (!wasOpen) { state.view = 'days'; render(); calPanel.classList.add('open'); durDateW.classList.add('open'); }
+    });
+  }
+
+  /* ── Rate input formatting ──────────────────────────────── */
+  function initRateInput(id) {
+    var el = document.getElementById(id);
+    el.addEventListener('input', function() {
+      var pos = this.selectionStart, oldLen = this.value.length;
+      var raw = this.value.replace(/\./g, '').replace(/\D/g, '');
+      this.value = raw === '' ? '' : raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      var diff = this.value.length - oldLen;
+      this.setSelectionRange(pos + diff, pos + diff);
+      if (this.value.trim()) this.closest('.rate-input-w').classList.remove('error');
+    });
+  }
+  initRateInput('overtime-rate-input');
+  initRateInput('override-rate-input');
+
+  /* ── Overtime hours time range calculation ──────────────── */
+  function calcOvertimeHours() {
+    var fromVal = document.getElementById('overtime-from').value;
+    var toVal   = document.getElementById('overtime-to').value;
+    var badge   = document.getElementById('overtime-calc');
+    if (!fromVal || !toVal) {
+      badge.textContent = '— hrs/day'; badge.className = 'time-calc-badge'; return;
+    }
+    var fp = fromVal.split(':'), tp = toVal.split(':');
+    var fromMins = parseInt(fp[0]) * 60 + parseInt(fp[1]);
+    var toMins   = parseInt(tp[0]) * 60 + parseInt(tp[1]);
+    var diff = toMins - fromMins;
+    if (diff <= 0) diff += 24 * 60;
+    var hrs  = Math.floor(diff / 60);
+    var mins = diff % 60;
+    var label = hrs + (mins > 0 ? '.' + Math.round(mins / 60 * 10) : '') + ' hrs/day';
+    badge.textContent = label; badge.className = 'time-calc-badge active';
+  }
+  function updateTimeColor(el) {
+    el.classList.toggle('has-value', !!el.value);
+  }
+  ['overtime-from', 'overtime-to'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.addEventListener('change', function() { calcOvertimeHours(); updateTimeColor(el); if (el.value) el.closest('.time-input-w').classList.remove('error'); });
+    updateTimeColor(el);
+  });
+</script>
+<script>
+  function validateStep6() {
+    var submitBtn = document.getElementById('submit-btn');
+    if (submitBtn.disabled) return;
+
+    /* lock immediately — prevent double submit */
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="btn-spinner"></span>Submitting…';
+
+    var ok = true;
+
+    /* clear previous errors */
+    document.querySelectorAll('.select-w.error, .rate-input-w.error, .dur-date-w.error, .time-input-w.error')
+      .forEach(function(el) { el.classList.remove('error'); });
+    document.querySelectorAll('.err-msg.show')
+      .forEach(function(el) { el.classList.remove('show'); });
+
+    /* 1. Overtime Type must be selected */
+    var activePanel = typeSelect.dataset.selectedValue;
+    if (!activePanel) {
+      typeSelect.classList.add('error');
+      document.getElementById('err-overtime-type').classList.add('show');
+      ok = false;
+    }
+
+    /* 2. Specific Amount → rate required */
+    if (activePanel === 'panel-specific') {
+      var rateW = document.querySelector('#panel-specific .rate-input-w');
+      var rateInput = document.getElementById('overtime-rate-input');
+      if (!(rateInput.value || '').trim()) {
+        rateW.classList.add('error');
+        document.getElementById('err-overtime-rate').classList.add('show');
+        ok = false;
+      }
+    }
+
+    /* 3. No Overtime + override enabled → rate + period dates + hours required */
+    if (activePanel === 'panel-none' && document.getElementById('override-toggle').checked) {
+      var overrideRateInput = document.getElementById('override-rate-input');
+      if (!(overrideRateInput.value || '').trim()) {
+        document.getElementById('override-rate-w').classList.add('error');
+        document.getElementById('err-override-rate').classList.add('show');
+        ok = false;
+      }
+
+      var startW = document.getElementById('override-start');
+      var endW   = document.getElementById('override-end');
+      var periodOk = true;
+      if (!startW.dataset.selectedValue) { startW.classList.add('error'); periodOk = false; ok = false; }
+      if (!endW.dataset.selectedValue)   { endW.classList.add('error');   periodOk = false; ok = false; }
+      if (!periodOk) document.getElementById('err-override-period').classList.add('show');
+
+      var fromInput = document.getElementById('overtime-from');
+      var toInput   = document.getElementById('overtime-to');
+      var fromW = fromInput.closest('.time-input-w');
+      var toW   = toInput.closest('.time-input-w');
+      var hoursOk = true;
+      if (!fromInput.value) { fromW.classList.add('error'); hoursOk = false; ok = false; }
+      if (!toInput.value)   { toW.classList.add('error');   hoursOk = false; ok = false; }
+      if (!hoursOk) document.getElementById('err-overtime-hours').classList.add('show');
+    }
+
+    if (!ok) {
+      /* restore button so user can fix and retry */
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Submit';
+      var firstErr = document.querySelector('.err-msg.show');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      localStorage.setItem('quadra_onboarding_success', '1');
+      /* record which employee completed onboarding so the list can remove them */
+      var activeId = sessionStorage.getItem('quadra_ob_active_id');
+      if (activeId) {
+        var doneIds = [];
+        try { doneIds = JSON.parse(localStorage.getItem('quadra_ob_done_ids')) || []; } catch(e) {}
+        if (doneIds.indexOf(activeId) === -1) doneIds.push(activeId);
+        localStorage.setItem('quadra_ob_done_ids', JSON.stringify(doneIds));
+        sessionStorage.removeItem('quadra_ob_active_id');
+        sessionStorage.removeItem('quadra_ob_return_checklist');
+      }
+      window.location.href = 'onboarding-employee-list.html';
+    }
+  }
+
+  function hasFormData() {
+    var ins = document.querySelectorAll('input[type=text]:not([disabled]),input[type=number]:not([disabled]),input[type=time]:not([disabled])');
+    for (var i = 0; i < ins.length; i++) { if ((ins[i].value || '').trim() !== '') return true; }
+    var picks = document.querySelectorAll('.select-w,.date-w');
+    for (var i = 0; i < picks.length; i++) { if (picks[i].dataset.selectedValue) return true; }
+    return false;
+  }
+  function handleCancel() {
+    if (hasFormData()) { document.getElementById('cancel-modal').classList.add('show'); }
+    else { window.location.href = 'onboarding-employee-list.html'; }
+  }
+</script>
+<!-- Cancel Modal -->
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Cancel Onboarding</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Cancel onboarding?</div>
+        <div class="modal-sub-desc">You have unsaved changes. Canceling now will discard all entered data for this employee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="window.location.href='onboarding-employee-list.html'">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+<script src="dropdown.js"></script>
+<script>
+  QuadraDropdown.init(document.getElementById('overtime-type-select'), [
+    { value: 'panel-grade',    label: 'Based on Grade/Level Range' },
+    { value: 'panel-specific', label: 'Specific Amount' },
+    { value: 'panel-none',     label: 'No Overtime' }
+  ], { placeholder: 'Select overtime type', onChange: function(val) { showPanel(val); } });
+</script>
+<script>
+  (function() {
+    var name = sessionStorage.getItem('quadra_ob_emp_name');
+    var url  = sessionStorage.getItem('quadra_ob_return_checklist');
+    if (name && url) {
+      var el  = document.getElementById('bc-cl');
+      var sep = document.getElementById('bc-cl-sep');
+      if (el)  { el.textContent = name + ' — HR Checklist'; el.href = url; el.style.display = ''; }
+      if (sep) sep.style.display = '';
+    }
+  })();
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

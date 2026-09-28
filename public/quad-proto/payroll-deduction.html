@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Deduction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <!-- .deduction-name promoted to layout.css (identical rule shared
+       with payroll-allowance.html's .allowance-name). -->
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="deduction"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Deduction</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">Deduction</div>
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Add Deduction
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Deduction Name</th>
+            <th style="width:110px">Percentage</th>
+            <th style="width:130px;text-align:right">Employees</th>
+            <th class="col-actions" style="width:116px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="deduction-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ ADD / EDIT DEDUCTION MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" style="width:480px">
+
+    <div class="modal-head">
+      <span class="modal-head-title" id="modal-title">Add Deduction</span>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Deduction Name</label>
+        <input id="input-name" class="text-input" type="text" placeholder="e.g. Health Insurance" onfocus="this.classList.remove('is-error');document.getElementById('input-name-err').style.display='none'" onkeydown="if(event.key==='Enter')saveDeduction()">
+        <div id="input-name-err" style="display:none;font-size:11px;color:#EF4444;margin-top:4px"></div>
+      </div>
+
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:6px">Percentage</label>
+        <div class="f-input" id="pct-wrap" style="width:160px">
+          <input id="input-pct" type="number" min="0.01" max="100" step="0.01" placeholder="0" onfocus="document.getElementById('pct-wrap').classList.remove('is-error');document.getElementById('input-pct-err').style.display='none'" onkeydown="if(event.key==='Enter')saveDeduction()">
+          <div class="input-suffix">%</div>
+        </div>
+        <div id="input-pct-err" style="display:none;font-size:11px;color:#EF4444;margin-top:4px"></div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button id="modal-save-btn" class="btn btn-primary" onclick="saveDeduction()">Save Deduction</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="delete-overlay">
+  <div class="modal-box" style="width:440px">
+
+    <div class="modal-head">
+      <span class="modal-head-title">Delete Deduction</span>
+      <button class="modal-close" onclick="closeDelete()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Delete "<span id="delete-deduction-name"></span>"?</div>
+        <div class="modal-sub-desc" id="delete-deduction-desc"></div>
+        </div>
+      </div>
+
+      <!-- Enrolled employees list (hidden when empty) -->
+      <div id="delete-emp-section" style="display:none">
+        <div style="font-size:11px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Enrolled Employees</div>
+        <div id="delete-emp-list" style="border:1px solid #E5E7EB;max-height:180px;overflow-y:auto;display:flex;flex-direction:column"></div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDelete()">Cancel</button>
+      <button id="delete-confirm-btn" class="btn btn-danger" onclick="doDelete()">Delete Deduction</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="deductions-data.js"></script>
+<script>
+  function getStoredDeductions() {
+    try { var d = JSON.parse(localStorage.getItem('quadra_deductions')); return (d && d.length) ? d : QUADRA_DEDUCTIONS.slice(); }
+    catch(e) { return QUADRA_DEDUCTIONS.slice(); }
+  }
+  function saveDeductions() { localStorage.setItem('quadra_deductions', JSON.stringify(QUADRA_DEDUCTIONS)); }
+
+  QUADRA_DEDUCTIONS = getStoredDeductions();
+
+  var SVG_VIEW  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>';
+  var SVG_EDIT  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SVG_DEL   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function renderDeductions() {
+    var tbody = document.getElementById('deduction-tbody');
+    tbody.innerHTML = QUADRA_DEDUCTIONS.map(function(d) {
+      var count = QUADRA_EMPLOYEES.filter(function(e) { return e.deductions.some(function(x) { return x.id === d.id; }); }).length;
+      return '<tr data-id="' + d.id + '">' +
+        '<td><span class="deduction-name">' + d.name + '</span></td>' +
+        '<td><span class="tag tag-warning" style="font-variant-numeric:tabular-nums">' + (d.pct || 0) + '%</span></td>' +
+        (count > 0
+          ? '<td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:500;color:#111827">' + count + '</td>'
+          : '<td style="text-align:right;color:#9CA3AF">—</td>') +
+        '<td><div class="action-btns">' +
+          '<button class="icon-btn" title="View" data-view="' + d.id + '">' + SVG_VIEW + '</button>' +
+          '<button class="icon-btn" title="Edit" data-edit="' + d.id + '">' + SVG_EDIT + '</button>' +
+          (!d.mandatory ? '<button class="icon-btn" title="Delete" style="color:#EF4444" data-delete="' + d.id + '">' + SVG_DEL + '</button>' : '<div style="width:28px"></div>') +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+    tbody.onclick = function(e) {
+      var viewBtn = e.target.closest('[data-view]');
+      var editBtn = e.target.closest('[data-edit]');
+      var delBtn  = e.target.closest('[data-delete]');
+      if (viewBtn) { window.location.href = 'payroll-deduction-detail.html?id=' + viewBtn.dataset.view; return; }
+      if (editBtn) { openEditModal(editBtn.dataset.edit); return; }
+      if (delBtn)  { confirmDelete(delBtn.dataset.delete); return; }
+      var row = e.target.closest('tr[data-id]');
+      if (row) window.location.href = 'payroll-deduction-detail.html?id=' + row.dataset.id;
+    };
+  } renderDeductions();
+
+  var _editId = null;
+  var _deleteId = null;
+
+  function openAddModal() {
+    _editId = null;
+    document.getElementById('modal-title').textContent = 'Add Deduction';
+    document.getElementById('modal-save-btn').textContent = 'Save Deduction';
+    document.getElementById('input-name').value = '';
+    document.getElementById('input-name').classList.remove('is-error');
+    document.getElementById('input-name-err').style.display = 'none';
+    document.getElementById('input-pct').value = '';
+    document.getElementById('pct-wrap').classList.remove('is-error');
+    document.getElementById('input-pct-err').style.display = 'none';
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(function() { document.getElementById('input-name').focus(); }, 50);
+  }
+  function openEditModal(id) {
+    _editId = id;
+    var d = QUADRA_DEDUCTIONS.find(function(x) { return x.id === id; });
+    document.getElementById('modal-title').textContent = 'Edit Deduction';
+    document.getElementById('modal-save-btn').textContent = 'Update Deduction';
+    document.getElementById('input-name').value = d ? d.name : '';
+    document.getElementById('input-name').classList.remove('is-error');
+    document.getElementById('input-name-err').style.display = 'none';
+    document.getElementById('input-pct').value = (d && d.pct != null) ? d.pct : '';
+    document.getElementById('pct-wrap').classList.remove('is-error');
+    document.getElementById('input-pct-err').style.display = 'none';
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(function() { document.getElementById('input-name').focus(); }, 50);
+  }
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+  function saveDeduction() {
+    var nameInput = document.getElementById('input-name');
+    var name = nameInput.value.trim();
+    var nameErr = document.getElementById('input-name-err');
+    var pctInput = document.getElementById('input-pct');
+    var pctWrap  = document.getElementById('pct-wrap');
+    var pctErr   = document.getElementById('input-pct-err');
+    var valid = true;
+
+    if (!name) {
+      nameInput.classList.add('is-error');
+      nameErr.textContent = 'Deduction name is required.'; nameErr.style.display = 'block';
+      valid = false;
+    } else {
+      var nameLower = name.toLowerCase();
+      var duplicate = QUADRA_DEDUCTIONS.some(function(x) {
+        return x.name.toLowerCase() === nameLower && x.id !== _editId;
+      });
+      if (duplicate) {
+        nameInput.classList.add('is-error');
+        nameErr.textContent = 'A deduction with this name already exists.'; nameErr.style.display = 'block';
+        valid = false;
+      } else {
+        nameInput.classList.remove('is-error'); nameErr.style.display = 'none';
+      }
+    }
+
+    var pctRaw = pctInput.value.trim();
+    var pct = parseFloat(pctRaw);
+    if (pctRaw === '' || isNaN(pct) || pct <= 0 || pct > 100) {
+      pctWrap.classList.add('is-error');
+      pctErr.textContent = 'Enter a valid percentage between 0.01 and 100.'; pctErr.style.display = 'block';
+      valid = false;
+    } else {
+      pctWrap.classList.remove('is-error'); pctErr.style.display = 'none';
+    }
+
+    if (!valid) return;
+
+    if (_editId) {
+      var d = QUADRA_DEDUCTIONS.find(function(x) { return x.id === _editId; });
+      if (d) { d.name = name; d.pct = pct; }
+      saveDeductions();
+      closeModal();
+      renderDeductions();
+      QuadraToast.show('Deduction Updated', '"' + name + '" has been updated successfully.');
+    } else {
+      var base = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      var id = base, sfx = 1;
+      while (QUADRA_DEDUCTIONS.some(function(x) { return x.id === id; })) { id = base + '-' + (sfx++); }
+      QUADRA_DEDUCTIONS.push({ id: id, name: name, pct: pct, mandatory: false });
+      saveDeductions();
+      closeModal();
+      renderDeductions();
+      QuadraToast.show('Deduction Added', '"' + name + '" has been added successfully.');
+    }
+  }
+  function confirmDelete(id) {
+    _deleteId = id;
+    var d = QUADRA_DEDUCTIONS.find(function(x) { return x.id === id; });
+    var enrolled = d ? QUADRA_EMPLOYEES.filter(function(e) { return e.deductions.some(function(x) { return x.id === d.id; }); }) : [];
+    var count = enrolled.length;
+
+    document.getElementById('delete-deduction-name').textContent = d ? d.name : '';
+
+    var empSection = document.getElementById('delete-emp-section');
+    var empList    = document.getElementById('delete-emp-list');
+    var descEl     = document.getElementById('delete-deduction-desc');
+    var confirmBtn = document.getElementById('delete-confirm-btn');
+
+    if (count > 0) {
+      descEl.textContent = count + ' employee' + (count !== 1 ? 's are' : ' is') + ' currently enrolled. Deleting this deduction will remove it from all of them.';
+      empList.innerHTML = enrolled.map(function(e) {
+        var initials = e.name.split(' ').slice(0, 2).map(function(w) { return w[0]; }).join('').toUpperCase();
+        return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid #F3F4F6">' +
+          '<div style="width:28px;height:28px;border-radius:50%;background:#E04A2A;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:600;color:#fff">' + initials + '</div>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div style="font-size:13px;font-weight:500;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + e.name + '</div>' +
+            '<div style="font-size:11px;color:#9CA3AF">' + (e.position || e.role || '') + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      empList.lastElementChild && (empList.lastElementChild.style.borderBottom = 'none');
+      empSection.style.display = 'block';
+      confirmBtn.textContent = 'Delete & Remove from ' + count + ' Employee' + (count !== 1 ? 's' : '');
+    } else {
+      descEl.textContent = 'This action cannot be undone.';
+      empSection.style.display = 'none';
+      confirmBtn.textContent = 'Delete Deduction';
+    }
+
+    document.getElementById('delete-overlay').classList.add('open');
+  }
+  function doDelete() {
+    if (!_deleteId) { closeDelete(); return; }
+    var idx = QUADRA_DEDUCTIONS.findIndex(function(x) { return x.id === _deleteId; });
+    var name = idx >= 0 ? QUADRA_DEDUCTIONS[idx].name : '';
+    if (idx >= 0) QUADRA_DEDUCTIONS.splice(idx, 1);
+    saveDeductions();
+    closeDelete();
+    renderDeductions();
+    if (name) QuadraToast.show('Deduction Deleted', '"' + name + '" has been removed.');
+  }
+  function closeDelete() {
+    document.getElementById('delete-overlay').classList.remove('open');
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeModal(); closeDelete(); }
+  });
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+
+<script src="clockwidget.js"></script>
+</body>
+</html>

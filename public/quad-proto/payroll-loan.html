@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Loan / Advance Salary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <!-- All 19 of this page's former inline rules were promoted this
+       session: .src-tag (+ its 3 identical-value modifiers, consolidated
+       into one base rule) → tags.css; .radio-group.is-error .radio-dot
+       → layout.css (radio option error state); the full .emp-combo
+       searchable-select family (14 rules) → fields.css as a new
+       "Employee Combo" component. See components.html's Radio Option /
+       Employee Combo sections and tags.css's Loan Deduction Source Tag
+       demo. No page-level <style> block needed any more. -->
+
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar"
+  data-active-menu="payroll"
+  data-active-sub="loan">
+</aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Loan / Advance Salary</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">Loan / Advance Salary</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Add Loan
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Active Loans</div>
+        <div class="stat-value" id="stat-active-count">—</div>
+        <div class="stat-sub" id="stat-active-sub">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Outstanding</div>
+        <div class="stat-value" style="font-size:18px" id="stat-outstanding">—</div>
+        <div class="stat-sub">Across all active loans</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Deducted This Month</div>
+        <div class="stat-value" style="font-size:18px" id="stat-this-month">—</div>
+        <div class="stat-sub" id="stat-month-label">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Monthly Deduction</div>
+        <div class="stat-value" style="font-size:18px" id="stat-avg">—</div>
+        <div class="stat-sub">Per active loan</div>
+      </div>
+    </div>
+
+    <!-- Tab Container -->
+    <div class="tab-container">
+
+      <!-- Tab bar -->
+      <div class="tab-bar">
+        <div class="tab-item active" id="tab-active" onclick="switchTab('active')">
+          Active Loans
+          <span class="tab-count" id="tab-count-active">0</span>
+        </div>
+        <div class="tab-item" id="tab-history" onclick="switchTab('history')">
+          Completed
+          <span class="tab-count" id="tab-count-history">0</span>
+        </div>
+      </div>
+
+      <!-- Toolbar (search + filter, inside container) -->
+      <div class="tab-toolbar">
+        <div class="search-w">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input type="text" id="search-input" placeholder="Search employee…" oninput="filterTable()" />
+        </div>
+        <div class="filter-select" id="status-select">
+          <div class="filter-btn" id="status-btn" onclick="toggleStatusDropdown()">
+            <span id="status-label">All Status</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="filter-dropdown" id="status-dropdown">
+            <div class="filter-option active" data-val="all"     onclick="setFilter('all')">All</div>
+            <div class="filter-option"        data-val="active"  onclick="setFilter('active')">Active</div>
+            <div class="filter-option"        data-val="overdue" onclick="setFilter('overdue')">Overdue</div>
+          </div>
+        </div>
+        <div class="tab-toolbar-right">
+          <button class="btn btn-outline">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 9V2M4 5l3-3 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10v1.5A1.5 1.5 0 003.5 13h7A1.5 1.5 0 0012 11.5V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead id="loan-thead"></thead>
+          <tbody id="loan-tbody"></tbody>
+        </table>
+      </div>
+
+    </div><!-- end tab-container -->
+
+  </main>
+</div>
+
+<!-- ═══ MODAL: ADD LOAN ═══ -->
+<div class="modal-overlay" id="modal-add" onclick="closeAddModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span class="modal-head-title">Add Loan</span>
+      <button class="icon-btn" onclick="closeAddModal()" style="color:#9CA3AF">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Type -->
+      <div class="form-group">
+        <label class="field-label">Type</label>
+        <div class="radio-group" id="rg-type">
+          <label class="radio-option">
+            <input type="radio" name="loan-type" value="Loan" checked onchange="document.getElementById('err-type').style.display='none'" />
+            <div class="radio-dot"></div>
+            <span>Loan</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="loan-type" value="Advance" onchange="document.getElementById('err-type').style.display='none'" />
+            <div class="radio-dot"></div>
+            <span>Advance</span>
+          </label>
+        </div>
+        <div class="field-error" id="err-type" style="display:none"></div>
+      </div>
+
+      <!-- Employee -->
+      <div class="form-group">
+        <label class="field-label">Employee</label>
+        <div class="emp-combo" id="emp-combo">
+          <div class="emp-combo-input" id="emp-combo-input">
+            <input type="text" id="inp-emp-search" placeholder="Search by name or ID…" autocomplete="off" />
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="emp-combo-list" id="emp-combo-list"></div>
+        </div>
+        <div class="field-error" id="err-emp" style="display:none"></div>
+        <div id="warn-emp-active" style="display:none;font-size:11px;color:#D97706;margin-top:4px;align-items:flex-start;gap:5px">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><path d="M6 1L11 10H1L6 1z" stroke="#D97706" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 5v2.5M6 8.5v.5" stroke="#D97706" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span id="warn-emp-active-text"></span>
+        </div>
+      </div>
+
+      <!-- Loan Amount + Tenor -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">Loan Amount</label>
+          <div class="affix-w" id="affix-loan-amount">
+            <span class="input-prefix">Rp</span>
+            <input type="text" placeholder="0" id="inp-loan-amount" class="fmt-amount" />
+          </div>
+          <div class="field-error" id="err-loan-amount" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Tenor</label>
+          <div class="affix-w" id="affix-tenor">
+            <input type="text" inputmode="numeric" placeholder="0" id="inp-tenor" oninput="calcMonthlyDeduction()" style="padding-left:10px" />
+            <span class="input-suffix">mo.</span>
+          </div>
+          <div class="field-error" id="err-tenor" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- Monthly Deduction (auto-calc) -->
+      <div class="form-group">
+        <label class="field-label">Monthly Deduction</label>
+        <div class="affix-w is-readonly">
+          <span class="input-prefix">Rp</span>
+          <input type="text" id="inp-monthly-ded" placeholder="Auto-calculated" readonly />
+        </div>
+        <span class="field-hint">= Loan Amount ÷ Tenor</span>
+      </div>
+
+      <!-- Deduction Source -->
+      <div class="form-group" id="fg-source">
+        <label class="field-label">Deduction Source</label>
+        <div class="select-w" id="dd-source"></div>
+        <div class="field-error" id="err-source" style="display:none"></div>
+        <div class="field-error" id="err-allowance" style="display:none"></div>
+        <div id="warn-allowance" style="display:none;font-size:11px;color:#D97706;align-items:flex-start;gap:5px;background:#FFFBEB;border:1px solid #FDE68A;padding:8px 10px;line-height:1.5;margin-top:4px">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M6 1L11 10H1L6 1z" stroke="#D97706" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 5v2.5M6 8.5v.5" stroke="#D97706" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span id="warn-allowance-text"></span>
+        </div>
+      </div>
+
+      <!-- Deduction Schedule (conditional) -->
+      <div class="ded-sched" id="ded-sched-allowance">
+        <div class="ded-sched-title">Deduction Timing</div>
+        <div class="field-info">
+          Deduction will be applied when the allowance payroll is processed — this may not align with the regular salary payroll date. Ensure the allowance run is scheduled for each installment period.
+        </div>
+      </div>
+
+      <div class="ded-sched" id="ded-sched-both">
+        <div class="ded-sched-title">Split per Installment</div>
+        <div class="form-row" style="margin-top:0">
+          <div class="form-group">
+            <label class="field-label">From Salary</label>
+            <div class="affix-w">
+              <span class="input-prefix">Rp</span>
+              <input type="text" placeholder="0" id="inp-split-salary" class="fmt-amount" />
+            </div>
+            <span class="field-hint">Deducted on salary payroll date</span>
+          </div>
+          <div class="form-group">
+            <label class="field-label">From Allowance</label>
+            <div class="affix-w">
+              <span class="input-prefix">Rp</span>
+              <input type="text" placeholder="0" id="inp-split-allowance" class="fmt-amount" />
+            </div>
+            <span class="field-hint">Deducted on allowance payroll date</span>
+          </div>
+        </div>
+        <div class="field-error" id="err-split" style="display:none"></div>
+        <div id="split-validation" style="font-size:11px;color:#9CA3AF"></div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="form-group">
+        <label class="field-label">Start Date</label>
+        <div class="date-select-w" id="dp-start"></div>
+        <div class="field-error" id="err-start" style="display:none"></div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="field-label">Notes <span class="opt">(Optional)</span></label>
+        <textarea class="textarea" id="inp-notes" placeholder="Reason for loan, asset details, or any additional information…"></textarea>
+      </div>
+
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLoanForm()">Save Loan</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ MODAL: EDIT LOAN ═══ -->
+<div class="modal-overlay" id="modal-edit" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span class="modal-head-title">Edit Loan</span>
+      <button class="icon-btn" onclick="closeEditModal()" style="color:#9CA3AF">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Employee (read-only) -->
+      <div class="form-group">
+        <label class="field-label">Employee</label>
+        <div class="emp-readonly" id="edit-emp-display">—</div>
+      </div>
+
+      <!-- Type -->
+      <div class="form-group">
+        <label class="field-label">Type</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="edit-loan-type" value="Loan" />
+            <div class="radio-dot"></div><span>Loan</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="edit-loan-type" value="Advance" />
+            <div class="radio-dot"></div><span>Advance</span>
+          </label>
+        </div>
+        <div class="field-error" id="err-edit-type" style="display:none"></div>
+      </div>
+
+      <!-- Amount + Tenor -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">Loan Amount</label>
+          <div class="affix-w" id="affix-edit-amount">
+            <span class="input-prefix">Rp</span>
+            <input type="text" placeholder="0" id="inp-edit-amount" oninput="editFmtAmount(this);calcEditMonthly()" />
+          </div>
+          <div class="field-error" id="err-edit-amount" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Tenor</label>
+          <div class="affix-w" id="affix-edit-tenor">
+            <input type="text" inputmode="numeric" placeholder="0" id="inp-edit-tenor" oninput="calcEditMonthly()" style="padding-left:10px" />
+            <span class="input-suffix">mo.</span>
+          </div>
+          <div class="field-error" id="err-edit-tenor" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- Monthly Deduction (auto-calc) -->
+      <div class="form-group">
+        <label class="field-label">Monthly Deduction</label>
+        <div class="affix-w is-readonly">
+          <span class="input-prefix">Rp</span>
+          <input type="text" id="inp-edit-monthly" placeholder="Auto-calculated" readonly />
+        </div>
+        <span class="field-hint">= Loan Amount ÷ Tenor</span>
+      </div>
+
+      <!-- Deduction Source -->
+      <div class="form-group">
+        <label class="field-label">Deduction Source</label>
+        <div class="select-w" id="dd-edit-source"></div>
+        <div class="field-error" id="err-edit-source" style="display:none"></div>
+      </div>
+
+      <!-- Allowance note (conditional) -->
+      <div class="ded-sched" id="ded-edit-allowance">
+        <div class="ded-sched-title">Deduction Timing</div>
+        <div class="field-info">
+          Deduction will be applied when the allowance payroll is processed — this may not align with the regular salary payroll date.
+        </div>
+      </div>
+
+      <!-- Split (conditional) -->
+      <div class="ded-sched" id="ded-edit-both">
+        <div class="ded-sched-title">Split per Installment</div>
+        <div class="form-row" style="margin-top:0">
+          <div class="form-group">
+            <label class="field-label">From Salary</label>
+            <div class="affix-w">
+              <span class="input-prefix">Rp</span>
+              <input type="text" placeholder="0" id="inp-edit-split-salary" oninput="editFmtAmount(this);updateEditSplitHint()" />
+            </div>
+            <span class="field-hint">Deducted on salary payroll date</span>
+          </div>
+          <div class="form-group">
+            <label class="field-label">From Allowance</label>
+            <div class="affix-w">
+              <span class="input-prefix">Rp</span>
+              <input type="text" placeholder="0" id="inp-edit-split-allowance" oninput="editFmtAmount(this);updateEditSplitHint()" />
+            </div>
+            <span class="field-hint">Deducted on allowance payroll date</span>
+          </div>
+        </div>
+        <div class="field-error" id="err-edit-split" style="display:none"></div>
+        <div id="edit-split-hint" style="font-size:11px;color:#9CA3AF;margin-top:4px"></div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="form-group">
+        <label class="field-label">Start Date</label>
+        <div class="date-select-w" id="dp-edit-start"></div>
+        <div class="field-error" id="err-edit-start" style="display:none"></div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="field-label">Notes <span class="opt">(Optional)</span></label>
+        <textarea class="textarea" id="inp-edit-notes" placeholder="Reason for loan, asset details, or any additional information…"></textarea>
+      </div>
+
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditForm()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ MODAL: DELETE CONFIRM ═══ -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Remove Loan Record</span>
+      <button class="modal-close" onclick="closeDeleteModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Remove <span id="delete-loan-name">this loan</span>'s record?</div>
+        <div class="modal-sub-desc">This loan record will be permanently deleted. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Remove Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DEFER CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="modal-defer" onclick="if(event.target===this)closeDeferModal()">
+  <div class="modal-box modal-sm">
+    <div class="modal-head">
+      <span class="modal-head-title" id="defer-modal-title">Defer Payment This Month</span>
+      <button class="icon-btn" onclick="closeDeferModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="padding:20px;display:flex;gap:12px;align-items:flex-start">
+      <div id="defer-icon-wrap" style="width:36px;height:36px;background:#FFFBEB;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:#D97706"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3.5l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div id="defer-modal-headline" style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px"></div>
+        <div id="defer-modal-desc" style="font-size:13px;color:#6B7280;line-height:1.6"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeferModal()">Cancel</button>
+      <button class="btn btn-primary" id="defer-confirm-btn" onclick="confirmDefer()">Defer Payment</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="loans-data.js"></script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script>
+
+  /* ── Employee lookup ── */
+  function getEmp(badge) {
+    return QUADRA_EMPLOYEES.find(function(e) { return e.badge === badge; }) || {};
+  }
+
+  var currentFilter = 'all';
+  var currentTab    = 'active';
+  var MONTHS_LIST   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  /* ── Helpers ── */
+  function fmt(n) {
+    return 'Rp ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function monthlyDed(loan) {
+    return loan.tenor > 0 ? Math.ceil(loan.total / loan.tenor) : 0;
+  }
+
+  function srcLabel(src) {
+    if (src === 'salary')           return '<span class="src-tag src-salary">Salary</span>';
+    if (src === 'allowance')        return '<span class="src-tag src-allowance">Allowance</span>';
+    if (src === 'salary+allowance') return '<span class="src-tag src-both">Salary + Allow.</span>';
+    return src;
+  }
+
+  function srcLabelFull(src) {
+    if (src === 'salary')           return 'Salary';
+    if (src === 'allowance')        return 'Allowance';
+    if (src === 'salary+allowance') return 'Salary + Allowance';
+    return src;
+  }
+
+  function statusBadge(s) {
+    if (s === 'active')    return '<span class="tag tag-dot tag-success">Active</span>';
+    if (s === 'completed') return '<span class="tag tag-dot tag-neutral">Completed</span>';
+    if (s === 'overdue')   return '<span class="tag tag-dot tag-danger">Overdue</span>';
+    return '';
+  }
+
+  /* ── Stats ── */
+  function renderStats() {
+    var active  = QUADRA_LOANS.filter(function(l) { return l.status === 'active'; }).length;
+    var overdue = QUADRA_LOANS.filter(function(l) { return l.status === 'overdue'; }).length;
+    var outstanding = QUADRA_LOANS.reduce(function(sum, l) {
+      return (l.status === 'active' || l.status === 'overdue') ? sum + (l.total - l.paid) : sum;
+    }, 0);
+    var activeList = QUADRA_LOANS.filter(function(l) { return l.status === 'active' || l.status === 'overdue'; });
+    var thisMonth  = activeList.reduce(function(sum, l) { return sum + monthlyDed(l); }, 0);
+    var avg        = activeList.length > 0 ? Math.round(thisMonth / activeList.length) : 0;
+    var now        = new Date();
+
+    document.getElementById('stat-active-count').textContent = active + overdue;
+    document.getElementById('stat-active-sub').textContent   = active + ' active · ' + overdue + ' overdue';
+    document.getElementById('stat-outstanding').textContent  = fmt(outstanding);
+    document.getElementById('stat-this-month').textContent   = fmt(thisMonth);
+    document.getElementById('stat-month-label').textContent  = MONTHS_LIST[now.getMonth()] + ' ' + now.getFullYear();
+    document.getElementById('stat-avg').textContent          = fmt(avg);
+
+    document.getElementById('tab-count-active').textContent  = active + overdue;
+    document.getElementById('tab-count-history').textContent = QUADRA_LOANS.filter(function(l) { return l.status === 'completed'; }).length;
+  }
+
+  /* ── Render table ── */
+  function renderTable() {
+    var q     = (document.getElementById('search-input').value || '').toLowerCase().trim();
+    var tbody = document.getElementById('loan-tbody');
+    var thead = document.getElementById('loan-thead');
+    var isCompleted = currentTab === 'history';
+    var colSpan = isCompleted ? 7 : 8;
+    tbody.innerHTML = '';
+
+    thead.innerHTML = '<tr>' +
+      '<th>Employee</th>' +
+      '<th class="num">Loan Amount</th>' +
+      (isCompleted ? '<th class="num">Paid</th>' : '<th class="num">Remaining</th><th class="num">Monthly Deduction</th>') +
+      '<th>Tenor</th>' +
+      '<th>Deduction Source</th>' +
+      '<th style="min-width:170px">Status</th>' +
+      '<th class="col-actions" style="width:128px">Actions</th>' +
+    '</tr>';
+
+    var visible = QUADRA_LOANS.filter(function(loan) {
+      if (currentTab === 'history') {
+        if (loan.status !== 'completed') return false;
+      } else {
+        if (loan.status === 'completed') return false;
+        if (currentFilter !== 'all' && loan.status !== currentFilter) return false;
+      }
+      if (q) {
+        var emp = getEmp(loan.empBadge);
+        return (emp.name || '').toLowerCase().indexOf(q) >= 0 ||
+               loan.empBadge.toLowerCase().indexOf(q) >= 0;
+      }
+      return true;
+    });
+
+    if (visible.length === 0) {
+      var emptyMsg = isCompleted ? 'No completed loans yet' : 'No active loans found';
+      tbody.innerHTML = '<tr><td colspan="' + colSpan + '" style="padding:40px;text-align:center;color:#9CA3AF;font-size:13px">' + emptyMsg + '</td></tr>';
+      return;
+    }
+
+    visible.forEach(function(loan) {
+      var emp           = getEmp(loan.empBadge);
+      var remaining     = loan.total - loan.paid;
+      var ded           = monthlyDed(loan);
+      var dedCell       = remaining > 0 ? fmt(ded) : '<span style="color:#9CA3AF">—</span>';
+      var remColor      = '';
+      var remText       = remaining > 0 ? fmt(remaining) : '<span style="color:#9CA3AF">—</span>';
+      var paidInst      = ded > 0 ? Math.min(Math.floor(loan.paid / ded), loan.tenor) : 0;
+
+      var tr = document.createElement('tr');
+      tr.style.cursor = 'pointer';
+      tr.innerHTML =
+        '<td>' +
+          '<div class="emp-cell">' +
+            '<div class="emp-avatar" style="background:' + (emp.color || '#9CA3AF') + '">' + (emp.initials || '?') + '</div>' +
+            '<div>' +
+              '<div class="emp-name">' + (emp.name || loan.empBadge) + '</div>' +
+              '<div class="emp-id">' + loan.empBadge + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</td>' +
+        '<td class="num">' + fmt(loan.total) + '</td>' +
+        (isCompleted
+          ? '<td class="num" style="color:#059669">' + fmt(loan.paid) + '</td>'
+          : '<td class="num"' + remColor + '>' + remText + '</td>' +
+            '<td class="num">' + dedCell + '</td>') +
+        '<td>' + paidInst + ' / ' + loan.tenor + ' <span style="color:#9CA3AF;font-size:11px">mo.</span></td>' +
+        '<td>' + srcLabel(loan.deductionSource) + '</td>' +
+        '<td style="white-space:nowrap">' + statusBadge(loan.status) + (loan.deferred ? '<span style="font-size:10px;color:#92400E;background:#FFFBEB;border:1px solid #FCD34D;padding:1px 6px;display:inline-block;margin-left:4px;white-space:nowrap">Deferred</span>' : '') + '</td>' +
+        '<td>' +
+          '<div class="action-btns">' +
+            '<button class="icon-btn" title="View Detail" onclick="goToDetail(' + loan.id + ');event.stopPropagation()">' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-4.5 6-4.5S13 7 13 7s-2.5 4.5-6 4.5S1 7 1 7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/></svg>' +
+            '</button>' +
+            (!isCompleted
+              ? '<button class="icon-btn" title="' + (loan.deferred ? 'Cancel Defer' : 'Defer This Month') + '" onclick="openDeferModal(' + loan.id + ');event.stopPropagation()" style="' + (loan.deferred ? 'color:#D97706' : '') + '">' +
+                  '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                '</button>'
+              : '') +
+            (loan.paid === 0
+              ? '<button class="icon-btn" title="Edit Loan" onclick="openEditModal(' + loan.id + ');event.stopPropagation()">' +
+                  '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5a1.414 1.414 0 0 1 2 2L4.5 11.5 2 12l.5-2.5L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                '</button>'
+              : '') +
+            '<button class="icon-btn" title="Delete" onclick="openDeleteModal(' + loan.id + ');event.stopPropagation()" style="color:#EF4444">' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '</button>' +
+          '</div>' +
+        '</td>';
+      tr.addEventListener('click', function() { goToDetail(loan.id); });
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── Defer payment ── */
+  var _deferLoanId = null;
+
+  function openDeferModal(loanId) {
+    var loan = QUADRA_LOANS.find(function(l) { return l.id === loanId; });
+    if (!loan) return;
+    _deferLoanId = loanId;
+    var emp = getEmp(loan.empBadge);
+    var ded = monthlyDed(loan);
+    var isDef = !!loan.deferred;
+    document.getElementById('defer-modal-title').textContent  = isDef ? 'Cancel Defer' : 'Defer Payment This Month';
+    document.getElementById('defer-modal-headline').textContent = isDef
+      ? (emp.name || loan.empBadge) + '\'s loan will be included in the next payroll run.'
+      : 'Skip ' + (emp.name || loan.empBadge) + '\'s installment this month?';
+    document.getElementById('defer-modal-desc').innerHTML = isDef
+      ? 'Monthly installment: <strong>' + fmt(ded) + '</strong>'
+      : 'Installment of <strong>' + fmt(ded) + '</strong> will be skipped.<br>Next month: <strong>2× installment (' + fmt(ded * 2) + ')</strong>.';
+    var btn = document.getElementById('defer-confirm-btn');
+    btn.textContent  = isDef ? 'Cancel Defer' : 'Defer Payment';
+    btn.className    = 'btn ' + (isDef ? 'btn-outline' : 'btn-primary');
+    document.getElementById('defer-icon-wrap').style.background = isDef ? '#F3F4F6' : '#FFFBEB';
+    document.getElementById('defer-icon-wrap').querySelector('svg').style.color = isDef ? '#6B7280' : '#D97706';
+    document.getElementById('modal-defer').classList.add('open');
+  }
+
+  function closeDeferModal() {
+    document.getElementById('modal-defer').classList.remove('open');
+    _deferLoanId = null;
+  }
+
+  function confirmDefer() {
+    var loan = QUADRA_LOANS.find(function(l) { return l.id === _deferLoanId; });
+    if (!loan) return;
+    loan.deferred = !loan.deferred;
+    saveLoans();
+    closeDeferModal();
+    renderTable();
+    QuadraToast.show(
+      loan.deferred ? 'Payment deferred' : 'Defer cancelled',
+      loan.deferred ? 'Excluded from next payroll run. Next month: 2× installment.' : 'Loan will be included in next payroll run.'
+    );
+  }
+
+  /* ── Status filter ── */
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll('#status-dropdown .filter-option').forEach(function(opt) {
+      opt.classList.toggle('active', opt.dataset.val === f);
+    });
+    var LABELS = { all: 'All Status', active: 'Active', overdue: 'Overdue', completed: 'Completed' };
+    document.getElementById('status-label').textContent = LABELS[f] || 'All Status';
+    document.getElementById('status-btn').classList.toggle('has-value', f !== 'all');
+    document.getElementById('status-dropdown').classList.remove('open');
+    renderTable();
+  }
+
+  function toggleStatusDropdown() {
+    document.getElementById('status-dropdown').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#status-select')) {
+      document.getElementById('status-dropdown').classList.remove('open');
+    }
+  });
+
+  function filterTable() { renderTable(); }
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tab-active').classList.toggle('active', tab === 'active');
+    document.getElementById('tab-history').classList.toggle('active', tab === 'history');
+    document.getElementById('status-select').style.display = tab === 'active' ? '' : 'none';
+    if (tab === 'active') { currentFilter = 'all'; setFilter('all'); return; }
+    renderTable();
+  }
+
+  function pickSource(val) {
+    document.getElementById('ded-sched-allowance').classList.toggle('open', val === 'Allowance');
+    document.getElementById('ded-sched-both').classList.toggle('open', val === 'Salary + Allowance');
+    var errEl  = document.getElementById('err-allowance');
+    var warnEl = document.getElementById('warn-allowance');
+    if (val === 'Salary + Allowance') {
+      document.getElementById('ded-sched-both').appendChild(errEl);
+      document.getElementById('ded-sched-both').appendChild(warnEl);
+      autoSplit();
+      validateSplit();
+    } else {
+      document.getElementById('fg-source').appendChild(errEl);
+      document.getElementById('fg-source').appendChild(warnEl);
+    }
+    warnAllowance();
+  }
+
+  /* ── Employee searchable combobox (Add Loan modal) ── */
+  var EMP_OPTIONS = QUADRA_EMPLOYEES.filter(function(e) { return e.status === 'Active'; }).map(function(e) {
+    return { value: e.badge, label: e.name, meta: e.project + ' · ' + e.pos, avatar: { initials: e.initials, color: e.color } };
+  });
+  var selectedEmpBadge = null;
+
+  function renderEmpCombo(q) {
+    var list = document.getElementById('emp-combo-list');
+    var matches = q ? EMP_OPTIONS.filter(function(e) {
+      return e.label.toLowerCase().indexOf(q) >= 0 || e.value.indexOf(q) >= 0;
+    }) : EMP_OPTIONS;
+    if (matches.length === 0) {
+      list.innerHTML = '<div class="emp-combo-empty">No employees found</div>';
+    } else {
+      list.innerHTML = matches.map(function(e) {
+        return '<div class="emp-combo-item" onmousedown="selectEmpCombo(\'' + e.value + '\',\'' + e.label.replace(/'/g, '\\\'') + '\')">' +
+          '<div class="emp-combo-item-avatar" style="background:' + e.avatar.color + '">' + e.avatar.initials + '</div>' +
+          '<div><div class="emp-combo-item-name">' + e.label + '</div>' +
+          '<div class="emp-combo-item-meta">' + e.meta + '</div></div>' +
+          '</div>';
+      }).join('');
+    }
+    list.classList.add('open');
+  }
+
+  function selectEmpCombo(badge, label) {
+    selectedEmpBadge = badge;
+    document.getElementById('inp-emp-search').value = label;
+    document.getElementById('emp-combo-list').classList.remove('open');
+    document.getElementById('emp-combo-input').classList.remove('is-error');
+    document.getElementById('err-emp').style.display = 'none';
+    var warn = document.getElementById('warn-emp-active');
+    var activeLoans = QUADRA_LOANS.filter(function(l) {
+      return l.empBadge === badge && (l.status === 'active' || l.status === 'overdue');
+    });
+    if (activeLoans.length > 0) {
+      document.getElementById('warn-emp-active-text').textContent =
+        label + ' already has ' + activeLoans.length + ' active loan' + (activeLoans.length > 1 ? 's' : '') + '. Adding another is allowed but please verify.';
+      warn.style.display = 'flex';
+    } else {
+      warn.style.display = 'none';
+    }
+    autoSplit();
+    validateSplit();
+    warnAllowance();
+  }
+
+  document.getElementById('inp-emp-search').addEventListener('input', function() {
+    selectedEmpBadge = null;
+    document.getElementById('warn-emp-active').style.display = 'none';
+    renderEmpCombo(this.value.toLowerCase().trim());
+  });
+  document.getElementById('inp-emp-search').addEventListener('focus', function() {
+    renderEmpCombo(this.value.toLowerCase().trim());
+  });
+  document.getElementById('inp-emp-search').addEventListener('blur', function() {
+    document.getElementById('emp-combo-list').classList.remove('open');
+  });
+  QuadraDropdown.init(document.getElementById('dd-source'),
+    ['Salary', 'Allowance', 'Salary + Allowance'],
+    { placeholder: 'Select source', onChange: function(value) {
+      pickSource(value);
+      document.getElementById('err-source').style.display = 'none';
+    } });
+
+  /* ── Monthly deduction calculator ── */
+  function calcMonthlyDeduction() {
+    var amtRaw   = document.getElementById('inp-loan-amount').value.replace(/[^\d]/g, '');
+    var tenorRaw = document.getElementById('inp-tenor').value;
+    var out = document.getElementById('inp-monthly-ded');
+    if (amtRaw && tenorRaw && parseInt(tenorRaw) > 0) {
+      var monthly = Math.ceil(parseInt(amtRaw) / parseInt(tenorRaw));
+      out.value = monthly.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    } else {
+      out.value = '';
+    }
+    autoSplit();
+    validateSplit();
+    warnAllowance();
+  }
+
+  /* ── Auto-fill split per installment ── */
+  function autoSplit() {
+    var source = QuadraDropdown.getValue(document.getElementById('dd-source'));
+    if (source !== 'Salary + Allowance') return;
+    if (!selectedEmpBadge) return;
+    var monthly = parseInt(document.getElementById('inp-monthly-ded').value.replace(/\./g, '')) || 0;
+    if (!monthly) return;
+
+    var emp = getEmp(selectedEmpBadge);
+    var totalAllowance = (emp.allowances || []).reduce(function(s, a) { return s + a.amount; }, 0);
+    var committed = QUADRA_LOANS
+      .filter(function(l) { return l.empBadge === selectedEmpBadge && (l.status === 'active' || l.status === 'overdue'); })
+      .reduce(function(sum, l) {
+        if (l.deductionSource === 'allowance') return sum + monthlyDed(l);
+        if (l.deductionSource === 'salary+allowance') return sum + (l.splitAllowance || 0);
+        return sum;
+      }, 0);
+
+    var available    = Math.max(0, totalAllowance - committed);
+    var fromAllowance = Math.min(available, monthly);
+    var fromSalary    = monthly - fromAllowance;
+    var dot = function(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); };
+
+    document.getElementById('inp-split-salary').value    = fromSalary > 0    ? dot(fromSalary)    : '';
+    document.getElementById('inp-split-allowance').value = fromAllowance > 0 ? dot(fromAllowance) : '';
+  }
+
+  /* ── Allowance sufficiency check (shared) ── */
+  function getAllowanceStatus(badge, source, monthly, splitAllowanceAmt) {
+    if (source !== 'Allowance' && source !== 'Salary + Allowance') return null;
+    if (!badge || !monthly) return null;
+
+    var emp = getEmp(badge);
+    var totalAllowance = (emp.allowances || []).reduce(function(s, a) { return s + a.amount; }, 0);
+
+    var deductFromAllowance = (source === 'Salary + Allowance') ? (splitAllowanceAmt || 0) : monthly;
+    if (!deductFromAllowance) return null;
+
+    var committed = QUADRA_LOANS
+      .filter(function(l) { return l.empBadge === badge && (l.status === 'active' || l.status === 'overdue'); })
+      .reduce(function(sum, l) {
+        if (l.deductionSource === 'allowance') return sum + monthlyDed(l);
+        if (l.deductionSource === 'salary+allowance') return sum + (l.splitAllowance || 0);
+        return sum;
+      }, 0);
+
+    var totalNeeded = committed + deductFromAllowance;
+    if (totalNeeded <= totalAllowance) return null;
+
+    var msg = (emp.name || badge) + '\'s total allowance is ' + fmt(totalAllowance) + '.';
+    if (committed > 0) {
+      msg += ' ' + fmt(committed) + ' is already committed to existing loans,';
+      msg += ' leaving only ' + fmt(Math.max(0, totalAllowance - committed)) + ' available.';
+      msg += ' New deduction of ' + fmt(deductFromAllowance) + ' would exceed this.';
+    } else {
+      msg += ' Deduction of ' + fmt(deductFromAllowance) + ' per installment exceeds this amount.';
+    }
+    return msg;
+  }
+
+  function warnAllowance() {
+    var warn = document.getElementById('warn-allowance');
+    var source   = QuadraDropdown.getValue(document.getElementById('dd-source'));
+    var monthly  = parseInt(document.getElementById('inp-monthly-ded').value.replace(/\./g, '')) || 0;
+    var splitAmt = parseInt(document.getElementById('inp-split-allowance').value.replace(/[^\d]/g, '')) || 0;
+    var msg = getAllowanceStatus(selectedEmpBadge, source, monthly, splitAmt);
+    if (msg) {
+      document.getElementById('warn-allowance-text').textContent = msg;
+      warn.style.display = 'flex';
+      document.getElementById('ded-sched-allowance').style.display = 'none';
+    } else {
+      warn.style.display = 'none';
+      document.getElementById('ded-sched-allowance').style.display = '';
+    }
+  }
+
+  /* ── Split validation ── */
+  function validateSplit() {
+    var monthly    = parseInt(document.getElementById('inp-monthly-ded').value.replace(/\./g, '')) || 0;
+    var salaryPart = parseInt(document.getElementById('inp-split-salary').value.replace(/[^\d]/g, '')) || 0;
+    var allowPart  = parseInt(document.getElementById('inp-split-allowance').value.replace(/[^\d]/g, '')) || 0;
+    var el = document.getElementById('split-validation');
+    if (!monthly || (!salaryPart && !allowPart)) { el.textContent = ''; return; }
+    var sum = salaryPart + allowPart;
+    if (sum === monthly) {
+      el.style.color = '#059669';
+      el.textContent = '✓ Split matches monthly deduction (' + fmt(monthly) + ')';
+    } else {
+      el.style.color = '#EF4444';
+      el.textContent = 'Sum (' + fmt(sum) + ') must equal monthly deduction (' + fmt(monthly) + ')';
+    }
+  }
+
+  QuadraDatePicker.init(document.getElementById('dp-start'), { placeholder: 'Select date', onChange: function() {
+    document.getElementById('err-start').style.display = 'none';
+  } });
+
+  /* ── Add Loan Modal ── */
+  function openAddModal() {
+    selectedEmpBadge = null;
+    document.querySelector('input[name="loan-type"][value="Loan"]').checked = true;
+    QuadraDropdown.init(document.getElementById('dd-source'), ['Salary', 'Allowance', 'Salary + Allowance'], { placeholder: 'Select source', onChange: function(value) { pickSource(value); document.getElementById('err-source').style.display = 'none'; } });
+    pickSource('');
+    document.getElementById('inp-emp-search').value = '';
+    document.getElementById('emp-combo-list').classList.remove('open');
+    document.getElementById('warn-emp-active').style.display = 'none';
+    document.getElementById('warn-allowance').style.display = 'none';
+    document.getElementById('inp-loan-amount').value = '';
+    document.getElementById('inp-tenor').value = '';
+    document.getElementById('inp-monthly-ded').value = '';
+    document.getElementById('inp-split-salary').value = '';
+    document.getElementById('inp-split-allowance').value = '';
+    document.getElementById('split-validation').textContent = '';
+    document.getElementById('inp-notes').value = '';
+    clearAddErrors();
+    document.getElementById('modal-add').classList.add('open');
+  }
+  function closeAddModal() { document.getElementById('modal-add').classList.remove('open'); }
+
+  function clearAddErrors() {
+    ['err-type','err-emp','err-loan-amount','err-tenor','err-source','err-split','err-allowance','err-start'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.style.display = 'none'; el.textContent = ''; }
+    });
+    document.getElementById('emp-combo-input').classList.remove('is-error');
+    document.getElementById('affix-loan-amount').classList.remove('error');
+    document.getElementById('affix-tenor').classList.remove('error');
+    document.getElementById('rg-type').classList.remove('is-error');
+    document.getElementById('dd-source').classList.remove('is-error');
+    document.getElementById('dp-start').classList.remove('is-error');
+    warnAllowance();
+  }
+
+  function showFieldError(errId, msg) {
+    var el = document.getElementById(errId);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function saveLoanForm() {
+    clearAddErrors();
+    var hasError = false;
+
+    /* Type */
+    var typeRadio = document.querySelector('input[name="loan-type"]:checked');
+    var typeVal = typeRadio ? typeRadio.value : null;
+    if (!typeVal) {
+      document.getElementById('rg-type').classList.add('is-error');
+      showFieldError('err-type', 'Please select a type.');
+      hasError = true;
+    }
+
+    /* Employee */
+    if (!selectedEmpBadge) {
+      document.getElementById('emp-combo-input').classList.add('is-error');
+      showFieldError('err-emp', 'Please select an employee.');
+      hasError = true;
+    }
+
+    /* Loan Amount */
+    var amtRaw = document.getElementById('inp-loan-amount').value.replace(/[^\d]/g, '');
+    if (!amtRaw) {
+      document.getElementById('affix-loan-amount').classList.add('error');
+      showFieldError('err-loan-amount', 'Loan amount is required.');
+      hasError = true;
+    } else if (parseInt(amtRaw) <= 0) {
+      document.getElementById('affix-loan-amount').classList.add('error');
+      showFieldError('err-loan-amount', 'Loan amount must be greater than 0.');
+      hasError = true;
+    }
+
+    /* Tenor */
+    var tenorRaw = document.getElementById('inp-tenor').value;
+    var tenorNum = parseFloat(tenorRaw);
+    if (!tenorRaw || tenorNum <= 0) {
+      document.getElementById('affix-tenor').classList.add('error');
+      showFieldError('err-tenor', 'Tenor is required.');
+      hasError = true;
+    } else if (Math.floor(tenorNum) !== tenorNum) {
+      document.getElementById('affix-tenor').classList.add('error');
+      showFieldError('err-tenor', 'Tenor must be a whole number.');
+      hasError = true;
+    } else if (tenorNum > 60) {
+      document.getElementById('affix-tenor').classList.add('error');
+      showFieldError('err-tenor', 'Tenor cannot exceed 60 months (5 years).');
+      hasError = true;
+    }
+
+    /* Deduction Source */
+    var sourceVal = QuadraDropdown.getValue(document.getElementById('dd-source'));
+    if (!sourceVal) {
+      document.getElementById('dd-source').classList.add('is-error');
+      showFieldError('err-source', 'Please select a deduction source.');
+      hasError = true;
+    }
+
+    /* Split validation (only when source = Salary + Allowance) */
+    var splitSalary = 0, splitAllowance = 0;
+    if (sourceVal === 'Salary + Allowance' && !hasError) {
+      var monthly    = parseInt(document.getElementById('inp-monthly-ded').value.replace(/\./g, '')) || 0;
+      splitSalary    = parseInt(document.getElementById('inp-split-salary').value.replace(/[^\d]/g, '')) || 0;
+      splitAllowance = parseInt(document.getElementById('inp-split-allowance').value.replace(/[^\d]/g, '')) || 0;
+      if (!splitSalary && !splitAllowance) {
+        showFieldError('err-split', 'Enter the split amounts for salary and allowance deductions.');
+        hasError = true;
+      } else if (splitSalary + splitAllowance !== monthly) {
+        showFieldError('err-split', 'Sum (' + fmt(splitSalary + splitAllowance) + ') must equal monthly deduction (' + fmt(monthly) + ').');
+        hasError = true;
+      }
+    }
+
+    /* Allowance sufficiency */
+    if (!hasError && (sourceVal === 'Allowance' || sourceVal === 'Salary + Allowance')) {
+      var monthlyForCheck = parseInt(document.getElementById('inp-monthly-ded').value.replace(/\./g, '')) || 0;
+      var splitForCheck   = sourceVal === 'Salary + Allowance' ? splitAllowance : 0;
+      var allowMsg = getAllowanceStatus(selectedEmpBadge, sourceVal, monthlyForCheck, splitForCheck);
+      if (allowMsg) {
+        showFieldError('err-allowance', allowMsg);
+        document.getElementById('warn-allowance').style.display = 'none';
+        document.getElementById('ded-sched-allowance').style.display = 'none';
+        hasError = true;
+      }
+    }
+
+    /* Start Date */
+    if (!QuadraDatePicker.getValue(document.getElementById('dp-start'))) {
+      document.getElementById('dp-start').classList.add('is-error');
+      showFieldError('err-start', 'Start date is required.');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    /* All valid — build and save */
+    var sourceMap = { 'Salary': 'salary', 'Allowance': 'allowance', 'Salary + Allowance': 'salary+allowance' };
+    var dateVal   = QuadraDatePicker.getValue(document.getElementById('dp-start'));
+    var dateParts = dateVal.split('-');
+    var startDate = MONTHS_LIST[parseInt(dateParts[1]) - 1] + ' ' + parseInt(dateParts[2]) + ', ' + dateParts[0];
+
+    /* If one split side is 0, collapse to the non-zero source */
+    var effectiveSource = sourceMap[sourceVal] || 'salary';
+    if (sourceVal === 'Salary + Allowance') {
+      if (splitSalary === 0)    effectiveSource = 'allowance';
+      else if (splitAllowance === 0) effectiveSource = 'salary';
+    }
+
+    var newLoan = {
+      id:              (QUADRA_LOANS.length ? Math.max.apply(null, QUADRA_LOANS.map(function(l) { return l.id; })) : 0) + 1,
+      empBadge:        selectedEmpBadge,
+      type:            typeVal,
+      total:           parseInt(amtRaw),
+      paid:            0,
+      tenor:           Math.floor(tenorNum),
+      deductionSource: effectiveSource,
+      startDate:       startDate,
+      status:          'active',
+      notes:           document.getElementById('inp-notes').value.trim()
+    };
+    if (effectiveSource === 'salary+allowance') {
+      newLoan.splitSalary    = splitSalary;
+      newLoan.splitAllowance = splitAllowance;
+    }
+
+    QUADRA_LOANS.push(newLoan);
+    saveLoans();
+    closeAddModal();
+    renderStats();
+    renderTable();
+    var empName = getEmp(newLoan.empBadge).name || newLoan.empBadge;
+    QuadraToast.show('Loan Added', empName + '\'s loan has been recorded.');
+  }
+
+  /* Clear errors on input */
+  document.getElementById('inp-loan-amount').addEventListener('input', function() {
+    document.getElementById('affix-loan-amount').classList.remove('error');
+    document.getElementById('err-loan-amount').style.display = 'none';
+  });
+  document.getElementById('inp-tenor').addEventListener('input', function() {
+    document.getElementById('affix-tenor').classList.remove('error');
+    document.getElementById('err-tenor').style.display = 'none';
+  });
+
+  /* ── Loan Detail Modal ── */
+  function goToDetail(id) {
+    window.location.href = 'payroll-loan-detail.html?id=' + id;
+  }
+
+  /* ── Delete Confirm Modal ── */
+  var _deleteId = null;
+  function openDeleteModal(id) {
+    _deleteId = id;
+    var loan = QUADRA_LOANS.find(function(l) { return l.id === id; });
+    if (!loan) return;
+    var emp = getEmp(loan.empBadge);
+    document.getElementById('delete-loan-name').textContent = emp.name || loan.empBadge;
+    document.getElementById('modal-delete').classList.add('open');
+  }
+  function closeDeleteModal() {
+    document.getElementById('modal-delete').classList.remove('open');
+    _deleteId = null;
+  }
+  function confirmDelete() {
+    if (!_deleteId) return;
+    var loan = QUADRA_LOANS.find(function(l) { return l.id === _deleteId; });
+    if (!loan) return;
+    var empName = getEmp(loan.empBadge).name || loan.empBadge;
+    QUADRA_LOANS.splice(QUADRA_LOANS.indexOf(loan), 1);
+    saveLoans();
+    closeDeleteModal();
+    renderStats();
+    renderTable();
+    QuadraToast.show('Loan Removed', empName + '\'s loan record has been removed.');
+  }
+
+  /* ── Numeric-only key guard ── */
+  function onlyDigits(e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Tab','Home','End'];
+    if (allowed.indexOf(e.key) >= 0) return;
+    if (!/^\d$/.test(e.key)) e.preventDefault();
+  }
+  document.getElementById('inp-loan-amount').addEventListener('keydown', onlyDigits);
+  document.getElementById('inp-tenor').addEventListener('keydown', onlyDigits);
+  document.getElementById('inp-split-salary').addEventListener('keydown', onlyDigits);
+  document.getElementById('inp-split-allowance').addEventListener('keydown', onlyDigits);
+
+  /* ── Amount formatting ── */
+  function formatAmount(input) {
+    var raw = input.value.replace(/\./g, '').replace(/\D/g, '');
+    if (raw === '') return;
+    input.value = raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+  document.addEventListener('input', function(e) {
+    if (!e.target.matches('input.fmt-amount')) return;
+    var pos = e.target.selectionStart, oldLen = e.target.value.length;
+    formatAmount(e.target);
+    var diff = e.target.value.length - oldLen;
+    e.target.setSelectionRange(pos + diff, pos + diff);
+    var id = e.target.id;
+    if (id === 'inp-loan-amount') calcMonthlyDeduction();
+    if (id === 'inp-split-salary' || id === 'inp-split-allowance') {
+      var monthly = parseInt(document.getElementById('inp-monthly-ded').value.replace(/\./g, '')) || 0;
+      if (monthly) {
+        var typed   = parseInt(e.target.value.replace(/\./g, '')) || 0;
+        var otherId = id === 'inp-split-salary' ? 'inp-split-allowance' : 'inp-split-salary';
+        var other   = Math.max(0, monthly - typed);
+        var otherEl = document.getElementById(otherId);
+        otherEl.value = other > 0 ? other.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+      }
+      validateSplit();
+      warnAllowance();
+    }
+  });
+
+  function autoOverdue() {
+    var now = new Date();
+    var nowY = now.getFullYear(), nowM = now.getMonth();
+    QUADRA_LOANS.forEach(function(loan) {
+      if (loan.status !== 'active') return;
+      var start  = new Date(loan.startDate);
+      var elapsed = (nowY - start.getFullYear()) * 12 + (nowM - start.getMonth());
+      var due    = Math.min(loan.tenor, elapsed);
+      if (due <= 0) return;
+      var ded = monthlyDed(loan);
+      if (ded > 0 && Math.floor(loan.paid / ded) < due) loan.status = 'overdue';
+    });
+  }
+
+  /* ── Edit Modal ── */
+  var editingLoanId = null;
+
+  function editFmtAmount(input) {
+    var raw = input.value.replace(/\./g, '').replace(/\D/g, '');
+    if (raw === '') { input.value = ''; return; }
+    input.value = raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function calcEditMonthly() {
+    var amt = parseInt(document.getElementById('inp-edit-amount').value.replace(/\./g, '')) || 0;
+    var ten = parseInt(document.getElementById('inp-edit-tenor').value) || 0;
+    document.getElementById('inp-edit-monthly').value = (amt > 0 && ten > 0) ? Math.ceil(amt / ten).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+  }
+
+  function pickEditSource(val) {
+    document.getElementById('ded-edit-allowance').classList.toggle('open', val === 'Allowance');
+    document.getElementById('ded-edit-both').classList.toggle('open', val === 'Salary + Allowance');
+  }
+
+  function updateEditSplitHint() {
+    var monthly = parseInt(document.getElementById('inp-edit-monthly').value.replace(/\./g,'')) || 0;
+    var sal = parseInt(document.getElementById('inp-edit-split-salary').value.replace(/\./g,'')) || 0;
+    var all = parseInt(document.getElementById('inp-edit-split-allowance').value.replace(/\./g,'')) || 0;
+    var hint = document.getElementById('edit-split-hint');
+    if (!hint) return;
+    if (monthly > 0 && sal + all === monthly) { hint.style.color = '#059669'; hint.textContent = '✓ Split matches monthly deduction'; }
+    else if (sal + all > 0) { hint.style.color = '#EF4444'; hint.textContent = 'Sum must equal monthly deduction'; }
+    else { hint.textContent = ''; }
+  }
+
+  function openEditModal(id) {
+    var loan = QUADRA_LOANS.find(function(l) { return l.id === id; });
+    if (!loan) return;
+    editingLoanId = id;
+    var emp = getEmp(loan.empBadge);
+
+    document.getElementById('edit-emp-display').textContent = (emp.name || loan.empBadge) + ' · ' + loan.empBadge;
+    document.querySelectorAll('input[name="edit-loan-type"]').forEach(function(r) { r.checked = (r.value === loan.type); });
+    document.getElementById('inp-edit-amount').value = loan.total > 0 ? loan.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+    document.getElementById('inp-edit-tenor').value = loan.tenor > 0 ? String(loan.tenor) : '';
+    calcEditMonthly();
+    document.getElementById('inp-edit-notes').value = loan.notes || '';
+
+    ['err-edit-type','err-edit-amount','err-edit-tenor','err-edit-source','err-edit-split','err-edit-start'].forEach(function(eid) {
+      var el = document.getElementById(eid); if (el) el.style.display = 'none';
+    });
+    ['affix-edit-amount','affix-edit-tenor'].forEach(function(eid) {
+      var el = document.getElementById(eid); if (el) el.classList.remove('error');
+    });
+
+    var srcVal = loan.deductionSource === 'salary' ? 'Salary' : loan.deductionSource === 'allowance' ? 'Allowance' : 'Salary + Allowance';
+    QuadraDropdown.init(document.getElementById('dd-edit-source'), ['Salary', 'Allowance', 'Salary + Allowance'], {
+      placeholder: 'Select source', value: srcVal,
+      onChange: function(val) { pickEditSource(val); document.getElementById('err-edit-source').style.display = 'none'; }
+    });
+    pickEditSource(srcVal);
+
+    if (loan.deductionSource === 'salary+allowance') {
+      document.getElementById('inp-edit-split-salary').value    = loan.splitSalary    ? loan.splitSalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')    : '';
+      document.getElementById('inp-edit-split-allowance').value = loan.splitAllowance ? loan.splitAllowance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+      updateEditSplitHint();
+    } else {
+      document.getElementById('inp-edit-split-salary').value    = '';
+      document.getElementById('inp-edit-split-allowance').value = '';
+    }
+
+    var sp = loan.startDate.split(' ');
+    var smIdx = MONTHS_LIST.indexOf(sp[0]);
+    var sd = parseInt((sp[1] || '').replace(',', ''));
+    var sy = parseInt(sp[2]);
+    QuadraDatePicker.init(document.getElementById('dp-edit-start'), {
+      placeholder: 'Select date',
+      preselected: (smIdx > -1 && sd && sy) ? { d: sd, m: smIdx, y: sy } : null,
+      onChange: function() { document.getElementById('err-edit-start').style.display = 'none'; }
+    });
+
+    document.getElementById('modal-edit').classList.add('open');
+  }
+
+  function closeEditModal() {
+    document.getElementById('modal-edit').classList.remove('open');
+    editingLoanId = null;
+  }
+
+  function saveEditForm() {
+    var hasError = false;
+
+    var typeEl = document.querySelector('input[name="edit-loan-type"]:checked');
+    if (!typeEl) {
+      var errType = document.getElementById('err-edit-type');
+      errType.textContent = 'Please select a type.'; errType.style.display = 'block'; hasError = true;
+    }
+
+    var amtRaw = document.getElementById('inp-edit-amount').value.replace(/[^\d]/g, '');
+    var amtNum = parseInt(amtRaw) || 0;
+    var affAmt = document.getElementById('affix-edit-amount');
+    var errAmt = document.getElementById('err-edit-amount');
+    if (!amtRaw) {
+      affAmt.classList.add('error'); errAmt.textContent = 'Loan amount is required.'; errAmt.style.display = 'block'; hasError = true;
+    } else if (amtNum <= 0) {
+      affAmt.classList.add('error'); errAmt.textContent = 'Loan amount must be greater than 0.'; errAmt.style.display = 'block'; hasError = true;
+    } else {
+      affAmt.classList.remove('error'); errAmt.style.display = 'none';
+    }
+
+    var tenorRaw = document.getElementById('inp-edit-tenor').value;
+    var tenorNum = parseFloat(tenorRaw);
+    var affTen = document.getElementById('affix-edit-tenor');
+    var errTen = document.getElementById('err-edit-tenor');
+    if (!tenorRaw || tenorNum <= 0) {
+      affTen.classList.add('error'); errTen.textContent = 'Tenor is required.'; errTen.style.display = 'block'; hasError = true;
+    } else if (Math.floor(tenorNum) !== tenorNum) {
+      affTen.classList.add('error'); errTen.textContent = 'Tenor must be a whole number.'; errTen.style.display = 'block'; hasError = true;
+    } else if (tenorNum > 60) {
+      affTen.classList.add('error'); errTen.textContent = 'Tenor cannot exceed 60 months (5 years).'; errTen.style.display = 'block'; hasError = true;
+    } else {
+      affTen.classList.remove('error'); errTen.style.display = 'none';
+    }
+
+    var srcVal = QuadraDropdown.getValue(document.getElementById('dd-edit-source'));
+    var errSrc = document.getElementById('err-edit-source');
+    if (!srcVal) {
+      errSrc.textContent = 'Please select a deduction source.'; errSrc.style.display = 'block'; hasError = true;
+    } else {
+      errSrc.style.display = 'none';
+    }
+
+    var monthly = (!hasError && amtNum > 0 && tenorNum > 0) ? Math.ceil(amtNum / Math.floor(tenorNum)) : 0;
+    var errSplit = document.getElementById('err-edit-split');
+    if (srcVal === 'Salary + Allowance') {
+      var splitSal = parseInt(document.getElementById('inp-edit-split-salary').value.replace(/[^\d]/g, '')) || 0;
+      var splitAll = parseInt(document.getElementById('inp-edit-split-allowance').value.replace(/[^\d]/g, '')) || 0;
+      if (!splitSal && !splitAll) {
+        errSplit.textContent = 'Enter the split amounts for salary and allowance deductions.'; errSplit.style.display = 'block'; hasError = true;
+      } else if (monthly > 0 && splitSal + splitAll !== monthly) {
+        errSplit.textContent = 'Sum must equal monthly deduction.'; errSplit.style.display = 'block'; hasError = true;
+      } else {
+        errSplit.style.display = 'none';
+      }
+    } else {
+      errSplit.style.display = 'none';
+    }
+
+    var startVal = QuadraDatePicker.getValue(document.getElementById('dp-edit-start'));
+    var errStart = document.getElementById('err-edit-start');
+    if (!startVal) {
+      errStart.textContent = 'Start date is required.'; errStart.style.display = 'block'; hasError = true;
+    } else {
+      errStart.style.display = 'none';
+    }
+
+    if (hasError) return;
+
+    var idx = QUADRA_LOANS.findIndex(function(l) { return l.id === editingLoanId; });
+    if (idx > -1) {
+      var sp = startVal.split('-');
+      var newSD = MONTHS_LIST[parseInt(sp[1]) - 1] + ' ' + parseInt(sp[2]) + ', ' + sp[0];
+      var newSrc = srcVal === 'Salary' ? 'salary' : srcVal === 'Allowance' ? 'allowance' : 'salary+allowance';
+      QUADRA_LOANS[idx].type            = typeEl.value;
+      QUADRA_LOANS[idx].total           = amtNum;
+      QUADRA_LOANS[idx].tenor           = Math.floor(tenorNum);
+      QUADRA_LOANS[idx].deductionSource = newSrc;
+      QUADRA_LOANS[idx].startDate       = newSD;
+      QUADRA_LOANS[idx].notes           = document.getElementById('inp-edit-notes').value.trim();
+      if (newSrc === 'salary+allowance') {
+        QUADRA_LOANS[idx].splitSalary    = parseInt(document.getElementById('inp-edit-split-salary').value.replace(/[^\d]/g,'')) || 0;
+        QUADRA_LOANS[idx].splitAllowance = parseInt(document.getElementById('inp-edit-split-allowance').value.replace(/[^\d]/g,'')) || 0;
+      } else {
+        delete QUADRA_LOANS[idx].splitSalary;
+        delete QUADRA_LOANS[idx].splitAllowance;
+      }
+      saveLoans();
+      var empName = getEmp(QUADRA_LOANS[idx].empBadge).name || QUADRA_LOANS[idx].empBadge;
+      closeEditModal();
+      autoOverdue();
+      renderStats();
+      renderTable();
+      QuadraToast.show('Loan Updated', empName + '\'s loan has been updated.');
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeAddModal(); closeEditModal(); closeDeleteModal(); closeDeferModal(); }
+  });
+
+  /* ── Init ── */
+  autoOverdue();
+  renderStats();
+  renderTable();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

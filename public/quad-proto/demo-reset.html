@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Demo Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #F3F4F6; min-height: 100vh; padding: 40px 24px; }
+
+    .page-header { max-width: 800px; margin: 0 auto 32px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #111827; }
+    .page-header p  { font-size: 13px; color: #6B7280; margin-top: 4px; }
+
+    .grid { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+    .card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; overflow: hidden; }
+    .card-head { padding: 16px 20px 14px; border-bottom: 1px solid #F3F4F6; display: flex; align-items: center; gap: 10px; }
+    .card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .card-icon.blue   { background: #EFF6FF; color: #2563EB; }
+    .card-icon.amber  { background: #FFFBEB; color: #D97706; }
+    .card-icon.red    { background: #FEF2F2; color: #DC2626; }
+    .card-icon.green  { background: #F0FDF4; color: #16A34A; }
+    .card-title { font-size: 14px; font-weight: 600; color: #111827; }
+    .card-sub   { font-size: 12px; color: #6B7280; margin-top: 1px; }
+
+    .card-body { padding: 16px 20px; }
+
+    .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .scenario-item { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 10px 12px; }
+    .s-name  { font-size: 12px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+    .s-detail { font-size: 11px; color: #6B7280; line-height: 1.5; }
+
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 3px; font-size: 10px; font-weight: 500; }
+    .tag-success  { background: #ECFDF5; color: #059669; }
+    .tag-danger   { background: #FEF2F2; color: #DC2626; }
+    .tag-warning  { background: #FFFBEB; color: #D97706; }
+    .tag-neutral  { background: #F3F4F6; color: #6B7280; }
+    .tag-info     { background: #EFF6FF; color: #2563EB; }
+    .tag-amber    { background: #FFFBEB; color: #92400E; border: 1px solid #FCD34D; }
+    .tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    .card-footer { padding: 12px 20px; background: #F9FAFB; border-top: 1px solid #F3F4F6; display: flex; align-items: center; justify-content: space-between; }
+    .card-footer .note { font-size: 11px; color: #9CA3AF; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity .15s; }
+    .btn:hover { opacity: .85; }
+    .btn:active { opacity: .7; }
+    .btn-primary { background: #E04A2A; color: #fff; }
+    .btn-danger  { background: #DC2626; color: #fff; }
+    .btn-outline { background: #fff; border: 1px solid #D1D5DB; color: #374151; }
+    .btn-green   { background: #16A34A; color: #fff; }
+
+    .divider { height: 1px; background: #E5E7EB; margin: 0; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #111827; color: #fff; font-size: 13px; padding: 10px 20px; border-radius: 8px; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .section-label { font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+
+    .nav-links { max-width: 800px; margin: 24px auto 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .nav-link { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; background: #fff; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 12px; color: #374151; text-decoration: none; transition: border-color .15s; }
+    .nav-link:hover { border-color: #9CA3AF; }
+    .nav-links-label { font-size: 11px; color: #9CA3AF; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>QuadraNG — Demo Control</h1>
+  <p>Load or reset prototype data before a demo session. Changes take effect immediately in localStorage.</p>
+</div>
+
+<div class="grid">
+
+  <!-- LOAN DEMO -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon blue">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.4"/><path d="M8 8v2M6 9h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Loan Module — Demo Data</div>
+        <div class="card-sub">5 loans across different states for a complete demo flow</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scenario-grid">
+        <div class="scenario-item">
+          <div class="s-name">Budi Santoso <span class="tag tag-success">Active</span></div>
+          <div class="s-detail">Loan · Rp 10.000.000 · 10 bulan<br>Bayar 4x dari 10 · on track</div>
+        </div>
+        <div class="scenario-item">
+          <div class="s-name">Dewi Rahayu <span class="tag tag-danger">Overdue</span></div>
+          <div class="s-detail">Loan · Rp 8.000.000 · 8 bulan<br>Bayar 2x dari 5 yang sudah jatuh tempo</div>
+        </div>
+        <div class="scenario-item">
+          <div class="s-name">Ahmad Fauzi <span class="tag tag-neutral">Completed</span></div>
+          <div class="s-detail">Loan · Rp 15.000.000 · 5 bulan<br>Lunas — semua cicilan selesai</div>
+        </div>
+        <div class="scenario-item">
+          <div class="s-name">Siti Nurhaliza <span class="tag tag-amber">Deferred</span></div>
+          <div class="s-detail">Advance · Rp 3.000.000 · 3 bulan<br>Bayar 1x, bulan ini di-defer</div>
+        </div>
+        <div class="scenario-item">
+          <div class="s-name">Putri Anggraini <span class="tag tag-success">Active</span></div>
+          <div class="s-detail">Advance · Rp 4.000.000 · 4 bulan<br>Baru mulai Mei 2026, bayar 1x</div>
+        </div>
+        <div class="scenario-item" style="background:#F9FAFB;border-style:dashed;display:flex;align-items:center;justify-content:center">
+          <div class="s-detail" style="text-align:center;color:#D1D5DB">Karyawan lain<br>tidak ada loan</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="note">Menimpa data loan yang ada di localStorage</span>
+      <button class="btn btn-primary" onclick="loadLoanDemo()">Load Loan Demo Data</button>
+    </div>
+  </div>
+
+  <!-- PAYROLL DEMO -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon green">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5 8h6M5 5h6M5 11h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Payroll Module — Demo Data</div>
+        <div class="card-sub">2 periode history · Juni 2026 kosong untuk di-demo live</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scenario-grid">
+        <div class="scenario-item">
+          <div class="s-name">April 2026 <span class="tag tag-success">Payslip Sent</span></div>
+          <div class="s-detail">8 karyawan · Payslip terkirim 5 Mei 2026<br>Semua batch sudah paid</div>
+        </div>
+        <div class="scenario-item">
+          <div class="s-name">May 2026 <span class="tag tag-info">Paid</span></div>
+          <div class="s-detail">9 karyawan (+ Rina Kusuma)<br>Transfer selesai, belum kirim payslip</div>
+        </div>
+        <div class="scenario-item" style="background:#F9FAFB;border-style:dashed;display:flex;align-items:center;justify-content:center;grid-column:span 2">
+          <div class="s-detail" style="text-align:center;color:#D1D5DB">Juni 2026 — belum ada · buat sendiri via Create Payroll untuk demo alur lengkap</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="note">Menimpa data payroll periods yang ada di localStorage</span>
+      <button class="btn btn-green" onclick="loadPayrollDemo()">Load Payroll Demo Data</button>
+    </div>
+  </div>
+
+  <!-- LOAD ALL -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon amber">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v4l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 5A6 6 0 1 0 8 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Load All Demo Data</div>
+        <div class="card-sub">Loan + Payroll sekaligus — satu klik siap presentasi</div>
+      </div>
+    </div>
+    <div class="card-footer" style="background:#fff;border-top:none">
+      <span class="note">Jalankan ini sebelum mulai presentasi</span>
+      <button class="btn btn-primary" onclick="loadAllDemo()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v4l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M3 4.5A5 5 0 1 0 7 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Load Semua Demo Data
+      </button>
+    </div>
+  </div>
+
+  <!-- TIMESHEET RESET -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon amber">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8A5 5 0 1 1 11.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M13 3v3h-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Timesheet — Reset Current Month</div>
+        <div class="card-sub">Clear this month's daily entries for every employee, back to a blank Draft</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="s-detail" style="color:#6B7280">July 2026 stays untouched (pre-filled, Submitted demo data). Only the live/current month — the one employees fill in during a demo — gets wiped.</div>
+    </div>
+    <div class="card-footer">
+      <span class="note">Menghapus data timesheet bulan berjalan di semua karyawan</span>
+      <button class="btn btn-outline" onclick="resetCurrentMonthTimesheet()">Reset Current Month Timesheet</button>
+    </div>
+  </div>
+
+  <!-- RESET -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon red">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Reset Semua Data</div>
+        <div class="card-sub">Hapus semua localStorage — kembali ke state kosong</div>
+      </div>
+    </div>
+    <div class="card-footer" style="background:#fff;border-top:none">
+      <span class="note">Tidak bisa di-undo</span>
+      <button class="btn btn-danger" onclick="resetAll()">Reset Everything</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUICK LINKS -->
+<div class="nav-links">
+  <div style="width:100%"><div class="nav-links-label">Quick Links</div></div>
+  <a href="payroll-summary.html" class="nav-link">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 4.5h6M3 6.5h6M3 8.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    Payroll Summary
+  </a>
+  <a href="payroll-loan.html" class="nav-link">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="7.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><path d="M4 3V2a1 1 0 011-1h2a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.2"/></svg>
+    Loan Module
+  </a>
+  <a href="payroll-create-single.html" class="nav-link">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 4v4M4 6h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    Create Single Payroll
+  </a>
+  <a href="payroll-create-bulk.html" class="nav-link">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 4v4M4 6h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    Create Bulk Payroll
+  </a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var LOANS_KEY   = 'QUADRA_LOANS';
+  var LOANS_V_KEY = 'QUADRA_LOANS_V';
+  var PERIODS_KEY   = 'QUADRA_PAYROLL_PERIODS';
+  var PERIODS_V_KEY = 'QUADRA_PAYROLL_PERIODS_V';
+
+  var DEMO_LOANS = [
+    {
+      id: 1, empBadge: '000000001', type: 'Loan',
+      total: 10000000, paid: 4000000, tenor: 10,
+      deductionSource: 'salary', startDate: 'February 1, 2026',
+      status: 'active', notes: 'Vehicle purchase assistance'
+    },
+    {
+      id: 2, empBadge: '000000002', type: 'Loan',
+      total: 8000000, paid: 2000000, tenor: 8,
+      deductionSource: 'salary', startDate: 'January 1, 2026',
+      status: 'overdue', notes: 'Home renovation'
+    },
+    {
+      id: 3, empBadge: '000000003', type: 'Loan',
+      total: 15000000, paid: 15000000, tenor: 5,
+      deductionSource: 'salary', startDate: 'January 1, 2026',
+      status: 'completed', notes: ''
+    },
+    {
+      id: 4, empBadge: '000000004', type: 'Advance',
+      total: 3000000, paid: 1000000, tenor: 3,
+      deductionSource: 'salary', startDate: 'April 1, 2026',
+      status: 'overdue', deferred: true, notes: 'Medical emergency'
+    },
+    {
+      id: 5, empBadge: '000000006', type: 'Advance',
+      total: 4000000, paid: 1000000, tenor: 4,
+      deductionSource: 'salary', startDate: 'May 1, 2026',
+      status: 'active', notes: ''
+    }
+  ];
+
+  /* 8 core employees (excl. intern + inactive) */
+  var CORE_IDS = ['000000001','000000002','000000003','000000004','000000005','000000006','000000007','000000008'];
+
+  function makeBatches(year, month, status) {
+    var mm   = String(month).padStart(2, '0');
+    var next = month === 12 ? { y: year + 1, m: 1 } : { y: year, m: month + 1 };
+    var nm   = String(next.m).padStart(2, '0');
+    var lastDay = new Date(year, month, 0).getDate();
+    return [
+      { id: 'salary',       type: 'salary',    transferDate: year + '-' + mm + '-' + String(lastDay).padStart(2,'0'), status: status },
+      { id: 'allowance-1',  type: 'allowance', deliveryDay: '1',  transferDate: next.y + '-' + nm + '-01', status: status },
+      { id: 'allowance-15', type: 'allowance', deliveryDay: '15', transferDate: next.y + '-' + nm + '-15', status: status }
+    ];
+  }
+
+  var DEMO_PERIODS = [
+    {
+      period: 'April 2026',
+      employees: 8, totalNet: 74500000,
+      status: 'payslip_sent', createdBy: 'Admin', payslipDate: '5 May 2026',
+      salaryCutoff: '2026-04-25',
+      employeeIds: CORE_IDS.slice(),
+      batches: makeBatches(2026, 4, 'paid'),
+      loanDecisions: [
+        { loanId: 1, action: 'confirm', amount: 1000000 },
+        { loanId: 2, action: 'confirm', amount: 1000000 },
+        { loanId: 3, action: 'confirm', amount: 3000000 },
+        { loanId: 4, action: 'confirm', amount: 1000000 }
+      ]
+    },
+    {
+      period: 'May 2026',
+      employees: 9, totalNet: 80000000,
+      status: 'paid', createdBy: 'Admin', payslipDate: null,
+      salaryCutoff: '2026-05-25',
+      employeeIds: CORE_IDS.concat(['001228']),
+      batches: makeBatches(2026, 5, 'paid'),
+      loanDecisions: [
+        { loanId: 1, action: 'confirm', amount: 1000000 },
+        { loanId: 2, action: 'confirm', amount: 1000000 },
+        { loanId: 4, action: 'defer',   amount: 0 },
+        { loanId: 5, action: 'confirm', amount: 1000000 }
+      ]
+    }
+  ];
+
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 2500);
+  }
+
+  function loadLoanDemo() {
+    localStorage.setItem(LOANS_KEY,   JSON.stringify(DEMO_LOANS));
+    localStorage.setItem(LOANS_V_KEY, '1');
+    localStorage.removeItem('quadra_loans');
+    toast('✓ Loan demo data loaded — 5 loans set');
+  }
+
+  function loadPayrollDemo() {
+    localStorage.setItem(PERIODS_KEY,   JSON.stringify(DEMO_PERIODS));
+    localStorage.setItem(PERIODS_V_KEY, '5');
+    toast('✓ Payroll demo data loaded — April & May 2026');
+  }
+
+  function loadAllDemo() {
+    loadLoanDemo();
+    setTimeout(function() {
+      loadPayrollDemo();
+      toast('✓ All demo data loaded — siap presentasi');
+    }, 50);
+  }
+
+  function currentTimesheetPeriodSuffix() {
+    var now = new Date();
+    var mm = String(now.getMonth() + 1).padStart(2, '0');
+    return '_' + now.getFullYear() + '-' + mm;
+  }
+
+  function resetCurrentMonthTimesheet() {
+    var suffix = currentTimesheetPeriodSuffix();
+    var toRemove = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('quadra_timesheet_') === 0 && k.slice(-suffix.length) === suffix) {
+        toRemove.push(k);
+      }
+    }
+    toRemove.forEach(function(k) { localStorage.removeItem(k); });
+    toast('✓ Current month timesheet reset — ' + toRemove.length + ' employee(s) cleared');
+  }
+
+  function resetAllTimesheets() {
+    var toRemove = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('quadra_timesheet_') === 0) toRemove.push(k);
+    }
+    toRemove.forEach(function(k) { localStorage.removeItem(k); });
+    return toRemove.length;
+  }
+
+  function resetAll() {
+    [
+      LOANS_KEY, LOANS_V_KEY, PERIODS_KEY, PERIODS_V_KEY, 'quadra_loans',
+      'quadra_resign_requests', 'quadra_resign_reason_options'
+    ].forEach(function(k) {
+      localStorage.removeItem(k);
+    });
+    resetAllTimesheets();
+    toast('✓ Semua data di-reset — prototype kembali kosong');
+  }
+</script>
+</body>
+</html>

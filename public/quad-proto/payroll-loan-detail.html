@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Loan Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .loan-hero, .loan-hero-info, .loan-hero-sub (+ its .dot / span:not(.tag)
+       children), .loan-hero-actions were exact-value duplicates of the
+       shared layout.css .emp-hero / .emp-hero-info / .emp-hero-sub /
+       .emp-hero-actions — eliminated here in favor of reusing the shared
+       classes directly (body markup updated). Only the avatar and name
+       are genuine size variants (52px/15px vs the shared 56px/18px,
+       17px vs 18px) and are kept below, page-specific. */
+    .loan-hero-avatar { width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    .loan-hero-name { font-size: 17px; font-weight: 700; color: #111827; }
+
+    /* Summary row/card — close cousin of the shared .stats-row-a/.stat-card
+       (identical card padding/border) but with different label margin
+       (8px vs 6px) and value font-size (18px vs 20px) — kept page-
+       specific rather than forcing a merge that would blur two specs. */
+    .summary-row { display: flex; gap: 12px; }
+    .summary-card { flex: 1; background: #fff; border: 1px solid #E5E7EB; padding: 16px 20px; display: flex; flex-direction: column; }
+    .summary-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .summary-value { font-size: 18px; font-weight: 700; color: #111827; font-variant-numeric: tabular-nums; }
+    .summary-value.green { color: #059669; }
+    .summary-value.red   { color: #DC2626; }
+
+    /* Loan payoff progress bar — distinct naming/markup from the shared
+       .progress-box/.progress-bar-wrap/.progress-bar-fill (checklist
+       completion tracker), own single-use pattern for "amount paid of
+       total". .progress-label — RESOLVED in Task 11: now uses the
+       shared .progress-label.inline variant in layout.css (COMMON
+       PATTERNS GROUP 5). */
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .progress-pct { font-size: 13px; font-weight: 700; color: #111827; }
+    .progress-bar { height: 6px; background: #F3F4F6; }
+    .progress-fill { height: 100%; background: #059669; transition: width 0.3s; }
+    .progress-sub { font-size: 12px; color: #9CA3AF; margin-top: 8px; }
+
+    /* "Loan not found" fallback state — single use. */
+    .not-found { padding: 60px; text-align: center; color: #9CA3AF; font-size: 14px; }
+    .not-found a { color: #E04A2A; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="loan"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Payroll</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="payroll-loan.html">Loan / Advance Salary</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="bc-current" class="bc-current">Detail</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="main-content">
+
+    <a href="payroll-loan.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Loan / Advance
+    </a>
+
+    <div id="page-content" style="display:flex;flex-direction:column;gap:20px"></div>
+
+  </main>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="delete-overlay">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-head">
+      <span class="modal-head-title">Remove Loan Record</span>
+      <button class="modal-close" onclick="closeDelete()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Remove <span id="delete-name">this loan</span>'s record?</div>
+        <div class="modal-sub-desc">This loan record will be permanently deleted. This action cannot be undone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDelete()">Cancel</button>
+      <button class="btn btn-danger" onclick="executeDelete()">Remove Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DEFER CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="defer-overlay" onclick="if(event.target===this)closeDeferModal()">
+  <div class="modal-box modal-sm">
+    <div class="modal-head">
+      <span class="modal-head-title" id="defer-modal-title">Defer Payment This Month</span>
+      <button class="icon-btn" onclick="closeDeferModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="padding:20px;display:flex;gap:12px;align-items:flex-start">
+      <div id="defer-icon-wrap" style="width:36px;height:36px;background:#FFFBEB;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:#D97706"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3.5l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div id="defer-modal-headline" style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px"></div>
+        <div id="defer-modal-desc" style="font-size:13px;color:#6B7280;line-height:1.6"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeDeferModal()">Cancel</button>
+      <button class="btn btn-primary" id="defer-confirm-btn" onclick="confirmDefer()">Defer Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EDIT MODAL ═══ -->
+<div class="modal-overlay" id="edit-overlay" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Edit Loan</span>
+      <button class="icon-btn" onclick="closeEditModal()" style="color:#9CA3AF">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Employee (read-only) -->
+      <div class="form-group">
+        <label class="field-label">Employee</label>
+        <div class="emp-readonly" id="edit-emp-display">—</div>
+      </div>
+
+      <!-- Type -->
+      <div class="form-group">
+        <label class="field-label">Type</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="edit-loan-type" value="Loan" />
+            <div class="radio-dot"></div><span>Loan</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="edit-loan-type" value="Advance" />
+            <div class="radio-dot"></div><span>Advance</span>
+          </label>
+        </div>
+        <div class="field-error" id="err-edit-type" style="display:none"></div>
+      </div>
+
+      <!-- Amount + Tenor -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">Loan Amount</label>
+          <div class="affix-w" id="affix-edit-amount">
+            <span class="input-prefix">Rp</span>
+            <input type="text" placeholder="0" id="inp-edit-amount" oninput="fmtEditAmount(this);calcEditMonthly()" />
+          </div>
+          <div class="field-error" id="err-edit-amount" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Tenor</label>
+          <div class="affix-w" id="affix-edit-tenor">
+            <input type="text" inputmode="numeric" placeholder="0" id="inp-edit-tenor" oninput="calcEditMonthly()" style="padding-left:10px" />
+            <span class="input-suffix">mo.</span>
+          </div>
+          <div class="field-error" id="err-edit-tenor" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- Monthly Deduction (auto-calc) -->
+      <div class="form-group">
+        <label class="field-label">Monthly Deduction</label>
+        <div class="affix-w is-readonly">
+          <span class="input-prefix">Rp</span>
+          <input type="text" id="inp-edit-monthly" placeholder="Auto-calculated" readonly />
+        </div>
+        <span class="field-hint">= Loan Amount ÷ Tenor</span>
+      </div>
+
+      <!-- Deduction Source -->
+      <div class="form-group">
+        <label class="field-label">Deduction Source</label>
+        <div class="select-w" id="dd-edit-source"></div>
+        <div class="field-error" id="err-edit-source" style="display:none"></div>
+      </div>
+
+      <!-- Allowance note (conditional) -->
+      <div class="ded-sched" id="ded-edit-sched-allowance">
+        <div class="ded-sched-title">Deduction Timing</div>
+        <div class="field-info">Deduction will be applied when the allowance payroll is processed.</div>
+      </div>
+
+      <!-- Split (conditional) -->
+      <div class="ded-sched" id="ded-edit-sched-both">
+        <div class="ded-sched-title">Split per Installment</div>
+        <div class="form-row" style="margin-top:0">
+          <div class="form-group">
+            <label class="field-label">From Salary</label>
+            <div class="affix-w">
+              <span class="input-prefix">Rp</span>
+              <input type="text" placeholder="0" id="inp-edit-split-salary" oninput="fmtEditAmount(this);updateEditSplitHint()" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="field-label">From Allowance</label>
+            <div class="affix-w">
+              <span class="input-prefix">Rp</span>
+              <input type="text" placeholder="0" id="inp-edit-split-allowance" oninput="fmtEditAmount(this);updateEditSplitHint()" />
+            </div>
+          </div>
+        </div>
+        <div class="field-error" id="err-edit-split" style="display:none"></div>
+        <div id="edit-split-hint" style="font-size:11px;color:#9CA3AF;margin-top:4px"></div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="form-group">
+        <label class="field-label">Start Date</label>
+        <div class="date-select-w" id="dp-edit-start"></div>
+        <div class="field-error" id="err-edit-start" style="display:none"></div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="field-label">Notes <span style="color:#9CA3AF;font-weight:400">(Optional)</span></label>
+        <textarea class="textarea" id="inp-edit-notes" style="min-height:72px" placeholder="Reason for loan, asset details, or any additional information…"></textarea>
+      </div>
+
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditForm()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="dropdown.js"></script>
+<script src="datepicker.js"></script>
+<script src="employees-data.js"></script>
+<script src="loans-data.js"></script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script>
+  /* ── Helpers ── */
+  var MONTHS_LIST = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function fmt(n) {
+    return 'Rp ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function getEmp(badge) {
+    return (typeof QUADRA_EMPLOYEES !== 'undefined' && QUADRA_EMPLOYEES.find(function(e) { return e.badge === badge; })) || {};
+  }
+
+  function monthlyDed(loan) {
+    return loan.tenor > 0 ? Math.ceil(loan.total / loan.tenor) : 0;
+  }
+
+  function srcLabelFull(src) {
+    if (src === 'salary')           return 'Salary';
+    if (src === 'allowance')        return 'Allowance';
+    if (src === 'salary+allowance') return 'Salary + Allowance';
+    return src;
+  }
+
+  function statusBadge(status) {
+    if (status === 'active')    return '<span class="tag tag-dot tag-success">Active</span>';
+    if (status === 'overdue')   return '<span class="tag tag-dot tag-danger">Overdue</span>';
+    if (status === 'completed') return '<span class="tag tag-dot tag-neutral">Completed</span>';
+    return '<span class="tag tag-neutral">' + status + '</span>';
+  }
+
+  /* ── Load loan ── */
+  var loans = QUADRA_LOANS;
+  var params = new URLSearchParams(window.location.search);
+  var loanId = parseInt(params.get('id'));
+  var loan   = loans.find(function(l) { return l.id === loanId; });
+
+  function render() {
+    if (!loan) {
+      document.getElementById('page-content').innerHTML =
+        '<div class="not-found">Loan record not found. <a href="payroll-loan.html">Go back</a></div>';
+      return;
+    }
+
+    var emp       = getEmp(loan.empBadge);
+    var remaining = loan.total - loan.paid;
+    var ded       = monthlyDed(loan);
+    var pct       = loan.total > 0 ? Math.round((loan.paid / loan.total) * 100) : 100;
+    var paidInst  = ded > 0 ? Math.min(Math.floor(loan.paid / ded), loan.tenor) : 0;
+
+    /* Breadcrumb */
+    document.getElementById('bc-current').textContent = emp.name || loan.empBadge;
+
+    /* Installment schedule */
+    var startParts    = loan.startDate.split(' ');
+    var startMonthIdx = MONTHS_LIST.indexOf(startParts[0]);
+    var startYear     = parseInt(startParts[2]);
+
+    var scheduleRows = '';
+    for (var i = 0; i < loan.tenor; i++) {
+      var mIdx      = (startMonthIdx + i) % 12;
+      var yr        = startYear + Math.floor((startMonthIdx + i) / 12);
+      var dueDate   = MONTHS_LIST[mIdx] + ' 25, ' + yr;
+      var instStatus, datePaid;
+      if (i < paidInst) {
+        instStatus = '<span class="tag tag-success">Paid</span>';
+        datePaid   = MONTHS_LIST[mIdx] + ' 25, ' + yr;
+      } else if (loan.status === 'overdue' && i === paidInst) {
+        instStatus = '<span class="tag tag-danger">Overdue</span>';
+        datePaid   = '—';
+      } else {
+        instStatus = '<span class="tag tag-neutral">Upcoming</span>';
+        datePaid   = '—';
+      }
+      scheduleRows +=
+        '<tr>' +
+          '<td>' + (i + 1) + '</td>' +
+          '<td>' + dueDate + '</td>' +
+          '<td class="num">' + fmt(ded) + '</td>' +
+          '<td>' + srcLabelFull(loan.deductionSource) + '</td>' +
+          '<td>' + instStatus + '</td>' +
+          '<td>' + datePaid + '</td>' +
+        '</tr>';
+    }
+
+    document.getElementById('page-content').innerHTML =
+      /* Hero */
+      '<div class="emp-hero">' +
+        '<div class="loan-hero-avatar" style="background:' + (emp.color || '#9CA3AF') + '">' + (emp.initials || '?') + '</div>' +
+        '<div class="emp-hero-info">' +
+          '<div class="loan-hero-name">' + (emp.name || loan.empBadge) + '</div>' +
+          '<div class="emp-hero-sub">' +
+            (emp.pos     ? '<span>' + emp.pos + '</span><div class="dot"></div>' : '') +
+            (emp.project ? '<span>' + emp.project + '</span><div class="dot"></div>' : '') +
+            '<span>' + loan.empBadge + '</span>' +
+            '<div class="dot"></div>' +
+            statusBadge(loan.status) +
+            (loan.deferred ? '<div class="dot"></div><span style="font-size:11px;color:#92400E;background:#FFFBEB;border:1px solid #FCD34D;padding:1px 8px;white-space:nowrap">Deferred</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="emp-hero-actions">' +
+          (loan.paid === 0
+            ? '<button class="btn btn-outline" onclick="openEditModal()">' +
+                '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                'Edit Loan' +
+              '</button>'
+            : '') +
+          (loan.status !== 'completed'
+            ? (loan.deferred
+                ? '<button class="btn btn-outline" onclick="openDeferModal()">' +
+                    '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                    'Cancel Defer' +
+                  '</button>'
+                : '<button class="btn btn-outline" onclick="openDeferModal()">' +
+                    '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                    'Defer Payment' +
+                  '</button>')
+            : '') +
+          '<button class="btn btn-danger-outline" onclick="openDelete()">' +
+            '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.75 7.5H3.75L3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Remove Record' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+
+      /* Summary cards */
+      '<div class="summary-row">' +
+        '<div class="summary-card"><div class="summary-label">Total Amount</div><div class="summary-value">' + fmt(loan.total) + '</div></div>' +
+        '<div class="summary-card"><div class="summary-label">Paid</div><div class="summary-value green">' + fmt(loan.paid) + '</div></div>' +
+        '<div class="summary-card"><div class="summary-label">Remaining</div><div class="summary-value' + (remaining > 0 && loan.status === 'overdue' ? ' red' : '') + '">' + (remaining > 0 ? fmt(remaining) : '—') + '</div></div>' +
+        '<div class="summary-card"><div class="summary-label">Monthly Deduction</div><div class="summary-value">' + fmt(ded) + '</div></div>' +
+      '</div>' +
+
+      /* Tab container */
+      '<div class="tab-container">' +
+
+        /* Tab bar */
+        '<div class="tab-bar">' +
+          '<button class="tab-btn active" onclick="switchTab(\'overview\',this)">Overview</button>' +
+          '<button class="tab-btn" onclick="switchTab(\'schedule\',this)">Installment Schedule</button>' +
+        '</div>' +
+
+        /* Pane: Overview */
+        '<div class="tab-pane active" id="tab-overview">' +
+
+          '<div class="detail-section">' +
+            '<div class="section-label">Loan Details</div>' +
+            '<div class="info-grid">' +
+              '<div class="info-group"><div class="info-label">Type</div><div class="info-value">' + (loan.type || '—') + '</div></div>' +
+              '<div class="info-group"><div class="info-label">Tenor</div><div class="info-value">' + loan.tenor + ' months</div></div>' +
+              '<div class="info-group"><div class="info-label">Deduction Source</div><div class="info-value">' + srcLabelFull(loan.deductionSource) + '</div></div>' +
+              '<div class="info-group"><div class="info-label">Start Date</div><div class="info-value">' + loan.startDate + '</div></div>' +
+              (loan.notes ? '<div class="info-group" style="grid-column:1/-1"><div class="info-label">Notes</div><div class="info-value">' + loan.notes + '</div></div>' : '') +
+            '</div>' +
+          '</div>' +
+
+          '<div class="detail-section">' +
+            '<div class="section-label">Repayment Progress</div>' +
+            '<div>' +
+              '<div class="progress-header">' +
+                '<span class="progress-label inline">' + paidInst + ' of ' + loan.tenor + ' installments paid</span>' +
+                '<span class="progress-pct">' + pct + '%</span>' +
+              '</div>' +
+              '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
+              '<div class="progress-sub">' + fmt(loan.paid) + ' paid of ' + fmt(loan.total) + '</div>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>' +
+
+        /* Pane: Installment Schedule */
+        '<div class="tab-pane" id="tab-schedule">' +
+          '<div class="detail-section">' +
+            '<div class="section-label">Installment Schedule</div>' +
+            '<div class="table-wrap">' +
+              '<table>' +
+                '<thead><tr>' +
+                  '<th style="width:48px">#</th>' +
+                  '<th>Due Date</th>' +
+                  '<th class="num">Amount</th>' +
+                  '<th>Source</th>' +
+                  '<th>Status</th>' +
+                  '<th>Date Paid</th>' +
+                '</tr></thead>' +
+                '<tbody>' + scheduleRows + '</tbody>' +
+              '</table>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>';
+  } // end render()
+
+  render();
+
+  /* ── Tabs ── */
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  /* ── Delete ── */
+  function openDeferModal() {
+    if (!loan) return;
+    var emp = getEmp(loan.empBadge);
+    var ded = monthlyDed(loan);
+    var isDef = !!loan.deferred;
+    document.getElementById('defer-modal-title').textContent = isDef ? 'Cancel Defer' : 'Defer Payment This Month';
+    document.getElementById('defer-modal-headline').textContent = isDef
+      ? (emp.name || loan.empBadge) + '\'s loan will be included in the next payroll run.'
+      : 'Skip ' + (emp.name || loan.empBadge) + '\'s installment this month?';
+    document.getElementById('defer-modal-desc').innerHTML = isDef
+      ? 'Monthly installment: <strong>' + fmt(ded) + '</strong>'
+      : 'Installment of <strong>' + fmt(ded) + '</strong> will be skipped.<br>Next month: <strong>2× installment (' + fmt(ded * 2) + ')</strong>.';
+    var btn = document.getElementById('defer-confirm-btn');
+    btn.textContent = isDef ? 'Cancel Defer' : 'Defer Payment';
+    btn.className   = 'btn ' + (isDef ? 'btn-outline' : 'btn-primary');
+    var iconWrap = document.getElementById('defer-icon-wrap');
+    iconWrap.style.background = isDef ? '#F3F4F6' : '#FFFBEB';
+    iconWrap.querySelector('svg').style.color = isDef ? '#6B7280' : '#D97706';
+    document.getElementById('defer-overlay').classList.add('open');
+  }
+  function closeDeferModal() {
+    document.getElementById('defer-overlay').classList.remove('open');
+  }
+  function confirmDefer() {
+    var quadraLoan = QUADRA_LOANS.find(function(l) { return l.id === loan.id; });
+    if (quadraLoan) quadraLoan.deferred = !quadraLoan.deferred;
+    loan.deferred = !!(quadraLoan && quadraLoan.deferred);
+    saveLoans();
+    closeDeferModal();
+    render();
+    QuadraToast.show(
+      loan.deferred ? 'Payment deferred' : 'Defer cancelled',
+      loan.deferred ? 'Excluded from next payroll run. Next month: 2× installment.' : 'Loan will be included in next payroll run.'
+    );
+  }
+
+  function openDelete() {
+    document.getElementById('delete-name').textContent = (getEmp(loan.empBadge).name || loan.empBadge);
+    document.getElementById('delete-overlay').classList.add('open');
+  }
+  function closeDelete() {
+    document.getElementById('delete-overlay').classList.remove('open');
+  }
+  function executeDelete() {
+    var idx = QUADRA_LOANS.findIndex(function(l) { return l.id === loan.id; });
+    if (idx > -1) QUADRA_LOANS.splice(idx, 1);
+    saveLoans();
+    closeDelete();
+    var empName = getEmp(loan.empBadge).name || loan.empBadge;
+    QuadraToast.show('Loan Removed', empName + '\'s loan record has been removed.');
+    setTimeout(function() { window.location.href = 'payroll-loan.html'; }, 1500);
+  }
+
+  /* ── Edit ── */
+  function dot(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+  function fmtEditAmount(input) {
+    var raw = input.value.replace(/[^\d]/g, '');
+    input.value = raw ? dot(parseInt(raw)) : '';
+  }
+
+  function calcEditMonthly() {
+    var amt   = parseInt(document.getElementById('inp-edit-amount').value.replace(/[^\d]/g,'')) || 0;
+    var tenor = parseInt(document.getElementById('inp-edit-tenor').value) || 0;
+    document.getElementById('inp-edit-monthly').value = (amt > 0 && tenor > 0) ? dot(Math.ceil(amt / tenor)) : '';
+  }
+
+  function pickEditSource(val) {
+    document.getElementById('ded-edit-sched-allowance').classList.toggle('open', val === 'Allowance');
+    document.getElementById('ded-edit-sched-both').classList.toggle('open', val === 'Salary + Allowance');
+    if (val === 'Salary + Allowance') updateEditSplitHint();
+  }
+
+  function updateEditSplitHint() {
+    var monthly = parseInt(document.getElementById('inp-edit-monthly').value.replace(/[^\d]/g,'')) || 0;
+    var sal     = parseInt(document.getElementById('inp-edit-split-salary').value.replace(/[^\d]/g,'')) || 0;
+    var all     = parseInt(document.getElementById('inp-edit-split-allowance').value.replace(/[^\d]/g,'')) || 0;
+    var hint    = document.getElementById('edit-split-hint');
+    if (!hint || monthly === 0) { hint.textContent = ''; return; }
+    if (sal + all === monthly) { hint.style.color = '#059669'; hint.textContent = '✓ Split matches monthly deduction'; }
+    else if (sal + all > 0)   { hint.style.color = '#EF4444'; hint.textContent = 'Sum must equal monthly deduction'; }
+    else                      { hint.textContent = ''; }
+  }
+
+  function openEditModal() {
+    if (!loan) return;
+    var emp = getEmp(loan.empBadge);
+
+    /* Employee display */
+    document.getElementById('edit-emp-display').textContent = (emp.name || loan.empBadge) + ' · ' + loan.empBadge;
+
+    /* Type */
+    document.querySelectorAll('input[name="edit-loan-type"]').forEach(function(r) { r.checked = (r.value === loan.type); });
+
+    /* Amount */
+    document.getElementById('inp-edit-amount').value = loan.total > 0 ? dot(loan.total) : '';
+
+    /* Tenor */
+    document.getElementById('inp-edit-tenor').value = loan.tenor > 0 ? String(loan.tenor) : '';
+
+    /* Monthly (auto-calc) */
+    calcEditMonthly();
+
+    /* Notes */
+    document.getElementById('inp-edit-notes').value = loan.notes || '';
+
+    /* Clear errors */
+    ['err-edit-type','err-edit-amount','err-edit-tenor','err-edit-source','err-edit-split','err-edit-start'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
+    ['affix-edit-amount','affix-edit-tenor'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.classList.remove('error');
+    });
+
+    /* Source dropdown */
+    var srcVal = loan.deductionSource === 'salary' ? 'Salary' : loan.deductionSource === 'allowance' ? 'Allowance' : 'Salary + Allowance';
+    QuadraDropdown.init(document.getElementById('dd-edit-source'), ['Salary', 'Allowance', 'Salary + Allowance'], {
+      placeholder: 'Select source', value: srcVal,
+      onChange: function(val) { pickEditSource(val); document.getElementById('err-edit-source').style.display = 'none'; }
+    });
+    pickEditSource(srcVal);
+
+    /* Split amounts */
+    if (loan.deductionSource === 'salary+allowance') {
+      document.getElementById('inp-edit-split-salary').value    = loan.splitSalary    ? dot(loan.splitSalary)    : '';
+      document.getElementById('inp-edit-split-allowance').value = loan.splitAllowance ? dot(loan.splitAllowance) : '';
+      updateEditSplitHint();
+    } else {
+      document.getElementById('inp-edit-split-salary').value    = '';
+      document.getElementById('inp-edit-split-allowance').value = '';
+    }
+
+    /* Start date */
+    var sp    = loan.startDate.split(' ');
+    var smIdx = MONTHS_LIST.indexOf(sp[0]);
+    var sd    = parseInt((sp[1] || '').replace(',',''));
+    var sy    = parseInt(sp[2]);
+    QuadraDatePicker.init(document.getElementById('dp-edit-start'), {
+      placeholder: 'Select date',
+      preselected: (smIdx > -1 && sd && sy) ? { d: sd, m: smIdx, y: sy } : null,
+      onChange: function() { document.getElementById('err-edit-start').style.display = 'none'; }
+    });
+
+    document.getElementById('edit-overlay').classList.add('open');
+  }
+
+  function closeEditModal() {
+    document.getElementById('edit-overlay').classList.remove('open');
+  }
+
+  function saveEditForm() {
+    var hasError = false;
+
+    /* Type */
+    var typeEl = document.querySelector('input[name="edit-loan-type"]:checked');
+    if (!typeEl) {
+      var errType = document.getElementById('err-edit-type');
+      errType.textContent = 'Please select a type.'; errType.style.display = 'block'; hasError = true;
+    }
+
+    /* Amount */
+    var amtRaw = document.getElementById('inp-edit-amount').value.replace(/[^\d]/g,'');
+    var amtNum = parseInt(amtRaw) || 0;
+    var affAmt = document.getElementById('affix-edit-amount');
+    var errAmt = document.getElementById('err-edit-amount');
+    if (!amtRaw) {
+      affAmt.classList.add('error'); errAmt.textContent = 'Loan amount is required.'; errAmt.style.display = 'block'; hasError = true;
+    } else if (amtNum <= 0) {
+      affAmt.classList.add('error'); errAmt.textContent = 'Loan amount must be greater than 0.'; errAmt.style.display = 'block'; hasError = true;
+    } else {
+      affAmt.classList.remove('error'); errAmt.style.display = 'none';
+    }
+
+    /* Tenor */
+    var tenorRaw = document.getElementById('inp-edit-tenor').value;
+    var tenorNum = parseFloat(tenorRaw);
+    var affTen   = document.getElementById('affix-edit-tenor');
+    var errTen   = document.getElementById('err-edit-tenor');
+    if (!tenorRaw || tenorNum <= 0) {
+      affTen.classList.add('error'); errTen.textContent = 'Tenor is required.'; errTen.style.display = 'block'; hasError = true;
+    } else if (Math.floor(tenorNum) !== tenorNum) {
+      affTen.classList.add('error'); errTen.textContent = 'Tenor must be a whole number.'; errTen.style.display = 'block'; hasError = true;
+    } else if (tenorNum > 60) {
+      affTen.classList.add('error'); errTen.textContent = 'Tenor cannot exceed 60 months (5 years).'; errTen.style.display = 'block'; hasError = true;
+    } else {
+      affTen.classList.remove('error'); errTen.style.display = 'none';
+    }
+
+    /* Source */
+    var srcVal   = QuadraDropdown.getValue(document.getElementById('dd-edit-source'));
+    var errSrc   = document.getElementById('err-edit-source');
+    if (!srcVal) {
+      errSrc.textContent = 'Please select a deduction source.'; errSrc.style.display = 'block'; hasError = true;
+    } else {
+      errSrc.style.display = 'none';
+    }
+
+    /* Split */
+    var monthly  = (!hasError && amtNum > 0 && tenorNum > 0) ? Math.ceil(amtNum / Math.floor(tenorNum)) : 0;
+    var errSplit = document.getElementById('err-edit-split');
+    if (srcVal === 'Salary + Allowance') {
+      var splitSal = parseInt(document.getElementById('inp-edit-split-salary').value.replace(/[^\d]/g,'')) || 0;
+      var splitAll = parseInt(document.getElementById('inp-edit-split-allowance').value.replace(/[^\d]/g,'')) || 0;
+      if (!splitSal && !splitAll) {
+        errSplit.textContent = 'Enter the split amounts for salary and allowance deductions.'; errSplit.style.display = 'block'; hasError = true;
+      } else if (monthly > 0 && splitSal + splitAll !== monthly) {
+        errSplit.textContent = 'Sum must equal monthly deduction.'; errSplit.style.display = 'block'; hasError = true;
+      } else {
+        errSplit.style.display = 'none';
+      }
+    } else {
+      errSplit.style.display = 'none';
+    }
+
+    /* Start Date */
+    var startVal = QuadraDatePicker.getValue(document.getElementById('dp-edit-start'));
+    var errStart = document.getElementById('err-edit-start');
+    if (!startVal) {
+      errStart.textContent = 'Start date is required.'; errStart.style.display = 'block'; hasError = true;
+    } else {
+      errStart.style.display = 'none';
+    }
+
+    if (hasError) return;
+
+    /* Save */
+    var idx = QUADRA_LOANS.findIndex(function(l) { return l.id === loan.id; });
+    if (idx > -1) {
+      var sp    = startVal.split('-');
+      var newSD = MONTHS_LIST[parseInt(sp[1]) - 1] + ' ' + parseInt(sp[2]) + ', ' + sp[0];
+      var newSrc = srcVal === 'Salary' ? 'salary' : srcVal === 'Allowance' ? 'allowance' : 'salary+allowance';
+
+      QUADRA_LOANS[idx].type            = typeEl.value;
+      QUADRA_LOANS[idx].total           = amtNum;
+      QUADRA_LOANS[idx].tenor           = Math.floor(tenorNum);
+      QUADRA_LOANS[idx].deductionSource = newSrc;
+      QUADRA_LOANS[idx].startDate       = newSD;
+      QUADRA_LOANS[idx].notes           = document.getElementById('inp-edit-notes').value.trim();
+
+      if (newSrc === 'salary+allowance') {
+        QUADRA_LOANS[idx].splitSalary    = parseInt(document.getElementById('inp-edit-split-salary').value.replace(/[^\d]/g,'')) || 0;
+        QUADRA_LOANS[idx].splitAllowance = parseInt(document.getElementById('inp-edit-split-allowance').value.replace(/[^\d]/g,'')) || 0;
+      } else {
+        delete QUADRA_LOANS[idx].splitSalary;
+        delete QUADRA_LOANS[idx].splitAllowance;
+      }
+
+      saveLoans();
+      loan = QUADRA_LOANS[idx];
+    }
+
+    closeEditModal();
+    render();
+    QuadraToast.show('Loan Updated', (getEmp(loan.empBadge).name || loan.empBadge) + '\'s loan has been updated.');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeDelete(); closeEditModal(); closeDeferModal(); }
+  });
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

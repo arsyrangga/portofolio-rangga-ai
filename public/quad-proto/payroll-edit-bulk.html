@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Payroll: Edit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* Period bar — read-only display strip (period / cutoff / lock
+       state) at the top of the bulk-edit page. Close cousin of the
+       editable .settings-bar (payroll-create-bulk.html) but genuinely
+       different purpose (display-only, fixed 52px height, no form
+       fields) — kept separate, single use. */
+    .period-bar { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 24px; height: 52px; display: flex; align-items: center; gap: 24px; flex-shrink: 0; }
+    .period-bar-field { display: flex; align-items: center; gap: 8px; }
+    .period-bar-label { font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; }
+    .period-bar-value { font-size: 13px; font-weight: 600; color: #111827; }
+    .period-bar-sep { width: 1px; height: 24px; background: #E5E7EB; }
+    .lock-icon { color: #9CA3AF; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="payroll" data-active-sub="payroll-summary"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="payroll-summary.html">Payroll Summary</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a id="bc-period-link" href="#">—</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Edit Payroll</span>
+  </div>
+
+  <div class="body-wrap">
+
+    <!-- ═══ Period Info Bar ═══ -->
+    <div class="period-bar">
+      <div class="period-bar-field">
+        <svg class="lock-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <rect x="3" y="6" width="8" height="7" rx="1" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M5 6V4.5a2 2 0 014 0V6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <span class="period-bar-label">Period</span>
+        <span class="period-bar-value" id="bar-period">—</span>
+      </div>
+      <div class="period-bar-sep"></div>
+      <div class="period-bar-field">
+        <span class="period-bar-label">Status</span>
+        <span id="bar-status"></span>
+      </div>
+      <div class="period-bar-sep"></div>
+      <div class="period-bar-field">
+        <span class="period-bar-label">Created By</span>
+        <span class="period-bar-value" id="bar-created-by">—</span>
+      </div>
+    </div>
+
+    <!-- ═══ Paid Warning Banner ═══ -->
+    <div id="paid-warning-bar" style="display:none;align-items:flex-start;gap:10px;padding:10px 24px;background:#FFFBEB;border-bottom:1px solid #FCD34D;flex-shrink:0;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 2L1.5 11.5h11L7 2z" stroke="#D97706" stroke-width="1.3" stroke-linejoin="round"/><path d="M7 6v2.5M7 10v.5" stroke="#D97706" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <span style="font-size:13px;color:#92400E;">Loan deductions for this period have already been applied. The employee list can still be updated, but loan decisions are locked.</span>
+    </div>
+
+    <!-- ═══ Employee Table ═══ -->
+    <div class="emp-panel">
+
+      <div class="emp-panel-toolbar">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9CA3AF" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input type="text" placeholder="Search employee…" oninput="filterTable(this.value)">
+        </div>
+
+        <div class="select-w" id="filter-contract" style="width:150px"></div>
+        <div class="select-w" id="filter-shift" style="width:160px"></div>
+        <button class="filter-chip" id="chip-loan" onclick="toggleLoanFilter()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1.5" width="10" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M4 5.5h4M4 7.5h2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Has Loan
+        </button>
+
+        <div class="sel-count-badge">
+          <strong id="sel-count">0</strong>&nbsp;of <strong id="total-count">0</strong> selected
+        </div>
+      </div>
+
+      <div class="emp-table-wrap">
+        <table id="emp-table">
+          <thead>
+            <tr>
+              <th style="width:40px;text-align:center">
+                <div class="cb-wrap" onclick="toggleAll()" title="Select / deselect all visible" style="margin:0 auto">
+                  <div class="cb indeterminate" id="cb-all">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </div>
+                </div>
+              </th>
+              <th>Employee</th>
+              <th style="width:140px">Timesheet</th>
+              <th class="num" style="width:130px">Base Salary</th>
+              <th class="num" style="width:120px">Allowances</th>
+              <th class="num" style="width:100px">Overtime</th>
+              <th class="num" style="width:110px">Loan Ded.</th>
+              <th class="num" style="width:110px">Late Ded.</th>
+              <th class="num" style="width:120px">Deductions</th>
+              <th class="num" style="width:130px">Net Salary</th>
+            </tr>
+          </thead>
+          <tbody id="emp-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="footer-bar">
+        <div class="footer-summary">
+          <div class="footer-stat">
+            <div class="footer-stat-label">Selected</div>
+            <div class="footer-stat-value" id="footer-count">0 employees</div>
+          </div>
+          <div class="footer-divider"></div>
+          <div class="footer-stat">
+            <div class="footer-stat-label">Est. Net Salary</div>
+            <div class="footer-stat-value" id="footer-net">—</div>
+          </div>
+          <div class="footer-divider"></div>
+          <div class="footer-stat">
+            <div class="footer-stat-label">Period</div>
+            <div class="footer-stat-value" id="footer-period">—</div>
+          </div>
+        </div>
+        <div class="footer-actions">
+          <a id="cancel-btn" href="#" class="btn btn-outline">Cancel</a>
+          <button class="btn btn-primary" id="save-btn" onclick="openConfirm()" disabled>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM MODAL ══ -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Save Payroll Changes</span>
+      <button class="modal-close" onclick="closeConfirm()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">Review the updated payroll data before saving.</div>
+    <div class="modal-summary">
+      <div class="modal-summary-row">
+        <span class="lbl">Period</span>
+        <span class="val" id="modal-period">—</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Employees</span>
+        <span class="val" id="modal-count">—</span>
+      </div>
+      <div class="modal-summary-row">
+        <span class="lbl">Est. Net Salary</span>
+        <span class="val" id="modal-net">—</span>
+      </div>
+      <div class="modal-summary-row" id="modal-defer-row" style="display:none">
+        <span class="lbl">Deferred Loans</span>
+        <span class="val" id="modal-defer-count" style="color:#D97706">—</span>
+      </div>
+      <div class="modal-summary-row" id="modal-no-loans-row" style="display:none">
+        <span class="lbl">Loans</span>
+        <span class="val" style="color:#6B7280">No active loans</span>
+      </div>
+    </div>
+    <div id="modal-all-deferred-note" style="display:none;margin-top:12px;padding:10px 12px;background:#DBEAFE;border:1px solid #BFDBFE;border-radius:6px;align-items:flex-start;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#2563EB" stroke-width="1.4"/><path d="M8 7v4M8 5v.5" stroke="#2563EB" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span style="font-size:13px;color:#1E40AF;line-height:1.4">All loan deductions are deferred this period. No loan balances will be reduced.</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmSave()">Confirm &amp; Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="payroll-timesheet-gate.js"></script>
+<script src="timesheet-seed.js"></script>
+<script src="loans-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+
+  var MONTHS_LIST = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SEED_VERSION = 5;
+
+  /* ── Load period from URL ── */
+  var ID_KEY = new URLSearchParams(window.location.search).get('id') || '';
+
+  function getStoredPeriods() {
+    try {
+      var storedV = parseInt(localStorage.getItem('QUADRA_PAYROLL_PERIODS_V') || '0');
+      if (storedV !== SEED_VERSION) throw new Error('stale');
+      var raw = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      if (raw) return JSON.parse(raw);
+    } catch(e) {
+      localStorage.removeItem('QUADRA_PAYROLL_PERIODS');
+      localStorage.removeItem('QUADRA_PAYROLL_PERIODS_V');
+    }
+    return [];
+  }
+
+  function savePeriods(periods) {
+    try {
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS', JSON.stringify(periods));
+      localStorage.setItem('QUADRA_PAYROLL_PERIODS_V', SEED_VERSION);
+    } catch(e) {}
+  }
+
+  var ALL_PERIODS = getStoredPeriods();
+  var PP = ALL_PERIODS.find(function(p) { return p.id === ID_KEY; });
+  var DETAIL_URL = 'payroll-summary-detail.html?v=6&id=' + encodeURIComponent(ID_KEY);
+
+  if (!PP) {
+    try { localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: 'Payroll period not found.', type: 'error' })); } catch(e) {}
+    window.location.replace('payroll-summary.html');
+  } else if (PP.status === 'payslip_sent') {
+    try { localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: 'Payroll for ' + PP.period + ' cannot be edited after payslips have been sent.', type: 'error' })); } catch(e) {}
+    window.location.replace(DETAIL_URL);
+  }
+
+  function statusBadge(s) {
+    if (s === 'draft')        return '<span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;font-size:11px;font-weight:600;background:#F3F4F6;color:#6B7280">Draft</span>';
+    if (s === 'paid')         return '<span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB">Paid</span>';
+    if (s === 'payslip_sent') return '<span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;font-size:11px;font-weight:600;background:#DCFCE7;color:#15803D">Payslip Sent</span>';
+    return '';
+  }
+
+  /* ── Salary calculations ── */
+  function calcPPh21(salary) {
+    var taxable = Math.max(0, salary * 12 - 54000000);
+    var tax = taxable <= 60000000  ? taxable * 0.05
+            : taxable <= 250000000 ? 3000000 + (taxable - 60000000) * 0.15
+                                   : 31500000 + (taxable - 250000000) * 0.25;
+    return Math.round(tax / 12);
+  }
+
+  var DUMMY_OT = {
+    '000000001': 225000, '000000002': 208000,
+    '000000003': 600000, '000000008': 494000,
+  };
+  var DUMMY_LATE = {
+    '000000002': 90000,  '000000004': 60000,
+    '000000007': 120000, '000000010': 45000,
+  };
+
+  seedAllTimesheetsIfNeeded();
+
+  var EMPLOYEES = QUADRA_EMPLOYEES
+    .filter(function(e) { return e.status === 'Active'; })
+    .map(function(e) {
+      var allowTotal = (e.allowances || []).reduce(function(s, a) { return s + a.amount; }, 0);
+      var dedTotal   = (e.deductions  || [])
+        .filter(function(d) { return d.paidBy === 'personal'; })
+        .reduce(function(s, d) {
+          var rate = d.id === 'bpjs-kes' ? 0.01 : d.id === 'bpjs-tk' ? 0.02 : null;
+          return s + (rate !== null ? Math.round(e.salary * rate) : calcPPh21(e.salary));
+        }, 0);
+      var loanDed = (QUADRA_LOANS || [])
+        .filter(function(l) { return l.empBadge === e.badge && (l.status === 'active' || l.status === 'overdue'); })
+        .reduce(function(s, l) { return s + (l.tenor > 0 ? Math.ceil(l.total / l.tenor) : 0); }, 0);
+      var otAmt   = (e.overtimeType !== 'No Overtime' && DUMMY_OT[e.badge])  ? DUMMY_OT[e.badge]  : 0;
+      var lateDed = DUMMY_LATE[e.badge] ? DUMMY_LATE[e.badge] : 0;
+      return {
+        id: e.badge, name: e.name, init: e.initials, color: e.color,
+        dept: e.project, shift: e.shift, contract: e.contract, base: e.salary,
+        allowTotal: allowTotal, otAmt: otAmt, dedTotal: dedTotal, loanDed: loanDed, lateDed: lateDed,
+        net: e.salary + allowTotal + otAmt - dedTotal - loanDed - lateDed,
+        hasOT: e.overtimeType !== 'No Overtime'
+      };
+    });
+
+  /* ── Pre-populate from existing period ── */
+  var prevIds = (PP && PP.employeeIds) ? PP.employeeIds : EMPLOYEES.map(function(e) { return e.id; });
+  var selected = new Set(prevIds);
+
+  /* Employees in other entries of the same period cannot be added here */
+  var lockedIds = (function() {
+    try {
+      var raw = localStorage.getItem('QUADRA_PAYROLL_PERIODS');
+      if (!raw) return new Set();
+      var ids = [];
+      JSON.parse(raw)
+        .filter(function(p) { return p.period === PP.period && p.id !== PP.id; })
+        .forEach(function(p) { ids = ids.concat(p.employeeIds || []); });
+      return new Set(ids);
+    } catch(e) { return new Set(); }
+  })();
+
+  var timesheetIneligibleIds = new Set(
+    EMPLOYEES.filter(function(e) { return !isTimesheetApprovedForPeriod(e.id, PP.period); })
+             .map(function(e) { return e.id; })
+  );
+
+  var deferredBadges = new Set();
+  if (PP && PP.loanDecisions) {
+    PP.loanDecisions.forEach(function(d) {
+      if (d.action === 'defer') {
+        var loan = (QUADRA_LOANS || []).find(function(l) { return l.id === d.loanId; });
+        if (loan) deferredBadges.add(loan.empBadge);
+      }
+    });
+  }
+
+  var currentContract = '';
+  var currentShift    = '';
+  var currentSearch   = '';
+  var filterHasLoan   = false;
+
+  function fmt(n) { return 'Rp ' + Math.round(n).toLocaleString('id-ID'); }
+
+  function matchesFilters(e) {
+    if (lockedIds.has(e.id)) return false;
+    var matchContract = !currentContract || e.contract === currentContract;
+    var matchShift    = !currentShift    || e.shift === currentShift;
+    var matchLoan     = !filterHasLoan   || e.loanDed > 0;
+    var q = currentSearch.toLowerCase();
+    var matchSearch   = !q || e.name.toLowerCase().includes(q) || e.id.includes(q);
+    return matchContract && matchShift && matchLoan && matchSearch;
+  }
+
+  function visibleIds() {
+    return EMPLOYEES.filter(matchesFilters).map(function(e) { return e.id; });
+  }
+
+  function renderTable() {
+    var tbody = document.getElementById('emp-tbody');
+    var rows  = '';
+    EMPLOYEES.forEach(function(e) {
+      if (!matchesFilters(e)) return;
+      var isSel = selected.has(e.id);
+      var tsStatus = getTimesheetStatusForPeriod(e.id, PP.period);
+      var tsTagClass = tsStatus === 'Approved' ? 'tag-success' : tsStatus === 'Rejected' ? 'tag-danger' : tsStatus === 'Submitted' ? 'tag-warning' : 'tag-neutral';
+      var tsLabel = tsStatus || 'No Timesheet';
+      var isIneligible = timesheetIneligibleIds.has(e.id) && !isSel;
+      rows += '<tr class="' + (isSel ? 'selected' : '') + (isIneligible ? ' ineligible' : '') + '"' + (isIneligible ? ' aria-disabled="true"' : '') + ' onclick="toggleRow(\'' + e.id + '\')" style="cursor:' + (isIneligible ? 'not-allowed' : 'pointer') + '">'
+        + '<td><div class="cb-wrap" style="' + (isIneligible ? 'opacity:0.35;cursor:not-allowed' : '') + '"><div class="cb ' + (isSel ? 'checked' : '') + '">'
+        +   (isSel ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '')
+        + '</div></div></td>'
+        + '<td><div class="emp-cell">'
+        +   '<div class="emp-avatar" style="background:' + e.color + '">' + e.init + '</div>'
+        +   '<div>'
+        +     '<div class="emp-name">' + e.name + '</div>'
+        +     '<div style="font-size:11px;color:#9CA3AF;margin-top:2px">' + e.id + ' · ' + e.shift + '</div>'
+        +   '</div>'
+        + '</div></td>'
+        + '<td><span class="tag ' + tsTagClass + '">' + tsLabel + '</span></td>'
+        + '<td class="num"><span class="sal-val">' + fmt(e.base) + '</span></td>'
+        + '<td class="num">' + (e.allowTotal > 0 ? '<span class="sal-allow">+' + fmt(e.allowTotal) + '</span>' : '<span class="sal-none">—</span>') + '</td>'
+        + '<td class="num">' + (e.otAmt > 0 ? '<span class="sal-allow">+' + fmt(e.otAmt) + '</span>' : '<span class="sal-none">—</span>') + '</td>'
+        + (function() {
+            if (e.loanDed <= 0) return '<td class="num"><span class="sal-none">—</span></td>';
+            var loanLocked = PP && PP.status === 'paid';
+            if (loanLocked) return '<td class="num"><span class="sal-loan">−' + fmt(e.loanDed) + '</span></td>';
+            if (deferredBadges.has(e.id)) return '<td class="num"><span style="text-decoration:line-through;color:#D1D5DB">−' + fmt(e.loanDed) + '</span><button class="defer-btn is-deferred" onclick="toggleDefer(\'' + e.id + '\', event)">Undo</button></td>';
+            return '<td class="num"><span class="sal-loan">−' + fmt(e.loanDed) + '</span><button class="defer-btn" onclick="toggleDefer(\'' + e.id + '\', event)">Defer</button></td>';
+          })()
+        + '<td class="num">' + (e.lateDed  > 0 ? '<span class="sal-deduct">−' + fmt(e.lateDed)  + '</span>' : '<span class="sal-none">—</span>') + '</td>'
+        + '<td class="num">' + (e.dedTotal > 0 ? '<span class="sal-deduct">−' + fmt(e.dedTotal) + '</span>' : '<span class="sal-none">—</span>') + '</td>'
+        + (function() {
+            var effLoan = deferredBadges.has(e.id) ? 0 : e.loanDed;
+            return '<td class="num"><span class="sal-net">' + fmt(e.base + e.allowTotal + e.otAmt - e.dedTotal - effLoan - e.lateDed) + '</span></td>';
+          })()
+        + '</tr>';
+    });
+    tbody.innerHTML = rows || '<tr><td colspan="10" style="text-align:center;color:#9CA3AF;padding:32px">No employees found</td></tr>';
+    updateCounts();
+  }
+
+  function toggleRow(id) {
+    if (timesheetIneligibleIds.has(id) && !selected.has(id)) {
+      QuadraToast.show('This employee\'s timesheet has not been approved for this period.', 'error');
+      return;
+    }
+    if (selected.has(id)) { selected.delete(id); } else { selected.add(id); }
+    renderTable();
+  }
+
+  // Same rule toggleRow() uses: an ineligible employee can't be newly selected,
+  // but one that was already in the saved payroll stays togglable — so it must
+  // stay inside the select-all set, otherwise "select all → deselect all"
+  // would leave it selected while the header checkbox reads unchecked.
+  function selectableIds() {
+    return visibleIds().filter(function(id) { return !timesheetIneligibleIds.has(id) || selected.has(id); });
+  }
+
+  function toggleAll() {
+    var selectable = selectableIds();
+    var allSel     = selectable.length > 0 && selectable.every(function(id) { return selected.has(id); });
+    if (allSel) { selectable.forEach(function(id) { selected.delete(id); }); }
+    else         { selectable.forEach(function(id) { selected.add(id);    }); }
+    renderTable();
+  }
+
+  function toggleDefer(badge, event) {
+    event.stopPropagation();
+    if (deferredBadges.has(badge)) { deferredBadges.delete(badge); }
+    else { deferredBadges.add(badge); }
+    renderTable();
+  }
+
+  function toggleLoanFilter() {
+    filterHasLoan = !filterHasLoan;
+    document.getElementById('chip-loan').classList.toggle('active', filterHasLoan);
+    renderTable();
+  }
+
+  function filterTable(q) {
+    currentSearch = q;
+    renderTable();
+  }
+
+  function updateCounts() {
+    var count = selected.size;
+    var net   = EMPLOYEES.filter(function(e) { return selected.has(e.id); })
+                         .reduce(function(s, e) {
+                           var effLoan = deferredBadges.has(e.id) ? 0 : e.loanDed;
+                           return s + e.base + e.allowTotal + e.otAmt - e.dedTotal - effLoan - e.lateDed;
+                         }, 0);
+
+    // Same rule as payroll-create-bulk.html: employees locked into another
+    // payroll entry for this period are hidden by matchesFilters(), so they
+    // must not inflate the "of Y" denominator.
+    var availableTotal = EMPLOYEES.filter(function(e) { return !lockedIds.has(e.id); }).length;
+
+    document.getElementById('sel-count').textContent   = count;
+    document.getElementById('total-count').textContent = availableTotal;
+    document.getElementById('footer-count').textContent = count + ' employee' + (count !== 1 ? 's' : '');
+    document.getElementById('footer-net').textContent   = fmt(net);
+    document.getElementById('modal-count').textContent  = count + ' employee' + (count !== 1 ? 's' : '');
+    document.getElementById('modal-net').textContent    = fmt(net);
+
+    // Tri-state is computed over exactly the set toggleAll() acts on, so the
+    // header always reflects what clicking it would do.
+    var selectable = selectableIds();
+    var allSel  = selectable.length > 0 && selectable.every(function(id) { return selected.has(id); });
+    var noneSel = selectable.every(function(id) { return !selected.has(id); });
+    var cbAll   = document.getElementById('cb-all');
+    cbAll.className = 'cb ' + (allSel ? 'checked' : noneSel ? '' : 'indeterminate');
+    cbAll.innerHTML = allSel
+      ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : noneSel ? ''
+      : '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+    document.getElementById('save-btn').disabled = count === 0;
+  }
+
+  function openConfirm() {
+    var selEmps    = EMPLOYEES.filter(function(e) { return selected.has(e.id); });
+    var loanEmps   = selEmps.filter(function(e) { return e.loanDed > 0; });
+    var deferCount = loanEmps.filter(function(e) { return deferredBadges.has(e.id); }).length;
+    var allDeferred = loanEmps.length > 0 && deferCount === loanEmps.length;
+
+    var deferRow   = document.getElementById('modal-defer-row');
+    deferRow.style.display = deferCount > 0 ? 'flex' : 'none';
+    if (deferCount > 0) {
+      document.getElementById('modal-defer-count').textContent = deferCount + ' employee loan' + (deferCount !== 1 ? 's' : '') + ' deferred';
+    }
+
+    document.getElementById('modal-no-loans-row').style.display = loanEmps.length === 0 ? 'flex' : 'none';
+
+    var allDeferredNote = document.getElementById('modal-all-deferred-note');
+    allDeferredNote.style.display = allDeferred ? 'flex' : 'none';
+
+    document.getElementById('confirm-modal').classList.add('open');
+  }
+
+  function closeConfirm() {
+    document.getElementById('confirm-modal').classList.remove('open');
+  }
+
+  function confirmSave() {
+    closeConfirm();
+
+    var loanDecisions = [];
+    EMPLOYEES.forEach(function(e) {
+      if (!selected.has(e.id) || e.loanDed <= 0) return;
+      (QUADRA_LOANS || [])
+        .filter(function(l) { return l.empBadge === e.id && (l.status === 'active' || l.status === 'overdue'); })
+        .forEach(function(l) {
+          var ded = l.tenor > 0 ? Math.ceil(l.total / l.tenor) : 0;
+          loanDecisions.push({
+            loanId: l.id,
+            action: deferredBadges.has(e.id) ? 'defer' : 'confirm',
+            amount: deferredBadges.has(e.id) ? 0 : ded
+          });
+        });
+    });
+
+    var totalNet = EMPLOYEES
+      .filter(function(e) { return selected.has(e.id); })
+      .reduce(function(s, e) {
+        var effLoan = deferredBadges.has(e.id) ? 0 : e.loanDed;
+        return s + e.base + e.allowTotal + e.otAmt - e.dedTotal - effLoan - e.lateDed;
+      }, 0);
+
+    var periods = getStoredPeriods();
+    var idx = periods.findIndex(function(p) { return p.id === ID_KEY; });
+    if (idx !== -1) {
+      Object.assign(periods[idx], {
+        employees:     selected.size,
+        totalNet:      totalNet,
+        loanDecisions: loanDecisions,
+        employeeIds:   Array.from(selected)
+      });
+    }
+    savePeriods(periods);
+
+    try { localStorage.setItem('QUADRA_PENDING_TOAST', JSON.stringify({ message: 'Payroll for ' + (PP ? PP.period : ID_KEY) + ' has been updated.', type: 'success' })); } catch(e) {}
+    window.location.href = DETAIL_URL;
+  }
+
+  document.getElementById('confirm-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeConfirm();
+  });
+
+  /* ── Init page info ── */
+  if (PP) {
+    document.title = 'QuadraNG — Edit ' + PP.period;
+    document.getElementById('bar-period').textContent     = PP.period;
+    document.getElementById('bar-status').innerHTML       = statusBadge(PP.status);
+    document.getElementById('bar-created-by').textContent = PP.createdBy || '—';
+    document.getElementById('bc-period-link').textContent = PP.period;
+    document.getElementById('bc-period-link').href        = DETAIL_URL;
+    document.getElementById('footer-period').textContent  = PP.period;
+    document.getElementById('modal-period').textContent   = PP.period;
+    document.getElementById('cancel-btn').href            = DETAIL_URL;
+
+    if (PP.status === 'paid') {
+      document.getElementById('paid-warning-bar').style.display = 'flex';
+    }
+  }
+
+  QuadraDropdown.init(document.getElementById('filter-contract'),
+    ['All Contracts', 'PKWTT', 'PKWT', 'Freelance', 'Internship'],
+    { value: 'All Contracts', onChange: function(v) { currentContract = v === 'All Contracts' ? '' : v; renderTable(); } });
+
+  QuadraDropdown.init(document.getElementById('filter-shift'),
+    ['All Shifts', 'Bendi', 'NDS', 'Ops Console'],
+    { value: 'All Shifts', onChange: function(v) { currentShift = v === 'All Shifts' ? '' : v; renderTable(); } });
+
+  renderTable();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+
+<script src="clockwidget.js"></script>
+</body>
+</html>

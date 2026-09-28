@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — My Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="my-attendance"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <span class="bc-current">My Attendance</span>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">My Attendance</div>
+      </div>
+    </div>
+
+    <div class="today-card">
+      <div class="today-card-header">
+        <span class="today-card-title">My Attendance Today</span>
+        <span class="today-card-date" id="todayCardDate"></span>
+      </div>
+      <div class="today-info-row">
+        <div class="today-info-cell">
+          <div class="today-info-label">Status</div>
+          <div class="today-info-value muted" id="todayStatus">—</div>
+        </div>
+        <div class="today-info-cell">
+          <div class="today-info-label">Clock In</div>
+          <div class="today-info-value muted" id="todayClockIn">—</div>
+          <div class="today-info-sub" id="todayClockInSub"></div>
+        </div>
+        <div class="today-info-cell">
+          <div class="today-info-label">Clock Out</div>
+          <div class="today-info-value muted" id="todayClockOut">—</div>
+          <div class="today-info-sub" id="todayClockOutSub"></div>
+        </div>
+        <div class="today-info-cell">
+          <div class="today-info-label">Work Hours</div>
+          <div class="today-info-value muted" id="todayWorkHours">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Work Hours</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="historyTbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<script src="employees-data.js"></script>
+<script>
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function fmtTime(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+
+  (function () {
+    var d = new Date();
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('todayCardDate').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  })();
+
+  function setClockInCard(time) {
+    document.getElementById('todayStatus').textContent = 'Present';
+    document.getElementById('todayStatus').classList.remove('muted');
+    document.getElementById('todayClockIn').textContent = fmtTime(time);
+    document.getElementById('todayClockIn').classList.remove('muted');
+    document.getElementById('todayClockInSub').textContent = 'Clocked in';
+  }
+
+  function setClockOutCard(time, durationMs) {
+    var h = Math.floor(durationMs / 3600000);
+    var m = Math.floor((durationMs % 3600000) / 60000);
+    document.getElementById('todayClockOut').textContent = fmtTime(time);
+    document.getElementById('todayClockOut').classList.remove('muted');
+    document.getElementById('todayClockOutSub').textContent = 'Clocked out';
+    document.getElementById('todayWorkHours').textContent = h + 'h ' + m + 'm';
+    document.getElementById('todayWorkHours').classList.remove('muted');
+  }
+
+  (function () {
+    if (sessionStorage.getItem('QUADRA_CLOCKED_IN') === 'true') {
+      var ts = sessionStorage.getItem('QUADRA_CLOCK_IN_TIME');
+      if (ts) setClockInCard(new Date(ts));
+    }
+  })();
+
+  window.addEventListener('quadra-clockin',  function (e) { setClockInCard(e.detail.time); });
+  window.addEventListener('quadra-clockout', function (e) { setClockOutCard(e.detail.time, e.detail.duration); });
+
+  /* ── Demo attendance history (prototype only — no backend, per-badge static rows) ── */
+  var STATUS_CFG = {
+    present: { label: 'Present',  cls: 'tag tag-success' },
+    late:    { label: 'Late',     cls: 'tag tag-warning' },
+    absent:  { label: 'Absent',   cls: 'tag tag-danger'  },
+    leave:   { label: 'On Leave', cls: 'tag tag-info'    }
+  };
+
+  var MY_ATTENDANCE_HISTORY = {
+    '001228': [
+      { date: '14 Jul 2026', clockIn: '07:28', clockOut: '16:35', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '07:30', clockOut: '16:30', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '07:32', clockOut: '16:40', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '07:29', clockOut: '16:33', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: '07:31', clockOut: '16:36', status: 'present' },
+      { date: '7 Jul 2026',  clockIn: '08:10', clockOut: '16:45', status: 'late'    },
+      { date: '6 Jul 2026',  clockIn: '07:27', clockOut: '16:31', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '07:30', clockOut: '16:34', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '07:28', clockOut: '16:32', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '07:33', clockOut: '16:38', status: 'present' }
+    ],
+    '000000001': [
+      { date: '14 Jul 2026', clockIn: '07:31', clockOut: '16:40', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '07:29', clockOut: '16:35', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '08:05', clockOut: '16:50', status: 'late'    },
+      { date: '9 Jul 2026',  clockIn: '07:30', clockOut: '16:38', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: null,    clockOut: null,    status: 'leave'   },
+      { date: '7 Jul 2026',  clockIn: '07:28', clockOut: '16:31', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: '07:33', clockOut: '16:45', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '07:30', clockOut: '16:29', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: null,    clockOut: null,    status: 'absent'  },
+      { date: '1 Jul 2026',  clockIn: '07:27', clockOut: '16:33', status: 'present' }
+    ],
+    '000000002': [
+      { date: '14 Jul 2026', clockIn: '07:45', clockOut: '16:35', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '07:44', clockOut: '16:30', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '07:46', clockOut: '16:40', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '08:15', clockOut: '16:33', status: 'late'    },
+      { date: '8 Jul 2026',  clockIn: '07:43', clockOut: '16:36', status: 'present' },
+      { date: '7 Jul 2026',  clockIn: '07:45', clockOut: '16:31', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: '07:44', clockOut: '16:45', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '07:46', clockOut: '16:34', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '07:45', clockOut: '16:32', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '07:44', clockOut: '16:38', status: 'present' }
+    ],
+    '000000003': [
+      { date: '14 Jul 2026', clockIn: '07:30', clockOut: '17:05', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '07:31', clockOut: '17:10', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '07:29', clockOut: '17:00', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: null,    clockOut: null,    status: 'leave'   },
+      { date: '8 Jul 2026',  clockIn: '07:30', clockOut: '17:08', status: 'present' },
+      { date: '7 Jul 2026',  clockIn: '07:32', clockOut: '17:02', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: '07:28', clockOut: '17:06', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '07:31', clockOut: '17:04', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '07:30', clockOut: '17:00', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '07:29', clockOut: '17:07', status: 'present' }
+    ],
+    '000000004': [
+      { date: '14 Jul 2026', clockIn: '16:02', clockOut: '00:35', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '16:38', clockOut: '00:30', status: 'late'    },
+      { date: '10 Jul 2026', clockIn: '16:01', clockOut: '00:32', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '16:00', clockOut: '00:33', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: '16:03', clockOut: '00:36', status: 'present' },
+      { date: '7 Jul 2026',  clockIn: null,    clockOut: null,    status: 'absent'  },
+      { date: '6 Jul 2026',  clockIn: '16:01', clockOut: '00:31', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '16:02', clockOut: '00:34', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '16:00', clockOut: '00:30', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '16:03', clockOut: '00:35', status: 'present' }
+    ],
+    '000000005': [
+      { date: '14 Jul 2026', clockIn: '07:29', clockOut: '16:35', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '07:30', clockOut: '16:31', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '07:28', clockOut: '16:33', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '07:31', clockOut: '16:36', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: '07:29', clockOut: '16:30', status: 'present' },
+      { date: '7 Jul 2026',  clockIn: '07:30', clockOut: '16:34', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: '08:20', clockOut: '16:40', status: 'late'    },
+      { date: '3 Jul 2026',  clockIn: '07:28', clockOut: '16:32', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '07:29', clockOut: '16:35', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '07:30', clockOut: '16:31', status: 'present' }
+    ],
+    '000000006': [
+      { date: '14 Jul 2026', clockIn: '08:02', clockOut: '17:35', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '08:00', clockOut: '17:30', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '08:01', clockOut: '17:33', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '08:03', clockOut: '17:36', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: null,    clockOut: null,    status: 'leave'   },
+      { date: '7 Jul 2026',  clockIn: '08:00', clockOut: '17:31', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: '08:02', clockOut: '17:34', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '08:01', clockOut: '17:32', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '08:35', clockOut: '17:40', status: 'late'    },
+      { date: '1 Jul 2026',  clockIn: '08:00', clockOut: '17:30', status: 'present' }
+    ],
+    '000000007': [
+      { date: '14 Jul 2026', clockIn: '16:05', clockOut: '00:32', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '16:00', clockOut: '00:30', status: 'present' },
+      { date: '10 Jul 2026', clockIn: null,    clockOut: null,    status: 'absent'  },
+      { date: '9 Jul 2026',  clockIn: '16:02', clockOut: '00:33', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: '16:40', clockOut: '00:36', status: 'late'    },
+      { date: '7 Jul 2026',  clockIn: '16:01', clockOut: '00:31', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: '16:03', clockOut: '00:34', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '16:00', clockOut: '00:30', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '16:02', clockOut: '00:33', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '16:01', clockOut: '00:32', status: 'present' }
+    ],
+    '000000008': [
+      { date: '14 Jul 2026', clockIn: '08:00', clockOut: '17:32', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '08:01', clockOut: '17:30', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '08:02', clockOut: '17:34', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '08:00', clockOut: '17:31', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: '08:03', clockOut: '17:35', status: 'present' },
+      { date: '7 Jul 2026',  clockIn: null,    clockOut: null,    status: 'absent'  },
+      { date: '6 Jul 2026',  clockIn: '08:01', clockOut: '17:33', status: 'present' },
+      { date: '3 Jul 2026',  clockIn: '08:30', clockOut: '17:40', status: 'late'    },
+      { date: '2 Jul 2026',  clockIn: '08:00', clockOut: '17:30', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '08:02', clockOut: '17:32', status: 'present' }
+    ],
+    '000000009': [
+      { date: '14 Jul 2026', clockIn: null, clockOut: null, status: 'absent' },
+      { date: '13 Jul 2026', clockIn: null, clockOut: null, status: 'absent' },
+      { date: '10 Jul 2026', clockIn: null, clockOut: null, status: 'absent' },
+      { date: '9 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' },
+      { date: '8 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' },
+      { date: '7 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' },
+      { date: '6 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' },
+      { date: '3 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' },
+      { date: '2 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' },
+      { date: '1 Jul 2026',  clockIn: null, clockOut: null, status: 'absent' }
+    ],
+    '000000010': [
+      { date: '14 Jul 2026', clockIn: '07:27', clockOut: '16:33', status: 'present' },
+      { date: '13 Jul 2026', clockIn: '07:28', clockOut: '16:30', status: 'present' },
+      { date: '10 Jul 2026', clockIn: '07:26', clockOut: '16:32', status: 'present' },
+      { date: '9 Jul 2026',  clockIn: '07:29', clockOut: '16:34', status: 'present' },
+      { date: '8 Jul 2026',  clockIn: '08:12', clockOut: '16:40', status: 'late'    },
+      { date: '7 Jul 2026',  clockIn: '07:27', clockOut: '16:31', status: 'present' },
+      { date: '6 Jul 2026',  clockIn: null,    clockOut: null,    status: 'leave'   },
+      { date: '3 Jul 2026',  clockIn: '07:28', clockOut: '16:33', status: 'present' },
+      { date: '2 Jul 2026',  clockIn: '07:26', clockOut: '16:30', status: 'present' },
+      { date: '1 Jul 2026',  clockIn: '07:29', clockOut: '16:32', status: 'present' }
+    ]
+  };
+
+  function calcWorkHrs(ci, co) {
+    if (!ci || !co) return '—';
+    var i = ci.split(':').map(Number), o = co.split(':').map(Number);
+    var mins = (o[0] * 60 + o[1]) - (i[0] * 60 + i[1]);
+    return Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm';
+  }
+
+  (function renderHistory() {
+    var badge = localStorage.getItem('quadra_active_badge');
+    var rows = MY_ATTENDANCE_HISTORY[badge];
+    var tbody = document.getElementById('historyTbody');
+    if (!rows) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">'
+        + '<div class="empty-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>'
+        + '<div class="empty-title">No employee record found</div>'
+        + '<div class="empty-desc">Your account isn\'t linked to an employee record. Please contact HR.</div>'
+        + '</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(function (r) {
+      var cfg = STATUS_CFG[r.status];
+      var inEl  = r.clockIn  ? r.clockIn  : '<span style="color:#9CA3AF">—</span>';
+      var outEl = r.clockOut ? r.clockOut : '<span style="color:#9CA3AF">—</span>';
+      return '<tr>'
+        + '<td>' + r.date + '</td>'
+        + '<td>' + inEl + '</td>'
+        + '<td>' + outEl + '</td>'
+        + '<td>' + calcWorkHrs(r.clockIn, r.clockOut) + '</td>'
+        + '<td><span class="' + cfg.cls + '">' + cfg.label + '</span></td>'
+        + '</tr>';
+    }).join('');
+  })();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+
+</body>
+</html>

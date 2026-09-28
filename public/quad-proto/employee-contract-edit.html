@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Edit Contract</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    .edit-form { padding: 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+    /* Adds a divider under the already-shared .form-title (layout.css)
+       when it's the heading of an .edit-form section. */
+    .edit-form .form-title { padding-bottom: 12px; border-bottom: 1px solid #F3F4F6; }
+    /* .up-field.hidden is now the shared utility (layout.css). */
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="employees" data-active-sub="list-employee"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="employees-list.html">Employee Directory</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="employee-detail.html#contract">Ahmad Fauzi</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">Edit Contract</span>
+  </div>
+
+  <div class="detail-layout">
+  <main class="main-content">
+
+    <!-- Back -->
+    <div style="width:100%;">
+      <a href="employee-detail.html#contract" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#6B7280;text-decoration:none;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Ahmad Fauzi
+      </a>
+    </div>
+
+    <!-- Edit form -->
+    <div class="section-card">
+      <div class="section-head">
+        <h3>Edit Contract</h3>
+      </div>
+      <div class="edit-form">
+
+        <!-- Only Filling Status is editable here. Work Type, Contract
+             Duration, Joining Date, and Base Salary all live in separate
+             flows (Renew Contract / Manage Salary) and are never
+             editable from this page — Joining Date in particular is
+             permanent and never editable anywhere. -->
+        <div class="form-row">
+          <div class="up-field">
+            <label>Filling Status (PTKP)</label>
+            <div class="select-w" id="fs-select" data-required="true"></div>
+          </div>
+          <div class="up-field">
+            <!-- spacer -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Change Details -->
+    <div class="section-card">
+      <div class="section-head"><h3>Change Details</h3></div>
+      <div class="section-body">
+        <div class="f-field">
+          <label>Note (Optional)</label>
+          <input type="text" class="text-input" id="note-input" placeholder="e.g. Contract type change, renewal" />
+        </div>
+        <div class="audit-note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#3B82F6" stroke-width="1.4"/><path d="M8 5v4M8 10.5v.5" stroke="#3B82F6" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <p>All changes are saved to the employee's audit history with a timestamp and the user who made the change.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="emp-profile-panel">
+    <div class="epp-avatar" id="epp-avatar" style="background:#E04A2A">AF</div>
+    <div class="epp-identity">
+      <div class="epp-name" id="epp-name">Ahmad Fauzi</div>
+      <div class="epp-position" id="epp-position">Senior Staff</div>
+      <div class="epp-status-row"><span class="tag tag-dot tag-success" id="epp-status">Active</span></div>
+    </div>
+    <div class="epp-email-row">
+      <span id="epp-email">ahmad.f@steradian.id</span>
+      <button class="epp-copy-btn" type="button" onclick="copyEppEmail()" aria-label="Copy email">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 10V3a1 1 0 011-1h7" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-info-row"><span class="epp-label">Badge ID</span><span class="epp-value" id="epp-badge">000000003</span></div>
+      <div class="epp-info-row"><span class="epp-label">Department</span><span class="epp-value" id="epp-department">Operations</span></div>
+    </div>
+    <div class="epp-divider"></div>
+    <div class="epp-section">
+      <div class="epp-section-title">Current Contract</div>
+      <div class="epp-info-row"><span class="epp-label">Work Type</span><span class="epp-value" id="current-worktype">PKWTT</span></div>
+      <div class="epp-info-row"><span class="epp-label">Duration</span><span class="epp-value" id="current-duration">24 months</span></div>
+      <div class="epp-info-row"><span class="epp-label">Filling Status</span><span class="epp-value" id="current-fillingstatus">K/1</span></div>
+      <div class="epp-info-row"><span class="epp-label">Joining Date</span><span class="epp-value" id="current-joiningdate">15 January 2021</span></div>
+      <div class="epp-info-row"><span class="epp-label">Base Salary</span><span class="epp-value" id="current-basesalary">IDR 12.000.000</span></div>
+      <div class="epp-info-row"><span class="epp-label">Level</span><span class="epp-value"><span class="tag tag-dot" id="current-level-tag"></span></span></div>
+    </div>
+  </aside>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <button class="btn btn-primary" id="save-btn" disabled>Save Changes</button>
+  </div>
+  </div><!-- /detail-layout -->
+
+</div>
+
+<script src="dropdown.js"></script>
+<script>
+  /* Same tier logic + fallback already established in
+     employee-salary-update.html / employee-contract-renew.html —
+     own copy here per self-contained-page convention. */
+  function loadSalaryLevels() {
+    var CLASSES = ['lv1','lv2','lv3','lv4','lv5'];
+    var FALLBACK = [
+      { min: 0,        max: 4999999,  cls: 'lv1', label: 'Level 1' },
+      { min: 5000000,  max: 7999999,  cls: 'lv2', label: 'Level 2' },
+      { min: 8000000,  max: 11999999, cls: 'lv3', label: 'Level 3' },
+      { min: 12000000, max: 19999999, cls: 'lv4', label: 'Level 4' },
+      { min: 20000000, max: Infinity, cls: 'lv5', label: 'Level 5' }
+    ];
+    try {
+      var stored = JSON.parse(localStorage.getItem('quadra_level_ranges'));
+      if (!stored || !stored.length) return FALLBACK;
+      return stored.sort(function(a, b) { return a.level - b.level; }).map(function(l, i) {
+        return { min: l.minWage, max: l.maxWage === null ? Infinity : l.maxWage, cls: CLASSES[i % CLASSES.length], label: 'Level ' + l.level };
+      });
+    } catch(e) { return FALLBACK; }
+  }
+  var SALARY_LEVELS = loadSalaryLevels();
+
+  /* ── Initial (current) values ──────────────────────────── */
+  /* Work Type, Contract Duration, Joining Date, and Base Salary are no
+     longer edited from this page (see Renew Contract / Manage Salary) —
+     only Filling Status remains. Real value is set once the badge is
+     resolved, below. */
+  var INITIAL = { fillingStatus: 'K/1' };
+  var state = { fillingStatus: 'K/1' };
+
+  /* ── Error helpers ─────────────────────────────────────── */
+  function setError(field, message) {
+    field.classList.add('error');
+    var col = field.closest('.up-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (!msg) {
+      msg = document.createElement('span');
+      msg.className = 'err-msg';
+      field.insertAdjacentElement('afterend', msg);
+    }
+    msg.textContent = message || 'This field is required.';
+    msg.classList.add('show');
+  }
+  function clearError(field) {
+    field.classList.remove('error');
+    var col = field.closest('.up-field');
+    if (!col) return;
+    var msg = col.querySelector('.err-msg');
+    if (msg) msg.classList.remove('show');
+  }
+
+  function validateForm() {
+    var errors = [];
+    document.querySelectorAll('[data-required]').forEach(function(field) {
+      var empty = (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA')
+        ? field.value.trim() === ''
+        : !field.dataset.selectedValue;
+      if (empty) { setError(field); errors.push(field); }
+      else clearError(field);
+    });
+    if (errors.length) errors[0].closest('.up-field').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return errors.length === 0;
+  }
+
+  function getChangedFields() {
+    var changes = [];
+    if (state.fillingStatus !== INITIAL.fillingStatus) changes.push('Filling Status');
+    return changes;
+  }
+
+  function checkSaveable() {
+    document.getElementById('save-btn').disabled = getChangedFields().length === 0;
+  }
+
+  /* ── Filling Status dropdown ───────────────────────────── */
+  var FS_OPTIONS = ['TK/0', 'TK/1', 'TK/2', 'TK/3', 'K/0', 'K/1', 'K/2', 'K/3', 'HB/0'];
+
+  QuadraDropdown.init(document.getElementById('fs-select'), FS_OPTIONS, {
+    value: state.fillingStatus,
+    onChange: function(value) {
+      state.fillingStatus = value;
+      clearError(document.getElementById('fs-select'));
+      checkSaveable();
+    }
+  });
+
+  /* ── Save ──────────────────────────────────────────────── */
+  document.getElementById('save-btn').addEventListener('click', function() {
+    if (this.disabled) return;
+    if (!validateForm()) return;
+    var changes = getChangedFields();
+    localStorage.setItem('quadra_contract_saved', JSON.stringify({
+      title: 'Changes Saved',
+      desc: changes.join(', ') + ' updated successfully.'
+    }));
+    __goToDetail('#contract');
+  });
+
+  function handleCancel() {
+    if (!document.getElementById('save-btn').disabled) {
+      document.getElementById('cancel-modal').classList.add('show');
+    } else {
+      __goToDetail('#contract');
+    }
+  }
+
+  function copyEppEmail() {
+    var email = document.getElementById('epp-email').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(email);
+    if (window.QuadraToast) QuadraToast.show('Email copied', email);
+  }
+</script>
+
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Discard Changes</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Discard unsaved changes?</div>
+        <div class="modal-sub-desc">You have unsaved changes. Leaving now will discard all edits.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="__goToDetail('#contract')">Discard Changes</button>
+    </div>
+  </div>
+</div>
+<script src="employees-data.js"></script>
+<script>
+function __goToDetail(hash) {
+  var b = window.__BADGE;
+  var url = 'employee-detail.html';
+  if (b) url += '?badge=' + b;
+  if (hash) url += hash;
+  window.location.href = url;
+}
+function getFullContractHistory(emp, badge) {
+  var extra = [];
+  try { extra = JSON.parse(localStorage.getItem('quadra_contract_history_' + badge)) || []; } catch(e) {}
+  return (emp.contractHistory || []).concat(extra);
+}
+(function() {
+  var badge = new URLSearchParams(window.location.search).get('badge');
+  if (!badge) return;
+  var emp = null;
+  for (var i = 0; i < QUADRA_EMPLOYEES.length; i++) {
+    if (QUADRA_EMPLOYEES[i].badge === badge) { emp = QUADRA_EMPLOYEES[i]; break; }
+  }
+  if (!emp) return;
+  window.__BADGE = badge;
+
+  var STATUS_TAG_CLASS = { 'Active': 'tag-success', 'Probation': 'tag-warning', 'On Leave': 'tag-info', 'Inactive': 'tag-neutral' };
+  var eppAvatar = document.getElementById('epp-avatar');
+  if (eppAvatar) { eppAvatar.textContent = emp.initials; eppAvatar.style.background = emp.color; }
+  document.getElementById('epp-name').textContent = emp.name;
+  document.getElementById('epp-position').textContent = emp.pos;
+  var eppStatusEl = document.getElementById('epp-status');
+  eppStatusEl.textContent = emp.status;
+  eppStatusEl.className = 'tag tag-dot ' + (STATUS_TAG_CLASS[emp.status] || 'tag-neutral');
+  document.getElementById('epp-email').textContent = emp.email || '—';
+  document.getElementById('epp-badge').textContent = emp.badge;
+  document.getElementById('epp-department').textContent = emp.department || '—';
+
+  var mergedHistory = getFullContractHistory(emp, badge);
+  var latestContract = mergedHistory.length ? mergedHistory[mergedHistory.length - 1] : null;
+  document.getElementById('current-worktype').textContent = latestContract ? latestContract.workType : emp.contract;
+  document.getElementById('current-duration').textContent = (latestContract && latestContract.duration) || 'Permanent';
+  var realFillingStatus = latestContract ? latestContract.fillingStatus : emp.fillingStatus;
+  document.getElementById('current-fillingstatus').textContent = realFillingStatus;
+  document.getElementById('current-joiningdate').textContent = emp.join;
+
+  var currentSalary = latestContract ? latestContract.baseSalary : emp.salary;
+  document.getElementById('current-basesalary').textContent = 'IDR ' + String(currentSalary).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  var tier = SALARY_LEVELS.find(function(t) { return currentSalary >= t.min && currentSalary <= t.max; });
+  var currentLevelTag = document.getElementById('current-level-tag');
+  if (tier) {
+    currentLevelTag.className = 'tag tag-dot tag-primary';
+    currentLevelTag.textContent = tier.label;
+  } else {
+    currentLevelTag.className = 'tag tag-dot tag-neutral';
+    currentLevelTag.textContent = 'No level assigned';
+  }
+
+  /* Pre-fill the Filling Status dropdown with the real current value —
+     setValue() only updates the display, it doesn't fire onChange, so
+     INITIAL/state are updated directly here to match. */
+  QuadraDropdown.setValue(document.getElementById('fs-select'), realFillingStatus);
+  INITIAL.fillingStatus = realFillingStatus;
+  state.fillingStatus = realFillingStatus;
+
+  document.querySelectorAll('a[href*="employee-detail.html"]').forEach(function(a) {
+    var h = a.getAttribute('href');
+    if (h.indexOf('badge=') < 0) {
+      var hi = h.indexOf('#');
+      a.setAttribute('href', hi >= 0 ? h.slice(0,hi) + '?badge=' + badge + h.slice(hi) : h + '?badge=' + badge);
+    }
+    a.innerHTML = a.innerHTML.replace(/Budi Santoso/g, emp.name).replace(/Ahmad Fauzi/g, emp.name);
+  });
+  document.querySelectorAll('button').forEach(function(btn) {
+    if (/Back to (Budi Santoso|Ahmad Fauzi)/.test(btn.innerHTML)) {
+      btn.innerHTML = btn.innerHTML.replace(/Budi Santoso|Ahmad Fauzi/g, emp.name);
+    }
+  });
+})();
+</script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Onboarding Preparation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" data-active-menu="onboarding"></aside>
+
+<div class="right-panel">
+
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action">
+        <div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">0</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <span class="bc-current">Preparation</span>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">Onboarding Preparation</div>
+      </div>
+    </div>
+
+    <div class="emp-card spacious">
+      <div class="info-grid" style="grid-template-columns:auto auto;gap:32px;">
+        <div class="info-group"><div class="info-label">Onboarding Date</div><div class="info-value" id="prep-onboard-date">—</div></div>
+        <div class="info-group"><div class="info-label">Role</div><div class="info-value" id="prep-role">—</div></div>
+      </div>
+      <div class="progress-box">
+        <div class="progress-count"><span id="prep-done-count">0</span><span class="progress-total"> / 12</span></div>
+        <div class="progress-label subtitle">items completed</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prep-progress-fill"></div></div>
+        <div class="progress-complete" id="prep-progress-complete">
+          <span class="tag tag-success" style="margin-top:8px;display:inline-flex;align-items:center;gap:4px;">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Checklist Complete
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="checklist-card">
+      <div class="checklist-head">
+        <div>
+          <div class="checklist-title">Preparation Checklist</div>
+          <div class="checklist-subtitle">Check off each item as it is completed · Progress saves automatically</div>
+        </div>
+      </div>
+      <div class="checklist-body" id="prep-checklist-body"></div>
+    </div>
+
+    <div class="detail-section">
+      <div class="section-label">Comments</div>
+      <textarea class="textarea" id="prep-comment" maxlength="1000" placeholder="Describe any issues or blockers encountered during onboarding..."></textarea>
+      <div class="field-hint" id="prep-comment-count">0 / 1000</div>
+    </div>
+
+  </main>
+</div>
+
+<script src="employees-data.js"></script>
+<script src="onboarding-data.js"></script>
+<script>
+(function () {
+  var activeBadge = localStorage.getItem('quadra_active_badge');
+  var emp = QUADRA_EMPLOYEES.find(function (e) { return e.badge === activeBadge; });
+  if (!emp) {
+    document.querySelector('main.main-content').innerHTML =
+      '<div class="empty-state">'
+      + '<div class="empty-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v4M9 12v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>'
+      + '<div class="empty-title">No employee record found</div>'
+      + '<div class="empty-desc">Your account isn\'t linked to an employee record. Please contact HR.</div>'
+      + '</div>';
+    return;
+  }
+
+  document.getElementById('prep-onboard-date').textContent = emp.join;
+  document.getElementById('prep-role').textContent = emp.pos;
+
+  var state = getPrepChecklistState(emp.badge);
+  var body = document.getElementById('prep-checklist-body');
+
+  function fmtToday() {
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var d = new Date();
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function updateProgress() {
+    var done = Object.keys(state).filter(function (k) { return state[k] && state[k].done; }).length;
+    document.getElementById('prep-done-count').textContent = done;
+    var pct = (done / PREP_CHECKLIST_ITEMS.length * 100).toFixed(1);
+    document.getElementById('prep-progress-fill').style.width = pct + '%';
+    document.getElementById('prep-progress-complete').style.display = done === PREP_CHECKLIST_ITEMS.length ? 'block' : 'none';
+  }
+
+  function toggle(idx, checked, row) {
+    if (checked) {
+      state[idx] = { done: true, date: fmtToday() };
+    } else {
+      state[idx] = { done: false };
+    }
+    savePrepChecklistState(emp.badge, state);
+    row.classList.toggle('done', checked);
+    row.querySelector('.ci-date').textContent = checked ? state[idx].date : '';
+    updateProgress();
+  }
+
+  function render() {
+    body.innerHTML = '';
+    PREP_CHECKLIST_ITEMS.forEach(function (label, idx) {
+      var s = state[idx] || {};
+      var row = document.createElement('div');
+      row.className = 'ci' + (s.done ? ' done' : '');
+      row.dataset.id = idx;
+      row.innerHTML =
+        '<input type="checkbox" class="ci-check"' + (s.done ? ' checked' : '') + ' />'
+        + '<div class="ci-num">' + (idx + 1) + '</div>'
+        + '<div class="ci-text">' + label + '</div>'
+        + '<div class="ci-date">' + (s.done && s.date ? s.date : '') + '</div>';
+      var cb = row.querySelector('.ci-check');
+      row.addEventListener('click', function (e) { if (e.target !== cb) cb.click(); });
+      cb.addEventListener('change', function () { toggle(idx, cb.checked, row); });
+      body.appendChild(row);
+    });
+    updateProgress();
+  }
+
+  render();
+
+  var commentEl = document.getElementById('prep-comment');
+  var countEl = document.getElementById('prep-comment-count');
+  commentEl.value = getPrepComment(emp.badge);
+  countEl.textContent = commentEl.value.length + ' / 1000';
+  commentEl.addEventListener('input', function () {
+    countEl.textContent = commentEl.value.length + ' / 1000';
+  });
+  commentEl.addEventListener('blur', function () {
+    savePrepComment(emp.badge, commentEl.value);
+  });
+})();
+</script>
+<script src="toast.js"></script>
+<script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>

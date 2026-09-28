@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuadraNG — Onboarding: Step 4 Allowance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="fields.css" />
+  <link rel="stylesheet" href="tags.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <style>
+    /* .allowance-entry / .ae-meta — RESOLVED in Task 11: now uses the
+       shared .allowance-entry.nested / .ae-meta.wrap variants in
+       layout.css (COMMON PATTERNS GROUP 4). See markup below.
+       .dur-date-w span (+ .disabled state) — the disabled state and
+       span typography stay page-specific (this page's own no-limit-
+       checkbox behavior); only the 148×34 size moved to the shared
+       .dur-date-w.sm variant in layout.css. */
+    .dur-date-w { flex-shrink: 0; padding: 0 10px; border: 1px solid #D1D5DB; background: #fff; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; position: relative; gap: 6px; }
+    .dur-date-w span { font-size: 13px; color: #9CA3AF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .dur-date-w.disabled { background: #F9FAFB; cursor: not-allowed; pointer-events: none; }
+    .dur-date-w.disabled span { color: #D1D5DB; }
+
+    /* .section-err — RESOLVED in Task 11: now uses the shared
+       .section-err.vivid variant in layout.css (COMMON PATTERNS
+       GROUP 5). See markup below. */
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar" data-active-menu="onboarding" data-active-sub="employee-onboarding"></aside>
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="right-panel">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <div class="navbar-right">
+      <div class="nav-action"><div class="timer-box" id="clockWidget"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/><path d="M10 11l3-3-3-3" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8H6" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round"/></svg><span>Clock In</span></div></div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action">
+        <div class="bell-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-1.5 2h13L14 10V7a5 5 0 00-5-5z" stroke="#6B7280" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="#6B7280" stroke-width="1.5"/></svg>
+          <div class="bell-badge">9</div>
+        </div>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-action"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#6B7280" stroke-width="1.5"/><path d="M9 2c-2 2-3 4.5-3 7s1 5 3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/><path d="M2 9h14" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="nav-divider"></div>
+      <div class="nav-user">
+        <div class="user-avatar">SE</div>
+        <span class="user-name">Steradian</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Onboarding</a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="onboarding-employee-list.html">Employee Onboarding</a>
+    <svg class="bc-sep" id="bc-cl-sep" width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:none;"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a href="#" id="bc-cl" style="display:none;font-size:13px;color:#6B7280;text-decoration:none;"></a>
+    <svg class="bc-sep" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="bc-current">New Employee</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Wizard: steps 1–3 done, step 4 active -->
+    <div class="wizard">
+      <div class="wstep">
+        <div class="wstep-dot done"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="wstep-label done">Personal Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="wstep-label done">Work Info</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot done"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="wstep-label done">Contract</span>
+      </div>
+      <div class="wconn done"></div>
+      <div class="wstep">
+        <div class="wstep-dot active">4</div>
+        <span class="wstep-label active">Allowance</span>
+      </div>
+      <div class="wconn pending"></div>
+      <div class="wstep">
+        <div class="wstep-dot inactive">5</div>
+        <span class="wstep-label inactive">Deduction</span>
+      </div>
+      <div class="wconn pending"></div>
+      <div class="wstep">
+        <div class="wstep-dot inactive">6</div>
+        <span class="wstep-label inactive">Overtime</span>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <div class="card-head"><h2>Allowance</h2></div>
+
+      <div class="card-body">
+        <div class="section-err vivid" id="step4-section-err">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#DC2626" stroke-width="1.5"/><path d="M8 5v3.5" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11" r="0.75" fill="#DC2626"/></svg>
+          <span>Please fill in all required fields before continuing.</span>
+        </div>
+        <p style="font-size:13px;color:#6B7280;line-height:1.6;">Select the allowances this employee is entitled to receive. Each allowance has its own amount, validity period, and delivery schedule.</p>
+
+        <!-- Allowance entries -->
+        <div style="display:flex;flex-direction:column;gap:0;" id="allowance-entries">
+
+          <!-- Laptop — default entry, no remove -->
+          <div class="allowance-entry nested">
+            <div class="allowance-row">
+              <div style="flex:1;min-width:0;height:40px;padding:0 12px;background:#F9FAFB;border:1px solid #E5E7EB;display:flex;align-items:center;">
+                <span style="font-size:14px;font-weight:500;color:#374151;">Laptop</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+                <label class="radio-opt"><input type="radio" name="laptop" value="personal" checked /><span>Personal</span></label>
+                <label class="radio-opt"><input type="radio" name="laptop" value="office" /><span>Office</span></label>
+              </div>
+              <div class="amount-err-wrap">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="amount-input-w" id="laptop-amount-w">
+                    <span class="amount-prefix">Rp.</span>
+                    <input type="text" id="laptop-amount" placeholder="Enter amount" />
+                  </div>
+                  <span class="amount-period-label amount-period">/ month</span>
+                </div>
+              </div>
+              <div style="width:32px;flex-shrink:0;"></div>
+            </div>
+            <div class="ae-meta wrap">
+              <span class="ae-meta-label">Validity</span>
+              <div class="dur-date-w sm"><span>Start date</span><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14" stroke="#9CA3AF" stroke-width="1.4"/><path d="M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+              <span class="dur-sep">—</span>
+              <div class="dur-date-w sm"><span>End date</span><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14" stroke="#9CA3AF" stroke-width="1.4"/><path d="M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+              <label class="no-limit-opt"><input type="checkbox" class="no-limit-cb" /><span>No time limit</span></label>
+            </div>
+            <div class="ae-meta wrap">
+              <span class="ae-meta-label">Delivery</span>
+              <div class="delivery-inline">
+                <span>Every</span>
+                <div class="del-drop-w">
+                  <span class="del-drop-val">1st</span>
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="del-drop-panel"></div>
+                </div>
+                <span>of month</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="add-allowance-btn" id="add-allowance-btn">+ Add Allowance</button>
+
+      </div><!-- /card-body -->
+    </div><!-- /form-card -->
+
+  </main>
+
+  <div class="fixed-footer">
+    <button class="btn btn-ghost" onclick="handleCancel()">Cancel</button>
+    <div class="foot-btns">
+      <button class="btn btn-outline" onclick="window.location.href='onboarding-step3-contract.html'">Back</button>
+      <button class="btn btn-primary" id="step4-next-btn" onclick="validateStep4()">Next</button>
+    </div>
+  </div>
+</div><!-- /right-panel -->
+
+<script src="allowances-data.js"></script>
+<script src="dropdown.js"></script>
+<script>
+  if (localStorage.getItem('quadra_role') === 'hr-umum') { window.location.replace('onboarding-employee-list.html'); }
+
+  /* Load stored allowances (respects additions from the Allowance settings page) */
+  function getStoredAllowances() {
+    try { var d = JSON.parse(localStorage.getItem('quadra_allowances')); return (d && d.length) ? d : QUADRA_ALLOWANCES.slice(); }
+    catch(e) { return QUADRA_ALLOWANCES.slice(); }
+  }
+  var ALL_ALLOWANCES = getStoredAllowances();
+
+  function getAllowanceType(name) {
+    var found = ALL_ALLOWANCES.find(function(a) { return a.name === name; });
+    return found ? found.type : 'monthly';
+  }
+
+  /* Non-mandatory allowances available to add (Laptop is always pre-populated) */
+  var ALLOWANCE_OPTIONS = ALL_ALLOWANCES
+    .filter(function(a) { return !a.mandatory; })
+    .map(function(a) { return a.name; });
+  var MONTHS = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+
+  /* ── Ordinal suffix ──────────────────────────────────────── */
+  function ordinal(n) {
+    var s = ['th','st','nd','rd'];
+    var v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  /* ── SVG helpers ─────────────────────────────────────────── */
+  var CAL_SVG = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><rect x="1" y="2" width="14" height="13" rx="1" stroke="#9CA3AF" stroke-width="1.4"/><path d="M1 6h14" stroke="#9CA3AF" stroke-width="1.4"/><path d="M5 1v2M11 1v2" stroke="#9CA3AF" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  var CHV_SVG = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M3 5l4 4 4-4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  /* ── Amount formatting & numeric-only enforcement ───────── */
+  function formatAmount(input) {
+    var raw = input.value.replace(/\./g, '').replace(/\D/g, '');
+    input.value = raw === '' ? '' : raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function setAmountError(input, msg) {
+    var wrap    = input.closest('.amount-input-w');
+    var errWrap = input.closest('.amount-err-wrap');
+    if (wrap) wrap.classList.add('error');
+    if (!errWrap) return;
+    var errEl = errWrap.querySelector('.amount-err-msg');
+    if (!errEl) {
+      errEl = document.createElement('span');
+      errEl.className = 'amount-err-msg';
+      errWrap.appendChild(errEl);
+    }
+    errEl.textContent = msg;
+    errEl.classList.add('show');
+  }
+
+  function clearAmountError(input) {
+    var wrap    = input.closest('.amount-input-w');
+    var errWrap = input.closest('.amount-err-wrap');
+    if (wrap) wrap.classList.remove('error');
+    if (!errWrap) return;
+    var errEl = errWrap.querySelector('.amount-err-msg');
+    if (errEl) errEl.classList.remove('show');
+  }
+
+  /* Block invalid keys immediately */
+  document.addEventListener('keydown', function(e) {
+    if (!e.target.matches('.amount-input-w input')) return;
+    if (e.target.disabled) return;
+    var allowed = ['Backspace','Delete','Tab','Enter','ArrowLeft','ArrowRight','Home','End'];
+    if (e.ctrlKey || e.metaKey) return;
+    if (allowed.indexOf(e.key) >= 0) return;
+    if (e.key === '-') {
+      e.preventDefault();
+      setAmountError(e.target, 'Allowance amount cannot be negative.');
+    } else if (!/^\d$/.test(e.key)) {
+      e.preventDefault();
+      setAmountError(e.target, 'Amount must contain numbers only.');
+    }
+  });
+
+  /* Format + validate on input (catches paste and other non-keyboard entry) */
+  document.addEventListener('input', function(e) {
+    if (!e.target.matches('.amount-input-w input')) return;
+    if (e.target.disabled) return;
+    var pos = e.target.selectionStart, oldLen = e.target.value.length;
+    /* Check for invalid chars BEFORE stripping (dots are valid separators, ignore them) */
+    var hasNegative = e.target.value.indexOf('-') !== -1;
+    var hadInvalid   = /[^\d.]/.test(e.target.value);
+    formatAmount(e.target);
+    var diff = e.target.value.length - oldLen;
+    e.target.setSelectionRange(Math.max(0, pos + diff), Math.max(0, pos + diff));
+    if (hasNegative) {
+      setAmountError(e.target, 'Allowance amount cannot be negative.');
+    } else if (hadInvalid) {
+      setAmountError(e.target, 'Amount must contain numbers only.');
+    } else {
+      clearAmountError(e.target);
+    }
+  });
+
+  /* Show zero-value error when field loses focus */
+  document.addEventListener('blur', function(e) {
+    if (!e.target.matches('.amount-input-w input')) return;
+    if (e.target.disabled) return;
+    var raw = (e.target.value || '').replace(/\./g, '').trim();
+    if (raw === '') return; /* empty is caught at submit, not on blur */
+    if (parseInt(raw, 10) === 0) {
+      setAmountError(e.target, 'Amount must be greater than 0.');
+    }
+  }, true);
+
+  /* ── Laptop Personal/Office toggle ──────────────────────── */
+  document.querySelectorAll('input[name="laptop"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      var w = document.getElementById('laptop-amount-w');
+      var inp = document.getElementById('laptop-amount');
+      if (this.value === 'office') {
+        inp.value = '0'; inp.disabled = true;
+        w.style.background = '#F9FAFB'; inp.style.color = '#9CA3AF';
+      } else {
+        inp.value = ''; inp.disabled = false;
+        w.style.background = '#fff'; inp.style.color = '#111827';
+      }
+    });
+  });
+
+  /* ── Close all panels ───────────────────────────────────── */
+  function closeAll() {
+    document.querySelectorAll('.calendar-panel.open, .del-drop-panel.open')
+      .forEach(function(p) { p.classList.remove('open'); });
+    document.querySelectorAll('.dur-date-w.open, .del-drop-w.open')
+      .forEach(function(el) { el.classList.remove('open'); });
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dur-date-w')) {
+      closeAll();
+    }
+  });
+
+  /* ── Delivery dropdown init ─────────────────────────────── */
+  var DELIVERY_OPTIONS = [];
+  for (var _i = 1; _i <= 31; _i++) DELIVERY_OPTIONS.push({ value: String(_i), label: ordinal(_i) });
+  DELIVERY_OPTIONS.push({ value: 'last', label: 'Last day' });
+
+  function initDeliveryDropdown(dropW) {
+    if (dropW.dataset.delInit) return;
+    dropW.dataset.delInit = '1';
+    var valEl = dropW.querySelector('.del-drop-val');
+    var panel = dropW.querySelector('.del-drop-panel');
+    var selected = '1';
+
+    function renderOptions() {
+      panel.innerHTML = '';
+      DELIVERY_OPTIONS.forEach(function(o) {
+        var item = document.createElement('div');
+        item.className = 'del-drop-opt' + (o.value === selected ? ' selected' : '');
+        item.textContent = o.label;
+        item.addEventListener('click', function(e) {
+          e.stopPropagation();
+          selected = o.value;
+          valEl.textContent = o.label;
+          panel.classList.remove('open');
+          dropW.classList.remove('open');
+        });
+        panel.appendChild(item);
+      });
+    }
+
+    dropW.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = panel.classList.contains('open');
+      closeAll();
+      if (!wasOpen) { renderOptions(); panel.classList.add('open'); dropW.classList.add('open'); }
+    });
+  }
+  document.querySelectorAll('.del-drop-w').forEach(initDeliveryDropdown);
+
+  /* ── Used allowances tracking ──────────────────────────── */
+  var usedAllowances = new Set();
+
+  /* ── Date range helpers ─────────────────────────────────── */
+  function parseDateStr(str) {
+    if (!str) return null;
+    var parts = str.split(' ');
+    if (parts.length !== 3) return null;
+    var d = parseInt(parts[0]);
+    var m = MONTHS.indexOf(parts[1]);
+    var y = parseInt(parts[2]);
+    if (isNaN(d) || m === -1 || isNaN(y)) return null;
+    return new Date(y, m, d);
+  }
+
+  function getJoiningDate() {
+    return parseDateStr(localStorage.getItem('quadra_joining_date') || '');
+  }
+
+  function checkDateRange(durDateW) {
+    var meta = durDateW.closest('.ae-meta');
+    if (!meta) return;
+    var dateWs = meta.querySelectorAll('.dur-date-w');
+    if (dateWs.length < 2) return;
+    var startW    = dateWs[0];
+    var endW      = dateWs[1];
+    var startDate = parseDateStr(startW.dataset.selectedValue);
+    var endDate   = parseDateStr(endW.dataset.selectedValue);
+    var joining   = getJoiningDate();
+
+    /* find or create the error element right after this .ae-meta */
+    var errEl = meta.nextElementSibling;
+    if (!errEl || !errEl.classList.contains('date-range-err')) {
+      errEl = document.createElement('span');
+      errEl.className = 'date-range-err';
+      meta.parentNode.insertBefore(errEl, meta.nextSibling);
+    }
+
+    if (startDate && joining && startDate < joining) {
+      startW.classList.add('error');
+      endW.classList.remove('error');
+      errEl.textContent = 'Start date cannot be before the joining date (' + (localStorage.getItem('quadra_joining_date') || '') + ').';
+      errEl.classList.add('show');
+    } else if (startDate && endDate && endDate <= startDate) {
+      startW.classList.add('error');
+      endW.classList.add('error');
+      errEl.textContent = 'End date must be after start date.';
+      errEl.classList.add('show');
+    } else {
+      startW.classList.remove('error');
+      endW.classList.remove('error');
+      errEl.classList.remove('show');
+    }
+  }
+
+  /* ── Duration date picker ───────────────────────────────── */
+  function initDurDatePicker(durDateW) {
+    if (durDateW.dataset.dpInit) return;
+    durDateW.dataset.dpInit = '1';
+    var now = new Date();
+    var initY = now.getFullYear();
+    var state = {
+      view: 'days', month: now.getMonth(), year: initY,
+      yearRangeStart: Math.floor(initY / 12) * 12, selected: null
+    };
+    var panel = document.createElement('div');
+    panel.className = 'calendar-panel';
+    durDateW.appendChild(panel);
+
+    function makeNav(prevFn, titleEl, nextFn) {
+      var nav = document.createElement('div');
+      nav.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;';
+      var prev = document.createElement('button');
+      prev.type = 'button'; prev.className = 'cal-nav-btn'; prev.innerHTML = '&#8249;';
+      prev.addEventListener('click', function(e) { e.stopPropagation(); prevFn(); render(); });
+      var next = document.createElement('button');
+      next.type = 'button'; next.className = 'cal-nav-btn'; next.innerHTML = '&#8250;';
+      next.addEventListener('click', function(e) { e.stopPropagation(); nextFn(); render(); });
+      nav.appendChild(prev); nav.appendChild(titleEl); nav.appendChild(next);
+      return nav;
+    }
+
+    function titleBtn(text, onClick) {
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'cal-title-btn'; btn.textContent = text;
+      btn.addEventListener('click', function(e) { e.stopPropagation(); onClick(); render(); });
+      return btn;
+    }
+
+    function gridBtn(label, selected, onClick) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-grid-btn' + (selected ? ' cal-grid-sel' : '');
+      btn.textContent = label;
+      btn.addEventListener('click', function(e) { e.stopPropagation(); onClick(); render(); });
+      return btn;
+    }
+
+    function renderDays() {
+      var titleWrap = document.createElement('div');
+      titleWrap.style.cssText = 'display:flex;align-items:center;gap:4px;';
+      titleWrap.appendChild(titleBtn(MONTHS[state.month], function() { state.view = 'months'; }));
+      titleWrap.appendChild(titleBtn(String(state.year), function() { state.view = 'years'; }));
+      panel.appendChild(makeNav(
+        function() { if (--state.month < 0) { state.month = 11; state.year--; } },
+        titleWrap,
+        function() { if (++state.month > 11) { state.month = 0; state.year++; } }
+      ));
+      var hRow = document.createElement('div'); hRow.className = 'cal-row';
+      ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d) {
+        var c = document.createElement('div'); c.className = 'cal-cell cal-header'; c.textContent = d; hRow.appendChild(c);
+      });
+      panel.appendChild(hRow);
+      var firstDay = new Date(state.year, state.month, 1).getDay();
+      var total = new Date(state.year, state.month + 1, 0).getDate();
+      var today = new Date();
+      var row = document.createElement('div'); row.className = 'cal-row'; var col = 0;
+      for (var b = 0; b < firstDay; b++) { row.appendChild(Object.assign(document.createElement('div'), {className:'cal-cell'})); col++; }
+      for (var d = 1; d <= total; d++) {
+        if (col > 0 && col % 7 === 0) { panel.appendChild(row); row = document.createElement('div'); row.className = 'cal-row'; }
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'cal-cell cal-day'; btn.textContent = d;
+        var isSel = state.selected && state.selected.d === d && state.selected.m === state.month && state.selected.y === state.year;
+        var isTdy = d === today.getDate() && state.month === today.getMonth() && state.year === today.getFullYear();
+        if (isSel) btn.classList.add('cal-selected');
+        else if (isTdy) btn.classList.add('cal-today');
+        (function(day) {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            state.selected = { d: day, m: state.month, y: state.year };
+            var span = durDateW.querySelector('span');
+            span.textContent = day + ' ' + MONTHS[state.month] + ' ' + state.year;
+            span.style.color = '#111827';
+            durDateW.dataset.selectedValue = day + ' ' + MONTHS[state.month] + ' ' + state.year;
+            closeAll();
+            checkDateRange(durDateW);
+          });
+        })(d);
+        row.appendChild(btn); col++;
+      }
+      panel.appendChild(row);
+    }
+
+    function renderMonths() {
+      panel.appendChild(makeNav(
+        function() { state.year--; },
+        titleBtn(String(state.year), function() { state.view = 'years'; }),
+        function() { state.year++; }
+      ));
+      var grid = document.createElement('div'); grid.className = 'cal-grid';
+      MONTHS.forEach(function(m, i) {
+        var cell = document.createElement('div'); cell.className = 'cal-grid-cell';
+        cell.appendChild(gridBtn(m.slice(0, 3), i === state.month, function(idx) {
+          return function() { state.month = idx; state.view = 'days'; };
+        }(i)));
+        grid.appendChild(cell);
+      });
+      panel.appendChild(grid);
+    }
+
+    function renderYears() {
+      var rangeEnd = state.yearRangeStart + 11;
+      var rangeLabel = document.createElement('span');
+      rangeLabel.style.cssText = 'font-size:13px;font-weight:600;color:#111827;font-family:Inter,sans-serif;';
+      rangeLabel.textContent = state.yearRangeStart + ' – ' + rangeEnd;
+      panel.appendChild(makeNav(
+        function() { state.yearRangeStart -= 12; },
+        rangeLabel,
+        function() { state.yearRangeStart += 12; }
+      ));
+      var grid = document.createElement('div'); grid.className = 'cal-grid';
+      for (var y = state.yearRangeStart; y <= rangeEnd; y++) {
+        var cell = document.createElement('div'); cell.className = 'cal-grid-cell';
+        cell.appendChild(gridBtn(String(y), y === state.year, function(yr) {
+          return function() { state.year = yr; state.view = 'months'; };
+        }(y)));
+        grid.appendChild(cell);
+      }
+      panel.appendChild(grid);
+    }
+
+    function render() {
+      panel.innerHTML = '';
+      if (state.view === 'months') { renderMonths(); return; }
+      if (state.view === 'years')  { renderYears();  return; }
+      renderDays();
+    }
+
+    durDateW.addEventListener('click', function(e) {
+      if (durDateW.classList.contains('disabled')) return;
+      e.stopPropagation();
+      var wasOpen = panel.classList.contains('open');
+      closeAll();
+      if (!wasOpen) { state.view = 'days'; render(); panel.classList.add('open'); durDateW.classList.add('open'); }
+    });
+  }
+  document.querySelectorAll('.dur-date-w').forEach(initDurDatePicker);
+
+  /* ── No time limit toggle ───────────────────────────────── */
+  function initNoLimit(entry) {
+    var cb = entry.querySelector('.no-limit-cb');
+    if (!cb) return;
+    function toggle() {
+      var dateWs = entry.querySelectorAll('.dur-date-w');
+      var startW = dateWs[0];
+      var endW   = dateWs[1];
+
+      if (cb.checked) {
+        /* Set start date to joining date; disable and clear end date */
+        var joiningDate = localStorage.getItem('quadra_joining_date') || '';
+        if (startW) {
+          var span = startW.querySelector('span');
+          if (joiningDate) {
+            span.textContent = joiningDate;
+            span.style.color = '#111827';
+            startW.dataset.selectedValue = joiningDate;
+          }
+          startW.classList.add('disabled');
+          startW.classList.remove('error');
+        }
+        if (endW) {
+          endW.classList.add('disabled');
+          endW.classList.remove('error');
+          var eSpan = endW.querySelector('span');
+          eSpan.textContent = 'End date';
+          eSpan.style.color = '';
+          delete endW.dataset.selectedValue;
+        }
+        entry.querySelectorAll('.date-range-err').forEach(function(el) { el.classList.remove('show'); });
+      } else {
+        /* Re-enable both; keep start date value if it was set from joining date */
+        dateWs.forEach(function(dw) {
+          dw.classList.remove('disabled');
+          var span = dw.querySelector('span');
+          var isPlaceholder = ['Start date','End date'].indexOf(span.textContent) !== -1;
+          span.style.color = isPlaceholder ? '' : '#111827';
+        });
+      }
+    }
+    toggle();
+    cb.addEventListener('change', toggle);
+  }
+  document.querySelectorAll('.allowance-entry').forEach(initNoLimit);
+
+  /* ── HTML builders for dynamic entries ─────────────────── */
+  function makeValidityRow() {
+    return '<div class="ae-meta wrap">' +
+      '<span class="ae-meta-label">Validity</span>' +
+      '<div class="dur-date-w sm"><span>Start date</span>' + CAL_SVG + '</div>' +
+      '<span class="dur-sep">—</span>' +
+      '<div class="dur-date-w sm"><span>End date</span>' + CAL_SVG + '</div>' +
+      '<label class="no-limit-opt"><input type="checkbox" class="no-limit-cb" /><span>No time limit</span></label>' +
+    '</div>';
+  }
+
+  function makeDeliveryRow() {
+    return '<div class="ae-meta wrap">' +
+      '<span class="ae-meta-label">Delivery</span>' +
+      '<div class="delivery-inline">' +
+        '<span>Every</span>' +
+        '<div class="del-drop-w">' +
+          '<span class="del-drop-val">1st</span>' +
+          '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<div class="del-drop-panel"></div>' +
+        '</div>' +
+        '<span>of month</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* ── Add Allowance ──────────────────────────────────────── */
+  document.getElementById('add-allowance-btn').addEventListener('click', function() {
+    var entry = document.createElement('div');
+    entry.className = 'allowance-entry nested';
+    entry.innerHTML =
+      '<div class="allowance-row">' +
+        '<div class="select-w" style="flex:1;min-width:0;"></div>' +
+        '<div class="amount-err-wrap">' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<div class="amount-input-w">' +
+              '<span class="amount-prefix">Rp.</span>' +
+              '<input type="text" placeholder="Enter amount" />' +
+            '</div>' +
+            '<span class="amount-period-label amount-period">/ month</span>' +
+          '</div>' +
+        '</div>' +
+        '<button class="remove-btn" type="button">' +
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+        '</button>' +
+      '</div>' +
+      makeValidityRow() +
+      makeDeliveryRow();
+
+    var selectW = entry.querySelector('.select-w');
+    QuadraDropdown.init(selectW,
+      ALLOWANCE_OPTIONS.filter(function(o) { return !usedAllowances.has(o); }),
+      { placeholder: 'Select allowance', onChange: function(val) {
+        var oldVal = selectW.dataset.selectedValue || '';
+        if (oldVal) usedAllowances.delete(oldVal);
+        usedAllowances.add(val);
+        var type = getAllowanceType(val);
+        var periodEl = entry.querySelector('.amount-period');
+        if (periodEl) periodEl.textContent = type === 'daily' ? '/ day' : '/ month';
+      }});
+    entry.querySelector('.remove-btn').addEventListener('click', function() {
+      if (selectW && selectW.dataset.selectedValue) usedAllowances.delete(selectW.dataset.selectedValue);
+      entry.remove();
+    });
+    initNoLimit(entry);
+    entry.querySelectorAll('.dur-date-w').forEach(initDurDatePicker);
+    entry.querySelectorAll('.del-drop-w').forEach(initDeliveryDropdown);
+
+    document.getElementById('allowance-entries').appendChild(entry);
+  });
+</script>
+<script>
+  function validateStep4() {
+    var ok = true;
+
+    /* clear previous errors */
+    document.querySelectorAll('.amount-input-w.error').forEach(function(el) {
+      var inp = el.querySelector('input');
+      if (inp) clearAmountError(inp); else el.classList.remove('error');
+    });
+    document.querySelectorAll('.dur-date-w.error')
+      .forEach(function(el) { el.classList.remove('error'); });
+    document.querySelectorAll('.date-range-err')
+      .forEach(function(el) { el.classList.remove('show'); });
+    document.getElementById('step4-section-err').classList.remove('show');
+
+    document.querySelectorAll('#allowance-entries .allowance-entry').forEach(function(entry) {
+      var selectW = entry.querySelector('.select-w');
+      var isLaptop = !selectW;
+      var hasAllowance = isLaptop || (selectW && selectW.dataset.selectedValue);
+
+      if (!hasAllowance) return;
+
+      /* amount */
+      var amountInput = entry.querySelector('.amount-input-w input');
+      if (amountInput && !amountInput.disabled) {
+        var rawAmt = (amountInput.value || '').replace(/\./g, '').trim();
+        if (!rawAmt) {
+          setAmountError(amountInput, 'Amount is required.');
+          ok = false;
+        } else if (parseInt(rawAmt, 10) === 0) {
+          setAmountError(amountInput, 'Amount must be greater than 0.');
+          ok = false;
+        }
+      }
+
+      /* validity */
+      var noLimitCb = entry.querySelector('.no-limit-cb');
+      if (!noLimitCb || !noLimitCb.checked) {
+        var dateWs = entry.querySelectorAll('.dur-date-w');
+        dateWs.forEach(function(dw) {
+          if (!dw.classList.contains('disabled') && !dw.dataset.selectedValue) {
+            dw.classList.add('error');
+            ok = false;
+          }
+        });
+        /* date range + joining date checks */
+        if (dateWs.length >= 2) {
+          var startDate  = parseDateStr(dateWs[0].dataset.selectedValue);
+          var endDate    = parseDateStr(dateWs[1].dataset.selectedValue);
+          var joining    = getJoiningDate();
+          var meta       = dateWs[0].closest('.ae-meta');
+          var errEl      = null;
+          if (meta) {
+            errEl = meta.nextElementSibling;
+            if (!errEl || !errEl.classList.contains('date-range-err')) {
+              errEl = document.createElement('span');
+              errEl.className = 'date-range-err';
+              meta.parentNode.insertBefore(errEl, meta.nextSibling);
+            }
+          }
+          if (startDate && joining && startDate < joining) {
+            dateWs[0].classList.add('error');
+            if (errEl) {
+              errEl.textContent = 'Start date cannot be before the joining date (' + (localStorage.getItem('quadra_joining_date') || '') + ').';
+              errEl.classList.add('show');
+            }
+            ok = false;
+          } else if (startDate && endDate && endDate <= startDate) {
+            dateWs[0].classList.add('error');
+            dateWs[1].classList.add('error');
+            if (errEl) {
+              errEl.textContent = 'End date must be after start date.';
+              errEl.classList.add('show');
+            }
+            ok = false;
+          }
+        }
+      }
+    });
+
+    if (!ok) {
+      document.getElementById('step4-section-err').classList.add('show');
+      document.getElementById('step4-section-err').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      window.location.href = 'onboarding-step5-deduction.html';
+    }
+  }
+
+  function hasFormData() {
+    var ins = document.querySelectorAll('input[type=text]:not([disabled]),input[type=number]:not([disabled])');
+    for (var i = 0; i < ins.length; i++) { if ((ins[i].value || '').trim() !== '') return true; }
+    var picks = document.querySelectorAll('.select-w,.dur-date-w');
+    for (var i = 0; i < picks.length; i++) { if (picks[i].dataset.selectedValue) return true; }
+    if (document.querySelectorAll('#allowance-entries .allowance-entry').length > 1) return true;
+    return false;
+  }
+  function handleCancel() {
+    if (hasFormData()) { document.getElementById('cancel-modal').classList.add('show'); }
+    else { window.location.href = 'onboarding-employee-list.html'; }
+  }
+</script>
+<!-- Cancel Modal -->
+<div class="modal-overlay" id="cancel-modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">Cancel Onboarding</span>
+      <button class="modal-close" onclick="document.getElementById('cancel-modal').classList.remove('show')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-confirm-body">
+        <div class="modal-warn-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v.5" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/><path d="M2 13L8 2l6 11H2z" stroke="#EF4444" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+        <div class="modal-sub-label">Cancel onboarding?</div>
+        <div class="modal-sub-desc">You have unsaved changes. Canceling now will discard all entered data for this employee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('cancel-modal').classList.remove('show')">Keep Editing</button>
+      <button class="btn btn-danger" onclick="window.location.href='onboarding-employee-list.html'">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+<script>
+  (function() {
+    var name = sessionStorage.getItem('quadra_ob_emp_name');
+    var url  = sessionStorage.getItem('quadra_ob_return_checklist');
+    if (name && url) {
+      var el  = document.getElementById('bc-cl');
+      var sep = document.getElementById('bc-cl-sep');
+      if (el)  { el.textContent = name + ' — HR Checklist'; el.href = url; el.style.display = ''; }
+      if (sep) sep.style.display = '';
+    }
+  })();
+</script>
+<script src="toast.js"></script>
+  <script src="sidebar.js"></script>
+<script src="clockwidget.js"></script>
+</body>
+</html>
