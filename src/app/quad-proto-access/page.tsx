@@ -9,9 +9,12 @@ function AccessForm() {
   const searchParams = useSearchParams();
   const rawFrom = searchParams.get("from");
 
-  // Prevent open-redirect vulnerabilities
-  const destination =
-    rawFrom && rawFrom.startsWith("/quad-proto") ? rawFrom : "/quad-proto";
+  // Prevent open-redirect vulnerabilities and ensure redirect goes directly to login.html
+  let destination =
+    rawFrom && rawFrom.startsWith("/quad-proto") ? rawFrom : "/quad-proto/login.html";
+  if (destination === "/quad-proto" || destination === "/quad-proto/") {
+    destination = "/quad-proto/login.html";
+  }
 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

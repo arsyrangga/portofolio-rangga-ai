@@ -13,10 +13,18 @@ export async function middleware(req: NextRequest) {
     const isAuthenticated = await verifyQuadAuthToken(token);
 
     if (!isAuthenticated) {
-      const fromUrl = pathname + search;
+      let fromUrl = pathname + search;
+      if (fromUrl === "/quad-proto" || fromUrl === "/quad-proto/") {
+        fromUrl = "/quad-proto/login.html";
+      }
       const accessUrl = new URL("/quad-proto-access", req.url);
       accessUrl.searchParams.set("from", fromUrl);
       return NextResponse.redirect(accessUrl);
+    }
+
+    // If authenticated and visiting root prototype path, redirect directly to login.html
+    if (pathname === "/quad-proto" || pathname === "/quad-proto/") {
+      return NextResponse.redirect(new URL("/quad-proto/login.html", req.url));
     }
   }
 
